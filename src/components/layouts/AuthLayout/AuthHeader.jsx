@@ -1,8 +1,33 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 const AuthHeader = () => {
   const [showHeader, setShowHeader] = useState(false);
+  const [loginButtonStyle, setLoginButtonStyle] = useState("");
+  const [signupButtonStyle, setSignupButtonStyle] = useState("");
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const currentPath = router.asPath;
+
+    if (currentPath === "/auth/signup") {
+      setLoginButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
+      setSignupButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      );
+    } else {
+      setLoginButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      );
+      setSignupButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
+    }
+  }, [router]);
   return (
     <header className="mb-4">
       <nav
@@ -74,18 +99,12 @@ const AuthHeader = () => {
              md:pt-0"
           >
             <li>
-              <Link
-                className="w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
-                href="/auth/login"
-              >
+              <Link className={loginButtonStyle} href="/auth/login">
                 Sign in
               </Link>
             </li>
             <li>
-              <Link
-                className="w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
-                href="/auth/signup"
-              >
+              <Link className={signupButtonStyle} href="/auth/signup">
                 Register
               </Link>
             </li>
