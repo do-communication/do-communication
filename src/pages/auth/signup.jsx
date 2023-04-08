@@ -1,7 +1,7 @@
-import AuthLayout from "@/components/layouts/AuthLayout";
+import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
 const Signup = () => {
     return (<AuthLayout>
-        <h1>Hello</h1>
+        {/* <h1>Hello</h1> */}
     </AuthLayout>);
 }
  
