@@ -9,7 +9,8 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
-        primary: "#90CAF9",
+        primary: "#57b0e2",
+        secondary: "#2d9cdb",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -1,5 +1,5 @@
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
-import {MdOutlineEmail} from "react-icons/md"
+import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
@@ -31,19 +31,19 @@ const Login = () => {
             size="lg"
           />
           {showPassword ? (
-            <AiOutlineEyeInvisible
+            <AiOutlineEye
               className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
               onClick={() => setShowPassword(false)}
             />
           ) : (
-            <AiOutlineEye
+            <AiOutlineEyeInvisible
               className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
               onClick={() => setShowPassword(true)}
             />
           )}
         </div>
         <Link
-          href="./forgot"
+          href="forgot"
           className="self-end pr-3 hover:underline text-gray-700"
         >
           Forgot Password?

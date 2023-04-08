@@ -50,12 +50,12 @@ const Signup = () => {
             size="lg"
           />
           {showPassword ? (
-            <AiOutlineEyeInvisible
+            <AiOutlineEye
               className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
               onClick={() => setShowPassword(false)}
             />
           ) : (
-            <AiOutlineEye
+            <AiOutlineEyeInvisible
               className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
               onClick={() => setShowPassword(true)}
             />

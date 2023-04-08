@@ -1,6 +1,7 @@
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
 import {MdOutlineEmail} from "react-icons/md"
 import {IoIosArrowBack} from "react-icons/io"
+import Link from "next/link";
 
 const Forgot = () => {
     return (
@@ -21,10 +22,15 @@ const Forgot = () => {
           <button className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
             Send
           </button>
-          <div className="flex flex-row gap-6 justify-center py-9">
-          < IoIosArrowBack className="w-16 h-auto bg-primary rounded-full" />
-            <h1 className="text-xl py-4 font-semibold vertical-align: bottom" >Back</h1>
+          <Link
+          href="/auth/forgot"
+          className="flex gap-4 justify-center items-center py-9"
+        >
+          <div className="rounded-full bg-primary w-10 h-10 flex items-center justify-center">
+            <IoIosArrowBack className="w-10 h-auto" />
           </div>
+          <h1 className="text-xl font-semibold vertical-align: bottom">Back</h1>
+        </Link>
         
         </div>
       </AuthLayout>
