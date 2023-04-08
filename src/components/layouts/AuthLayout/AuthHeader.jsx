@@ -8,23 +8,23 @@ const AuthHeader = () => {
   const [signupButtonStyle, setSignupButtonStyle] = useState("");
 
   const router = useRouter();
-
+  //change the  sign up button style
   useEffect(() => {
     const currentPath = router.asPath;
 
     if (currentPath === "/auth/signup") {
       setLoginButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
       );
       setSignupButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
     } else {
       setLoginButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
       setSignupButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
       );
     }
   }, [router]);
@@ -45,7 +45,7 @@ const AuthHeader = () => {
       >
         <div>
           <Link href="/">
-            <img src="/images/logo.png" alt="logo" className="lg:w-32  w-20" />
+            <img src="/images/logo.png" alt="logo" className="lg:w-24  w-20" />
           </Link>
         </div>
 
@@ -100,12 +100,12 @@ const AuthHeader = () => {
           >
             <li>
               <Link className={loginButtonStyle} href="/auth/login">
-                Sign in
+                Log in
               </Link>
             </li>
             <li>
               <Link className={signupButtonStyle} href="/auth/signup">
-                Register
+                Sign up
               </Link>
             </li>
           </ul>

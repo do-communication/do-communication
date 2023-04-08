@@ -12,7 +12,7 @@ const Login = () => {
     <AuthLayout title="Login">
       <div className="flex flex-col gap-6">
         {/* email input */}
-        <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300">
+        <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pl-5">
           <MdOutlinePersonOutline className="w-10 text-gray-600 pl-2 h-auto" />
           <input
             type="email"
@@ -23,7 +23,7 @@ const Login = () => {
         </div>
 
         {/*password input */}
-        <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300">
+        <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pr-5 pl-5">
           <input
             type={showPassword ? "text" : "password"}
             className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[52px] outline-none"
@@ -43,10 +43,10 @@ const Login = () => {
           )}
         </div>
         <Link
-          href="auth/forget"
+          href="auth/forgot/forgotPassword"
           className="self-end pr-3 hover:underline text-gray-700"
         >
-          Forget Password?
+          Forgot Password?
         </Link>
       </div>
       <div className="flex flex-col gap-4">
