@@ -15,7 +15,7 @@ const AuthLayout = ({ title, children }) => {
             <img src="/images/office.svg" alt="office logo" />
           </div>
           <div class="w-full md:w-7/12 flex justify-center">
-            <div className="bg-black bg-opacity-5 shadow-md shadow-gray-800 w-full lg:w-2/3 flex flex-col gap-8 px-5 py-8 rounded-2xl">
+            <div className="bg-black bg-opacity-5 shadow-md shadow-gray-800 w-full lg:w-2/3 flex flex-col gap-8 px-9 py-8 rounded-2xl">
               <h2 className="text-3xl font-semibold text-center">{title}</h2>
               {children}
             </div>
