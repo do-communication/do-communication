@@ -44,8 +44,8 @@ const Sidebar = () => {
 
       <nav className="px-4 pt-4 scroller overflow-y-scroll max-h-[calc(100vh-64px)]">
         <ul className="flex flex-col space-y-2">
-          {navList.map((nav) => (
-            <SideNav nav={nav} />
+          {navList.map((nav, index) => (
+            <SideNav nav={nav} key={index} />
           ))}
         </ul>
       </nav>
