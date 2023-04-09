@@ -18,7 +18,7 @@ const Home = () => {
                     </span>
                   </h1>
                   <p className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl">
-                    It's never been easier to build beautiful websites that
+                    It&apos;s never been easier to build beautiful websites that
                     convey your message and tell your story.
                   </p>
                   <div className="relative flex flex-col sm:flex-row sm:space-x-4">
@@ -73,7 +73,8 @@ const Home = () => {
             <div className="box-border relative w-full max-w-md px-4 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10">
               <img
                 src="/images/task.svg"
-                className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20 " alt="task-management"
+                className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20 "
+                alt="task-management"
               />
             </div>
 
@@ -141,23 +142,23 @@ const Home = () => {
             <div className="box-border relative w-full max-w-md px-4 mt-10 mb-4 text-center bg-no-repeat bg-contain border-solid md:mt-0 md:max-w-none lg:mb-0 md:w-1/2">
               <img
                 src="/images/group.svg"
-                className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32" alt="group chat"
+                className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32"
+                alt="group chat"
               />
             </div>
           </div>
         </section>
         {/* contact page  */}
         <section className="bg-white">
-        
           <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
-          <div className="flex justify-center items-start pb-4">
-            <h2
-              id="contact"
-              className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl "
-            >
-              Contact us
-            </h2>
-          </div>
+            <div className="flex justify-center items-start pb-4">
+              <h2
+                id="contact"
+                className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl "
+              >
+                Contact us
+              </h2>
+            </div>
             <nav className="flex flex-wrap justify-center -mx-5 -my-2">
               <div className="px-5 py-2">
                 <Link
