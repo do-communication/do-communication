@@ -74,12 +74,18 @@ const AuthHeader = () => {
               </Link>
             </li>
             <li>
-              <Link className="md:p-4 py-2 block hover:text-black" href="#">
+              <Link
+                className="md:p-4 py-2 block hover:text-black"
+                href="#about"
+              >
                 About us
               </Link>
             </li>
             <li>
-              <Link className="md:p-4 py-2 block hover:text-black" href="#">
+              <Link
+                className="md:p-4 py-2 block hover:text-black"
+                href="#contact"
+              >
                 Contact us
               </Link>
             </li>
