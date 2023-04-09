@@ -72,7 +72,7 @@ const Home = () => {
             <div className="box-border relative w-full max-w-md px-4 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10">
               <img
                 src="/images/task.svg"
-                className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20 "
+                className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20 " alt="task-management"
               />
             </div>
 
@@ -140,7 +140,7 @@ const Home = () => {
             <div className="box-border relative w-full max-w-md px-4 mt-10 mb-4 text-center bg-no-repeat bg-contain border-solid md:mt-0 md:max-w-none lg:mb-0 md:w-1/2">
               <img
                 src="/images/group.svg"
-                className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32"
+                className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32" alt="group chat"
               />
             </div>
           </div>
