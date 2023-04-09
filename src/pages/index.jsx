@@ -6,7 +6,7 @@ const Home = () => {
       <AuthHeader />
       <main>
         {/* home section */}
-        <section className="px-2 py-27 bg-white md:px-0">
+        <section className="px-2 py-30 pt-10 bg-white md:px-0">
           <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
             <div className="flex flex-wrap items-center sm:-mx-3">
               <div className="w-full md:w-1/2 md:px-3">
@@ -18,12 +18,13 @@ const Home = () => {
                     </span>
                   </h1>
                   <p className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl">
-                    It&apos;s never been easier to build beautiful websites that
-                    convey your message and tell your story.
+                    Independent and all-in-one workspace for mid-sized
+                    organizations to conduct their work in a manner that is
+                    well-planned and productive
                   </p>
                   <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                     <Link
-                      href="#_"
+                      href="#about"
                       className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-secondary rounded-md sm:mb-0 hover:bg-blue-600 sm:w-auto"
                     >
                       Try It
@@ -42,7 +43,7 @@ const Home = () => {
                       </svg>
                     </Link>
                     <Link
-                      href="#_"
+                      href="/signup"
                       className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600"
                     >
                       Sign up
@@ -60,11 +61,11 @@ const Home = () => {
         </section>
 
         {/* about page */}
-        <section className="w-full bg-white pt-7 pb-7 md:pt-20 md:pb-24">
+        <section className="w-full bg-white pt-30 pb-7 md:pt-20 md:pb-24">
           <div className="flex justify-center items-start pb-4">
             <h2
               id="about"
-              className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl pb-12"
+              className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl pb-12 pt-10"
             >
               About us
             </h2>
@@ -97,13 +98,13 @@ const Home = () => {
                   <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
-                  Speed past your competition
+                  Efficient Task Management
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
                   <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
-                  Learn the top techniques
+                  Improved File Management
                 </li>
               </ul>
             </div>
@@ -114,27 +115,28 @@ const Home = () => {
                 Boost Productivity
               </h2>
               <p className="pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-10 lg:text-lg">
-                Save time and money with our revolutionary services. We are the
-                leaders in the industry.
+                enhance your company staff relations and efficiency by
+                facilitating office communications
               </p>
               <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
                   <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
-                  Automated task management workflow
+                  Chat capability
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
                   <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
-                  Detailed analytics for your data
+                  Improved Communication
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
                   <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
-                  Some awesome integrations
+                  Independent from personal
+                  affair
                 </li>
               </ul>
             </div>
