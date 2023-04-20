@@ -1,5 +1,10 @@
-import { useState, useContext } from "react";
-import { AiFillAccountBook, AiFillAlert } from "react-icons/ai";
+import { useContext } from "react";
+import { AiFillAccountBook, AiFillFileAdd } from "react-icons/ai";
+import {BsFillChatDotsFill} from "react-icons/bs"
+import {RiTeamFill,RiLogoutBoxFill} from "react-icons/ri"
+import {MdGroupWork}from "react-icons/md"
+import {FaTasks} from "react-icons/fa"
+import {TbReportAnalytics} from "react-icons/tb"
 import SideNav from "./SideNav";
 import Link from "next/link";
 import OpenSideBarContext from "./context/openSideBarContext";
@@ -14,19 +19,68 @@ const Sidebar = () => {
       name: "Dashbaord",
     },
     {
-      Icon: <AiFillAlert />,
-      name: "Team", //unqiue
+      Icon: <BsFillChatDotsFill />,
+      url: "/admin/chats",
+      name: "Chat",
+    },
+    {
+      Icon: <RiTeamFill />,
+      name: "Members", //unqiue
       children: [
         {
-          url: "/admin/team/create",
-          name: "Creat Team",
+          url: "/admin/member/create",
+          name: "Add Member",
         },
         {
-          url: "/admin/team/manage",
-          name: "Manage Team",
+          url: "/admin/member/manage",
+          name: "Manage Members",
         },
       ],
     },
+    {
+      Icon: <MdGroupWork />,
+      name: "Groups", //unqiue
+      children: [
+        {
+          url: "/admin/group/create",
+          name: "Creat Team",
+        },
+        {
+          url: "/admin/group/manage",
+          name: "Manage Groups",
+        },
+      ],
+    },
+    
+    {
+      Icon: <FaTasks/>,
+      name: "Tasks", //unqiue
+      children: [
+        {
+          url: "/admin/task/create",
+          name: "Creat Task",
+        },
+        {
+          url: "/admin/task/manage",
+          name: "Manage Tasks",
+        },
+      ],
+    },
+    {
+      Icon: <TbReportAnalytics/>,
+      url: "/admin/report",
+      name: "Report",
+    },
+    {
+      Icon: <AiFillFileAdd />,
+      url: "/admin/file",
+      name: "Files",
+    },
+    {
+      Icon: <RiLogoutBoxFill/>,
+      url: "/",
+      name: "Logout",
+    }
   ];
 
   return (
