@@ -28,11 +28,11 @@ const Sidebar = () => {
       name: "Members", //unqiue
       children: [
         {
-          url: "/admin/member/create",
+          url: "/admin/members/create",
           name: "Add Member",
         },
         {
-          url: "/admin/member/manage",
+          url: "/admin/members/manage",
           name: "Manage Members",
         },
       ],
@@ -89,7 +89,7 @@ const Sidebar = () => {
         openSideBar ? "md:translate-x-0 md:sticky " : "-translate-x-full"
       } max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
     >
-      <header className=" h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-bold flex items-center justify-start  z-40">
+      <header className=" h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
         <Link
           href="/admin"
           className="flex items-center space-x-2 text-white group hover:text-white"
