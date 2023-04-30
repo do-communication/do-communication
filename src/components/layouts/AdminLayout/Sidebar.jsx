@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { AiFillAccountBook, AiFillFileAdd } from "react-icons/ai";
-import {BsFillChatDotsFill} from "react-icons/bs"
-import {RiTeamFill,RiLogoutBoxFill} from "react-icons/ri"
-import {MdGroupWork}from "react-icons/md"
-import {FaTasks} from "react-icons/fa"
-import {TbReportAnalytics} from "react-icons/tb"
+import { BsFillChatDotsFill } from "react-icons/bs";
+import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
+import { MdGroupWork } from "react-icons/md";
+import { FaTasks } from "react-icons/fa";
+import { TbReportAnalytics } from "react-icons/tb";
 import SideNav from "./SideNav";
 import Link from "next/link";
 import OpenSideBarContext from "./context/openSideBarContext";
@@ -51,9 +51,9 @@ const Sidebar = () => {
         },
       ],
     },
-    
+
     {
-      Icon: <FaTasks/>,
+      Icon: <FaTasks />,
       name: "Tasks", //unqiue
       children: [
         {
@@ -67,7 +67,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <TbReportAnalytics/>,
+      Icon: <TbReportAnalytics />,
       url: "/admin/report",
       name: "Report",
     },
@@ -77,19 +77,25 @@ const Sidebar = () => {
       name: "Files",
     },
     {
-      Icon: <RiLogoutBoxFill/>,
+      Icon: <RiLogoutBoxFill />,
       url: "/",
       name: "Logout",
-    }
+    },
   ];
+
+  // className={`${
+  //   openSideBar ? "md:translate-x-0 md:sticky " : "md:-translate-x-full"
+  // } -translate-x-full max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
 
   return (
     <div
       className={`${
-        openSideBar ? "md:translate-x-0 md:sticky " : "-translate-x-full"
+        openSideBar
+          ? "-translate-x-full md:translate-x-0 md:sticky"
+          : "translate-x-0 md:-translate-x-full md:sticky"
       } max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
     >
-      <header className=" h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
+      <header className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
         <Link
           href="/admin"
           className="flex items-center space-x-2 text-white group hover:text-white"

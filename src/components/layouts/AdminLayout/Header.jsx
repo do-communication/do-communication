@@ -1,7 +1,13 @@
 import { useState, useContext } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { AiOutlineMenu } from "react-icons/ai";
+import {
+  AiOutlineMenu,
+  AiOutlineBell,
+  AiOutlineUser,
+  AiOutlineLogout,
+} from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
+import Link from "next/link";
 const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -29,7 +35,7 @@ const Header = () => {
                 aria-expanded="false"
               >
                 <span className="sr-only">Open main menu</span>
-                <BiMenuAltLeft className="w-8 h-auto" />
+                <BiMenuAltLeft className="w-10 h-auto" />
               </button>
             </div>
             <div className="flex items-center pl-6">
@@ -59,14 +65,6 @@ const Header = () => {
                     <span className="block text-xs">Communication</span>
                   </div>
                 </a>
-              </div>
-
-              {/* <!-- toggel sidebar --> */}
-              <div
-                className="hidden text-white cursor-pointer md:block"
-                onClick={toggleSidebar}
-              >
-                <BiMenuAltLeft className="w-10 h-auto" />
               </div>
 
               <div className="hidden lg:block">
@@ -207,24 +205,7 @@ const Header = () => {
 
         {/* <!-- Mobile menu, show/hide based on menu state. --> */}
         {mobileMenu && (
-          <div className="absolute w-full transition duration-100 ease-out bg-gray-800 md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <a
-                href="#"
-                className="block px-3 py-2 text-base font-medium text-white bg-gray-900 rounded-md"
-                aria-current="page"
-              >
-                Dashboard
-              </a>
-
-              <a
-                href="#"
-                className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
-              >
-                Team
-              </a>
-            </div>
-
+          <div className="absolute w-full transition duration-100 ease-out bg-secondary md:hidden">
             <div className="pt-4 pb-3 border-t border-gray-700">
               {/* <!-- profile menue for mobile --> */}
               <div className="flex items-center px-5">
@@ -236,49 +217,36 @@ const Header = () => {
                   />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium leading-none text-white">
+                  <div className="text-base font-medium leading-none text-gray-800">
                     Senait Gobezie
                   </div>
-                  <div className="text-sm font-medium leading-none text-gray-400">
+                  <div className="text-sm font-medium leading-none text-gray-600">
                     sen@example.com
                   </div>
                 </div>
                 <button
                   type="button"
-                  className="flex-shrink-0 p-1 ml-auto text-gray-400 bg-gray-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  className="flex-shrink-0 p-1 ml-auto text-gray-700 rounded-full bg-primary hover:text-gray-900 hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-700"
                 >
                   <span className="sr-only">View notifications</span>
-                  <svg
-                    className="w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
+                  <AiOutlineBell className="w-6 h-6" />
                 </button>
               </div>
-              <div className="px-2 mt-3 space-y-1">
-                <a
-                  href="#"
-                  className="block px-3 py-2 text-base font-medium text-gray-400 rounded-md hover:text-white hover:bg-gray-700"
+              <div className="px-2 mt-3 space-y-1 border-t border-t-gray-700">
+                <Link
+                  href="/admin/profile"
+                  className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
-                  Your Profile
-                </a>
+                  <AiOutlineUser className="w-5 h-auto" /> Your Profile
+                </Link>
 
-                <a
-                  href="#"
-                  className="block px-3 py-2 text-base font-medium text-gray-400 rounded-md hover:text-white hover:bg-gray-700"
+                <Link
+                  href="/logout"
+                  className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
+                  <AiOutlineLogout className="w-5 h-auto" />
                   Sign out
-                </a>
+                </Link>
               </div>
             </div>
           </div>

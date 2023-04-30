@@ -8,7 +8,7 @@ import OpenSideBarContext, {
 const AdminLayout = ({ children }) => {
   const [openSideBar, openSideBarDispatch] = useReducer(
     openSideBarReducer,
-    true
+    false
   );
 
   return (
