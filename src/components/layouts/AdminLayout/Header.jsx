@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
-import { BiMenuAltLeft } from 'react-icons/bi'
+import { BiMenuAltLeft } from "react-icons/bi";
+import { AiOutlineMenu } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
@@ -7,10 +8,10 @@ const Header = () => {
   const [open, setOpen] = useState(false);
 
   const toggleSidebar = () => {
-    if(openSideBar) {
-      openSideBarDispatch({ type: 'close' })
+    if (openSideBar) {
+      openSideBarDispatch({ type: "close" });
     } else {
-      openSideBarDispatch({ type: 'open' })
+      openSideBarDispatch({ type: "open" });
     }
   };
 
@@ -19,14 +20,39 @@ const Header = () => {
       <nav className="sticky top-0 z-50 w-full text-black shadow-xl bg-light">
         <div className="mx-auto ">
           <div className="flex items-stretch justify-between h-16">
-            <div className="flex items-center md:hidden" />
+            <div className="flex items-center md:hidden">
+              <button
+                type="button"
+                onClick={toggleSidebar}
+                className="inline-flex items-center justify-center p-2 text-white rounded-md hover:text-gray-700"
+                aria-controls="mobile-menu"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                <BiMenuAltLeft className="w-8 h-auto" />
+              </button>
+            </div>
             <div className="flex items-center pl-6">
-              {/* the logo part */}
               <div className="flex-shrink-0 md:hidden">
                 <a
                   href="#"
                   className="flex items-center space-x-2 text-white group"
                 >
+                  <div>
+                    <svg
+                      className="w-8 h-8 transition-transform duration-300 group-hover:-rotate-45 "
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
 
                   <div>
                     <span className="text-2xl font-extrabold">DO</span>
@@ -40,9 +66,9 @@ const Header = () => {
                 className="hidden text-white cursor-pointer md:block"
                 onClick={toggleSidebar}
               >
-                <BiMenuAltLeft className="w-10 h-auto"/>
+                <BiMenuAltLeft className="w-10 h-auto" />
               </div>
-                {/* the search bar */}
+
               <div className="hidden lg:block">
                 <form action="" className="app-search" method="GET">
                   <div className="relative group ">
@@ -72,11 +98,10 @@ const Header = () => {
                 </form>
               </div>
             </div>
-             {/* notificatons and profile view */}
             <div className="items-stretch hidden md:flex">
               <div className="flex ml-4 md:ml-6 ">
                 <div className="relative flex items-center justify-center mr-4">
-                  <div className="block p-1 text-gray-700 bg-light_2 rounded-full hover:text-black">
+                  <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
                     <span className="sr-only">View notifications</span>
                     <svg
                       className="w-6 h-6"
@@ -97,7 +122,7 @@ const Header = () => {
                 </div>
 
                 {/* <!-- Profile dropdown --> */}
-                <div className="relative px-4 text-sm text-gray-700 bg-light bright shadow-2xl cursor-pointer hover:text-white">
+                <div className="relative px-4 text-sm text-gray-700 shadow-2xl cursor-pointer bg-light bright hover:text-white">
                   <div
                     className="flex items-center min-h-full"
                     onClick={() => setOpen(!open)}
@@ -111,13 +136,13 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-8 h-8 rounded-full"
-                        src="/images/admin.png"
+                        src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
                         alt=""
                       />
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>John Doe</span>
+                      <span>Senait Gobezie</span>
                       <span>Admin</span>
                     </div>
                   </div>
@@ -146,7 +171,17 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-1"
                       >
-                        Log out
+                        Projects
+                      </a>
+
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                        tabindex="-1"
+                        id="user-menu-item-1"
+                      >
+                        Sign out
                       </a>
                     </div>
                   )}
@@ -154,47 +189,17 @@ const Header = () => {
               </div>
             </div>
 
-            <div className="flex -mr-2 md:hidden">
+            <div className="flex px-2 -mr-2 md:hidden">
               {/* <!-- Mobile menu button --> */}
               <button
                 type="button"
                 onClick={() => setMobileMenu(!mobileMenu)}
-                className="inline-flex items-center justify-center p-2 text-gray-400 bg-gray-800 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                className="inline-flex items-center justify-center p-2 text-white rounded-md hover:text-gray-700"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
               >
                 <span className="sr-only">Open main menu</span>
-
-                <svg
-                  className="block w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-                <svg
-                  className="hidden w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <AiOutlineMenu className="h-auto w-7" />
               </button>
             </div>
           </div>
