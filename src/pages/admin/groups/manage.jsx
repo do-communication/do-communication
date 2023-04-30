@@ -60,8 +60,8 @@ const ManageGroup = () => {
 
   return (
     <AdminLayout>
-      <div className="grid min-h-full grid-cols-3 gap-x-6">
-        <div className="col-span-2">
+      <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
+        <div className="order-last md:col-span-2 col-span-full md:order-first">
           <h1 className="mb-4 text-3xl font-semibold">Manage Groups</h1>
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -89,7 +89,7 @@ const ManageGroup = () => {
             pagination
           />
         </div>
-        <div className="border-l-4 border-primary">
+        <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
             <div className="flex items-center justify-center w-full h-full text-xl">
