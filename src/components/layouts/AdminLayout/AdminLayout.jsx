@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import OpenSideBarContext, {
-  openSideBarReducer
+  openSideBarReducer,
 } from "./context/openSideBarContext";
 
 const AdminLayout = ({ children }) => {
@@ -12,7 +12,7 @@ const AdminLayout = ({ children }) => {
   );
 
   return (
-    <div class="md:flex">
+    <div className="md:flex">
       <OpenSideBarContext.Provider value={[openSideBar, openSideBarDispatch]}>
         <Sidebar />
         <div className="flex flex-col flex-1">
