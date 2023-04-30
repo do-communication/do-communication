@@ -42,11 +42,11 @@ const Sidebar = () => {
       name: "Groups", //unqiue
       children: [
         {
-          url: "/admin/group/create",
-          name: "Creat Team",
+          url: "/admin/groups/create",
+          name: "Create Group",
         },
         {
-          url: "/admin/group/manage",
+          url: "/admin/groups/manage",
           name: "Manage Groups",
         },
       ],
