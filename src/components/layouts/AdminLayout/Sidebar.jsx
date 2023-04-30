@@ -83,26 +83,20 @@ const Sidebar = () => {
     },
   ];
 
-  // className={`${
-  //   openSideBar ? "md:translate-x-0 md:sticky " : "md:-translate-x-full"
-  // } -translate-x-full max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
-
   return (
     <div
       className={`${
-        openSideBar
-          ? "-translate-x-full md:translate-x-0 md:sticky"
-          : "translate-x-0 md:-translate-x-full md:sticky"
-      } max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
+        openSideBar && "-translate-x-full"
+      } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
     >
-      <header className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
+      <nav className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
         <Link
           href="/admin"
           className="flex items-center space-x-2 text-white group hover:text-white"
         >
           <img src="/images/white_logo.png" alt="logo" width="80" />
         </Link>
-      </header>
+      </nav>
 
       <nav className="px-4 pt-4 scroller overflow-y-scroll max-h-[calc(100vh-64px)]">
         <ul className="flex flex-col space-y-2">
