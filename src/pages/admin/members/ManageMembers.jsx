@@ -1,5 +1,5 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import {allMembers } from "@/mock/members";
+import { allMembers } from "@/mock/members";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
@@ -17,7 +17,12 @@ import {
   BiUserPlus,
 } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-import { MdChecklist, MdGroup, MdHeight, MdManageAccounts } from "react-icons/md";
+import {
+  MdChecklist,
+  MdGroup,
+  MdHeight,
+  MdManageAccounts,
+} from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
 const ManageMembers = () => {
   const [members, setMembers] = useState(allMembers);
@@ -43,7 +48,15 @@ const ManageMembers = () => {
   const columns = [
     {
       name: "photo",
-      selector: (row) =>(<img src="row.photo" width={150} height={50} alt="pp" className="rounded-full"/>),
+      selector: (row) => (
+        <img
+          src={row.photo}
+          width={150}
+          height={50}
+          alt="pp"
+          className="rounded-full"
+        />
+      ),
     },
     {
       name: "Name",
@@ -69,7 +82,7 @@ const ManageMembers = () => {
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
           <h1 className="mb-5 text-2xl font-semibold">Manage Members</h1>
-          <div className="flex items-center justify-between mb-2 pb-0">
+          <div className="flex items-center justify-between pb-0 mb-2">
             <Link
               href="/admin/Members/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
@@ -176,14 +189,17 @@ const ManageMembers = () => {
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center justify-center w-20 h-20 bg-primary rounded-full">
+                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
                   {/* <MdGroup className="w-12 h-12" /> */}
-                  <img src="/images/pp.png" className="flex items-center justify-center w-20 h-20 bg-primary rounded-full"/>
+                  <img
+                    src="/images/pp.png"
+                    className="flex items-center justify-center w-20 h-20 rounded-full bg-primary"
+                  />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].name}
                 </h4>
-                <p className="text-md font-light" mt-1>
+                <p className="font-light text-md" mt-1>
                   {selectedRows[0].email}
                 </p>
                 <p className="text-sm">{selectedRows[0].type}</p>
@@ -198,7 +214,9 @@ const ManageMembers = () => {
               </div>
 
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
-                <h3 className="p-2 text-center text-lg font-semibold">Profile Details</h3>
+                <h3 className="p-2 text-lg font-semibold text-center">
+                  Profile Details
+                </h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   <Link
