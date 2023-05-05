@@ -1,5 +1,5 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { allGroups } from "@/mock/groups";
+import {allMembers } from "@/mock/members";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
@@ -17,10 +17,10 @@ import {
   BiUserPlus,
 } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-import { MdChecklist, MdGroup, MdManageAccounts } from "react-icons/md";
+import { MdChecklist, MdGroup, MdHeight, MdManageAccounts } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
-const ManageGroup = () => {
-  const [groups, setGroups] = useState(allGroups);
+const ManageMembers = () => {
+  const [members, setMembers] = useState(allMembers);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -28,27 +28,35 @@ const ManageGroup = () => {
 
   // search for groups using group name
   useEffect(() => {
-    const filteredData = allGroups.filter(
+    const filteredData = allMembers.filter(
       (item) =>
         item.name && item.name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
-      setGroups(filteredData);
+      setMembers(filteredData);
     } else {
-      setGroups(allGroups);
+      setMembers(allMembers);
     }
   }, [search]);
 
   const columns = [
     {
-      name: "Group Name",
+      name: "photo",
+      selector: (row) =>(<img src="row.photo" width={150} height={50} alt="pp" className="rounded-full"/>),
+    },
+    {
+      name: "Name",
       selector: (row) => row.name,
       sortable: true,
     },
     {
-      name: "Type",
-      selector: (row) => row.type,
+      name: "Email",
+      selector: (row) => row.email,
+    },
+    {
+      name: "Department",
+      selector: (row) => row.department,
     },
   ];
 
@@ -60,13 +68,13 @@ const ManageGroup = () => {
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
-          <h1 className="mb-4 text-3xl font-semibold">Manage Groups</h1>
-          <div className="flex items-center justify-between mb-4">
+          <h1 className="mb-5 text-2xl font-semibold">Manage Members</h1>
+          <div className="flex items-center justify-between mb-2 pb-0">
             <Link
-              href="/admin/groups/create"
+              href="/admin/Members/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
-              <AiOutlinePlus /> Create Group
+              <AiOutlinePlus /> Add Member
             </Link>
             <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
               <input
@@ -74,31 +82,33 @@ const ManageGroup = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="py-2 pl-4 bg-transparent outline-none"
-                placeholder="Search from groups"
+                placeholder="Search from members"
               />
               <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
+          {/* try */}
           <DataTable
             columns={columns}
-            data={groups}
+            data={members}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
             pagination
           />
+          {/* try */}
         </div>
         <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
             <div className="flex items-center justify-center w-full h-full text-xl">
-              <p>Select group to see details</p>
+              <p>Select Member to see details</p>
             </div>
           )}
           {/* if multiple rows are selected */}
           {selectedRows.length > 1 && (
             <>
               <h3 className="flex justify-between px-2 pb-4 text-xl font-semibold">
-                Selected Groups
+                Selected members
                 <button className="flex items-center gap-1 px-2 py-1 text-base text-white bg-red-600 rounded-lg hover:bg-red-500">
                   <AiOutlineClose className="w-5 h-auto" />
                   Delete All
@@ -151,7 +161,7 @@ const ManageGroup = () => {
                         href="/admin/groups/edit/{groupId}"
                         className="flex items-center gap-2"
                       >
-                        <AiFillEdit className="w-5 h-auto" /> Edit Group
+                        <AiFillEdit className="w-5 h-auto" /> Edit Member
                       </Link>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
@@ -159,19 +169,23 @@ const ManageGroup = () => {
                         href="/admin/groups/edit"
                         className="flex items-center gap-2"
                       >
-                        <AiFillDelete className="w-5 h-auto" /> Delete Group
+                        <AiFillDelete className="w-5 h-auto" /> Delete Member
                       </button>
                     </li>
                   </ul>
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center justify-center w-20 h-20 bg-red-400 rounded-full">
-                  <MdGroup className="w-12 h-12" />
+                <div className="flex items-center justify-center w-20 h-20 bg-primary rounded-full">
+                  {/* <MdGroup className="w-12 h-12" /> */}
+                  <img src="/images/pp.png" className="flex items-center justify-center w-20 h-20 bg-primary rounded-full"/>
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].name}
                 </h4>
+                <p className="text-md font-light" mt-1>
+                  {selectedRows[0].email}
+                </p>
                 <p className="text-sm">{selectedRows[0].type}</p>
               </div>
               <div className="relative flex justify-center py-4">
@@ -184,7 +198,7 @@ const ManageGroup = () => {
               </div>
 
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
-                <h3 className="p-2 text-lg font-semibold">Members</h3>
+                <h3 className="p-2 text-center text-lg font-semibold">Profile Details</h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   <Link
@@ -233,4 +247,4 @@ const ManageGroup = () => {
   );
 };
 
-export default ManageGroup;
+export default ManageMembers;

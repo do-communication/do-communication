@@ -32,7 +32,7 @@ const Sidebar = () => {
           name: "Add Member",
         },
         {
-          url: "/admin/members/manage",
+          url: "/admin/members/ManageMembers",
           name: "Manage Members",
         },
       ],

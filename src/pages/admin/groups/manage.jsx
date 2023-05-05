@@ -6,9 +6,7 @@ import DataTable from "react-data-table-component";
 import {
   AiFillDelete,
   AiFillEdit,
-  AiFillWechat,
   AiOutlineClose,
-  AiOutlineEye,
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";

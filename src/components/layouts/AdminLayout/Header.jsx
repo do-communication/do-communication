@@ -134,13 +134,13 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-8 h-8 rounded-full"
-                        src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                        src="/images/admin.png"
                         alt=""
                       />
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>Senait Gobezie</span>
+                      <span>Mister X</span>
                       <span>Admin</span>
                     </div>
                   </div>
