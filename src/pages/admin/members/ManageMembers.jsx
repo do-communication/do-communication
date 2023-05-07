@@ -10,7 +10,8 @@ import {
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiDotsVertical } from "react-icons/bi";
+import { BiDotsVertical, BiGroup } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
@@ -261,27 +262,48 @@ const ManageMembers = () => {
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   <Link
                     href="/admin/memebers/{userId}"
-                    className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+                    <p className="flex items-center gap-1 p-1 px-4 rounded-lg ">
+                      <BiGroup />
                       Group one
                     </p>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                    >
+                      <BsEye /> View
+                    </button>
                   </Link>
                   <Link
                     href="/admin/memebers/{userId}"
-                    className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-                      Group two
+                    <p className="flex items-center gap-1 p-1 px-4 rounded-lg ">
+                      <BiGroup />
+                      Group one
                     </p>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                    >
+                      <BsEye /> View
+                    </button>
                   </Link>
                   <Link
                     href="/admin/memebers/{userId}"
-                    className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-                      Group three
+                    <p className="flex items-center gap-1 p-1 px-4 rounded-lg ">
+                      <BiGroup />
+                      Group one
                     </p>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                    >
+                      <BsEye /> View
+                    </button>
                   </Link>
                 </ul>
               </div>
