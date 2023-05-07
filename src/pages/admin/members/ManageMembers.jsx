@@ -47,11 +47,11 @@ const ManageMembers = () => {
 
   const columns = [
     {
-      name: "photo",
+      name: " ",
       selector: (row) => (
         <img
           src={row.photo}
-          width={150}
+          width={50}
           height={50}
           alt="pp"
           className="rounded-full"
@@ -214,46 +214,95 @@ const ManageMembers = () => {
               </div>
 
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
-                <h3 className="p-2 text-lg font-semibold text-center">
+                <h3 className="p-2 text-lg font-bold text-center">
                   Profile Details
+                </h3>
+
+                <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
+                  <div
+                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
+                  >
+                    <div className="flex gap-2">
+                      <p className="flex items-center gap-1 p-1 px-2 font-semibold">
+                        Full Name
+                      </p>
+                    </div>
+                    <p>Lidiya Solomon Tamru</p>
+                  </div>
+             
+                  <div
+                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
+                  >
+                    <div className="flex gap-2">
+                      <p className="flex items-center gap-1 p-1 px-2 font-semibold ">
+                        Department 
+                      </p>
+                    </div>
+                    <p className="pr-9">Product Manager</p>
+                  </div>
+                  <div
+                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
+                  >
+                    <div className="flex gap-2">
+                      <p className="flex items-center gap-1 p-1 px-2 font-semibold">
+  
+                        Address 
+                      </p>
+                    </div>
+                    <p>AddissAbaba/Ethiopia</p>
+                  </div>
+                  <div
+                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
+                  >
+                    <div className="flex gap-2">
+                      <p className="flex items-center gap-1 p-1 px-2 font-semibold">
+          
+                      Phone Number
+                      </p>
+                    </div>
+                    <p  className="pr-12">+251910******</p>
+                  </div>
+                </ul>
+              </div>
+              {/* try */}
+              <div className="w-full h-full p-2 mt-6 ml-2 bg-gray-200 rounded-xl">
+                <h3 className="p-2 text-lg font-semibold text-center">
+                  Joined Groups
                 </h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   <Link
                     href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p>Senait Gobezie</p>
-                    <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
-                        <BiUserPlus className="w-5 h-auto" />
-                        Assign Leader
-                      </button>
-                    </div>
+        
+                      <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+              
+                        Group one
+                      </p>
+                  
                   </Link>
                   <Link
                     href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p>Senait Gobezie</p>
-                    <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
-                        <BiUserPlus className="w-5 h-auto" />
-                        Assign Leader
-                      </button>
-                    </div>
+        
+                      <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+              
+                        Group two
+                      </p>
+                  
                   </Link>
                   <Link
                     href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p>Senait Gobezie</p>
-                    <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
-                        <BiUserPlus className="w-5 h-auto" />
-                        Assign Leader
-                      </button>
-                    </div>
+        
+                      <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+              
+                        Group three
+                      </p>
+                  
                   </Link>
                 </ul>
               </div>
