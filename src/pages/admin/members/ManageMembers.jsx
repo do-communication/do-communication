@@ -10,19 +10,9 @@ import {
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import {
-  BiDotsVertical,
-  BiMessage,
-  BiMessageAlt,
-  BiUserPlus,
-} from "react-icons/bi";
+import { BiDotsVertical } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-import {
-  MdChecklist,
-  MdGroup,
-  MdHeight,
-  MdManageAccounts,
-} from "react-icons/md";
+import { MdChecklist } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
 const ManageMembers = () => {
   const [members, setMembers] = useState(allMembers);
@@ -47,20 +37,20 @@ const ManageMembers = () => {
 
   const columns = [
     {
-      name: " ",
-      selector: (row) => (
-        <img
-          src={row.photo}
-          width={50}
-          height={50}
-          alt="pp"
-          className="rounded-full"
-        />
-      ),
-    },
-    {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => (
+        <p className="flex items-center gap-2">
+          <img
+            src={row.photo}
+            width={50}
+            height={50}
+            alt="pp"
+            className="rounded-full"
+          />
+
+          {row.name}
+        </p>
+      ),
       sortable: true,
     },
     {
@@ -219,9 +209,7 @@ const ManageMembers = () => {
                 </h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  <div
-                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
-                  >
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Full Name
@@ -229,38 +217,30 @@ const ManageMembers = () => {
                     </div>
                     <p>Lidiya Solomon Tamru</p>
                   </div>
-             
-                  <div
-                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
-                  >
+
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold ">
-                        Department 
+                        Department
                       </p>
                     </div>
                     <p className="pr-9">Product Manager</p>
                   </div>
-                  <div
-                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
-                  >
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
-  
-                        Address 
+                        Address
                       </p>
                     </div>
                     <p>AddissAbaba/Ethiopia</p>
                   </div>
-                  <div
-                    className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary"
-                  >
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
-          
-                      Phone Number
+                        Phone Number
                       </p>
                     </div>
-                    <p  className="pr-12">+251910******</p>
+                    <p className="pr-12">+251910******</p>
                   </div>
                 </ul>
               </div>
@@ -275,34 +255,25 @@ const ManageMembers = () => {
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-        
-                      <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-              
-                        Group one
-                      </p>
-                  
+                    <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+                      Group one
+                    </p>
                   </Link>
                   <Link
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-        
-                      <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-              
-                        Group two
-                      </p>
-                  
+                    <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+                      Group two
+                    </p>
                   </Link>
                   <Link
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-center p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-        
-                      <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-              
-                        Group three
-                      </p>
-                  
+                    <p className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+                      Group three
+                    </p>
                   </Link>
                 </ul>
               </div>
