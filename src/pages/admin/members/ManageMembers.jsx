@@ -215,7 +215,9 @@ const ManageMembers = () => {
                         Full Name
                       </p>
                     </div>
-                    <p>Lidiya Solomon Tamru</p>
+                    <p className="w-40 truncate" title="Lidiya Solomon Tamru">
+                      Lidiya Solomon Tamru
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -224,7 +226,9 @@ const ManageMembers = () => {
                         Department
                       </p>
                     </div>
-                    <p className="pr-9">Product Manager</p>
+                    <p className="w-40 truncate" title="Product Manager">
+                      Product Manager
+                    </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
@@ -232,7 +236,9 @@ const ManageMembers = () => {
                         Address
                       </p>
                     </div>
-                    <p>AddissAbaba/Ethiopia</p>
+                    <p className="w-40 truncate" title="Addis Ababa/Ethiopia">
+                      Addis Ababa/Ethiopia
+                    </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
@@ -240,7 +246,9 @@ const ManageMembers = () => {
                         Phone Number
                       </p>
                     </div>
-                    <p className="pr-12">+251910******</p>
+                    <p className="w-40 truncate" title="+251910******">
+                      +251910******
+                    </p>
                   </div>
                 </ul>
               </div>
