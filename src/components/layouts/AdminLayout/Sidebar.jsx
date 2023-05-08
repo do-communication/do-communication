@@ -73,7 +73,7 @@ const Sidebar = () => {
     },
     {
       Icon: <AiFillFileAdd />,
-      url: "/admin/file",
+      url: "/admin/files/ManageFiles",
       name: "Files",
     },
     {
