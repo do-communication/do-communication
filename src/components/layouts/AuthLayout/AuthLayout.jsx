@@ -16,7 +16,7 @@ const AuthLayout = ({ title, children }) => {
           </div>
           <div className="flex justify-center w-full md:w-7/12">
             <div className="flex flex-col w-full gap-8 py-8 bg-black shadow-md bg-opacity-5 shadow-gray-800 lg:w-2/3 px-9 rounded-2xl">
-              <h2 className="text-3xl font-semibold text-center">{title}</h2>
+              <h2 className="text-3xl text-white font-semibold text-center">{title}</h2>
               {children}
             </div>
           </div>

@@ -18,18 +18,18 @@ const Forgot = () => {
           />
         </div>
         </div>
-        <div className="flex flex-col gap-4">
-          <button className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
+        <div className="flex flex-col gap-2">
+          <button className="w-full text-white first-letter:text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
             Send
           </button>
           <Link
-          href="/auth/forgot"
+          href="/auth/login"
           className="flex gap-4 justify-center items-center py-9"
         >
-          {/* <div className="rounded-full bg-primary w-10 h-10 flex items-center justify-center">
-            <IoIosArrowBack className="w-10 h-auto" />
-          </div> */}
-          <h4 className="text-l font-semibold translate-x-0 vertical-align: bottom">Back</h4>
+          <div className="rounded-full  bg-primary w-7 h-7 flex items-center justify-center">
+            <IoIosArrowBack className="w-8 h-auto text-white" />
+          </div>
+          <h4 className="text-lg text-gray-400 hover:text-black font-semibold translate-x-0 vertical-align: bottom">Back</h4>
         </Link>
         
         </div>
