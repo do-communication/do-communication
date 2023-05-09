@@ -11,7 +11,7 @@ const DirectChat = () => {
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
+        item?.name && item?.name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -23,21 +23,21 @@ const DirectChat = () => {
   return (
     <AdminLayout>
       {/* <!-- component --> */}
-      <div className="flex h-screen antialiased text-gray-800">
-        <div className="flex flex-row h-full w-full pb-0 overflow-x-hidden">
-          <div className="flex flex-col py-5 pl-6 pr-2   w-64 bg-white   rounded-2xl flex-shrink-0">
-            <div className="flex flex-row items-center justify-center h-12 w-full">
-              <div className="flex items-center justify-center rounded-xl text-primary  h-10 w-10">
+      <div className="flex h-[600px] antialiased text-gray-800">
+        <div className="flex flex-row w-full h-full pb-0 overflow-x-hidden">
+          <div className="flex flex-col flex-shrink-0 py-5 pl-6 pr-2 bg-white w-80 rounded-2xl">
+            <div className="flex flex-row items-center justify-center w-full h-12">
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl text-primary">
                 <img
                   src="/images/chat.png"
                   className="w-8 h-8 bg-transparent rounded-2xl"
                 />
               </div>
-              <div className="ml-2 font-bold text-2xl">Direct Chat</div>
+              <div className="ml-2 text-2xl font-bold">Direct Chat</div>
             </div>
             {/* profile part start */}
-            <div className="flex flex-col items-center bg-light opacity-3 border-gray-200 mt-4 mr-6 py-6 px-4 rounded-lg">
-              <div className="h-50 w-50 rounded-full">
+            <div className="flex flex-col items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+              <div className="rounded-full h-50 w-50">
                 <img
                   src="/images/pp.png"
                   alt="Avatar"
@@ -46,104 +46,87 @@ const DirectChat = () => {
                   className="rounded-full"
                 />
               </div>
-              <div className="text-sm font-semibold mt-2">Lidiya Solomon</div>
+              <div className="mt-2 text-sm font-semibold">Lidiya Solomon</div>
               <div className="text-xs text-gray-500">Banner Designer</div>
               <div className="flex flex-row items-center mt-3">
-                <div className="flex flex-col justify-center h-4 w-8 bg-green-700 rounded-full">
-                  <div className="h-3 w-3 bg-white rounded-full self-end mr-1"></div>
+                <div className="flex flex-col justify-center w-8 h-4 bg-green-700 rounded-full">
+                  <div className="self-end w-3 h-3 mr-1 bg-white rounded-full"></div>
                 </div>
-                <div className="leading-none ml-1 text-xs">Active</div>
+                <div className="ml-1 text-xs leading-none">Active</div>
               </div>
             </div>
             {/* profile part end */}
             {/* chat list */}
             <div className="flex flex-col mt-8">
               <div className="flex flex-row items-center justify-between text-xs">
-                <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
+                <div className="flex w-full pr-4 mr-4 bg-white border rounded-md border-secondary ">
                   <input
                     type="search"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="py-2 pl-4  w-48 border-gray-200 shadow-md outline-none"
+                    className="w-11/12 py-2 pl-4 bg-transparent outline-none"
                     placeholder="Search"
                   />
                   <AiOutlineSearch className="w-6 h-auto" />
                 </div>
               </div>
-              <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
-                <button className="flex flex-row items-center hover:bg-opacity-25  hover:bg-secondary rounded-xl p-2">
-                  <div className="flex items-center justify-center h-8 w-8 bg-blue-200 rounded-full">
-                    M
+              <div className="flex flex-col h-48 mt-4 -mx-2 space-y-1 overflow-y-auto">
+                {members.length > 0 &&
+                  members.map((member, index) => (
+                    <button
+                      key={index}
+                      className={`flex flex-row items-center p-2  rounded-xl ${
+                        index === 1
+                          ? "bg-secondary text-white"
+                          : "hover:bg-opacity-25 hover:bg-secondary"
+                      }`}
+                    >
+                      <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+                        {member.name[0]}
+                      </div>
+                      <div className="ml-2 text-sm font-semibold">
+                        {member.name}
+                      </div>
+                    </button>
+                  ))}
+
+                {members.length === 0 && (
+                  <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
+                    <div className="ml-2 text-sm font-semibold">
+                      No members found
+                    </div>
                   </div>
-                  <div className="ml-2 text-sm font-semibold">
-                    {members[0].name}
-                  </div>
-                </button>
-                <button className="flex flex-row items-center hover:bg-opacity-25 hover:bg-secondary rounded-xl p-2">
-                  <div className="flex items-center justify-center h-8 w-8 bg-primary rounded-full">
-                    M
-                  </div>
-                  <div className="ml-2 text-sm font-semibold">
-                    {members[1].name}
-                  </div>
-                  <div className="flex items-center justify-center ml-auto text-xs text-white bg-green-500 h-4 w-4 rounded leading-none">
-                    2
-                  </div>
-                </button>
-                <button className="flex flex-row items-center hover:bg-opacity-25 hover:bg-secondary rounded-xl p-2">
-                  <div className="flex items-center justify-center h-8 w-8 bg-blue-200 rounded-full">
-                    M
-                  </div>
-                  <div className="ml-2 text-sm font-semibold">
-                    {members[2].name}
-                  </div>
-                </button>
-                <button className="flex flex-row items-center hover:bg-opacity-25 hover:bg-secondary rounded-xl p-2">
-                  <div className="flex items-center justify-center h-8 w-8  bg-primary rounded-full">
-                    M
-                  </div>
-                  <div className="ml-2 text-sm font-semibold">
-                    {members[3].name}
-                  </div>
-                </button>
-                <button className="flex flex-row items-center hover:bg-opacity-25 hover:bg-secondary rounded-xl p-2">
-                  <div className="flex items-center justify-center h-8 w-8 bg-primary rounded-full">
-                    M
-                  </div>
-                  <div className="ml-2 text-sm font-semibold">
-                    {members[4].name}
-                  </div>
-                </button>
+                )}
               </div>
-              <div className="flex flex-row items-center justify-between text-xs mt-6">
-                <button className=" flex items-center justify-center h-10 w-40 bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
+              <div className="flex items-center justify-center mt-6 text-xs">
+                <button className="flex items-center justify-center w-40 h-10 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold">
                   Load More
                 </button>
               </div>
             </div>
             {/* chat list end */}
           </div>
-          <div className="flex flex-col flex-auto h-full  ml-6">
-            <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-full p-4">
-              <div className="flex flex-col h-full overflow-x-auto mb-4">
+          <div className="flex flex-col flex-auto h-full ml-6">
+            <div className="flex flex-col flex-auto flex-shrink-0 h-full p-4 bg-white rounded-2xl">
+              <div className="flex flex-col h-full mb-4 overflow-x-auto">
                 <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-2">
                     <div className="col-start-1 col-end-8 p-3 rounded-lg">
                       <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           L
                         </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
                           <div>Hey How are you today?</div>
                         </div>
                       </div>
                     </div>
                     <div className="col-start-1 col-end-8 p-3 rounded-lg">
                       <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           L
                         </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
                           <div>
                             Lorem ipsum dolor sit amet, consectetur adipisicing
                             elit. Vel ipsa commodi illum saepe numquam maxime
@@ -153,21 +136,21 @@ const DirectChat = () => {
                       </div>
                     </div>
                     <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex items-center justify-start flex-row-reverse">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                      <div className="flex flex-row-reverse items-center justify-start">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           A
                         </div>
-                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
                           <div>I'm ok what about you?</div>
                         </div>
                       </div>
                     </div>
                     <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex items-center justify-start flex-row-reverse">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                      <div className="flex flex-row-reverse items-center justify-start">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           A
                         </div>
-                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
                           <div>
                             Lorem ipsum dolor sit, amet consectetur adipisicing.
                             ?
@@ -177,25 +160,25 @@ const DirectChat = () => {
                     </div>
                     <div className="col-start-1 col-end-8 p-3 rounded-lg">
                       <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           L
                         </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
                           <div>Lorem ipsum dolor sit amet !</div>
                         </div>
                       </div>
                     </div>
                     <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex items-center justify-start flex-row-reverse">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                      <div className="flex flex-row-reverse items-center justify-start">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           A
                         </div>
-                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
                           <div>
                             Lorem ipsum dolor sit, amet consectetur adipisicing.
                             ?
                           </div>
-                          <div className="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500">
+                          <div className="absolute bottom-0 right-0 mr-2 -mb-5 text-xs text-gray-500">
                             Seen
                           </div>
                         </div>
@@ -203,10 +186,10 @@ const DirectChat = () => {
                     </div>
                     <div className="col-start-1 col-end-8 p-3 rounded-lg">
                       <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
+                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
                           L
                         </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
                           <div>
                             Lorem ipsum dolor sit amet consectetur adipisicing
                             elit. Perspiciatis, in.
@@ -214,76 +197,10 @@ const DirectChat = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary flex-shrink-0">
-                          L
-                        </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                          <div className="flex flex-row items-center">
-                            <button className="flex items-center justify-center bg-bold hover:primary rounded-full h-8 w-10">
-                              <svg
-                                className="w-6 h-6 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="1.5"
-                                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                                ></path>
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="1.5"
-                                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                              </svg>
-                            </button>
-                            <div className="flex flex-row items-center space-x-px ml-4">
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-4 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-12 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-6 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-5 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-4 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-3 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-1 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-1 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                              <div className="h-4 w-1 bg-gray-500 rounded-lg"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+              <div className="flex flex-row items-center w-full h-16 px-4 bg-white rounded-xl">
                 <div>
                   <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
                     <svg
@@ -306,9 +223,9 @@ const DirectChat = () => {
                   <div className="relative w-full">
                     <input
                       type="text"
-                      className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                      className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
                     />
-                    <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
+                    <button className="absolute top-0 right-0 flex items-center justify-center w-12 h-full text-gray-400 hover:text-gray-600">
                       <svg
                         className="w-6 h-6"
                         fill="none"
@@ -327,11 +244,11 @@ const DirectChat = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <button className="flex items-center justify-center bg-primary hover:bg-Bold rounded-xl text-white px-4 py-1 flex-shrink-0">
+                  <button className="flex items-center justify-center flex-shrink-0 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
                     <span>Send</span>
                     <span className="ml-2">
                       <svg
-                        className="w-4 h-4 transform rotate-45 -mt-px"
+                        className="w-4 h-4 -mt-px transform rotate-45"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
