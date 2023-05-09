@@ -14,11 +14,8 @@ const Login = () => {
         {/* email input */}
         <div className="flex gap-2 pl-5 bg-white group rounded-3xl hover:ring-2 active:ring-2 ring-blue-300">
           <MdOutlineEmail className="w-10 h-auto pl-2 text-gray-600" />
-        <div className="flex gap-2 pl-5 bg-white group rounded-3xl hover:ring-2 active:ring-2 ring-blue-300">
-          <MdOutlineEmail className="w-10 h-auto pl-2 text-gray-600" />
           <input
             type="email"
-            className="w-full px-2 py-4 text-gray-600 bg-white outline-none rounded-3xl"
             className="w-full px-2 py-4 text-gray-600 bg-white outline-none rounded-3xl"
             placeholder="Enter your email"
             size="lg"
@@ -37,12 +34,10 @@ const Login = () => {
           {showPassword ? (
             <AiOutlineEye
               className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
-              className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
               onClick={() => setShowPassword(false)}
             />
           ) : (
             <AiOutlineEyeInvisible
-              className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
               className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
               onClick={() => setShowPassword(true)}
             />
@@ -50,7 +45,6 @@ const Login = () => {
         </div>
         <Link
           href="forgot"
-          className="self-end pr-3 text-gray-700 hover:underline"
           className="self-end pr-3 text-gray-700 hover:underline"
         >
           Forgot Password?
@@ -60,8 +54,6 @@ const Login = () => {
         <button className="flex items-center text-white justify-center w-full py-4 text-lg font-semibold rounded-full shadow-sm bg-primary shadow-black hover:brightness-95">
           Sign in
         </button>
-        <fieldset className="border-t border-black">
-          <legend className="px-4 mx-auto text-lg text-black">or</legend>
         <fieldset className="border-t border-black">
           <legend className="px-4 mx-auto text-lg text-black">or</legend>
         </fieldset>

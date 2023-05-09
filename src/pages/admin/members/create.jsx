@@ -1,6 +1,7 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 
 const AddMember = () => {
+  
   return (
     <AdminLayout>
     <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
@@ -62,6 +63,8 @@ const AddMember = () => {
                     <label for="country">Phone Number</label>
                     <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                       <input
+                        type="tel"
+                        pattern="[789][0-9]{9}" required
                         name="country"
                         placeholder="+251 9 "
                         className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
@@ -79,6 +82,17 @@ const AddMember = () => {
                         placeholder="Department"
                         className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
                       />
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-3">
+                    <label for="state">Date of Birth</label>
+                    <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                    <input type="date"
+                        onfocus="(this.type='date')" name="DB"
+                        placeholder="MM/DD/YYYY"
+                        id="state"
+                        className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"/>
                     </div>
                   </div>
 

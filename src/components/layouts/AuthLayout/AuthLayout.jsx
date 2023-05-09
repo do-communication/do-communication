@@ -12,8 +12,6 @@ const AuthLayout = ({ title, children }) => {
         <AuthHeader />
         <div className="flex gap-10 px-5 lg:px-20">
           <div className="items-center justify-center hidden w-5/12 pt-20 pl-10 md:flex">
-        <div className="flex gap-10 px-5 lg:px-20">
-          <div className="items-center justify-center hidden w-5/12 pt-20 pl-10 md:flex">
             <img src="/images/office.svg" alt="office logo" />
           </div>
           <div className="flex justify-center w-full md:w-7/12">
