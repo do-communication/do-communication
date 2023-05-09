@@ -13,8 +13,8 @@ import {
   AiOutlineFile,
   AiFillLike,
 } from "react-icons/ai";
-import {TfiFiles} from "react-icons/tfi"
-import {GiShare} from "react-icons/gi"
+import { TfiFiles } from "react-icons/tfi";
+import { GiShare } from "react-icons/gi";
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
@@ -46,9 +46,7 @@ const ManageFiles = () => {
       name: "File Name",
       selector: (row) => (
         <p className="flex items-center gap-2">
-          <AiOutlineFile
-           className="w-9 p-2 h-auto rounded-full bg-primary opacity-"
-          />
+          <AiOutlineFile className="w-9 p-2 h-auto" />
 
           {row.name}
         </p>
@@ -56,8 +54,8 @@ const ManageFiles = () => {
       sortable: true,
     },
     {
-      name: "File Type",
-      selector: (row) => row.type,
+      name: "Description",
+      selector: (row) => row.Description,
     },
     {
       name: "Owner",
@@ -175,9 +173,7 @@ const ManageFiles = () => {
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
                   {/* <MdGroup className="w-12 h-12" /> */}
-                  < AiOutlineFile
-                    className="flex items-center justify-center w-10 h-10 m-2 rounded-full "
-                  />
+                  <AiOutlineFile className="flex items-center justify-center w-10 h-10 m-2 rounded-full " />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].name}
@@ -201,22 +197,22 @@ const ManageFiles = () => {
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
-                      File Name
+                        File Name
                       </p>
                     </div>
-                    <p className="w-40 truncate" title="Lidiya Solomon Tamru">
-                    {selectedRows[0].name}
+                    <p className="w-40 truncate text-sm" title="Lidiya Solomon Tamru">
+                      {selectedRows[0].name}
                     </p>
                   </div>
 
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold ">
-                        File Type
+                        Description
                       </p>
                     </div>
-                    <p className="w-40 truncate" title="Product Manager">
-                    {selectedRows[0].type}
+                    <p className="w-40 truncate text-sm" title="Product Manager">
+                      {selectedRows[0].description}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -225,8 +221,8 @@ const ManageFiles = () => {
                         Owner
                       </p>
                     </div>
-                    <p className="w-40 truncate" title="Addis Ababa/Ethiopia">
-                    {selectedRows[0].owner}
+                    <p className="w-40 truncate text-sm" title="Addis Ababa/Ethiopia">
+                      {selectedRows[0].owner}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -235,8 +231,8 @@ const ManageFiles = () => {
                         Location
                       </p>
                     </div>
-                    <p className="w-40 truncate" title="+251910******">
-                    {selectedRows[0].location}
+                    <p className="w-40 truncate text-sm" title="+251910******">
+                      {selectedRows[0].location}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -245,8 +241,8 @@ const ManageFiles = () => {
                         Created At
                       </p>
                     </div>
-                    <p className="w-40 truncate" title="+251910******">
-                    {selectedRows[0].createdAt}
+                    <p className="w-40 truncate text-sm" title="+251910******">
+                      {selectedRows[0].createdAt}
                     </p>
                   </div>
                 </ul>

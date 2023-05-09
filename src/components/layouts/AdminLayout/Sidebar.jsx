@@ -20,8 +20,17 @@ const Sidebar = () => {
     },
     {
       Icon: <BsFillChatDotsFill />,
-      url: "/admin/chats",
       name: "Chat",
+      children: [
+        {
+          url: "/admin/chats/groupChat",
+          name: "Group Chat",
+        },
+        {
+          url: "/admin/chats/directChat",
+          name: "Direct Chat",
+        },
+      ],
     },
     {
       Icon: <RiTeamFill />,
@@ -67,14 +76,23 @@ const Sidebar = () => {
       ],
     },
     {
+      Icon: <AiFillFileAdd />,
+      name: "Files", //unqiue
+      children: [
+        {
+          url: "/admin/files/create",
+          name: "Add File",
+        },
+        {
+          url: "/admin/files/ManageFiles",
+          name: "Manage files",
+        },
+      ],
+    },
+    {
       Icon: <TbReportAnalytics />,
       url: "/admin/report",
       name: "Report",
-    },
-    {
-      Icon: <AiFillFileAdd />,
-      url: "/admin/files/ManageFiles",
-      name: "Files",
     },
     {
       Icon: <RiLogoutBoxFill />,
