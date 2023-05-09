@@ -26,10 +26,10 @@ const Forgot = () => {
           href="/auth/forgot"
           className="flex gap-4 justify-center items-center py-9"
         >
-          <div className="rounded-full bg-primary w-10 h-10 flex items-center justify-center">
+          {/* <div className="rounded-full bg-primary w-10 h-10 flex items-center justify-center">
             <IoIosArrowBack className="w-10 h-auto" />
-          </div>
-          <h1 className="text-xl font-semibold vertical-align: bottom">Back</h1>
+          </div> */}
+          <h4 className="text-l font-semibold translate-x-0 vertical-align: bottom">Back</h4>
         </Link>
         
         </div>

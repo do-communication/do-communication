@@ -13,18 +13,25 @@ const AuthHeader = () => {
     const currentPath = router.asPath;
 
     if (currentPath === "/auth/signup") {
-      setLoginButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      setSignupButtonStyle(
+        "w-full text-white px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
       );
+      setLoginButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
+    } else if (currentPath === "/auth/login"){
       setSignupButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
+      setLoginButtonStyle(
+        "w-full text-white px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
       );
     } else {
-      setLoginButtonStyle(
+      setSignupButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
-      setSignupButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      setLoginButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
     }
   }, [router]);
@@ -106,7 +113,7 @@ const AuthHeader = () => {
           >
             <li>
               <Link className={loginButtonStyle} href="/auth/login">
-                Log in
+                Sign in
               </Link>
             </li>
             <li>

@@ -9,7 +9,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <AuthLayout title="Login">
+    <AuthLayout title="Sign In">
       <div className="flex flex-col gap-6">
         {/* email input */}
         <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pl-5">
