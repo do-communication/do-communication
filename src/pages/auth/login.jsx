@@ -17,14 +17,14 @@ const Login = () => {
     password: ''
   })
 
-  const handleLogin = async (e) =>{
+  const handleLogin = async (e) => {
     e.preventDefault()
     // const form = document.getElementById('loginForm')
-    try{
+    try {
       await logIn(data.email, data.password)
       document.querySelector('.error-txt').innerHtml = ""
       router.push('/')
-    }catch(err){
+    } catch (err) {
       // if (err.message == "(auth/wrong-password)."){
       //   setData({
       //     ...data,
@@ -34,22 +34,24 @@ const Login = () => {
       //   document.getElementById("password").placeholder="Your Password is incorrect";
       //   // document.getElementById("password").value
       // }else{
-        // const form = document.getElementById('loginForm')
-        document.querySelector('.error-txt').innerHtml = err.code
-        
+      // const form = document.getElementById('loginForm')
+      // document.querySelector('.error-txt').innerHtml = err.code
+      console.log(err)
+
       // }
     }
     console.log(data)
   }
-  
-  const handleLoginGoogle = async (e) =>{
+
+  const handleLoginGoogle = async (e) => {
     e.preventDefault()
     // const form = document.getElementById('loginForm')
-    try{
+    try {
       await signInGoogle(auth, provider)
-      form.querySelector('.error-txt').innerHtml = ""
+      // form.querySelector('.error-txt').innerHtml = ""
       router.push('/')
-    }catch(err){
+      console.log("done successfully");
+    } catch (err) {
       // if (err.message == "auth/wrong-password"){
       //   setData({
       //     ...data,
@@ -63,7 +65,9 @@ const Login = () => {
       // }
       // console.log(err)
       // const form = document.getElementById('loginForm')
-      form.querySelector('.error-txt').innerHtml = err.message
+      // form.querySelector('.error-txt').innerHtml = err.message
+      console.log('in error');
+      console.log(err);
     }
     console.log(data)
   }
@@ -77,7 +81,7 @@ const Login = () => {
           <input
             onChange={(e) => setData({
               ...data,
-              email : e.target.value
+              email: e.target.value
             })
             }
             value={data.email}
@@ -93,7 +97,7 @@ const Login = () => {
           <input
             onChange={(e) => setData({
               ...data,
-              password : e.target.value
+              password: e.target.value
             })
             }
             value={data.password}
