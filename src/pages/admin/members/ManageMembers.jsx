@@ -26,7 +26,9 @@ const ManageMembers = () => {
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
+        item.name && item.name.toLowerCase().includes(search.toLowerCase()) 
+        || item.department && item.department.toLowerCase().includes(search.toLowerCase())
+        || item.email && item.email.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
