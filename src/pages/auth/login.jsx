@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault()
     try {
       await logIn(data.email, data.password)
-      router.push('/')
+      router.push('/admin')
     } catch (err) {
       if (err.message == "Firebase: Error (auth/wrong-password).") {
         passwordInput.value = "";
@@ -157,16 +157,6 @@ const Login = () => {
         </fieldset>
         <button onClick={handleLoginGoogle} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
           Sign in with &nbsp; <FcGoogle className="h-auto w-6" />
-          {/* ======= */}
-          {/* <button className="flex items-center justify-center w-full py-4 text-lg font-semibold rounded-full shadow-sm bg-primary shadow-black hover:brightness-95">
-          Sign in
-        </button>
-        <fieldset className="border-t border-black">
-          <legend className="px-4 mx-auto text-lg text-black">or</legend>
-        </fieldset>
-        <button className="flex items-center justify-center w-full py-4 text-lg font-semibold rounded-full shadow-sm bg-primary shadow-black hover:brightness-95">
-          Sign in with &nbsp; <FcGoogle className="w-6 h-auto" /> */}
-          {/* >>>>>>> 66edee1d6d5cfaeb310a009c5ee1ac8ddcebf4cf */}
         </button>
       </div>
     </AuthLayout>

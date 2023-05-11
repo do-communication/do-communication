@@ -115,15 +115,18 @@ const Signup = () => {
     }
     if (passwordSignUp.value != "" && emailSignUp.value != "" && nameInput.value != "" && companyInput.value != "") {
       try {
-        await signUp(data.email, data.password)
-        router.push('/')
-        // await signUp(data.email, data.password).then(cred => {
-        //   return setDoc(doc(db, data.companyName + cred.user.uid, cred.user.uid, "Users", "Admin"), {
-        //     name: data.name,
-        //     companyName: data.companyName,
-        //     email: data.email,
-        //   })
-        // }).then(() => router.push('/admin')).catch((e) => console.log(e))
+        const cred = await signUp(data.email, data.password)
+        try {
+          console.log(db)
+          await setDoc(doc(db, data.companyName, cred.user.uid), {
+            name: data.name,
+            companyName: data.companyName,
+            email: data.email,
+          })
+          router.push('/admin')
+        } catch (errrr) {
+          console.log(errrr);
+        }
       } catch (err) {
         if (err.message == "Firebase: Password should be at least 6 characters (auth/weak-password).") {
           passwordSignUp.value = "";
@@ -210,12 +213,19 @@ const Signup = () => {
           placeholder="Enter your password"
           size="lg"
         />
-        : (
-        <AiOutlineEyeInvisible
-          className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
-          onClick={() => setShowPassword(true)}
-        />
-        )
+        {showPassword ? (
+          <AiOutlineEye
+            className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
+            onClick={() => setShowPassword(false)}
+          />
+        ) : (
+
+
+          <AiOutlineEyeInvisible
+            className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
+            onClick={() => setShowPassword(true)}
+          />)
+        }
       </div>
     </div>
     <div className="flex flex-col gap-3">
