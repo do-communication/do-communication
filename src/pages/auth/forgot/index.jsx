@@ -2,8 +2,29 @@ import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
 import {MdOutlineEmail} from "react-icons/md"
 import {IoIosArrowBack} from "react-icons/io"
 import Link from "next/link";
+import { useAuth } from "../../../../context/AuthContext";
+import { useState } from "react";
+import Router from "next/router";
+
+const router = Router
 
 const Forgot = () => {
+  const [email, setEmail] = useState("");
+  const { user, forgotPassword } = useAuth()
+  
+
+  const handleForgot = async (e) =>{
+    e.preventDefault()
+    try{
+      await forgotPassword(email)
+      router.push("/auth/forgot/newPassword")
+    }catch(err){
+      console.log(err.message)
+    }
+  
+  }
+
+
     return (
         <AuthLayout title="Forgot Password">
         <div className="flex flex-col gap-9 py-10">
@@ -11,6 +32,8 @@ const Forgot = () => {
           <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pl-5">
           <MdOutlineEmail className="w-10 text-gray-600 pl-2 h-auto" />
           <input
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
             type="email"
             className="bg-white text-gray-600 w-full rounded-3xl py-4 px-2 outline-none"
             placeholder="Enter your email"
@@ -18,8 +41,8 @@ const Forgot = () => {
           />
         </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <button className="w-full text-white first-letter:text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
+        <div className="flex flex-col gap-4">
+          <button onClick = {handleForgot} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
             Send
           </button>
           <Link

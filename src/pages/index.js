@@ -1,5 +1,6 @@
 import AuthHeader from "@/components/layouts/AuthLayout/AuthHeader";
 import Link from "next/link";
+
 const Home = () => {
   return (
     <>
