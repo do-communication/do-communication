@@ -67,7 +67,7 @@ const Sidebar = () => {
       children: [
         {
           url: "/admin/task/create",
-          name: "Creat Task",
+          name: "Create Task",
         },
         {
           url: "/admin/task/manage",
@@ -97,7 +97,7 @@ const Sidebar = () => {
     {
       Icon: <RiLogoutBoxFill />,
       url: "/",
-      name: "Logout",
+      name: "Sign out",
     },
   ];
 

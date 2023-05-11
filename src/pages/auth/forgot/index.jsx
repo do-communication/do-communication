@@ -46,13 +46,13 @@ const Forgot = () => {
             Send
           </button>
           <Link
-          href="/auth/forgot"
+          href="/auth/login"
           className="flex gap-4 justify-center items-center py-9"
         >
-          <div className="rounded-full bg-primary w-10 h-10 flex items-center justify-center">
-            <IoIosArrowBack className="w-10 h-auto" />
+          <div className="rounded-full  bg-primary w-7 h-7 flex items-center justify-center">
+            <IoIosArrowBack className="w-8 h-auto text-white" />
           </div>
-          <h1 className="text-xl font-semibold vertical-align: bottom">Back</h1>
+          <h4 className="text-lg text-gray-400 hover:text-black font-semibold translate-x-0 vertical-align: bottom">Back</h4>
         </Link>
         
         </div>

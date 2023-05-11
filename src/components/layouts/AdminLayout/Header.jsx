@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
 import {
   AiOutlineMenu,

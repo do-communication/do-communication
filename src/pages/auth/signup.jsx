@@ -1,9 +1,7 @@
-import { MdOutlineEmail } from "react-icons/md"
+import { MdLockOutline, MdOutlineEmail } from "react-icons/md";
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2"
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
 import { useState } from "react";
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
 import { useAuth, getAuth, updateProfile } from "../../../context/AuthContext";
@@ -15,6 +13,7 @@ const router = Router
 const Signup = () => {
   const { user, signUp } = useAuth()
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [data, setData] = useState({
     name: '',
@@ -183,7 +182,7 @@ const Signup = () => {
           value={data.companyName}
           id="companyInput"
           type="text"
-          className="bg-white text-gray-600 w-full rounded-3xl py-4 px-2 outline-none"
+          className="w-full px-2 py-4 text-gray-600 bg-white outline-none rounded-3xl"
           placeholder="Enter your company name"
           size="lg"
         />
@@ -196,7 +195,7 @@ const Signup = () => {
           id="emailSignUp"
           value={data.email}
           type="email"
-          className="bg-white text-gray-600 w-full rounded-3xl py-4 px-2 outline-none"
+          className="w-full px-2 py-4 text-gray-600 bg-white outline-none rounded-3xl"
           placeholder="Enter your email"
           size="lg"
         />
@@ -204,42 +203,57 @@ const Signup = () => {
 
       {/*password input */}
       <div id="divpassword" className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pr-5 pl-5">
+        <MdLockOutline className="w-10 h-auto pl-2 text-gray-600" />
         <input
           onChange={handlePasswordChange}
           id="passwordSignUp"
           value={data.password}
           type={showPassword ? "text" : "password"}
-          className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[52px] outline-none"
+          className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[10px] outline-none"
           placeholder="Enter your password"
           size="lg"
         />
         {showPassword ? (
           <AiOutlineEye
-            className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
+            className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
             onClick={() => setShowPassword(false)}
           />
         ) : (
-
-
           <AiOutlineEyeInvisible
-            className="cursor-pointer w-10 text-gray-600 pr-3 h-auto"
+            className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
             onClick={() => setShowPassword(true)}
-          />)
-        }
+          />
+        )}
+      </div>
+      <div className="flex gap-2 pl-5 pr-5 bg-white group rounded-3xl hover:ring-2 active:ring-2 ring-blue-300">
+        <MdLockOutline className="w-10 h-auto pl-2 text-gray-600" />
+        <input
+          type={showConfirmPassword ? "text" : "password"}
+          className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[10px] outline-none"
+          placeholder="Confirm your password"
+          size="lg"
+        />
+        {showConfirmPassword ? (
+          <AiOutlineEye
+            className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
+            onClick={() => setShowConfirmPassword(false)}
+          />
+        ) : (
+          <AiOutlineEyeInvisible
+            className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
+            onClick={() => setShowConfirmPassword(true)}
+          />
+        )}
       </div>
     </div>
     <div className="flex flex-col gap-3">
-      <button onClick={handleSignUp} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-3 rounded-full shadow-sm shadow-black hover:brightness-95">
-        Sign in
+      <button onClick={handleSignUp} className="flex items-center text-white justify-center w-full py-3 text-lg font-semibold rounded-full shadow-sm bg-primary shadow-black hover:brightness-95">
+        Sign Up
       </button>
-      <fieldset class="border-t border-black">
-        <legend class="mx-auto px-4 text-black text-lg">or</legend>
-      </fieldset>
-      <button className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-3 rounded-full shadow-sm shadow-black hover:brightness-95">
-        Sign in with &nbsp; <FcGoogle className="h-auto w-6" />
-      </button>
+
     </div>
-  </AuthLayout>;
+  </AuthLayout>
+
 };
 
 export default Signup;

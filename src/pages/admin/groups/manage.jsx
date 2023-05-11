@@ -30,7 +30,7 @@ const ManageGroup = () => {
   useEffect(() => {
     const filteredData = allGroups.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
+        item.name && item.name.toLowerCase().includes(search.toLowerCase()) || item.type && item.type.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -156,7 +156,7 @@ const ManageGroup = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                        href="/admin/groups/edit"
+                        href="/admin/groups/delete/{groupId}"
                         className="flex items-center gap-2"
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Group
@@ -176,7 +176,6 @@ const ManageGroup = () => {
               </div>
               <div className="relative flex justify-center py-4">
                 <button
-                  onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <TbMessage className="w-8 h-auto" />

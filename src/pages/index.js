@@ -25,7 +25,7 @@ const Home = () => {
                   </p>
                   <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                     <Link
-                      href="#about"
+                      href="/auth/signup"
                       className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-secondary rounded-md sm:mb-0 hover:bg-blue-600 sm:w-auto"
                     >
                       Try It
@@ -44,10 +44,10 @@ const Home = () => {
                       </svg>
                     </Link>
                     <Link
-                      href="/auth/signup"
+                      href="/auth/login"
                       className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600"
                     >
-                      Sign up
+                      Sign In
                     </Link>
                   </div>
                 </div>

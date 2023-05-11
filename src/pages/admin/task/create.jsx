@@ -7,89 +7,76 @@ const AddMember = () => {
     <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
       <div className="container max-w-screen-lg mx-auto">
         <div>
-          <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Add Member</h2>
+          <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Assign Task</h2>
 
           <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
             <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
               <div className="text-gray-600">
-                <p className="font-medium text-lg pb-3 pl-4">Employee Details</p>
-                <img src="/images/form1.svg" alt="form" width={250} height={800} className="pt-10 sm:pb-3" />
+                <p className="font-medium text-lg pb-3 pl-4">Task Details</p>
+                <img src="/images/task.svg" alt="form" width={250} height={800} className="pt-10 sm:pb-3" />
               </div>
 
               <div className="lg:col-span-2 ">
                 <div className="grid gap-6 gap-y-5 text-sm grid-cols-1 md:grid-cols-6">
                   <div className="md:col-span-3">
-                    <label for="full_name">Full Name</label>
+                    <label for="full_name">Task Title</label>
                     <input
                       type="text"
-                      name="full_name"
-                      id="full_name"
+                      name="task_title"
+                      id="task_title"
                       className="h-10 border mt-1 rounded px-4  w-full bg-gray-50"
                     />
                   </div>
 
                   <div className="md:col-span-3">
-                    <label for="email">Email Address</label>
-                    <input
+                    <label for="task">Task Description</label>
+                    <textarea
                       type="text"
-                      name="email"
-                      id="email"
+                      name="description"
+                      id="description"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      placeholder="email@employee.com"
+                      placeholder="Write some description about the task"
+                      rows={16} cols={50}
                     />
                   </div>
 
                   <div className="md:col-span-3">
-                    <label for="address">Address</label>
+                    <label for="address">Assigned To:</label>
                     <input
                       type="text"
-                      name="address"
-                      id="address"
+                      name="assignedTo"
+                      id="assignedTo"
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      placeholder=""
+                      placeholder="search for a member or group"
                     />
                   </div>
 
                   <div className="md:col-span-3">
-                    <label for="Gender">Gender</label>
+                    <label for="Gender">Priority</label>
                     <select className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
-                      <option value="null">Select gender</option>
-                      <option value="f">Female</option>
-                      <option value="m">Male</option>
+                      <option value="null">Select priority</option>
+                      <option value="h">High</option>
+                      <option value="m">Medium</option>
+                      <option value="l">Low</option>
                     </select>
                   </div>
 
                   <div className="md:col-span-3">
-                    <label for="country">Phone Number</label>
-                    <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                      <input
-                        type="tel"
-                        pattern="[789][0-9]{9}" required
-                        name="country"
-                        placeholder="+251 9 "
-                        className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
-                        
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-3">
-                    <label for="state">Department</label>
-                    <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                      <input
-                        name="state"
-                        id="state"
-                        placeholder="Department"
-                        className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-3">
-                    <label for="state">Date of Birth</label>
+                    <label for="state">Start Date</label>
                     <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                     <input type="date"
-                        onfocus="(this.type='date')" name="DB"
+                        onfocus="(this.type='date')" name="startDate"
+                        placeholder="MM/DD/YYYY"
+                        id="state"
+                        className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"/>
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-3">
+                    <label for="state">Due Date</label>
+                    <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                    <input type="date"
+                        onfocus="(this.type='date')" name="dueDate"
                         placeholder="MM/DD/YYYY"
                         id="state"
                         className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"/>
@@ -103,7 +90,7 @@ const AddMember = () => {
                           Cancel
                         </button>
                         <button className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
-                          Submit
+                          Assign
                         </button>
                       </div>
                     </div>

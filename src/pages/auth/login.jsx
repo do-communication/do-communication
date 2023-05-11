@@ -1,5 +1,5 @@
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
-import { MdOutlineEmail } from "react-icons/md";
+import { MdLockOutline, MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
@@ -99,7 +99,7 @@ const Login = () => {
 
 
   return (
-    <AuthLayout title="Login">
+    <AuthLayout title="Sign In">
       <div className="flex flex-col gap-6">
         {/* email input */}
         <div id="emaildiv" className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pl-5">
@@ -118,36 +118,38 @@ const Login = () => {
 
         {/*password input */}
         <div id="passworddiv" className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pr-5 pl-5">
+          <MdLockOutline className="w-10 h-auto pl-2 text-gray-600" />
           <input
             onChange={handlePasswordChange}
             value={data.password}
             type={showPassword ? "text" : "password"}
-            className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[52px] outline-none"
+            className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[10px] outline-none"
             id="passwordInput"
             placeholder="Enter your password"
             size="lg"
           />
-          {showPassword ? (
-            <AiOutlineEye
-              className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
-              onClick={() => setShowPassword(false)}
-            />
-          ) : (
-            <AiOutlineEyeInvisible
-              className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
-              onClick={() => setShowPassword(true)}
-            />
-          )}
-        </div>
+          {
+            showPassword ? (
+              <AiOutlineEye
+                className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <AiOutlineEyeInvisible
+                className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
+                onClick={() => setShowPassword(true)}
+              />
+            )
+          }
+        </div >
         <Link
           href="forgot"
           className="self-end pr-3 text-gray-700 hover:underline"
         >
           Forgot Password?
         </Link>
-      </div>
+      </div >
       <div className="flex flex-col gap-4">
-        {/* <<<<<<< HEAD */}
         <button onClick={handleLogin} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
           Sign in
         </button>
@@ -159,7 +161,7 @@ const Login = () => {
           Sign in with &nbsp; <FcGoogle className="h-auto w-6" />
         </button>
       </div>
-    </AuthLayout>
+    </AuthLayout >
   );
 };
 
