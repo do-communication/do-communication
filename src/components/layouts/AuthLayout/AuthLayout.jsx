@@ -10,12 +10,12 @@ const AuthLayout = ({ title, children }) => {
       />
       <main className="relative z-10 min-h-screen">
         <AuthHeader />
-        <div className="flex lg:px-20 px-5 gap-10">
-          <div className="md:flex pt-20 pl-10 w-5/12 items-center justify-center hidden">
+        <div className="flex gap-10 px-5 lg:px-20">
+          <div className="items-center justify-center hidden w-5/12 pt-20 pl-10 md:flex">
             <img src="/images/office.svg" alt="office logo" />
           </div>
-          <div class="w-full md:w-7/12 flex justify-center">
-            <div className="bg-black bg-opacity-5 shadow-md shadow-gray-800 w-full lg:w-2/3 flex flex-col gap-8 px-9 py-8 rounded-2xl">
+          <div className="flex justify-center w-full md:w-7/12">
+            <div className="flex flex-col w-full gap-8 py-8 bg-black shadow-md bg-opacity-5 shadow-gray-800 lg:w-2/3 px-9 rounded-2xl">
               <h2 className="text-3xl font-semibold text-center">{title}</h2>
               {children}
             </div>

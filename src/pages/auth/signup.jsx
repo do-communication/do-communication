@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { useState } from "react";
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth, getAuth, updateProfile } from "../../../context/AuthContext";
 import Router from 'next/router'
 import { db } from "../../../context/DbContext"
 import { doc, setDoc } from "firebase/firestore";
@@ -27,16 +27,16 @@ const Signup = () => {
     e.preventDefault()
     try {
       signUp(data.email, data.password).then(cred => {
-        return setDoc(doc(db, data.companyName, cred.user.uid));
-        //   DocumentReference messageRef = db
-        // .collection("rooms").document("roomA")
-        // .collection("messages").document("message1");
-      }).then(() => router.push('/')).catch((e) => console.log(e))
+        return setDoc(doc(db, data.companyName + cred.user.uid, cred.user.uid, "Users", "Admin"), {
+          name: data.name,
+          companyName: data.companyName,
+          email: data.email,
+        })
+      }).then(() => router.push('/admin')).catch((e) => console.log(e))
 
     } catch (err) {
       console.log(err)
     }
-    console.log(data)
   }
 
   return <AuthLayout title="Sign up">

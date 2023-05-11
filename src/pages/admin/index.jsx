@@ -1,9 +1,15 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import { db } from "../../../context/DbContext";
+import { useAuth } from "../../../context/AuthContext";
 
 const Admin = () => {
+  const { user } = useAuth()
+
   return (
     <AdminLayout>
-      <h1>Nice</h1>
+      <div>
+        {user && user.email}
+      </div>
     </AdminLayout>
   );
 };
