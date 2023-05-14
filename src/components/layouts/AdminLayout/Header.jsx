@@ -74,7 +74,7 @@ const Header = () => {
                       type="text"
                       className="form-input rounded-md bg-light_2 text-sm text-gray-700 pl-10 py-1.5 ml-5 border-transparent border-none outline-none focus:ring-0 focus:text-white transition-all duration-300 ease-in-out focus:w-60 w-48"
                       placeholder="Search..."
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                     <span className="absolute text-gray-400 transition-all duration-300 ease-in-out left-44 bottom-2 group-focus-within:left-8">
                       <svg
