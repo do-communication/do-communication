@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { TbMessageCircle, TbSend } from "react-icons/tb";
 import { allGroups } from "@/mock/groups";
 import { AiOutlineSearch } from "react-icons/ai";
-import { BiDotsVertical, BiUser } from "react-icons/bi";
+import { BiUser } from "react-icons/bi";
 import { RiAttachment2 } from "react-icons/ri";
 
 const GroupChat = () => {
@@ -163,9 +163,6 @@ const GroupChat = () => {
                 <BiUser className="w-10 h-10 text-4xl bg-gray-400 rounded-full" />
                 John Doe
               </div>
-              <button className="text-4xl">
-                <BiDotsVertical />
-              </button>
             </header>
             {/* chatbox */}
             <div className="absolute w-full grid grid-cols-12 gap-y-2  h-[438px] bottom-16 overflow-x-hidden overflow-y-auto">
