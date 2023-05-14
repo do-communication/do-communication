@@ -35,4 +35,40 @@ export const allMembers = [
     email: "Member6@gmail.com",
     department: "designer",
   },
+  {
+    photo: "/images/pp.png",
+    name: "member 6",
+    email: "Member6@gmail.com",
+    department: "designer",
+  },
+  {
+    photo: "/images/pp.png",
+    name: "member 6",
+    email: "Member6@gmail.com",
+    department: "designer",
+  },
+  {
+    photo: "/images/pp.png",
+    name: "member 6",
+    email: "Member6@gmail.com",
+    department: "designer",
+  },
+  {
+    photo: "/images/pp.png",
+    name: "member 6",
+    email: "Member6@gmail.com",
+    department: "designer",
+  },
+  {
+    photo: "/images/pp.png",
+    name: "member 6",
+    email: "Member6@gmail.com",
+    department: "designer",
+  },
+  {
+    photo: "/images/pp.png",
+    name: "member 6",
+    email: "Member6@gmail.com",
+    department: "designer",
+  },
 ];

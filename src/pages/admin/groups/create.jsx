@@ -175,12 +175,12 @@ const ManageGroup = () => {
                 <p className="text-sm">{selectedRows[0].type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button
-                  onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
+                <Link
+                  href="/admin/chats/directChat"
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <TbMessage className="w-8 h-auto" />
-                </button>
+                </Link>
               </div>
 
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
