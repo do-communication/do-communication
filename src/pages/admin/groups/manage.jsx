@@ -23,7 +23,7 @@ const ManageGroup = () => {
   const [groups, setGroups] = useState(allGroups);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
+  const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
 
   // search for groups using group name
@@ -86,6 +86,7 @@ const ManageGroup = () => {
             onSelectedRowsChange={handleRowSelected}
             selectableRowsSingle={true}
             selectableRowsNoSelectAll={true}
+            clearSelectedRows={clearSelectedRows}
             pagination={true}
           />
         </div>
@@ -101,7 +102,10 @@ const ManageGroup = () => {
             <div className="flex flex-col">
               <div className="relative flex justify-between sm:justify-end">
                 <button
-                  onClick={() => setSelectedRows([])}
+                  onClick={() => {
+                    setSelectedRows([]);
+                    setClearSelectedRows(true);
+                  }}
                   className="block sm:hidden"
                 >
                   <BiX className="h-auto w-9 hover:text-gray-600" />
