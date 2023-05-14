@@ -99,8 +99,11 @@ const ManageGroup = () => {
 
           {selectedRows.length === 1 && (
             <div className="flex flex-col">
-              <div className="relative flex justify-between">
-                <button onClick={() => setSelectedRows([])}>
+              <div className="relative flex justify-between sm:justify-end">
+                <button
+                  onClick={() => setSelectedRows([])}
+                  className="block sm:hidden"
+                >
                   <BiX className="h-auto w-9 hover:text-gray-600" />
                 </button>
                 <button
