@@ -2,6 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { useState } from "react";
 import { allMembers } from "@/mock/members";
 import Select from "react-select";
+import { toast } from "react-toastify";
 
 const CreateGroup = () => {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ const CreateGroup = () => {
       members,
     };
 
+    toast.success("Group created successfully");
     console.log(newGroup);
   };
 
