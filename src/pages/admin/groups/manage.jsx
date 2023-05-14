@@ -6,7 +6,6 @@ import DataTable from "react-data-table-component";
 import {
   AiFillDelete,
   AiFillEdit,
-  AiOutlineClose,
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
@@ -14,6 +13,12 @@ import { BiDotsVertical, BiUserPlus } from "react-icons/bi";
 import { HiDocumentChartBar } from "react-icons/hi2";
 import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
+import dynamic from "next/dynamic";
+
+const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
+  ssr: false,
+});
+
 const ManageGroup = () => {
   const [groups, setGroups] = useState(allGroups);
   const [search, setSearch] = useState("");
@@ -74,14 +79,14 @@ const ManageGroup = () => {
               <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
-          <DataTable
+          <ClientOnlyTable
             columns={columns}
             data={groups}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
             selectableRowsSingle={true}
             selectableRowsNoSelectAll={true}
-            pagination
+            pagination={true}
           />
         </div>
         <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
