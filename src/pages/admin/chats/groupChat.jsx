@@ -1,18 +1,72 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { useState } from "react";
-import { render } from "react-dom";
-import { BiPlus } from "react-icons/bi";
+import { useEffect, useState } from "react";
 import { TbMessageCircle } from "react-icons/tb";
+import { allMembers } from "@/mock/members";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const GroupChat = () => {
   const [messageTab, setMessageTab] = useState("recent");
+  const [members, setMembers] = useState(allMembers);
+  const [search, setSearch] = useState("");
+  // search for groups using group name
+  useEffect(() => {
+    const filteredData = allMembers.filter(
+      (item) =>
+        item?.name && item?.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    if (search) {
+      setMembers(filteredData);
+    } else {
+      setMembers(allMembers);
+    }
+  }, [search]);
 
   const renderRecent = () => {
     return <h1>Recent</h1>;
   };
 
   const renderMembers = () => {
-    return <h1>Members</h1>;
+    return (
+      <div className="flex flex-col">
+        <div className="flex flex-row items-center justify-between text-sm">
+          <div className="flex w-full pr-4 mr-4 bg-white border rounded-md border-secondary ">
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+              placeholder="Search"
+            />
+            <AiOutlineSearch className="w-6 h-auto" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 mt-4">
+          {members.length > 0 &&
+            members.map((member, index) => (
+              <button
+                key={index}
+                className={`flex flex-row items-center p-2  rounded-xl ${
+                  index === 1
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
+                }`}
+              >
+                <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+                  {member.name[0]}
+                </div>
+                <div className="ml-2 text-sm font-semibold">{member.name}</div>
+              </button>
+            ))}
+
+          {members.length === 0 && (
+            <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
+              <div className="ml-2 text-sm font-semibold">No members found</div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -22,16 +76,9 @@ const GroupChat = () => {
           {/* Sidebar */}
           <div className="max-h-full col-span-1 px-4 py-5 bg-white shadow-md rounded-2xl">
             {/* Chat Logo with create message*/}
-            <div className="flex items-center justify-between mx-auto">
-              <div className="flex items-center gap-2 text-3xl">
-                <TbMessageCircle className="text-4xl text-secondary" />
-                <h3 className="font-semibold">Group Chat</h3>
-              </div>
-              <div>
-                <button className="flex items-center justify-center gap-2 p-2 font-medium text-white rounded-full bg-primary">
-                  <BiPlus className="w-6 h-6 text-white" />
-                </button>
-              </div>
+            <div className="flex items-center justify-center gap-2 text-3xl">
+              <TbMessageCircle className="text-4xl text-secondary" />
+              <h3 className="font-semibold">Group Chat</h3>
             </div>
 
             {/* tab */}
@@ -54,7 +101,7 @@ const GroupChat = () => {
               </button>
             </div>
 
-            <div className="w-full bg-red-100 max-h-[450px] overflow-x-hidden overflow-y-auto mt-4">
+            <div className="w-full max-h-[450px] overflow-x-hidden overflow-y-auto mt-4">
               {messageTab === "recent" ? renderRecent() : renderMembers()}
             </div>
           </div>
