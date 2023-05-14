@@ -91,31 +91,6 @@ const ManageGroup = () => {
               <p>Select group to see details</p>
             </div>
           )}
-          {/* if multiple rows are selected */}
-          {selectedRows.length > 1 && (
-            <>
-              <h3 className="flex justify-between px-2 pb-4 text-xl font-semibold">
-                Selected Groups
-                <button className="flex items-center gap-1 px-2 py-1 text-base text-white bg-red-600 rounded-lg hover:bg-red-500">
-                  <AiOutlineClose className="w-5 h-auto" />
-                  Delete All
-                </button>
-              </h3>
-              <ul className="flex flex-col gap-2 px-2">
-                {selectedRows.map((row, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
-                  >
-                    <p>{row.name}</p>
-                    <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
-                      <AiOutlineClose />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
 
           {selectedRows.length === 1 && (
             <div className="flex flex-col">
