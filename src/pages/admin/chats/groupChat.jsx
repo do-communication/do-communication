@@ -23,7 +23,54 @@ const GroupChat = () => {
   }, [search]);
 
   const renderRecent = () => {
-    return <h1>Recent</h1>;
+    return (
+      <div className="flex flex-col">
+        <div className="flex flex-row items-center justify-between text-sm">
+          <div className="flex w-full pr-4 mr-4 bg-white border rounded-md border-secondary ">
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+              placeholder="Search"
+            />
+            <AiOutlineSearch className="w-6 h-auto" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 mt-4">
+          {members.length > 0 &&
+            members.slice(0, 3).map((member, index) => (
+              <button
+                key={index}
+                className={`flex flex-row items-center p-2 rounded-xl ${
+                  index === 1
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
+                }`}
+              >
+                <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+                  {member.name[0]}
+                </div>
+                <div className="flex flex-col items-start justify-start ml-4 font-semibold">
+                  <p>{member.name}</p>
+                  <p className="w-56 text-sm font-light truncate">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Facilis accusamus ipsam officiis officia voluptates iusto,
+                    porro minima architecto corrupti. Nam deserunt accusantium
+                    natus labore numquam sunt voluptates aliquam aut. Quisquam.
+                  </p>
+                </div>
+              </button>
+            ))}
+
+          {members.length === 0 && (
+            <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
+              <div className="ml-2 text-sm font-semibold">No members found</div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   const renderMembers = () => {
