@@ -2,7 +2,6 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { allGroups } from "@/mock/groups";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import DataTable from "react-data-table-component";
 import {
   AiFillDelete,
   AiFillEdit,
