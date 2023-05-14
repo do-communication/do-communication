@@ -9,7 +9,7 @@ import {
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiDotsVertical, BiUserPlus } from "react-icons/bi";
+import { BiDotsVertical, BiUserPlus, BiX } from "react-icons/bi";
 import { HiDocumentChartBar } from "react-icons/hi2";
 import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
@@ -61,19 +61,19 @@ const ManageGroup = () => {
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
           <h1 className="mb-4 text-3xl font-semibold">Manage Groups</h1>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
             <Link
               href="/admin/groups/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Create Group
             </Link>
-            <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
+            <div className="flex justify-between pr-4 bg-white border-gray-700 rounded-md ">
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="py-2 pl-4 bg-transparent outline-none"
+                className="w-11/12 py-2 pl-4 bg-transparent outline-none"
                 placeholder="Search from groups"
               />
               <AiOutlineSearch className="w-6 h-auto" />
@@ -99,7 +99,10 @@ const ManageGroup = () => {
 
           {selectedRows.length === 1 && (
             <div className="flex flex-col">
-              <div className="relative flex justify-end">
+              <div className="relative flex justify-between">
+                <button onClick={() => setSelectedRows([])}>
+                  <BiX className="h-auto w-9 hover:text-gray-600" />
+                </button>
                 <button
                   onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                 >
