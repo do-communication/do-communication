@@ -26,7 +26,7 @@ const ManageMembers = () => {
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase()) 
+        item.name && item.name.toLowerCase().includes(search.toLowerCase())
         || item.department && item.department.toLowerCase().includes(search.toLowerCase())
         || item.email && item.email.toLowerCase().includes(search.toLowerCase())
     );
@@ -199,7 +199,6 @@ const ManageMembers = () => {
               </div>
               <div className="relative flex justify-center py-4">
                 <button
-                  onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <TbMessage className="w-8 h-auto" />
