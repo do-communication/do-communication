@@ -4,10 +4,12 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2"
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useState } from "react";
 import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
-import { useAuth, getAuth, updateProfile } from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import Router from 'next/router'
 import { db } from "../../../context/DbContext"
 import { doc, setDoc } from "firebase/firestore";
+import { updateProfile } from "firebase/auth"
+import { auth } from "../../../config/firebase";
 // import { collection } from "../config/firebase";
 const router = Router
 const Signup = () => {
@@ -115,9 +117,11 @@ const Signup = () => {
     if (passwordSignUp.value != "" && emailSignUp.value != "" && nameInput.value != "" && companyInput.value != "") {
       try {
         const cred = await signUp(data.email, data.password)
+        await updateProfile(auth.currentUser, { displayName: data.name });
         try {
-          console.log(db)
-          await setDoc(doc(db, data.companyName, cred.user.uid), {
+          // console.log(db)
+          console.log(cred)
+          await setDoc(doc(db, data.companyName + cred.user.uid, "Users", "Admin", cred.user.uid,), {
             name: data.name,
             companyName: data.companyName,
             email: data.email,

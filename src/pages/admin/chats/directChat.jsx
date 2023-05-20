@@ -1,17 +1,37 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { allMembers } from "@/mock/members";
+// import { allMembers } from "@/mock/members";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { db } from "../../../../context/DbContext"
+import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 
 const DirectChat = () => {
-  const [members, setMembers] = useState(allMembers);
+  const [members, setMembers] = useState([]);
+  const [allMembers, setallMembers] = useState([]);
   const [search, setSearch] = useState("");
   // search for groups using group name
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
+      });
+
+    } catch (err) {
+      console.log(err)
+      setMembers([{ Name: "check your connection" }])
+    }
+
+    setMembers(arr)
+    setallMembers(arr)
+  }
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item?.name && item?.name.toLowerCase().includes(search.toLowerCase())
+        item?.Name && item?.Name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -19,7 +39,15 @@ const DirectChat = () => {
     } else {
       setMembers(allMembers);
     }
+
   }, [search]);
+
+  useEffect(() => {
+    getData()
+  }, []);
+
+
+
   return (
     <AdminLayout>
       {/* <!-- component --> */}
@@ -71,26 +99,27 @@ const DirectChat = () => {
                 </div>
               </div>
               <div className="flex flex-col h-48 mt-4 -mx-2 space-y-1 overflow-y-auto">
-                {members.length > 0 &&
+                {members &&
                   members.map((member, index) => (
                     <button
                       key={index}
-                      className={`flex flex-row items-center p-2  rounded-xl ${
-                        index === 1
-                          ? "bg-secondary text-white"
-                          : "hover:bg-opacity-25 hover:bg-secondary"
-                      }`}
+                      className={`flex flex-row items-center p-2  rounded-xl ${index === 1
+                        ? "bg-secondary text-white"
+                        : "hover:bg-opacity-25 hover:bg-secondary"
+                        }`}
                     >
+
                       <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
-                        {member.name[0]}
+                        {member.Name[0]}
                       </div>
                       <div className="ml-2 text-sm font-semibold">
-                        {member.name}
+                        {member.Name}
                       </div>
                     </button>
-                  ))}
+                  ))
+                }
 
-                {members.length === 0 && (
+                {!members && (
                   <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
                     <div className="ml-2 text-sm font-semibold">
                       No members found
@@ -114,7 +143,7 @@ const DirectChat = () => {
                     <div className="col-start-1 col-end-8 p-3 rounded-lg">
                       <div className="flex flex-row items-center">
                         <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          L
+                          R
                         </div>
                         <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
                           <div>Hey How are you today?</div>

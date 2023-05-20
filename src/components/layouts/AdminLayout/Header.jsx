@@ -164,7 +164,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>{user && user.email}</span>
+                      <span>{user && user.displayName}</span>
                       <span>Admin</span>
                     </div>
                   </div>
@@ -243,10 +243,10 @@ const Header = () => {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-gray-800">
-                    Senait Gobezie
+                    {user && user.displayName}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    sen@example.com
+                    {user && user.email}
                   </div>
                 </div>
                 <button
@@ -266,9 +266,11 @@ const Header = () => {
                 </Link>
 
                 <Link
-                  href="/logout"
+                  href="#"
+                  onClick={handleSingout}
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
+
                   <AiOutlineLogout className="w-5 h-auto" />
                   Sign out
                 </Link>

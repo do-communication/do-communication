@@ -8,7 +8,7 @@ const Admin = () => {
   return (
     <AdminLayout>
       <div>
-        {user && user.email}
+        {user && user.displayName}
       </div>
     </AdminLayout>
   );
