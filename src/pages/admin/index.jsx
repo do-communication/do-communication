@@ -8,7 +8,7 @@ const Admin = () => {
             <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
               <div className="mr-6">
                 <h1 className="text-4xl font-semibold mb-2">Dashboard</h1>
-                <h2 className="text-gray-600 ml-0.5">Some@company</h2>
+                <h2 className="text-gray-600 ml-0.5">SomeCompany@gmail.com</h2>
               </div>
             </div>
             <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -177,7 +177,7 @@ const Admin = () => {
                 <div className="rounded-t mb-0 px-0 border-0">
                   <div className="flex flex-wrap items-center px-4 py-2">
                     <div className="relative w-full max-w-full flex-grow flex-1">
-                      <h3 className="font-semibold text-base text-gray-900 dark:text-gray-500">
+                      <h3 className="font-semibold text-base text-gray-900 dark:text-gray-00">
                         Recent Activities
                       </h3>
                     </div>
@@ -191,12 +191,12 @@ const Admin = () => {
                     </div>
                   </div>
                   <div className="block w-full">
-                    <div className="px-4 bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    <div className="px-4 bg-gray-10 bg-light text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       Today
                     </div>
                     <ul className="my-1">
                       <li className="flex px-4">
-                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-red-500 my-2 mr-3">
+                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-green-300 my-2 mr-3">
                           <svg
                             className="w-9 h-9 fill-current text-red-50"
                             viewBox="0 0 36 36"
@@ -207,21 +207,47 @@ const Admin = () => {
                         <div className="flex-grow flex items-center border-gray-100 text-sm text-gray-600 dark:text-gray-500 py-2">
                           <div className="flex-grow flex justify-between items-center">
                             <div className="self-center">
-                              The post{" "}
+                              Some@member completed his task
+                            </div>
+                            <div className="flex-shrink-0 ml-2">
                               <a
-                                className="font-medium text-gray-800 dark:text-gray-50 dark:hover:text-gray-100"
+                                className="flex items-center font-medium text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-500"
                                 href="#0"
                               >
-                                Post Name
-                              </a>{" "}
-                              was removed by{" "}
-                              <a
-                                className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-50 dark:hover:text-gray-100"
-                                href="#0"
-
-                              >
-                                Nick Mark
+                                View
+                                <span>
+                                  <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    className="transform transition-transform duration-500 ease-in-out"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                      clip-rule="evenodd"
+                                    ></path>
+                                  </svg>
+                                </span>
                               </a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="flex px-4">
+                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-green-300 my-2 mr-3">
+                          <svg
+                            className="w-9 h-9 fill-current text-red-50"
+                            viewBox="0 0 36 36"
+                          >
+                            <path d="M25 24H11a1 1 0 01-1-1v-5h2v4h12v-4h2v5a1 1 0 01-1 1zM14 13h8v2h-8z"></path>
+                          </svg>
+                        </div>
+                        <div className="flex-grow flex items-center border-gray-100 text-sm text-gray-600 dark:text-gray-500 py-2">
+                          <div className="flex-grow flex justify-between items-center">
+                            <div className="self-center">
+                              Some@member added new report
                             </div>
                             <div className="flex-shrink-0 ml-2">
                               <a
@@ -250,12 +276,12 @@ const Admin = () => {
                         </div>
                       </li>
                     </ul>
-                    <div className="px-4 bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    <div className="px-4 bg-gray-10 bg-light text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       Yesterday
                     </div>
                     <ul className="my-1">
                       <li className="flex px-4">
-                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-green-500 my-2 mr-3">
+                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-primary my-2 mr-3">
                           <svg
                             className="w-9 h-9 fill-current text-light-blue-50"
                             viewBox="0 0 36 36"
@@ -313,7 +339,76 @@ const Admin = () => {
               {/* <!-- ./Recent Activities --> */}
             </section>
 
-            <section className="text-right font-semibold text-gray-500"></section>
+            <section >
+            {/* <!-- Task Summaries --> */}
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-12 text-black">
+          <div class="md:col-span-2 xl:col-span-3">
+            <h3 class="text-lg font-semibold">Task summaries</h3>
+          </div>
+          <div class="md:col-span-2 xl:col-span-1">
+            <div class="rounded text-black bg-white p-3">
+              <div class="flex justify-between py-1 text-blac">
+                <h3 class="text-sm font-semibold">Tasks in TO DO</h3>
+                <svg class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" /></svg>
+              </div>
+              <div class="text-sm text-black dark:text-gray-50 mt-2">
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Delete all references from the wiki</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Remove analytics code</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                  Do a mobile first layout
+                </div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Check the meta tags</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                  Think more tasks for this example
+                </div>
+                <p class="mt-3 text-gray-600 dark:text-gray-400">Add a card...</p>
+              </div>
+            </div>
+          </div>
+          <div>
+          <div class="md:col-span-2 xl:col-span-1">
+            <div class="rounded text-black bg-white p-3">
+              <div class="flex justify-between py-1 text-blac">
+                <h3 class="text-sm font-semibold">Tasks in Progress</h3>
+                <svg class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" /></svg>
+              </div>
+              <div class="text-sm text-black dark:text-gray-50 mt-2">
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Delete all references from the wiki</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Remove analytics code</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                  Do a mobile first layout
+                </div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Check the meta tags</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                  Think more tasks for this example
+                </div>
+                <p class="mt-3 text-gray-600 dark:text-gray-400">Add a card...</p>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="md:col-span-2 xl:col-span-1">
+            <div class="rounded text-black bg-white p-3">
+              <div class="flex justify-between py-1 text-blac">
+                <h3 class="text-sm font-semibold">Completed tasks</h3>
+                <svg class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" /></svg>
+              </div>
+              <div class="text-sm text-black dark:text-gray-50 mt-2">
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Delete all references from the wiki</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Remove analytics code</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                  Do a mobile first layout
+                </div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Check the meta tags</div>
+                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                  Think more tasks for this example
+                </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+            </section>
           </main>
         </div>
       </body>
