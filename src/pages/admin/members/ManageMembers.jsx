@@ -81,7 +81,7 @@ const ManageMembers = () => {
           <h1 className="mb-5 text-2xl font-semibold">Manage Members</h1>
           <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
             <Link
-              href="/admin/Members/create"
+              href="/admin/members/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Add Member

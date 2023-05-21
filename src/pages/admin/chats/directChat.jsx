@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 import { TbMessageCircle, TbSend } from "react-icons/tb";
 import { allMembers } from "@/mock/members";
 import { AiOutlineSearch } from "react-icons/ai";
-import { BiUser } from "react-icons/bi";
+import { BiFileBlank, BiUser } from "react-icons/bi";
 import { RiAttachment2 } from "react-icons/ri";
+import { messages } from "../../../mock/messages";
+import Link from "next/link";
+import ReceiverMessage from "@/components/Message/ReceiverMessage";
+import SenderMessage from "@/components/Message/SenderMessage";
 
 const DirectChat = () => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -164,52 +168,13 @@ const DirectChat = () => {
             </header>
             {/* chatbox */}
             <div className="absolute w-full grid grid-cols-12 gap-y-2  h-[438px] bottom-16 overflow-x-hidden overflow-y-auto">
-              <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                <div className="flex flex-row items-center">
-                  <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                    L
-                  </div>
-                  <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
-                    <div>Hey How are you today?</div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                <div className="flex flex-row items-center">
-                  <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                    L
-                  </div>
-                  <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Vel ipsa commodi illum saepe numquam maxime asperiores
-                      voluptate sit, minima perspiciatis.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                <div className="flex flex-row-reverse items-center justify-start">
-                  <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                    A
-                  </div>
-                  <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
-                    <div>I'm ok what about you?</div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                <div className="flex flex-row-reverse items-center justify-start">
-                  <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                    A
-                  </div>
-                  <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
-                    <div>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {messages.map((msg) => {
+                return msg.from.id === 1 ? (
+                  <ReceiverMessage msg={msg} />
+                ) : (
+                  <SenderMessage msg={msg} />
+                );
+              })}
             </div>
             {/* sender form */}
             <div className="absolute bottom-0 flex flex-row items-center w-full h-16 px-4 bg-white border-t rounded-xl">
@@ -246,6 +211,36 @@ const DirectChat = () => {
         </div>
       </div>
     </AdminLayout>
+  );
+};
+
+const receiverMessage = () => {
+  return (
+    <div className="col-start-1 col-end-8 p-3 rounded-lg">
+      <div className="flex flex-row items-center">
+        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
+          L
+        </div>
+        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
+          <div>Hey How are you today?</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const senderMessage = () => {
+  return (
+    <div className="col-start-6 col-end-13 p-3 rounded-lg">
+      <div className="flex flex-row-reverse items-center justify-start">
+        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
+          A
+        </div>
+        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
+          <div>I'm ok what about you?</div>
+        </div>
+      </div>
+    </div>
   );
 };
 
