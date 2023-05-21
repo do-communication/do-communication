@@ -13,7 +13,7 @@ const Admin = () => {
             </div>
             <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
+                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 bg-sky-300 rounded-full mr-6">
                   <svg
                     aria-hidden="true"
                     fill="none"
@@ -35,7 +35,7 @@ const Admin = () => {
                 </div>
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
+                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 bg-sky-300 rounded-full mr-6">
                   <svg
                     aria-hidden="true"
                     fill="none"
@@ -57,7 +57,7 @@ const Admin = () => {
                 </div>
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
+                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 bg-sky-300 rounded-full mr-6">
                   <svg
                     aria-hidden="true"
                     fill="none"
@@ -79,7 +79,7 @@ const Admin = () => {
                 </div>
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
-                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-blue-600 bg-blue-100 rounded-full mr-6">
+                <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16  bg-sky-300 rounded-full mr-6">
                   <svg
                     aria-hidden="true"
                     fill="none"
@@ -191,7 +191,7 @@ const Admin = () => {
                     </div>
                   </div>
                   <div className="block w-full">
-                    <div className="px-4 bg-gray-10 bg-light text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    <div className="px-4 bg-gray-10 bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       Today
                     </div>
                     <ul className="my-1">
@@ -276,12 +276,12 @@ const Admin = () => {
                         </div>
                       </li>
                     </ul>
-                    <div className="px-4 bg-gray-10 bg-light text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    <div className="px-4 bg-gray-10 bg-gray-600 text-gray-500 dark:text-gray-100 align-middle border border-solid border-gray-200 dark:border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       Yesterday
                     </div>
                     <ul className="my-1">
                       <li className="flex px-4">
-                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-primary my-2 mr-3">
+                        <div className="w-9 h-9 rounded-full flex-shrink-0 bg-sky-300 my-2 mr-3">
                           <svg
                             className="w-9 h-9 fill-current text-light-blue-50"
                             viewBox="0 0 36 36"
@@ -339,75 +339,96 @@ const Admin = () => {
               {/* <!-- ./Recent Activities --> */}
             </section>
 
-            <section >
-            {/* <!-- Task Summaries --> */}
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-12 text-black">
-          <div class="md:col-span-2 xl:col-span-3">
-            <h3 class="text-lg font-semibold">Task summaries</h3>
-          </div>
-          <div class="md:col-span-2 xl:col-span-1">
-            <div class="rounded text-black bg-white p-3">
-              <div class="flex justify-between py-1 text-blac">
-                <h3 class="text-sm font-semibold">Tasks in TO DO</h3>
-                <svg class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" /></svg>
-              </div>
-              <div class="text-sm text-black dark:text-gray-50 mt-2">
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Delete all references from the wiki</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Remove analytics code</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                  Do a mobile first layout
+            <section>
+              {/* <!-- Task Summaries --> */}
+              <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-12 text-black">
+                <div class="md:col-span-2 xl:col-span-3 ">
+                  <h3 class="text-lg font-semibold pt-4 ">Task summaries</h3>
                 </div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Check the meta tags</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                  Think more tasks for this example
+                <div class="md:col-span-2 xl:col-span-1">
+                  <div class="rounded text-black bg-white p-3">
+                    <div class="flex justify-between py-1 text-blac">
+                      <h3 class="text-sm font-semibold">Tasks in TO DO</h3>
+                      <svg
+                        class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
+                      </svg>
+                    </div>
+                    <div class="text-sm text-black dark:text-gray-50 mt-2 ">
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                  
+                      <p class="mt-3 text-gray-600 dark:text-gray-400">
+                        Add a card...
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <p class="mt-3 text-gray-600 dark:text-gray-400">Add a card...</p>
-              </div>
-            </div>
-          </div>
-          <div>
-          <div class="md:col-span-2 xl:col-span-1">
-            <div class="rounded text-black bg-white p-3">
-              <div class="flex justify-between py-1 text-blac">
-                <h3 class="text-sm font-semibold">Tasks in Progress</h3>
-                <svg class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" /></svg>
-              </div>
-              <div class="text-sm text-black dark:text-gray-50 mt-2">
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Delete all references from the wiki</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Remove analytics code</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                  Do a mobile first layout
+                <div>
+                  <div class="md:col-span-2 xl:col-span-1">
+                    <div class="rounded text-black bg-white  pb-6 p-3">
+                      <div class="flex justify-between py-1 text-black">
+                        <h3 class="text-sm font-semibold">Tasks in Progress</h3>
+                        <svg
+                          class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
+                        </svg>
+                      </div>
+                      <div class="text-sm text-black dark:text-gray-50 mt-2">
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                  
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Check the meta tags</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                  Think more tasks for this example
+                <div class="md:col-span-2 xl:col-span-1">
+                  <div class="rounded text-black bg-white  pb-6 p-3">
+                    <div class="flex justify-between py-1 text-black">
+                      <h3 class="text-sm font-semibold">Completed tasks</h3>
+                      <svg
+                        class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
+                      </svg>
+                    </div>
+                    <div class="text-sm text-black dark:text-gray-50 mt-2 ">
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        Lorem ipsum dolor sit amet consectetur
+                      </div>
+                  
+                    </div>
+                  </div>
                 </div>
-                <p class="mt-3 text-gray-600 dark:text-gray-400">Add a card...</p>
               </div>
-            </div>
-          </div>
-          </div>
-          <div class="md:col-span-2 xl:col-span-1">
-            <div class="rounded text-black bg-white p-3">
-              <div class="flex justify-between py-1 text-blac">
-                <h3 class="text-sm font-semibold">Completed tasks</h3>
-                <svg class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" /></svg>
-              </div>
-              <div class="text-sm text-black dark:text-gray-50 mt-2">
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Delete all references from the wiki</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Remove analytics code</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                  Do a mobile first layout
-                </div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">Check the meta tags</div>
-                <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded mt-1 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                  Think more tasks for this example
-                </div>
-               
-              </div>
-            </div>
-          </div>
-        </div>
             </section>
           </main>
         </div>
