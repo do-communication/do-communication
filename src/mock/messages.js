@@ -64,4 +64,55 @@ export const messages = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    from: {
+      id: 1,
+      fullName: "John Doe",
+      profilePicture:
+        "https://plus.unsplash.com/premium_photo-1683740128609-9b20f5e75d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
+    },
+    to: {
+      id: 2,
+      fullName: "Jane Doe",
+      profilePicture:
+        "https://plus.unsplash.com/premium_photo-1683740128609-9b20f5e75d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
+    },
+    message: "Okay",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    from: {
+      id: 1,
+      fullName: "John Doe",
+      profilePicture:
+        "https://plus.unsplash.com/premium_photo-1683740128609-9b20f5e75d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
+    },
+    to: {
+      id: 2,
+      fullName: "Jane Doe",
+      profilePicture:
+        "https://plus.unsplash.com/premium_photo-1683740128609-9b20f5e75d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
+    },
+    message: "Okay",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    from: {
+      id: 1,
+      fullName: "John Doe",
+      profilePicture:
+        "https://plus.unsplash.com/premium_photo-1683740128609-9b20f5e75d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
+    },
+    to: {
+      id: 2,
+      fullName: "Jane Doe",
+      profilePicture:
+        "https://plus.unsplash.com/premium_photo-1683740128609-9b20f5e75d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80",
+    },
+    message: "Okay",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ];

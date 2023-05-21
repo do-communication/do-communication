@@ -1,12 +1,11 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TbMessageCircle, TbSend } from "react-icons/tb";
 import { allMembers } from "@/mock/members";
 import { AiOutlineSearch } from "react-icons/ai";
-import { BiFileBlank, BiUser } from "react-icons/bi";
+import { BiUser } from "react-icons/bi";
 import { RiAttachment2 } from "react-icons/ri";
 import { messages } from "../../../mock/messages";
-import Link from "next/link";
 import ReceiverMessage from "@/components/Message/ReceiverMessage";
 import SenderMessage from "@/components/Message/SenderMessage";
 
@@ -14,6 +13,15 @@ const DirectChat = () => {
   const [messageTab, setMessageTab] = useState("recent");
   const [members, setMembers] = useState(allMembers);
   const [search, setSearch] = useState("");
+  const chatboxRef = useRef(null);
+
+  const scrollToBottom = () => {
+    chatboxRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   // search for groups using group name
   useEffect(() => {
     const filteredData = allMembers.filter(
@@ -48,13 +56,13 @@ const DirectChat = () => {
             members.slice(0, 3).map((member, index) => (
               <button
                 key={index}
-                className={`flex flex-row items-center p-2 rounded-xl ${
+                className={`flex flex-row items-center p-2 rounded-xl  ${
                   index === 1
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
                 }`}
               >
-                <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+                <div className="items-center justify-center hidden w-8 h-8 bg-blue-200 rounded-full xl:flex">
                   {member.name[0]}
                 </div>
                 <div className="flex flex-col items-start justify-start ml-4 font-semibold">
@@ -123,11 +131,11 @@ const DirectChat = () => {
   };
 
   return (
-    <AdminLayout>
-      <div class="relative w-full h-full">
-        <div className="absolute grid w-full h-full grid-cols-4 gap-5 ">
+    <AdminLayout noFooter={true}>
+      <div class="relative w-full md:h-full h-[calc(100vh-130px)]">
+        <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
-          <div className="max-h-full col-span-1 px-4 py-5 bg-white shadow-md rounded-2xl">
+          <div className="hidden max-h-full col-span-1 px-4 py-5 bg-white shadow-md md:block rounded-2xl">
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
               <TbMessageCircle className="text-4xl text-secondary" />
@@ -159,7 +167,7 @@ const DirectChat = () => {
             </div>
           </div>
           {/* chatbox */}
-          <div className="relative flex flex-col col-span-3 bg-white rounded-2xl">
+          <div className="relative flex flex-col h-full bg-white md:col-span-3 col-span-full rounded-2xl">
             <header className="sticky top-0 flex flex-row justify-between w-full h-16 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
               <div className="flex items-center gap-4">
                 <BiUser className="w-10 h-10 text-4xl bg-gray-400 rounded-full" />
@@ -167,7 +175,10 @@ const DirectChat = () => {
               </div>
             </header>
             {/* chatbox */}
-            <div className="absolute w-full grid grid-cols-12 gap-y-2  h-[438px] bottom-16 overflow-x-hidden overflow-y-auto">
+            <div
+              ref={chatboxRef}
+              className="absolute w-full grid grid-cols-12 gap-y-2  h-[438px] bottom-16 overflow-x-hidden overflow-y-auto"
+            >
               {messages.map((msg) => {
                 return msg.from.id === 1 ? (
                   <ReceiverMessage msg={msg} />

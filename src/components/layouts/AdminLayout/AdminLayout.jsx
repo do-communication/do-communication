@@ -5,7 +5,7 @@ import OpenSideBarContext, {
   openSideBarReducer,
 } from "./context/openSideBarContext";
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = ({ children, noFooter = false }) => {
   const [openSideBar, openSideBarDispatch] = useReducer(
     openSideBarReducer,
     false
@@ -20,9 +20,12 @@ const AdminLayout = ({ children }) => {
           <Header />
           {/* <!-- End Top navbar --> */}
           <main className="bg-[#f3f3f9] mb-auto flex-grow p-5">{children}</main>
-          <footer className="p-4 pb-3 text-xs bg-gray-100 border-t">
-            2023 @ Do communication all right reserved.
-          </footer>
+
+          {!noFooter && (
+            <footer className="p-4 pb-3 text-xs bg-gray-100 border-t">
+              2023 @ Do communication all right reserved.
+            </footer>
+          )}
         </div>
       </OpenSideBarContext.Provider>
     </div>
