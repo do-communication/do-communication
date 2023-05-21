@@ -1,5 +1,8 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import { allMembers } from "@/mock/members";
+import React, { useEffect, useState } from "react";
 const Admin = () => {
+  const [members, setMembers] = useState(allMembers);
   return (
     <AdminLayout>
       <body className="flex bg-gray-100 min-h-screen">
@@ -132,42 +135,42 @@ const Admin = () => {
                     <li className="flex items-center">
                       <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
                         <img
-                          src="https://randomuser.me/api/portraits/women/82.jpg"
+                          src="images/pp.png"
                           alt="Annette Watson profile picture"
                         />
                       </div>
-                      <span className="text-gray-600">Annette Watson</span>
+                      <span className="text-gray-600">member4</span>
                       <span className="ml-auto font-semibold">9</span>
                     </li>
                     <li className="flex items-center">
                       <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
                         <img
-                          src="https://randomuser.me/api/portraits/men/81.jpg"
-                          alt="Calvin Steward profile picture"
+                          src="images/pp.png"
+                          alt="Annette Watson profile picture"
                         />
                       </div>
-                      <span className="text-gray-600">Calvin Steward</span>
+                      <span className="text-gray-600">member7</span>
                       <span className="ml-auto font-semibold">8</span>
                     </li>
                     <li className="flex items-center">
                       <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
                         <img
-                          src="https://randomuser.me/api/portraits/men/80.jpg"
-                          alt="Ralph Richards profile picture"
+                          src="images/pp.png"
+                          alt="Annette Watson profile picture"
                         />
                       </div>
-                      <span className="text-gray-600">Ralph Richards</span>
-                      <span className="ml-auto font-semibold">8</span>
+                      <span className="text-gray-600">member1</span>
+                      <span className="ml-auto font-semibold">7</span>
                     </li>
                     <li className="flex items-center">
                       <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
                         <img
-                          src="https://randomuser.me/api/portraits/men/79.jpg"
-                          alt="Bernard Murphy profile picture"
+                          src="images/pp.png"
+                          alt="Annette Watson profile picture"
                         />
                       </div>
-                      <span className="text-gray-600">Bernard Murphy</span>
-                      <span className="ml-auto font-semibold">2</span>
+                      <span className="text-gray-600">member3</span>
+                      <span className="ml-auto font-semibold">5</span>
                     </li>
                   </ul>
                 </div>
@@ -367,10 +370,25 @@ const Admin = () => {
                       <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
-                  
-                      <p class="mt-3 text-gray-600 dark:text-gray-400">
-                        Add a card...
-                      </p>
+
+                      <form class="mt-3 text-gray-600 dark:text-gray-400">
+                        <div class="flex flex-col mt-2 ">
+                          <label for="tel" class="hidden">
+                            task
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Add a task"
+                            class="w-100 mt-2 py-4 rounded-sm px-3 bg-white dark:bg-gray-600 text-white  font-semibold"
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          className=" flex align-item-center justify-center md:w-32 bg-primary text-white font-bold py-3   rounded-lg mt-4 hover:bg-bold transition ease-in-out duration-300"
+                        >
+                        Add
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -388,16 +406,15 @@ const Admin = () => {
                         </svg>
                       </div>
                       <div class="text-sm text-black dark:text-gray-50 mt-2">
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                  
+                        <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                          Lorem ipsum dolor sit amet consectetur
+                        </div>
+                        <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                          Lorem ipsum dolor sit amet consectetur
+                        </div>
+                        <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                          Lorem ipsum dolor sit amet consectetur
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -424,7 +441,6 @@ const Admin = () => {
                       <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
-                  
                     </div>
                   </div>
                 </div>
