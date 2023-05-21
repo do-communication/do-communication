@@ -6,7 +6,7 @@ const Home = () => {
       <AuthHeader />
       <main>
         {/* home section */}
-        <section className="px-2 py-30 pt-10 bg-white md:px-0">
+        <section className="px-2 pt-10 bg-white py-30 md:px-0">
           <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
             <div className="flex flex-wrap items-center sm:-mx-3">
               <div className="w-full md:w-1/2 md:px-3">
@@ -25,7 +25,7 @@ const Home = () => {
                   <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                     <Link
                       href="#about"
-                      className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-secondary rounded-md sm:mb-0 hover:bg-blue-600 sm:w-auto"
+                      className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white rounded-md bg-secondary sm:mb-0 hover:bg-blue-600 sm:w-auto"
                     >
                       Try It
                       <svg
@@ -34,9 +34,9 @@ const Home = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
@@ -52,7 +52,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="w-full h-auto overflow-hidden rounded-md  sm:rounded-xl">
+                <div className="w-full h-auto overflow-hidden rounded-md sm:rounded-xl">
                   <img src="/images/office.svg" />
                 </div>
               </div>
@@ -62,10 +62,10 @@ const Home = () => {
 
         {/* about page */}
         <section className="w-full bg-white pt-30 pb-7 md:pt-20 md:pb-24">
-          <div className="flex justify-center items-start pb-4">
+          <div className="flex items-start justify-center pb-4">
             <h2
               id="about"
-              className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl pb-12 pt-10"
+              className="pt-10 pb-12 m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl"
             >
               About us
             </h2>
@@ -89,19 +89,19 @@ const Home = () => {
               </p>
               <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
+                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Maximize productivity and growth
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
+                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Efficient Task Management
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
+                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Improved File Management
@@ -110,7 +110,7 @@ const Home = () => {
             </div>
           </div>
           <div className="box-border flex flex-col items-center content-center px-8 mx-auto mt-2 leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-0 md:flex-row max-w-7xl lg:px-16">
-            <div className="box-border w-full text-black border-solid md:w-1/2 md:pl-6 xl:pl-32 pt-32">
+            <div className="box-border w-full pt-32 text-black border-solid md:w-1/2 md:pl-6 xl:pl-32">
               <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
                 Boost Productivity
               </h2>
@@ -120,23 +120,22 @@ const Home = () => {
               </p>
               <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
+                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Chat capability
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
+                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Improved Communication
                 </li>
                 <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white bg-primary rounded-full">
+                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
-                  Independent from personal
-                  affair
+                  Independent from personal affair
                 </li>
               </ul>
             </div>
@@ -153,7 +152,7 @@ const Home = () => {
         {/* contact page  */}
         <section className="bg-white">
           <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
-            <div className="flex justify-center items-start pb-4">
+            <div className="flex items-start justify-center pb-4">
               <h2
                 id="contact"
                 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl "
