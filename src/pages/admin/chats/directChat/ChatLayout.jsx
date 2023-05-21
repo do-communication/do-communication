@@ -47,7 +47,7 @@ const ChatLayout = ({ children }) => {
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2 rounded-xl  ${
-                  index === 1
+                  member.id === router.query.userId
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
                 }`}
@@ -99,7 +99,7 @@ const ChatLayout = ({ children }) => {
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2  rounded-xl ${
-                  index === 1
+                  member.id === router.query.userId
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
                 }`}
@@ -123,7 +123,7 @@ const ChatLayout = ({ children }) => {
 
   return (
     <AdminLayout noFooter={true}>
-      <div class="relative w-full md:h-full h-[calc(100vh-130px)]">
+      <div className="relative w-full md:h-full h-[calc(100vh-130px)]">
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
@@ -134,7 +134,7 @@ const ChatLayout = ({ children }) => {
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
               <TbMessageCircle className="text-4xl text-secondary" />
-              <h3 className="font-semibold">Direct Chat</h3>
+              <h3 className="font-se mibold">Direct Chat</h3>
             </div>
 
             {/* tab */}

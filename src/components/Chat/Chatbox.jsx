@@ -19,11 +19,15 @@ const Chatbox = ({ messages, name }) => {
     scrollToBottom();
   }, [messages]);
 
+  console.log("us", router);
   return (
     <div className="relative flex-col h-full bg-white md:col-span-3 col-span-full rounded-2xl">
-      <header className="sticky top-0 flex flex-row w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
-        <button onClick={() => router.back()}>
-          <BiChevronLeft className="w-8 h-auto" />
+      <header className="sticky top-0 flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
+        <button
+          onClick={() => router.back()}
+          className="w-10 h-10 rounded-full hover:bg-secondary"
+        >
+          <BiChevronLeft className="w-10 h-auto" />
         </button>
         <div className="flex items-center gap-4">
           <BiUser className="w-10 h-10 text-4xl bg-gray-400 rounded-full" />
@@ -37,9 +41,9 @@ const Chatbox = ({ messages, name }) => {
       >
         {messages.map((msg) => {
           return msg.from.id === 1 ? (
-            <ReceiverMessage msg={msg} />
+            <ReceiverMessage msg={msg} key={msg.id} />
           ) : (
-            <SenderMessage msg={msg} />
+            <SenderMessage msg={msg} key={msg.id} />
           );
         })}
       </div>

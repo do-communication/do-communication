@@ -122,7 +122,7 @@ const GroupChat = () => {
 
   return (
     <AdminLayout>
-      <div class="relative w-full h-full">
+      <div className="relative w-full h-full">
         <div className="absolute grid w-full h-full grid-cols-4 gap-5 ">
           {/* Sidebar */}
           <div className="max-h-full col-span-1 px-4 py-5 bg-white shadow-md rounded-2xl">

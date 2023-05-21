@@ -32,7 +32,7 @@ const Admin = () => {
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
                 <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 bg-sky-300 rounded-full mr-6">
-                <FaTasks size={23} />
+                  <FaTasks size={23} />
                 </div>
                 <div>
                   <span className="block text-2xl font-bold">110</span>
@@ -41,8 +41,7 @@ const Admin = () => {
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
                 <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 bg-sky-300 rounded-full mr-6">
-               < TbReportAnalytics size={23}  />
-                 
+                  <TbReportAnalytics size={23} />
                 </div>
                 <div>
                   <span className="inline-block text-2xl font-bold">70</span>
@@ -51,7 +50,7 @@ const Admin = () => {
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
                 <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16  bg-sky-300 rounded-full mr-6">
-              < AiFillFileAdd size={23} />
+                  <AiFillFileAdd size={23} />
                 </div>
                 <div>
                   <span className="block text-2xl font-bold">30</span>
@@ -250,7 +249,9 @@ const Admin = () => {
                         <div className="flex-grow flex items-center border-gray-100 text-sm text-gray-600 dark:text-gray-500 py-2">
                           <div className="flex-grow flex justify-between items-center">
                             <div className="self-center">
-                             <p>Lorem ipsum dolor consectetur adipisicing elit.</p>
+                              <p>
+                                Lorem ipsum dolor consectetur adipisicing elit.
+                              </p>
                             </div>
                             <div className="flex-shrink-0 ml-2">
                               <a
@@ -287,101 +288,105 @@ const Admin = () => {
 
             <section>
               {/* <!-- Task Summaries --> */}
-              <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-12 text-black">
-                <div class="md:col-span-2 xl:col-span-3 ">
-                  <h3 class="text-lg font-semibold pt-4 ">Task summaries</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-12 text-black">
+                <div className="md:col-span-2 xl:col-span-3 ">
+                  <h3 className="text-lg font-semibold pt-4 ">
+                    Task summaries
+                  </h3>
                 </div>
-                <div class="md:col-span-2 xl:col-span-1">
-                  <div class="rounded text-black bg-white p-3">
-                    <div class="flex justify-between py-1 text-blac">
-                      <h3 class="text-sm font-semibold">Tasks in TO DO</h3>
+                <div className="md:col-span-2 xl:col-span-1">
+                  <div className="rounded text-black bg-white p-3">
+                    <div className="flex justify-between py-1 text-blac">
+                      <h3 className="text-sm font-semibold">Tasks in TO DO</h3>
                       <svg
-                        class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
+                        className="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                       >
                         <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                       </svg>
                     </div>
-                    <div class="text-sm text-black dark:text-gray-50 mt-2 ">
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                    <div className="text-sm text-black dark:text-gray-50 mt-2 ">
+                      <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                      <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                      <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
 
-                      <form class="mt-3 text-gray-600 dark:text-gray-400">
-                        <div class="flex flex-col mt-2 ">
-                          <label for="tel" class="hidden">
+                      <form className="mt-3 text-gray-600 dark:text-gray-400">
+                        <div className="flex flex-col mt-2 ">
+                          <label for="tel" className="hidden">
                             task
                           </label>
                           <input
                             type="text"
                             placeholder="Add a task"
-                            class="w-100 mt-2 py-4 rounded-sm px-3 bg-white dark:bg-gray-600 text-white  font-semibold"
+                            className="w-100 mt-2 py-4 rounded-sm px-3 bg-white dark:bg-gray-600 text-white  font-semibold"
                           />
                         </div>
                         <button
                           type="submit"
                           className=" flex align-item-center justify-center w-32 bg-primary text-white font-bold py-3   rounded-lg mt-4 hover:bg-bold transition ease-in-out duration-300"
                         >
-                        Add
+                          Add
                         </button>
                       </form>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <div class="md:col-span-2 xl:col-span-1">
-                    <div class="rounded text-black bg-white  pb-6 p-3">
-                      <div class="flex justify-between py-1 text-black">
-                        <h3 class="text-sm font-semibold">Tasks in Progress</h3>
+                  <div className="md:col-span-2 xl:col-span-1">
+                    <div className="rounded text-black bg-white  pb-6 p-3">
+                      <div className="flex justify-between py-1 text-black">
+                        <h3 className="text-sm font-semibold">
+                          Tasks in Progress
+                        </h3>
                         <svg
-                          class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
+                          className="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                         >
                           <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                         </svg>
                       </div>
-                      <div class="text-sm text-black dark:text-gray-50 mt-2">
-                        <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                      <div className="text-sm text-black dark:text-gray-50 mt-2">
+                        <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                           Lorem ipsum dolor sit amet consectetur
                         </div>
-                        <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                           Lorem ipsum dolor sit amet consectetur
                         </div>
-                        <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                        <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                           Lorem ipsum dolor sit amet consectetur
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="md:col-span-2 xl:col-span-1">
-                  <div class="rounded text-black bg-white  pb-6 p-3">
-                    <div class="flex justify-between py-1 text-black">
-                      <h3 class="text-sm font-semibold">Completed tasks</h3>
+                <div className="md:col-span-2 xl:col-span-1">
+                  <div className="rounded text-black bg-white  pb-6 p-3">
+                    <div className="flex justify-between py-1 text-black">
+                      <h3 className="text-sm font-semibold">Completed tasks</h3>
                       <svg
-                        class="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
+                        className="h-4 fill-current text-gray-600 dark:text-gray-500 cursor-pointer"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                       >
                         <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                       </svg>
                     </div>
-                    <div class="text-sm text-black dark:text-gray-50 mt-2 ">
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                    <div className="text-sm text-black dark:text-gray-50 mt-2 ">
+                      <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                      <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
-                      <div class="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
+                      <div className="bg-white dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 p-3 mb-3 rounded mt-2 border-b border-gray-100 dark:border-gray-900 cursor-pointer">
                         Lorem ipsum dolor sit amet consectetur
                       </div>
                     </div>
