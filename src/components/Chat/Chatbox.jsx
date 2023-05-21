@@ -19,13 +19,19 @@ const Chatbox = ({ messages, name }) => {
     scrollToBottom();
   }, [messages]);
 
-  console.log("us", router);
+  console.log("us", router.pathname === "/admin/chats/directChat/[userId]");
   return (
     <div className="relative flex-col h-full bg-white md:col-span-3 col-span-full rounded-2xl">
       <header className="sticky top-0 flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
         <button
-          onClick={() => router.back()}
-          className="w-10 h-10 rounded-full hover:bg-secondary"
+          onClick={() => {
+            if (router.pathname === "/admin/chats/directChat/[userId]") {
+              router.push("/admin/chats/directChat");
+            } else {
+              router.push("/admin/chats/groupChat");
+            }
+          }}
+          className="block w-10 h-10 rounded-full hover:bg-secondary md:hidden"
         >
           <BiChevronLeft className="w-10 h-auto" />
         </button>
