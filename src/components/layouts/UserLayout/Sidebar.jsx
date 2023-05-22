@@ -18,11 +18,11 @@ const Sidebar = () => {
       name: "Chat",
       children: [
         {
-          url: "/admin/chats/groupChat",
+          url: "/user/chats/groupChat",
           name: "Group Chat",
         },
         {
-          url: "/admin/chats/directChat",
+          url: "/user/chats/directChat",
           name: "Direct Chat",
         },
       ],
@@ -36,7 +36,6 @@ const Sidebar = () => {
       Icon: <MdGroupWork />,
       url: "/admin/groups",
       name: "Groups", //unqiue
-    
     },
 
     {
@@ -44,7 +43,7 @@ const Sidebar = () => {
       url: "/admin/tasks",
       name: "Tasks", //unqiue
     },
-   
+
     {
       Icon: <TbReportAnalytics />,
       url: "/admin/report",
