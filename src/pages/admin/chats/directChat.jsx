@@ -1,37 +1,91 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-// import { allMembers } from "@/mock/members";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { db } from "../../../../context/DbContext"
-import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+import { getDocs, collection, query, where, or, orderBy, and, addDoc } from "firebase/firestore";
+import { auth } from "../../../../config/firebase";
+import { serverTimestamp } from '@firebase/firestore'
+import { Img } from 'react-image'
+
 
 const DirectChat = () => {
   const [members, setMembers] = useState([]);
   const [allMembers, setallMembers] = useState([]);
   const [search, setSearch] = useState("");
-  // search for groups using group name
-  const getData = async () => {
+  const [messages, setMessages] = useState([]);
+  const [index, setIndex] = useState(-1);
+  const [selected, setSelected] = useState("");
+  const [sendMessage, setSendMessage] = useState("");
+  // Get members in the system
+  const getMembersData = async () => {
     let arr = []
-    const all = collection(db, "KalCompany", "Users", "StaffMembers");
     try {
+      const all = collection(db, "KalCompany", "Users", "StaffMembers")
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push(d.data())
+        arr.push({ id: d.id, data: d.data() })
       });
 
     } catch (err) {
       console.log(err)
-      setMembers([{ Name: "check your connection" }])
+      // setMembers([{ Name: "check your connection" }])
     }
 
     setMembers(arr)
     setallMembers(arr)
   }
+  // get message between two members
+  const getMessage = async () => {
+    let arr = []
+    const allMessages = collection(db, "KalCompany", "Messages", "Messages")
+
+    const q = query(allMessages,
+      or(and(where("SenderId", "==", auth.currentUser.uid), where("RecieverId", "==", selected)),
+        and(where("SenderId", "==", selected), where("RecieverId", "==", auth.currentUser.uid))
+      ), orderBy("CreatedAt")
+    );
+
+    const docs = await getDocs(q)
+
+    docs.forEach(d => {
+      arr.push({ id: d.id, data: d.data() })
+    });
+
+    setMessages(arr)
+    setTimeout(() => {
+      let objDiv = document.getElementById("scroll");
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }, 100);
+  }
+  // send message
+  const send = async () => {
+
+    if (sendMessage.trim() !== "") {
+      await addDoc(collection(db, "KalCompany", "Messages", "Messages"), {
+        Content: sendMessage,
+        CreatedAt: serverTimestamp(),
+        RecieverId: selected,
+        SenderId: auth.currentUser.uid,
+        SenderName: auth.currentUser.displayName,
+        seen: false
+      });
+    }
+    document.getElementById('sendMessageId').value = ''
+    await getMessage()
+    setSendMessage('')
+    setTimeout(() => {
+      let objDiv = document.getElementById("scroll");
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }, 100);
+
+  }
+
+
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item?.Name && item?.Name.toLowerCase().includes(search.toLowerCase())
+        item?.data.Name && item?.data.Name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -43,8 +97,12 @@ const DirectChat = () => {
   }, [search]);
 
   useEffect(() => {
-    getData()
+    getMembersData();
   }, []);
+
+  useEffect(() => {
+    getMessage();
+  }, [selected])
 
 
 
@@ -100,20 +158,22 @@ const DirectChat = () => {
               </div>
               <div className="flex flex-col h-48 mt-4 -mx-2 space-y-1 overflow-y-auto">
                 {members &&
-                  members.map((member, index) => (
+                  members.map((member, i) => (
                     <button
-                      key={index}
-                      className={`flex flex-row items-center p-2  rounded-xl ${index === 1
+                      key={i}
+                      className={`flex flex-row items-center p-2  rounded-xl ${index === i
                         ? "bg-secondary text-white"
                         : "hover:bg-opacity-25 hover:bg-secondary"
                         }`}
+                      onClick={() => { setIndex(i); setSelected(member.id); }}
                     >
 
                       <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
-                        {member.Name[0]}
+                        {member.data.ProfilePic === "" ? member.data.Name[0] : <Img className="flex items-center justify-center w-9 h-9 rounded-full" src={member.data.ProfilePic} />}
+
                       </div>
                       <div className="ml-2 text-sm font-semibold">
-                        {member.Name}
+                        {member.data.Name}
                       </div>
                     </button>
                   ))
@@ -137,101 +197,47 @@ const DirectChat = () => {
           </div>
           <div className="flex flex-col flex-auto h-full ml-6">
             <div className="flex flex-col flex-auto flex-shrink-0 h-full p-4 bg-white rounded-2xl">
-              <div className="flex flex-col h-full mb-4 overflow-x-auto">
+              <div id="scroll" scrollHeight className="flex flex-col h-full mb-4 overflow-x-auto">
                 <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-2">
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          R
-                        </div>
-                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
-                          <div>Hey How are you today?</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          L
-                        </div>
-                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
-                          <div>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Vel ipsa commodi illum saepe numquam maxime
-                            asperiores voluptate sit, minima perspiciatis.
+
+                    {messages.map(({ data: { Content, SenderId, SenderName, seen } }, i) => (
+                      <div key={i} className={`${SenderId === auth.currentUser.uid ? 'col-start-6 col-end-13 p-3 rounded-lg' : 'col-start-1 col-end-8 p-3 rounded-lg'}`}>
+                        <div key={i} className={`${SenderId === auth.currentUser.uid ? 'flex flex-row-reverse items-center justify-start' : 'flex flex-row items-center'}`}>
+                          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
+                            {SenderName[0]}
+                          </div>
+                          <div key={i} className={`${SenderId === auth.currentUser.uid ? 'relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl' : 'relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl'}`}>
+                            <div>{Content}</div>
+                            <div key={i} className="absolute bottom-0 right-0 mr-2 -mb-5 text-xs text-gray-500">
+                              {`${(messages.length === i + 1) && (SenderId === auth.currentUser.uid) ? `${seen ? "seen" : "delevered"}` : ''}`}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex flex-row-reverse items-center justify-start">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          A
-                        </div>
-                        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
-                          <div>I'm ok what about you?</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex flex-row-reverse items-center justify-start">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          A
-                        </div>
-                        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
-                          <div>
-                            Lorem ipsum dolor sit, amet consectetur adipisicing.
-                            ?
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          L
-                        </div>
-                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
-                          <div>Lorem ipsum dolor sit amet !</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex flex-row-reverse items-center justify-start">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          A
-                        </div>
-                        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
-                          <div>
-                            Lorem ipsum dolor sit, amet consectetur adipisicing.
-                            ?
-                          </div>
-                          <div className="absolute bottom-0 right-0 mr-2 -mb-5 text-xs text-gray-500">
-                            Seen
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                          L
-                        </div>
-                        <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
-                          <div>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Perspiciatis, in.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
+                  {(messages.length === 0 && index < 0) && (
+                    <div className="flex flex-row items-center p-2 justify-center">
+                      <div className="ml-2 text-lg font-semibold">
+                        Select a member to start chatting
+                      </div>
+                    </div>
+                  )}
+
+                  {(messages.length === 0 && index > -1) && (
+                    <div className="flex flex-row items-center p-2  justify-center">
+                      <div className="ml-2 text-lg font-semibold">
+                        Send the first message
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex flex-row items-center w-full h-16 px-4 bg-white rounded-xl">
                 <div>
-                  <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
+                  <button onClick={() => document.getElementById("file").click()} className="flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <input id="file" className="hidden" type="file"></input>
                     <svg
                       className="w-5 h-5"
                       fill="none"
@@ -253,6 +259,8 @@ const DirectChat = () => {
                     <input
                       type="text"
                       className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
+                      id="sendMessageId"
+                      onChange={(e) => setSendMessage(e.target.value)}
                     />
                     <button className="absolute top-0 right-0 flex items-center justify-center w-12 h-full text-gray-400 hover:text-gray-600">
                       <svg
@@ -273,7 +281,7 @@ const DirectChat = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <button className="flex items-center justify-center flex-shrink-0 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+                  <button onClick={() => send()} className="flex items-center justify-center flex-shrink-0 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
                     <span>Send</span>
                     <span className="ml-2">
                       <svg
