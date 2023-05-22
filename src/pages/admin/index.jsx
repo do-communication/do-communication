@@ -45,7 +45,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <span className="inline-block text-2xl font-bold">70</span>
-                  <span className="block text-gray-500">70 Reports</span>
+                  <span className="block text-gray-500"> Reports</span>
                 </div>
               </div>
               <div className="flex items-center p-8 bg-white shadow rounded-lg">
@@ -54,7 +54,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <span className="block text-2xl font-bold">30</span>
-                  <span className="block text-gray-500">Fles</span>
+                  <span className="block text-gray-500">Files</span>
                 </div>
               </div>
             </section>
