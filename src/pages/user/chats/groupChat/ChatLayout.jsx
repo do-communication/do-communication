@@ -4,6 +4,7 @@ import { allGroups } from "@/mock/groups";
 import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 
 const ChatLayout = ({ children }) => {
@@ -44,7 +45,7 @@ const ChatLayout = ({ children }) => {
           {groups.length > 0 &&
             groups.slice(0, 3).map((group, index) => (
               <Link
-                href={`/user/chats/groupChat/${group.id}`}
+                href={`/admin/chats/groupChat/${group.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2 rounded-xl ${
                   group.id === router.query.groupId
@@ -52,18 +53,14 @@ const ChatLayout = ({ children }) => {
                     : "hover:bg-opacity-25 hover:bg-secondary"
                 }`}
               >
-                <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
-                  {group.name[0]}
-                </div>
-                <div className="flex flex-col items-start justify-start ml-4 font-semibold">
-                  <p>{group.name}</p>
-                  <p className="w-32 text-sm font-light truncate">
+                <RecentMessageItem
+                  name={group.name}
+                  msg="
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                     Facilis accusamus ipsam officiis officia voluptates iusto,
                     porro minima architecto corrupti. Nam deserunt accusantium
-                    natus labore numquam sunt voluptates aliquam aut. Quisquam.
-                  </p>
-                </div>
+                    natus labore numquam sunt voluptates aliquam aut. Quisquam."
+                />
               </Link>
             ))}
 
@@ -98,7 +95,7 @@ const ChatLayout = ({ children }) => {
           {groups.length > 0 &&
             groups.map((group, index) => (
               <Link
-                href={`/user/chats/groupChat/${group.id}`}
+                href={`/admin/chats/groupChat/${group.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2  rounded-xl ${
                   group.id === router.query.groupId
@@ -163,7 +160,13 @@ const ChatLayout = ({ children }) => {
               {messageTab === "recent" ? renderRecent() : renderGroups()}
             </div>
           </div>
-          {children}
+          <div
+            className={`lg:col-span-3 col-span-full lg:block ${
+              router.query.groupId ? "" : "hidden"
+            }`}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </UserLayout>
