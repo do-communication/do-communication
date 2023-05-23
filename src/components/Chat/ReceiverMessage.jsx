@@ -14,7 +14,10 @@ const ReceiverMessage = ({ msg }) => {
       </div>
       <ul className="flex gap-4 ml-14">
         {msg.files?.map((file) => (
-          <li className="px-2 py-1 mt-2 text-center rounded-md bg-slate-200 hover:bg-slate-300">
+          <li
+            key={file.id}
+            className="px-2 py-1 mt-2 text-center rounded-md bg-slate-200 hover:bg-slate-300"
+          >
             <Link href={file.location} className="flex flex-col">
               <BiFileBlank className="w-12 h-auto text-secondary" />
               <p

@@ -130,7 +130,7 @@ const ChatLayout = ({ children }) => {
           {/* Sidebar */}
           <div
             className={`max-h-full px-4 py-5 bg-white shadow-md md:col-span-1 col-span-full md:block rounded-2xl ${
-              router.query.userId ? "hidden" : ""
+              router.query.groupId ? "hidden" : ""
             }`}
           >
             {/* Chat Logo with create message*/}
