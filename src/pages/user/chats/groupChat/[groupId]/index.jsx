@@ -6,7 +6,7 @@ import ChatLayout from "../ChatLayout";
 const GroupChat = () => {
   const router = useRouter();
 
-  const userId = router.query.userId;
+  const groupId = router.query.groupId;
   return (
     <ChatLayout>
       <Chatbox messages={messages} name="John Doe" />

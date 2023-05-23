@@ -5,6 +5,7 @@ import { allMembers } from "@/mock/members";
 import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
 
 const ChatLayout = ({ children }) => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -52,18 +53,13 @@ const ChatLayout = ({ children }) => {
                     : "hover:bg-opacity-25 hover:bg-secondary"
                 }`}
               >
-                <div className="items-center justify-center hidden w-8 h-8 bg-blue-200 rounded-full xl:flex">
-                  {member.name[0]}
-                </div>
-                <div className="flex flex-col items-start justify-start ml-4 font-semibold">
-                  <p>{member.name}</p>
-                  <p className="w-32 text-sm font-light truncate">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                <RecentMessageItem
+                  name={member.name}
+                  msg="Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                     Facilis accusamus ipsam officiis officia voluptates iusto,
                     porro minima architecto corrupti. Nam deserunt accusantium
-                    natus labore numquam sunt voluptates aliquam aut. Quisquam.
-                  </p>
-                </div>
+                    natus labore numquam sunt voluptates aliquam aut. Quisquam."
+                />
               </Link>
             ))}
 
@@ -127,7 +123,7 @@ const ChatLayout = ({ children }) => {
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md md:col-span-1 col-span-full md:block rounded-2xl ${
+            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${
               router.query.userId ? "hidden" : ""
             }`}
           >
@@ -161,7 +157,13 @@ const ChatLayout = ({ children }) => {
               {messageTab === "recent" ? renderRecent() : renderMembers()}
             </div>
           </div>
-          {children}
+          <div
+            className={`lg:col-span-3 col-span-full lg:block ${
+              router.query.userId ? "" : "hidden"
+            }`}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </AdminLayout>
