@@ -43,7 +43,7 @@ const Chatbox = ({ messages, name }) => {
       {/* chatbox */}
       <div
         ref={chatboxRef}
-        className="absolute w-full grid grid-cols-12 gap-y-2  h-[438px] bottom-16 overflow-x-hidden overflow-y-auto"
+        className="absolute w-full grid grid-cols-12 gap-y-2 h-[440px] bottom-16 overflow-x-hidden overflow-y-auto"
       >
         {messages.map((msg) => {
           return msg.from.id === 1 ? (

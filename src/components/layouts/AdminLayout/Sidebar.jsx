@@ -67,7 +67,7 @@ const Sidebar = () => {
       children: [
         {
           url: "/admin/task/create",
-          name: "Creat Task",
+          name: "Create Task",
         },
         {
           url: "/admin/task/manage",
@@ -91,13 +91,13 @@ const Sidebar = () => {
     },
     {
       Icon: <TbReportAnalytics />,
-      url: "/admin/report",
+      url: "/admin/reports/reports",
       name: "Report",
     },
     {
       Icon: <RiLogoutBoxFill />,
       url: "/",
-      name: "Logout",
+      name: "Sign Out",
     },
   ];
 
