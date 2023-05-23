@@ -7,6 +7,8 @@ import { getDocs, collection, query, where, or, orderBy, and, addDoc } from "fir
 import { auth } from "../../../../config/firebase";
 import { serverTimestamp } from '@firebase/firestore'
 import { Img } from 'react-image'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { BiFileBlank } from "react-icons/bi";
 
 
 const DirectChat = () => {
@@ -17,6 +19,7 @@ const DirectChat = () => {
   const [index, setIndex] = useState(-1);
   const [selected, setSelected] = useState("");
   const [sendMessage, setSendMessage] = useState("");
+  const [sendFile, setSendFile] = useState(null);
   // Get members in the system
   const getMembersData = async () => {
     let arr = []
@@ -60,7 +63,6 @@ const DirectChat = () => {
   }
   // send message
   const send = async () => {
-
     if (sendMessage.trim() !== "") {
       await addDoc(collection(db, "KalCompany", "Messages", "Messages"), {
         Content: sendMessage,
@@ -68,16 +70,72 @@ const DirectChat = () => {
         RecieverId: selected,
         SenderId: auth.currentUser.uid,
         SenderName: auth.currentUser.displayName,
-        seen: false
+        seen: false,
+        file: false
       });
+
+      document.getElementById('sendMessageId').value = '';
+      await getMessage();
+      setSendMessage('');
+      setSendFile(null);
+      setTimeout(() => {
+        let objDiv = document.getElementById("scroll");
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }, 100);
     }
-    document.getElementById('sendMessageId').value = ''
-    await getMessage()
-    setSendMessage('')
-    setTimeout(() => {
-      let objDiv = document.getElementById("scroll");
-      objDiv.scrollTop = objDiv.scrollHeight;
-    }, 100);
+
+    if (sendFile !== null && sendMessage.trim() === "") {
+      const storage = getStorage();
+      const storageRef = ref(storage, sendFile.name);
+      const uploadTask = uploadBytesResumable(storageRef, sendFile)
+      uploadTask.on('state_changed',
+        (snapshot) => {
+
+          const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          // console.log('Upload is ' + progress + '% done');
+          document.getElementById("sendMessageId").value = sendFile.name + "  " + progress + '% Done';
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+
+
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await addDoc(collection(db, "KalCompany", "Messages", "Messages"), {
+              Content: sendFile.name,
+              CreatedAt: serverTimestamp(),
+              RecieverId: selected,
+              SenderId: auth.currentUser.uid,
+              SenderName: auth.currentUser.displayName,
+              seen: false,
+              file: true,
+              url: downloadURL
+            });
+
+            document.getElementById('sendMessageId').value = '';
+            await getMessage();
+            setSendMessage('');
+            setSendFile(null);
+            setTimeout(() => {
+              let objDiv = document.getElementById("scroll");
+              objDiv.scrollTop = objDiv.scrollHeight;
+            }, 100);
+          });
+
+        }
+      );
+    }
+
+
 
   }
 
@@ -122,25 +180,23 @@ const DirectChat = () => {
               <div className="ml-2 text-2xl font-bold">Direct Chat</div>
             </div>
             {/* profile part start */}
-            <div className="flex flex-col items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <img
-                  src="/images/pp.png"
-                  alt="Avatar"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-              </div>
-              <div className="mt-2 text-sm font-semibold">Lidiya Solomon</div>
-              <div className="text-xs text-gray-500">Banner Designer</div>
-              <div className="flex flex-row items-center mt-3">
-                <div className="flex flex-col justify-center w-8 h-4 bg-green-700 rounded-full">
-                  <div className="self-end w-3 h-3 mr-1 bg-white rounded-full"></div>
+            {members.length != 0 && index > -1 ?
+              (<div className="flex flex-col items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+
+                  {members[index].data.ProfilePic === "" ? members[index].data.Name[0] : <img
+                    src={members[index].data.ProfilePic}
+                    alt="Avatar"
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  />}
                 </div>
-                <div className="ml-1 text-xs leading-none">Active</div>
-              </div>
-            </div>
+                <div className="mt-2 text-sm font-semibold">{members[index].data.Name}</div>
+                <div className="text-xs text-gray-500">{members[index].data.Department}</div>
+                <div className="flex flex-row items-center mt-3">
+                </div>
+              </div>) : <div></div>}
             {/* profile part end */}
             {/* chat list */}
             <div className="flex flex-col mt-8">
@@ -201,21 +257,53 @@ const DirectChat = () => {
                 <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-2">
 
-                    {messages.map(({ data: { Content, SenderId, SenderName, seen } }, i) => (
-                      <div key={i} className={`${SenderId === auth.currentUser.uid ? 'col-start-6 col-end-13 p-3 rounded-lg' : 'col-start-1 col-end-8 p-3 rounded-lg'}`}>
-                        <div key={i} className={`${SenderId === auth.currentUser.uid ? 'flex flex-row-reverse items-center justify-start' : 'flex flex-row items-center'}`}>
-                          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
-                            {SenderName[0]}
-                          </div>
-                          <div key={i} className={`${SenderId === auth.currentUser.uid ? 'relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl' : 'relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl'}`}>
-                            <div>{Content}</div>
-                            <div key={i} className="absolute bottom-0 right-0 mr-2 -mb-5 text-xs text-gray-500">
-                              {`${(messages.length === i + 1) && (SenderId === auth.currentUser.uid) ? `${seen ? "seen" : "delevered"}` : ''}`}
+                    {messages.map(({ data: { Content, SenderId, SenderName, seen, file, url } }, i) => {
+                      if (file) {
+                        return (
+                          <div key={i} className={`${SenderId === auth.currentUser.uid ? 'col-start-6 col-end-13 p-3 rounded-lg' : 'col-start-1 col-end-8 p-3 rounded-lg'}`}>
+                            <div key={i} className={`${SenderId === auth.currentUser.uid ? 'flex flex-row-reverse items-center justify-start' : 'flex flex-row items-center'}`}>
+                              <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
+                                {SenderName[0]}
+                              </div>
+                              <div key={i} className={`${SenderId === auth.currentUser.uid ? 'relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl' : 'relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl'}`}>
+                                <li className="px-2 py-1 mt-2 text-center rounded-md bg-slate-200 hover:bg-slate-300">
+                                  <Link target="_blank" href={url} className="flex flex-col">
+                                    <BiFileBlank className="w-12 h-auto text-secondary" />
+                                    <p
+                                      className="w-10 text-xs font-semibold truncate"
+                                      title={Content}
+                                    >
+                                      {Content}
+                                    </p>
+                                  </Link>
+                                </li>
+                                <div key={i} className="absolute bottom-0 right-0 mr-2 -mb-5 text-xs text-gray-500">
+                                  {`${(messages.length === i + 1) && (SenderId === auth.currentUser.uid) ? `${seen ? "seen" : "delevered"}` : ''}`}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
+                        )
+                      }
+                      else {
+                        return (
+
+                          <div key={i} className={`${SenderId === auth.currentUser.uid ? 'col-start-6 col-end-13 p-3 rounded-lg' : 'col-start-1 col-end-8 p-3 rounded-lg'}`}>
+                            <div key={i} className={`${SenderId === auth.currentUser.uid ? 'flex flex-row-reverse items-center justify-start' : 'flex flex-row items-center'}`}>
+                              <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
+                                {SenderName[0]}
+                              </div>
+                              <div key={i} className={`${SenderId === auth.currentUser.uid ? 'relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl' : 'relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl'}`}>
+                                <div>{Content}</div>
+                                <div key={i} className="absolute bottom-0 right-0 mr-2 -mb-5 text-xs text-gray-500">
+                                  {`${(messages.length === i + 1) && (SenderId === auth.currentUser.uid) ? `${seen ? "seen" : "delevered"}` : ''}`}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      }
+                    })}
                   </div>
                   {(messages.length === 0 && index < 0) && (
                     <div className="flex flex-row items-center p-2 justify-center">
@@ -236,8 +324,8 @@ const DirectChat = () => {
               </div>
               <div className="flex flex-row items-center w-full h-16 px-4 bg-white rounded-xl">
                 <div>
-                  <button onClick={() => document.getElementById("file").click()} className="flex items-center justify-center text-gray-400 hover:text-gray-600">
-                    <input id="file" className="hidden" type="file"></input>
+                  <button onClick={() => document.getElementById("fileInput").click()} className="flex items-center justify-center text-gray-400 hover:text-gray-600">
+                    <input onChange={(e) => { if (e.target.files.length !== 0) { setSendFile(e.target.files[0]); document.getElementById("sendMessageId").value = e.target.files[0].name; } }} id="fileInput" className="hidden" type="file"></input>
                     <svg
                       className="w-5 h-5"
                       fill="none"
@@ -260,7 +348,7 @@ const DirectChat = () => {
                       type="text"
                       className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
                       id="sendMessageId"
-                      onChange={(e) => setSendMessage(e.target.value)}
+                      onChange={(e) => { setSendMessage(e.target.value); setSendFile(null); document.getElementById("fileInput").value = "" }}
                     />
                     <button className="absolute top-0 right-0 flex items-center justify-center w-12 h-full text-gray-400 hover:text-gray-600">
                       <svg
