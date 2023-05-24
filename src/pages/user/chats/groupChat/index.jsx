@@ -3,8 +3,8 @@ import ChatLayout from "./ChatLayout";
 const GroupChat = () => {
   return (
     <ChatLayout>
-      <div className="flex items-center justify-center col-span-3">
-        <h3 className="hidden text-xl font-semibold md:block">
+      <div className="items-center justify-center hidden h-full lg:flex">
+        <h3 className="text-xl font-semibold">
           Select a group or a recent chat
         </h3>
       </div>

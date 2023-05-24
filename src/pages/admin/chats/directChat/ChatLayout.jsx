@@ -130,7 +130,7 @@ const ChatLayout = ({ children }) => {
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
               <TbMessageCircle className="text-4xl text-secondary" />
-              <h3 className="font-se mibold">Direct Chat</h3>
+              <h3 className="font-semibold">Direct Chat</h3>
             </div>
             {/* profile part start */}
             <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
