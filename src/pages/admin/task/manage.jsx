@@ -1,8 +1,9 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { allTasks } from "@/mock/tasks";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
+import { db } from "../../../../context/DbContext"
+import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -16,12 +17,29 @@ import { MdChecklist, MdTask } from "react-icons/md";
 
 
 const ManageTasks = () => {
-  const [tasks, setTasks] = useState( allTasks);
+  const [allTasks, setallTasks] = useState([]);
+  const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
 
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Tasks", "Tasks");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
+      });
 
+    } catch (err) {
+      console.log(err)
+      setTasks([{ Name: "check your connection" }])
+    }
+
+    setTasks(arr)
+    setallTasks(arr)
+  }
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) => 
@@ -41,35 +59,37 @@ const ManageTasks = () => {
   const columns = [
     {
       name: "Tasks",
-      selector: (row) => row.name,
+      selector: (row) => row.Title,
       sortable: true,
     },
     {
       name: "Assigned To",
-      selector: (row) => row.assignedTo,
+      selector: (row) => row.AssignedTo,
     },
     {
       name: "Status",
-      selector: (row) => row.status,
+      selector: (row) => row.Status,
     },
     {
       name: "Issue Date",
-      selector: (row) => row.issueDate,
+      selector: (row) => row.StartDate,
     },
     {
       name: "Due Date",
-      selector: (row) => row.dueDate,
+      selector: (row) => row.DueDate,
     },
     {
       name: "Priority",
-      selector: (row) => row.priority,
+      selector: (row) => row.Priority,
     }
   ];
 
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
   },[]);
-
+  useEffect(() => {
+    getData()
+  }, []);
   return (
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
@@ -176,29 +196,29 @@ const ManageTasks = () => {
                   <MdTask className="w-12 h-12"/>
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].name}
+                  {selectedRows[0].Title}
                 </h4>
-                <p className="text-sm">Assigned to {selectedRows[0].assignedTo}</p>
+                <p className="text-sm">Assigned to {selectedRows[0].AssignedTo}</p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>
-                <p className="flex flex-col p-2 gap-2 overflow-y-auto max-h-64">{selectedRows[0].detail}</p>
+                <p className="flex flex-col p-2 gap-2 overflow-y-auto max-h-64">{selectedRows[0].Description}</p>
                 <table>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Priority:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].priority}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].Priority}</p></td>
                   </tr>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Status:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].status}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].Status}</p></td>
                   </tr>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Issue Date:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].issueDate}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].StartDate}</p></td>
                   </tr>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Due Date:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].dueDate}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].DueDate}</p></td>
                   </tr>
                 </table>
 
