@@ -187,7 +187,7 @@ const ManageMembers = () => {
               </div>
               <div className="relative flex justify-center py-4">
                 <button
-                  onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
+                  
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <TbMessage className="w-8 h-auto" />

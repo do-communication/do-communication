@@ -1,11 +1,22 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Select from 'react-select'
+import { toast } from "react-toastify";
 const AddFile= () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("submit");
+
+    e.target.reset();
+
+    toast.success("File uploaded successfully");
+  }
+
+
   return (
     <AdminLayout>
     <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
       <div className="container max-w-screen-lg mx-auto">
-        <div>
+        <form onSubmit={handleSubmit}>
           <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Add File</h2>
 
           <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
@@ -27,26 +38,7 @@ const AddFile= () => {
                     />
                   </div>
 
-                  <div className="md:col-span-3">
-                    <label for="address">Owner</label>
-                    <input
-                      type="text"
-                      name="owner"
-                      id="owner"
-                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="md:col-span-3">
-                    <label for="email">Description</label>
-                    <textarea
-                 
-                      name="type"
-                      id="type"
-                      className="border mt-1 rounded px-4 w-full  h-24 bg-gray-50"
-                      placeholder=" "
-                    />
-                  </div>
+                  
 
                   <div className="md:col-span-3">
                     <label for="state">Upload File</label>
@@ -59,6 +51,17 @@ const AddFile= () => {
                         className="px-4 appearance-none outline-none  text-gray-500 p-2 w-full bg-transparent text-sm border-none"
                       />
                     </div>
+                  </div>
+
+                  <div className="md:col-span-3">
+                    <label for="email">Description</label>
+                    <textarea
+                 
+                      name="type"
+                      id="type"
+                      className="border mt-1 rounded px-4 w-full  h-24 bg-gray-50"
+                      placeholder=" "
+                    />
                   </div>
                 
 
@@ -78,7 +81,7 @@ const AddFile= () => {
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
     </AdminLayout>

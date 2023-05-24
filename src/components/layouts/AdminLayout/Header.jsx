@@ -127,15 +127,15 @@ const Header = () => {
                       aria-labelledby="user-menu-button"
                       tabindex="-1"
                     >
-                      <a
-                        href="#"
+                      <Link
+                        href="/admin/profile/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
                         My Profile
-                      </a>
+                      </Link>
 
                       <a
                         href="#"
@@ -144,17 +144,7 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-1"
                       >
-                        Projects
-                      </a>
-
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabindex="-1"
-                        id="user-menu-item-1"
-                      >
-                        Sign out
+                        Sign out 
                       </a>
                     </div>
                   )}

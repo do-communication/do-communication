@@ -6,16 +6,22 @@ import { useState } from "react";
 const AddMember = () => {
   const [members, setMembers] = useState([]);
 
-  const handleAssign = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     console.log("submit");
-    toast.success("Member added successfully");
-  };
+
+    // e.target.reset();
+
+    toast.success("Task Assigned successfully");
+  }
+
+  
   
   return (
     <AdminLayout>
     <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
       <div className="container max-w-screen-lg mx-auto">
-        <div>
+        <form>
           <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Assign Task</h2>
 
           <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
@@ -101,11 +107,15 @@ const AddMember = () => {
                   <div className="md:col-span-6 text-right ml-auto">
                     <div className="inline-flex items-end justify-end">
                       <div className="flex-row gap-10 pt-8">
-                        <button className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
+                        <button 
+                          className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2"
+                          
+                        >
                           Cancel
                         </button>
-                        <button className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded"
-                          onClick={() => handleAssign()}
+                        <button 
+                          className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded"
+                          onClick={handleSubmit}
                         >
                           Assign
                         </button>
@@ -116,7 +126,7 @@ const AddMember = () => {
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
     </AdminLayout>
