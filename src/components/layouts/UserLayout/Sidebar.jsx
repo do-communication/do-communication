@@ -14,66 +14,40 @@ const Sidebar = () => {
 
   const navList = [
     {
-      Icon: <AiFillAccountBook />,
-      url: "/admin",
-      name: "Dashbaord",
-    },
-    {
       Icon: <BsFillChatDotsFill />,
       name: "Chat",
       children: [
         {
-          url: "/admin/chats/groupChat",
+          url: "/user/chats/groupChat",
           name: "Group Chat",
         },
         {
-          url: "/admin/chats/directChat",
+          url: "/user/chats/directChat",
           name: "Direct Chat",
         },
       ],
     },
     {
       Icon: <RiTeamFill />,
+      url: "/admin/members",
       name: "Members", //unqiue
-      children: [
-        {
-          url: "/admin/members/create",
-          name: "Add Member",
-        },
-        {
-          url: "/admin/members/ManageMembers",
-          name: "Manage Members",
-        },
-      ],
     },
     {
       Icon: <MdGroupWork />,
+      url: "/admin/groups",
       name: "Groups", //unqiue
-      children: [
-        {
-          url: "/admin/groups/create",
-          name: "Create Group",
-        },
-        {
-          url: "/admin/groups/manage",
-          name: "Manage Groups",
-        },
-      ],
     },
 
     {
       Icon: <FaTasks />,
+      url: "/admin/tasks",
       name: "Tasks", //unqiue
-      children: [
-        {
-          url: "/admin/task/create",
-          name: "Create Task",
-        },
-        {
-          url: "/admin/task/manage",
-          name: "Manage Tasks",
-        },
-      ],
+    },
+
+    {
+      Icon: <TbReportAnalytics />,
+      url: "/admin/report",
+      name: "Report",
     },
     {
       Icon: <AiFillFileAdd />,
@@ -90,21 +64,17 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <TbReportAnalytics />,
-      url: "/admin/reports/reports",
-      name: "Report",
-    },
-    {
       Icon: <RiLogoutBoxFill />,
       url: "/",
-      name: "Sign Out",
+      name: "Logout",
     },
   ];
 
   return (
     <div
-      className={`${!openSideBar && "-translate-x-full"
-        } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
+      className={`${
+        !openSideBar && "-translate-x-full"
+      } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
     >
       <nav className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
         <Link

@@ -1,3 +1,4 @@
+
 import { useReducer } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -5,7 +6,7 @@ import OpenSideBarContext, {
   openSideBarReducer,
 } from "./context/openSideBarContext";
 
-const AdminLayout = ({ children, noFooter = false }) => {
+const UserLayout = ({ children }) => {
   const [openSideBar, openSideBarDispatch] = useReducer(
     openSideBarReducer,
     false
@@ -20,16 +21,13 @@ const AdminLayout = ({ children, noFooter = false }) => {
           <Header />
           {/* <!-- End Top navbar --> */}
           <main className="bg-[#f3f3f9] mb-auto flex-grow p-5">{children}</main>
-
-          {!noFooter && (
-            <footer className="p-4 pb-3 text-xs bg-gray-100 border-t">
-              2023 @ Do communication all right reserved.
-            </footer>
-          )}
+          <footer className="p-4 pb-3 text-xs bg-gray-100 border-t">
+            2023 @ Do communication all right reserved.
+          </footer>
         </div>
       </OpenSideBarContext.Provider>
     </div>
   );
 };
 
-export default AdminLayout;
+export default UserLayout;

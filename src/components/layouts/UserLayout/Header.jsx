@@ -1,5 +1,7 @@
 import { useState, useContext } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import { IoNotificationsOutline } from "react-icons/io5";
 import {
   AiOutlineMenu,
   AiOutlineBell,
@@ -8,34 +10,10 @@ import {
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
-import { auth } from "../../../../config/firebase";
-import { useAuth } from "../../../../context/AuthContext";
-import Router from "next/router";
-
-const router = Router
-
 const Header = () => {
-  const { user, logout } = useAuth()
-  // const [user, setUser] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(u => {
-  //     setUser(u)
-  //   })
-  // }, [])
-
-  const handleSingout = (e) => {
-    e.preventDefault()
-    try {
-      logout().then(() => router.push('/'))
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -76,7 +54,7 @@ const Header = () => {
                       stroke="currentColor"
                     >
                       <path
-                        strokLinecap="round"
+                        strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth="2"
                         d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
@@ -92,32 +70,36 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:block">
-                <div><p>Company Name</p></div>
+                <form action="" className="app-search" method="GET">
+                  <div className="relative group ">
+                    <input
+                      type="text"
+                      className="form-input rounded-md bg-light_2 text-sm text-gray-700 pl-10 py-1.5 ml-5 border-transparent border-none outline-none focus:ring-0 focus:text-white transition-all duration-300 ease-in-out focus:w-60 w-48"
+                      placeholder="Search..."
+                      autoComplete="off"
+                    />
+                    <span className="absolute text-gray-400 transition-all duration-300 ease-in-out left-44 bottom-2 group-focus-within:left-8">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </form>
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
               <div className="flex ml-4 md:ml-6 ">
-                <div className="relative flex items-center justify-center mr-4">
-                  <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
-                    <span className="sr-only">View notifications</span>
-                    <svg
-                      className="w-6 h-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
                 {/* <!-- Profile dropdown --> */}
                 <div className="relative px-4 text-sm text-gray-700 shadow-2xl cursor-pointer bg-light bright hover:text-white">
                   <div
@@ -132,15 +114,15 @@ const Header = () => {
                     >
                       <span className="sr-only">Open user menu</span>
                       <img
-                        className="w-8 h-8 rounded-full"
-                        src="/images/admin.png"
+                        className="w-10 h-10 rounded-full"
+                        src="/images/pp.png"
                         alt=""
                       />
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>{user && user.displayName}</span>
-                      <span>Admin</span>
+                      <span>Member1</span>
+                      <span>Product Manager</span>
                     </div>
                   </div>
                   {open && (
@@ -149,13 +131,13 @@ const Header = () => {
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu-button"
-                      tabIndex="-1"
+                      tabindex="-1"
                     >
                       <a
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabIndex="-1"
+                        tabindex="-1"
                         id="user-menu-item-0"
                       >
                         My Profile
@@ -165,7 +147,7 @@ const Header = () => {
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabIndex="-1"
+                        tabindex="-1"
                         id="user-menu-item-1"
                       >
                         Projects
@@ -175,9 +157,8 @@ const Header = () => {
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabIndex="-1"
+                        tabindex="-1"
                         id="user-menu-item-1"
-                        onClick={handleSingout}
                       >
                         Sign out
                       </a>
@@ -185,9 +166,23 @@ const Header = () => {
                   )}
                 </div>
               </div>
+              {/* notification */}
+              <div className="relative flex items-center justify-center mr-4">
+                <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
+                  <span className="sr-only">View notifications</span>
+                  <IoNotificationsOutline size={20} />
+                </div>
+              </div>
+              {/* logout */}
+              <div className="relative flex items-center justify-center mr-4">
+                <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
+                  <span className="sr-only">View notifications</span>
+                  <RiLogoutBoxRLine size={20} />
+                </div>
+              </div>
             </div>
 
-            <div className="flex px-2 md:hidden">
+            <div className="flex px-2 -mr-2 md:hidden">
               {/* <!-- Mobile menu button --> */}
               <button
                 type="button"
@@ -218,10 +213,10 @@ const Header = () => {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-gray-800">
-                    {user && user.displayName}
+                    Senait Gobezie
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    {user && user.email}
+                    sen@example.com
                   </div>
                 </div>
                 <button
@@ -241,11 +236,9 @@ const Header = () => {
                 </Link>
 
                 <Link
-                  href="#"
-                  onClick={handleSingout}
+                  href="/logout"
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
-
                   <AiOutlineLogout className="w-5 h-auto" />
                   Sign out
                 </Link>
