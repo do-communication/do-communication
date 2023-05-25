@@ -46,7 +46,7 @@ const Sidebar = () => {
 
     {
       Icon: <TbReportAnalytics />,
-      url: "/admin/report",
+      url: "/user/reports/report",
       name: "Report",
     },
     {

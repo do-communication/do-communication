@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { allMembers } from "@/mock/members";
 import Select from "react-select";
 import { useState } from "react";
-const AddMember = () => {
+const AddTask = () => {
   const [members, setMembers] = useState([]);
 
   const handleSubmit = (e) => {
@@ -134,4 +134,4 @@ const AddMember = () => {
   );
 };
 
-export default AddMember;
+export default AddTask;

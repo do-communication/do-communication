@@ -52,7 +52,7 @@ const Profile = () => {
                                             type="text" 
                                             name="full_name"
                                             id="full_name"
-                                            className="w-[90%] h-10 px-4 mt-1 border rounded bg-gray-50"
+                                            className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                                             value={user.full_name}
                                             onChange={handleChange}
 
@@ -64,7 +64,7 @@ const Profile = () => {
                                             type="text" 
                                             name="company_name"
                                             id="company_name"
-                                            className="w-[90%] h-10 px-4 mt-1 border rounded bg-gray-50"
+                                            className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                                             value={user.company_name}
                                             onChange={handleChange}
                                             />
@@ -75,9 +75,7 @@ const Profile = () => {
                                             type="date"
                                             name="date_of_birth"
                                             id="date_of_birth"
-                                            className="w-[90%] h-10 px-4 mt-1 border rounded bg-gray-50"
-                                            // value={user.dob}
-                                            // onChange={handleChange}
+                                            className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                                             />
                                         </div>
                                         <div className="md:col-span-5">
@@ -86,7 +84,7 @@ const Profile = () => {
                                             type="text" 
                                             name="phone_number"
                                             id="phone_number"
-                                            className="w-[90%] h-10 px-4 mt-1 border rounded bg-gray-50"
+                                            className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                                             value={user.phone_number}
                                             onChange={handleChange}
                                             />
