@@ -16,7 +16,7 @@ const Sidebar = () => {
     {
       Icon: <AiFillAccountBook />,
       url: "/admin",
-      name: "Dashbaord",
+      name: "Dashboard",
     },
     {
       Icon: <BsFillChatDotsFill />,

@@ -102,7 +102,6 @@ const ManageMembers = () => {
             data={members}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
-            selectableRowsSingle={true}
             selectableRowsNoSelectAll={true}
             pagination={true}
           />
