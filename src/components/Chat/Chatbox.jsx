@@ -21,7 +21,7 @@ const Chatbox = ({ messages, name }) => {
 
   return (
     <div className="relative flex-col h-full bg-white rounded-2xl">
-      <header className="sticky top-0 flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
+      <header className="absolute top-0 z-40 flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
         <button
           onClick={() => {
             if (router.pathname === "/admin/chats/directChat/[userId]") {
