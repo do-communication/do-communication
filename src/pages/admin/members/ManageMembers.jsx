@@ -189,6 +189,7 @@ const ManageMembers = () => {
               </div>
               <div className="relative flex justify-center py-4">
                 <button
+
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <TbMessage className="w-8 h-auto" />

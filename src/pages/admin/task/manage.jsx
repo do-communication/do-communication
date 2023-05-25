@@ -175,7 +175,7 @@ const ManageTasks = () => {
                 <div className="flex items-center justify-center w-20 h-20 bg-green-400 rounded-full">
                   <MdTask className="w-12 h-12"/>
                 </div>
-                <h4 className="text-xl font-semibold capitalize" mt-1>
+                <h4 className="text-xl font-semibold capitalize" >
                   {selectedRows[0].name}
                 </h4>
                 <p className="text-sm">Assigned to {selectedRows[0].assignedTo}</p>

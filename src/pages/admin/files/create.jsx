@@ -6,6 +6,7 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../../context/DbContext"
 import { serverTimestamp } from '@firebase/firestore'
+import { toast } from "react-toastify";
 
 
 const AddFile = () => {
@@ -15,7 +16,7 @@ const AddFile = () => {
   const [Discription, setDiscription] = useState("");
   const [progress, setProgress] = useState("");
 
-  const UploadFile = async () => {
+  const UploadFile = async (e) => {
 
     if (sendFile !== null) {
 
@@ -62,6 +63,13 @@ const AddFile = () => {
             setFileName('');
             setDiscription('');
             setSendFile(null);
+
+            e.preventDefault();
+            console.log("submit");
+
+            // e.target.reset();
+
+            toast.success("File uploaded successfully");
           });
 
         }
@@ -149,7 +157,7 @@ const AddFile = () => {
                           <button className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
                             Cancel
                           </button>
-                          <button onClick={UploadFile} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
+                          <button onClick={(e) => UploadFile(e)} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
                             Upload
                           </button>
                         </div>
@@ -161,6 +169,7 @@ const AddFile = () => {
             </div>
           </div>
         </div>
+        {/* </form> */}
       </div>
     </AdminLayout>
 
