@@ -1,8 +1,9 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { allMembers } from "@/mock/members";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
+import { db } from "../../../../context/DbContext"
+import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -22,12 +23,29 @@ const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
 });
 
 const ManageMembers = () => {
-  const [members, setMembers] = useState(allMembers);
+  const [allMembers, setallMembers] = useState([]);
+  const [members, setMembers] = useState([allMembers]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
+      });
 
+    } catch (err) {
+      console.log(err)
+      setMembers([{ Name: "check your connection" }])
+    }
+
+    setMembers(arr)
+    setallMembers(arr)
+  }
   // search for groups using group name
   useEffect(() => {
     const filteredData = allMembers.filter(
@@ -41,6 +59,7 @@ const ManageMembers = () => {
       setMembers(filteredData);
     } else {
       setMembers(allMembers);
+      console.log(members);
     }
   }, [search]);
 
@@ -48,32 +67,38 @@ const ManageMembers = () => {
     {
       name: "Name",
       selector: (row) => (
-        <p className="flex items-center gap-2">
-          <img
-            src={row.photo}
-            width={50}
-            height={50}
-            alt="pp"
-            className="rounded-full"
-          />
+        <p className="flex items-center justify-center gap-2"><div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+          {row.ProfilePic === '' ? row.Name[0] : <img
+          src={row.ProfilePic}
+          width={50}
+          height={50}
+          alt= "pp"
+          className="rounded-full"
+        />}
+        </div>
+        <div>
+        {row.Name}
+      </div></p>
 
-          {row.name}
-        </p>
       ),
       sortable: true,
     },
     {
       name: "Email",
-      selector: (row) => row.email,
+      selector: (row) => row.Email,
     },
     {
       name: "Department",
-      selector: (row) => row.department,
+      selector: (row) => row.Department,
     },
   ];
 
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
+  }, []);
+
+  useEffect(() => {
+    getData()
   }, []);
 
   return (
@@ -115,6 +140,31 @@ const ManageMembers = () => {
             <div className="flex items-center justify-center w-full h-full text-xl">
               <p>Select Member to see details</p>
             </div>
+          )}
+          {/* if multiple rows are selected */}
+          {selectedRows.length > 1 && (
+            <>
+              <h3 className="flex justify-between px-2 pb-4 text-xl font-semibold">
+                Selected members
+                <button className="flex items-center gap-1 px-2 py-1 text-base text-white bg-red-600 rounded-lg hover:bg-red-500">
+                  <AiOutlineClose className="w-5 h-auto" />
+                  Delete All
+                </button>
+              </h3>
+              <ul className="flex flex-col gap-2 px-2">
+                {selectedRows.map((row, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
+                  >
+                    <p>{row.Name}</p>
+                    <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
+                      <AiOutlineClose />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
 
           {selectedRows.length === 1 && (
@@ -173,17 +223,20 @@ const ManageMembers = () => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
-                  {/* <MdGroup className="w-12 h-12" /> */}
-                  <img
-                    src="/images/pp.png"
-                    className="flex items-center justify-center w-20 h-20 rounded-full bg-primary"
-                  />
+                    {selectedRows[0].ProfilePic === '' ? selectedRows[0].Name[0] : 
+                    <img
+                    src={selectedRows[0].ProfilePic}
+                    width={50}
+                    height={50}
+                    alt= "pp"
+                    className="rounded-full"
+                  />}
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].name}
+                  {selectedRows[0].Name}
                 </h4>
                 <p className="font-light text-md" mt-1>
-                  {selectedRows[0].email}
+                  {selectedRows[0].Email}
                 </p>
                 <p className="text-sm">{selectedRows[0].type}</p>
               </div>
@@ -209,7 +262,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="Lidiya Solomon Tamru">
-                      Lidiya Solomon Tamru
+                      {selectedRows[0].Name}
                     </p>
                   </div>
 
@@ -220,7 +273,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="Product Manager">
-                      Product Manager
+                      {selectedRows[0].Department}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -230,7 +283,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="Addis Ababa/Ethiopia">
-                      Addis Ababa/Ethiopia
+                      {selectedRows[0].Address}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -240,7 +293,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="+251910******">
-                      +251910******
+                      {selectedRows[0].PhoneNumber}
                     </p>
                   </div>
                 </ul>
@@ -250,9 +303,9 @@ const ManageMembers = () => {
                 <h3 className="p-2 text-lg font-semibold text-center">
                   Joined Groups
                 </h3>
-
+                
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  <Link
+                  {/* <Link
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
@@ -296,7 +349,21 @@ const ManageMembers = () => {
                     >
                       <BsEye /> View
                     </button>
-                  </Link>
+                  </Link> */}
+                  {selectedRows[0].GroupId && selectedRows[0].GroupId.map((row, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
+                  >
+                    <p>{row}</p>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                    >
+                      <BsEye /> View
+                    </button>
+                  </li>
+                ))}
                 </ul>
               </div>
             </div>

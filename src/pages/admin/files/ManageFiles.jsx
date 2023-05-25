@@ -67,9 +67,26 @@ const ManageFiles = () => {
     },
   ];
 
-  const handleRowSelected = useCallback((state) => {
+  const handleRowSelected = (state) => {
     setSelectedRows(state.selectedRows);
-  }, []);
+    console.log(selectedRows)
+  };
+
+  const handleDeselectedRows = (index, row) => {
+    let arr = [...selectedRows];
+    console.log(selectedRows);
+    arr.splice(index, 1)
+    setSelectedRows(arr);
+    console.log(selectedRows);
+    console.log(index);
+    const id = "select-row-" + row.id
+    document.querySelector(`input[name=${id}]`).classList.remove("checked");
+
+
+  }
+  useEffect(() => {
+    console.log("changed")
+  }, [selectedRows])
 
   useEffect(() => {
     getFiles()
@@ -146,8 +163,8 @@ const ManageFiles = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>hello</p>
-                    <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
+                    <p>{row.data.FileName}</p>
+                    <button onClick={() => handleDeselectedRows(index, row)} className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
                   </li>
