@@ -126,7 +126,7 @@ const ChatLayout = ({ children }) => {
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md md:col-span-1 col-span-full md:block rounded-2xl ${
+            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${
               router.query.groupId ? "hidden" : ""
             }`}
           >
