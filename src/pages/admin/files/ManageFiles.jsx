@@ -1,5 +1,4 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { allFiles } from "@/mock/files";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
@@ -20,8 +19,13 @@ import { BsEye } from "react-icons/bs";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
+import { db } from "../../../../context/DbContext"
+import { getDocs, collection, query, where, or, orderBy, and, addDoc } from "firebase/firestore";
+import { auth } from "../../../../config/firebase";
+
 const ManageFiles = () => {
-  const [files, setFiles] = useState(allFiles);
+  const [files, setFiles] = useState([]);
+  const [allFiles, setAllFiles] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -31,7 +35,7 @@ const ManageFiles = () => {
   useEffect(() => {
     const filteredData = allFiles.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
+        item.data.FileName && item.data.FileName.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -48,24 +52,43 @@ const ManageFiles = () => {
         <p className="flex items-center gap-2">
           <AiOutlineFile className="w-9 p-2 h-auto" />
 
-          {row.name}
+          {row.data.FileName}
         </p>
       ),
       sortable: true,
     },
     {
       name: "Description",
-      selector: (row) => row.Description,
+      selector: (row) => row.data.Description,
     },
     {
       name: "Owner",
-      selector: (row) => row.owner,
+      selector: (row) => row.data.SenderName,
     },
   ];
 
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
   }, []);
+
+  useEffect(() => {
+    getFiles()
+  }, [])
+
+  const getFiles = async () => {
+    let arr = []
+    try {
+      const all = collection(db, "KalCompany", "Files", auth.currentUser.uid)
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push({ id: d.id, data: d.data() })
+      });
+    } catch (err) {
+      console.log(err)
+    }
+    setAllFiles(arr);
+    setFiles(arr);
+  }
 
   return (
     <AdminLayout>
@@ -123,7 +146,7 @@ const ManageFiles = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.name}</p>
+                    <p>hello</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -176,7 +199,7 @@ const ManageFiles = () => {
                   <AiOutlineFile className="flex items-center justify-center w-10 h-10 m-2 rounded-full " />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].name}
+                  {selectedRows[0].data.FileName}
                 </h4>
               </div>
               <div className="relative flex justify-center py-4">
@@ -201,7 +224,7 @@ const ManageFiles = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate text-sm" title="Lidiya Solomon Tamru">
-                      {selectedRows[0].name}
+                      {selectedRows[0].data.FileName}
                     </p>
                   </div>
 
@@ -212,7 +235,7 @@ const ManageFiles = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate text-sm" title="Product Manager">
-                      {selectedRows[0].description}
+                      {selectedRows[0].data.Description}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -222,7 +245,7 @@ const ManageFiles = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate text-sm" title="Addis Ababa/Ethiopia">
-                      {selectedRows[0].owner}
+                      {selectedRows[0].data.SenderName}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -232,7 +255,7 @@ const ManageFiles = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate text-sm" title="+251910******">
-                      {selectedRows[0].location}
+                      {selectedRows[0].data.location}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -242,7 +265,7 @@ const ManageFiles = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate text-sm" title="+251910******">
-                      {selectedRows[0].createdAt}
+                      {String(selectedRows[0].data.CreatedAt.toDate().toDateString())}
                     </p>
                   </div>
                 </ul>
