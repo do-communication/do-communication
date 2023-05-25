@@ -181,40 +181,47 @@ const AddMember = () => {
     <AdminLayout>
       <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
         <div className="container max-w-screen-lg mx-auto">
-          <form>
+          <div>
             <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Assign Task</h2>
 
-            <div className="lg:col-span-2 ">
-              <div className="grid gap-6 gap-y-5 text-sm grid-cols-1 md:grid-cols-6">
-                <div className="md:col-span-3">
-                  <label for="full_name">Task Title</label>
-                  <input
-                    type="text"
-                    name="task_title"
-                    id="title"
-                    onChange={handleTitle}
-                    value={data.Title}
-                    className="h-10 border mt-1 rounded px-4  w-full bg-gray-50"
-                  />
+            <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
+              <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+                <div className="text-gray-600">
+                  <p className="font-medium text-lg pb-3 pl-4">Task Details</p>
+                  <img src="/images/task.svg" alt="form" width={250} height={800} className="pt-10 sm:pb-3" />
                 </div>
 
-                <div className="md:col-span-3">
-                  <label for="task">Task Description</label>
-                  <textarea
-                    type="text"
-                    name="description"
-                    id="description"
-                    onChange={handleDescription}
-                    value={data.Description}
-                    className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    placeholder="Write some description about the task"
-                    rows={16} cols={50}
-                  />
-                </div>
+                <div className="lg:col-span-2 ">
+                  <div className="grid gap-6 gap-y-5 text-sm grid-cols-1 md:grid-cols-6">
+                    <div className="md:col-span-3">
+                      <label for="full_name">Task Title</label>
+                      <input
+                        type="text"
+                        name="task_title"
+                        id="title"
+                        onChange={handleTitle}
+                        value={data.Title}
+                        className="h-10 border mt-1 rounded px-4  w-full bg-gray-50"
+                      />
+                    </div>
 
-                <div className="md:col-span-3">
-                  <label for="address">Assigned To:</label>
-                  {/* <input
+                    <div className="md:col-span-3">
+                      <label for="task">Task Description</label>
+                      <textarea
+                        type="text"
+                        name="description"
+                        id="description"
+                        onChange={handleDescription}
+                        value={data.Description}
+                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                        placeholder="Write some description about the task"
+                        rows={16} cols={50}
+                      />
+                    </div>
+
+                    <div className="md:col-span-3">
+                      <label for="address">Assigned To:</label>
+                      {/* <input
                       type="text"
                       name="assignedTo"
                       id="assigned"
@@ -223,62 +230,64 @@ const AddMember = () => {
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                       placeholder="search for a member or group"
                     /> */}
-                  <Select
-                    isMulti
-                    name="members"
-                    id="assigned"
-                    options={allMembers.map((member) => {
-                      return { label: member.Name, value: member.Name };
-                    })}
-                    onChange={(selectedMembers) => {
-                      setMembers(
-                        selectedMembers.map((member) => member.value)
-                      );
-                      selectedMembers.map(member => {
-                        data.AssignedTo.push(member.value)
-                      });
-                      if (assigned && assigned.classList.contains("ring-red-600")) {
-                        assigned.classList.remove("ring-red-600");
-                        assigned.classList.remove("ring-2");
-                        assigned.placeholder = "search for a member or a group";
-                      }
+                      <Select
+                        isMulti
+                        name="members"
+                        id="assigned"
+                        options={allMembers.map((member) => {
+                          return { label: member.Name, value: member.Name };
+                        })}
+                        onChange={(selectedMembers) => {
+                          setMembers(
+                            selectedMembers.map((member) => member.value)
+                          );
+                          selectedMembers.map(member => {
+                            data.AssignedTo.push(member.value)
+                          });
+                          if (assigned && assigned.classList.contains("ring-red-600")) {
+                            assigned.classList.remove("ring-red-600");
+                            assigned.classList.remove("ring-2");
+                            assigned.placeholder = "search for a member or a group";
+                          }
 
-                    }}
-                  />
-                </div>
+                        }}
+                      />
+                    </div>
 
-                <div className="md:col-span-3">
-                  <label for="Gender">Priority</label>
-                  <select required id="selectPriority" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
-                    <option value="null">Select priority</option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                  </select>
-                </div>
+                    <div className="md:col-span-3">
+                      <label for="Gender">Priority</label>
+                      <select required id="selectPriority" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+                        <option value="null">Select priority</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                      </select>
+                    </div>
 
-                <div className="md:col-span-3">
-                  <label for="state">Start Date</label>
-                  <div id="start" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input required type="date"
-                      onfocus="(this.type='date')" name="startDate"
-                      placeholder="MM/DD/YYYY"
-                      onChange={handleStart}
-                      id="startDate"
-                      value={data.StartDate}
-                      className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
-                  </div>
+                    <div className="md:col-span-3">
+                      <label for="state">Start Date</label>
+                      <div id="start" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                        <input required type="date"
+                          onfocus="(this.type='date')" name="startDate"
+                          placeholder="MM/DD/YYYY"
+                          onChange={handleStart}
+                          id="startDate"
+                          value={data.StartDate}
+                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
+                      </div>
+                    </div>
 
-                  <div className="md:col-span-3">
-                    <label for="state">Due Date</label>
-                    <div id="end" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                      <input required type="date"
-                        onChange={handleEnd}
-                        value={data.DueDate}
-                        id="endDate"
-                        onfocus="(this.type='date')" name="dueDate"
-                        placeholder="MM/DD/YYYY"
-                        className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
+                    <div className="md:col-span-3">
+                      <label for="state">Due Date</label>
+                      <div id="end" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                        <input required type="date"
+                          onChange={handleEnd}
+                          value={data.DueDate}
+                          id="endDate"
+                          onfocus="(this.type='date')" name="dueDate"
+                          placeholder="MM/DD/YYYY"
+                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
+                      </div>
                     </div>
 
                     <div className="md:col-span-6 text-right ml-auto">
@@ -296,7 +305,7 @@ const AddMember = () => {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </AdminLayout>
