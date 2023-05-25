@@ -2,28 +2,27 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { allGroups } from "@/mock/groups";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import DataTable from "react-data-table-component";
 import {
   AiFillDelete,
   AiFillEdit,
-  AiOutlineClose,
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import {
-  BiDotsVertical,
-  BiMessage,
-  BiMessageAlt,
-  BiUserPlus,
-} from "react-icons/bi";
-import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-import { MdChecklist, MdGroup, MdManageAccounts } from "react-icons/md";
+import { BiDotsVertical, BiUserPlus, BiX } from "react-icons/bi";
+import { HiDocumentChartBar } from "react-icons/hi2";
+import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
+import dynamic from "next/dynamic";
+
+const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
+  ssr: false,
+});
+
 const ManageGroup = () => {
   const [groups, setGroups] = useState(allGroups);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
+  const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
 
   // search for groups using group name
@@ -61,30 +60,33 @@ const ManageGroup = () => {
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
           <h1 className="mb-4 text-3xl font-semibold">Manage Groups</h1>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
             <Link
               href="/admin/groups/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Create Group
             </Link>
-            <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
+            <div className="flex justify-between pr-4 bg-white border-gray-700 rounded-md ">
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="py-2 pl-4 bg-transparent outline-none"
+                className="w-11/12 py-2 pl-4 bg-transparent outline-none"
                 placeholder="Search from groups"
               />
               <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
-          <DataTable
+          <ClientOnlyTable
             columns={columns}
             data={groups}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
-            pagination
+            selectableRowsSingle={true}
+            selectableRowsNoSelectAll={true}
+            clearSelectedRows={clearSelectedRows}
+            pagination={true}
           />
         </div>
         <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
@@ -94,35 +96,19 @@ const ManageGroup = () => {
               <p>Select group to see details</p>
             </div>
           )}
-          {/* if multiple rows are selected */}
-          {selectedRows.length > 1 && (
-            <>
-              <h3 className="flex justify-between px-2 pb-4 text-xl font-semibold">
-                Selected Groups
-                <button className="flex items-center gap-1 px-2 py-1 text-base text-white bg-red-600 rounded-lg hover:bg-red-500">
-                  <AiOutlineClose className="w-5 h-auto" />
-                  Delete All
-                </button>
-              </h3>
-              <ul className="flex flex-col gap-2 px-2">
-                {selectedRows.map((row, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
-                  >
-                    <p>{row.name}</p>
-                    <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
-                      <AiOutlineClose />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
 
           {selectedRows.length === 1 && (
             <div className="flex flex-col">
-              <div className="relative flex justify-end">
+              <div className="relative flex justify-between sm:justify-end">
+                <button
+                  onClick={() => {
+                    setSelectedRows([]);
+                    setClearSelectedRows(true);
+                  }}
+                  className="block sm:hidden"
+                >
+                  <BiX className="h-auto w-9 hover:text-gray-600" />
+                </button>
                 <button
                   onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                 >

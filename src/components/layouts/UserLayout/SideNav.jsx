@@ -20,8 +20,9 @@ const SideNav = ({ nav }) => {
         <div>{name}</div>
         {!url && (
           <div
-            className={`absolute right-1.5 transition-transform duration-300 ${isSelected ? "rotate-180" : ""
-              }`}
+            className={`absolute right-1.5 transition-transform duration-300 ${
+              isSelected ? "rotate-180" : ""
+            }`}
           >
             <BiChevronUp></BiChevronUp>
           </div>
@@ -29,8 +30,9 @@ const SideNav = ({ nav }) => {
       </Link>
       {children && (
         <div
-          className={`pl-4 pr-2 overflow-hidden transition-all transform translate duration-200 ${isSelected ? "max-h-full" : "max-h-0"
-            }`}
+          className={`pl-4 pr-2 overflow-hidden transition-all transform translate duration-200 ${
+            isSelected ? "max-h-full" : "max-h-0"
+          }`}
         >
           <ul className="flex flex-col pl-2 mt-2 space-y-1 text-xs text-gray-500 border-l border-gray-700">
             {children.map((child, index) => (

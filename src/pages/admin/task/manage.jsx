@@ -64,7 +64,7 @@ const ManageTasks = () => {
     },
     {
       name: "Assigned To",
-      selector: (row) => row.AssignedTo,
+      selector: (row) => new Set(row.AssignedTo).toString(),
     },
     {
       name: "Status",
@@ -198,7 +198,7 @@ const ManageTasks = () => {
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].Title}
                 </h4>
-                <p className="text-sm">Assigned to {selectedRows[0].AssignedTo}</p>
+                <p className="text-sm">Assigned to {new Set(selectedRows[0].AssignedTo).toString(", ")}  </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>

@@ -11,17 +11,23 @@ import {
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiDotsVertical, BiGroup } from "react-icons/bi";
+import { BiDotsVertical, BiGroup, BiX } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
+import dynamic from "next/dynamic";
+
+const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
+  ssr: false,
+});
+
 const ManageMembers = () => {
   const [allMembers, setallMembers] = useState([]);
   const [members, setMembers] = useState([allMembers]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
+  const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
   const getData = async () => {
     let arr = []
@@ -100,7 +106,7 @@ const ManageMembers = () => {
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
           <h1 className="mb-5 text-2xl font-semibold">Manage Members</h1>
-          <div className="flex items-center justify-between pb-0 mb-2">
+          <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
             <Link
               href="/admin/members/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
@@ -112,21 +118,21 @@ const ManageMembers = () => {
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="py-2 pl-4 bg-transparent outline-none"
+                className="w-11/12 py-2 pl-4 bg-transparent outline-none"
                 placeholder="Search from members"
               />
               <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
-          {/* try */}
-          <DataTable
+          <ClientOnlyTable
             columns={columns}
             data={members}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
-            pagination
+            selectableRowsSingle={true}
+            selectableRowsNoSelectAll={true}
+            pagination={true}
           />
-          {/* try */}
         </div>
         <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
           {/* if no row is selected */}
@@ -163,7 +169,16 @@ const ManageMembers = () => {
 
           {selectedRows.length === 1 && (
             <div className="flex flex-col">
-              <div className="relative flex justify-end">
+              <div className="relative flex justify-between sm:justify-end">
+                <button
+                  onClick={() => {
+                    setSelectedRows([]);
+                    setClearSelectedRows(true);
+                  }}
+                  className="block sm:hidden"
+                >
+                  <BiX className="h-auto w-9 hover:text-gray-600" />
+                </button>
                 <button
                   onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                 >

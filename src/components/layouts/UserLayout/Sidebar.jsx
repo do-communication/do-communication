@@ -14,66 +14,40 @@ const Sidebar = () => {
 
   const navList = [
     {
-      Icon: <AiFillAccountBook />,
-      url: "/admin",
-      name: "Dashbaord",
-    },
-    {
       Icon: <BsFillChatDotsFill />,
       name: "Chat",
       children: [
         {
-          url: "/admin/chats/groupChat",
+          url: "/user/chats/groupChat",
           name: "Group Chat",
         },
         {
-          url: "/admin/chats/directChat",
+          url: "/user/chats/directChat",
           name: "Direct Chat",
         },
       ],
     },
     {
       Icon: <RiTeamFill />,
+      url: "/admin/members",
       name: "Members", //unqiue
-      children: [
-        {
-          url: "/admin/members/create",
-          name: "Add Member",
-        },
-        {
-          url: "/admin/members/ManageMembers",
-          name: "Manage Members",
-        },
-      ],
     },
     {
       Icon: <MdGroupWork />,
+      url: "/admin/groups",
       name: "Groups", //unqiue
-      children: [
-        {
-          url: "/admin/groups/create",
-          name: "Create Group",
-        },
-        {
-          url: "/admin/groups/manage",
-          name: "Manage Groups",
-        },
-      ],
     },
 
     {
       Icon: <FaTasks />,
+      url: "/admin/tasks",
       name: "Tasks", //unqiue
-      children: [
-        {
-          url: "/admin/task/create",
-          name: "Create Task",
-        },
-        {
-          url: "/admin/task/manage",
-          name: "Manage Tasks",
-        },
-      ],
+    },
+
+    {
+      Icon: <TbReportAnalytics />,
+      url: "/admin/report",
+      name: "Report",
     },
     {
       Icon: <AiFillFileAdd />,
@@ -90,14 +64,9 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <TbReportAnalytics />,
-      url: "/admin/reports/reports",
-      name: "Report",
-    },
-    {
       Icon: <RiLogoutBoxFill />,
       url: "/",
-      name: "Sign Out",
+      name: "Logout",
     },
   ];
 

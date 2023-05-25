@@ -1,22 +1,41 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { addDoc, collection } from "firebase/firestore";
-import { useState } from "react";
+import { doc, getDocs, getDoc, addDoc, collection } from "firebase/firestore";
+import { useState, useEffect } from "react";
 import { db } from "../../../../context/DbContext";
+import { toast } from "react-toastify";
+import Select from "react-select";
 // import { useAuth } from "../../../../context/AuthContext";
-import Router from 'next/router';
-const router = Router
 // const { user } = useAuth()
 const AddMember = () => {
+  const [allMembers, setallMembers] = useState([]);
+  const [members, setMembers] = useState([]);
   const [data, setData] = useState({
     Title: '',
     Description: '',
-    AssignedTo: '',
+    AssignedTo: [],
     Priority: '',
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
     Status: "Assigned",  
     AssignedBy: "Admin" //it should be id of the current user
   });
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
+      });
+    } catch (err) {
+      console.log(err)
+      setMembers([{ Name: "check your connection" }])
+    }
+
+    setMembers(arr)
+    setallMembers(arr)
+  }
+  
   const select = document.getElementById('selectPriority');
   const title = document.getElementById('title');
   const start = document.getElementById('start');
@@ -84,18 +103,19 @@ const AddMember = () => {
       endDate.placeholder = "MM/DD/YYYY";
     }
   };
-  const handleAssigned = (e) =>{
-    e.preventDefault();
-    setData({
-      ...data,
-      AssignedTo: e.target.value
-    })
-    if (assigned && assigned.classList.contains("ring-red-600")) {
-      assigned.classList.remove("ring-red-600");
-      assigned.classList.remove("ring-2");
-      assigned.placeholder = "search for a member or a group";
-    }
-  };
+  // const handleAssigned = (e) =>{
+  //   e.preventDefault();
+  //   setData({
+  //     ...data,
+  //     AssignedTo: e.target.value
+  //   })
+  //   if (assigned && assigned.classList.contains("ring-red-600")) {
+  //     assigned.classList.remove("ring-red-600");
+  //     assigned.classList.remove("ring-2");
+  //     assigned.placeholder = "search for a member or a group";
+  //   }
+
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,7 +124,7 @@ const AddMember = () => {
       title.classList.add("ring-red-600");
       title.classList.add("ring-2");
     }
-    if (assigned && data.AssignedTo == "") {
+    if (assigned && data.AssignedTo === []) {
       assigned.placeholder = "Fill name of the member or group";
       assigned.classList.add("ring-red-600");
       assigned.classList.add("ring-2");
@@ -130,7 +150,9 @@ const AddMember = () => {
     }
     if(data.Title != "" && data.Description != "" && data.AssignedTo != "" && data.StartDate != null && data.DueDate != null && data.Priority != "null" ){
     await addDoc(collection(db, "KalCompany", "Tasks", "Tasks"), data);
-    router.push("/admin/task/manage");}
+    handleClear();
+    toast.success("Task Assigned successfully");
+  }
   };
   const handleClear = (e) => {
     title.value = "";
@@ -139,8 +161,9 @@ const AddMember = () => {
     description.value = "";
     data.Description = "";
     description.placeholder = "Write some description about the task";
+    assigned.value = [];
+    data.AssignedTo = [];
     assigned.value = "";
-    data.AssignedTo = "";
     assigned.placeholder = "search for a member or group";
     startDate.value = null;
     data.StartDate = new Date("10/10/2030")
@@ -148,8 +171,12 @@ const AddMember = () => {
     endDate.value = null;
     data.DueDate = new Date("10/10/2030")
     endDate.placeholder = "MM/DD/YYYY";
+    select.value = "null";
+    data.Priority = "";
   };
-
+  useEffect(() => {
+    getData()
+  }, []);
   return (
     <AdminLayout>
     <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
@@ -194,7 +221,7 @@ const AddMember = () => {
 
                   <div className="md:col-span-3">
                     <label for="address">Assigned To:</label>
-                    <input
+                    {/* <input
                       type="text"
                       name="assignedTo"
                       id="assigned"
@@ -202,7 +229,29 @@ const AddMember = () => {
                       value={data.AssignedTo}
                       className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                       placeholder="search for a member or group"
-                    />
+                    /> */}
+                    <Select
+                        isMulti
+                        name="members"
+                        id="assigned"
+                        options={allMembers.map((member) => {
+                          return { label: member.Name, value: member.Name };
+                        })}
+                        onChange={(selectedMembers) => {
+                          setMembers(
+                            selectedMembers.map((member) => member.value)
+                          );
+                          selectedMembers.map(member => {
+                            data.AssignedTo.push(member.value)
+                          });
+                          if (assigned && assigned.classList.contains("ring-red-600")) {
+                            assigned.classList.remove("ring-red-600");
+                            assigned.classList.remove("ring-2");
+                            assigned.placeholder = "search for a member or a group";
+                          }
+                      
+                         }}
+                      />
                   </div>
 
                   <div className="md:col-span-3">
@@ -247,8 +296,7 @@ const AddMember = () => {
                         <button onClick={handleClear} className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
                           Cancel
                         </button>
-                        <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
-                          Assign
+                        <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded"> Assign
                         </button>
                       </div>
                     </div>
@@ -264,5 +312,4 @@ const AddMember = () => {
 
   );
 };
-
 export default AddMember;
