@@ -2,7 +2,7 @@ const SenderMessage = ({ msg }) => {
   return (
     <div className="col-start-6 col-end-13 p-3 rounded-lg">
       <div className="flex flex-row-reverse items-center justify-start">
-        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
+        <div className="flex items-center justify-center flex-shrink-0 w-10  h-10 rounded-full bg-primary">
           {msg.from.fullName[0]}
         </div>
         <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
