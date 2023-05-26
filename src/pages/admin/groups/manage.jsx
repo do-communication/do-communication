@@ -1,6 +1,7 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { allGroups } from "@/mock/groups";
 import Link from "next/link";
+import { db } from "../../../../context/DbContext"
+import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
 import {
   AiFillDelete,
@@ -19,12 +20,30 @@ const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
 });
 
 const ManageGroup = () => {
+  const [allGroups, setallGroups] = useState([]);
   const [groups, setGroups] = useState(allGroups);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
 
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Groups", "Groups");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
+      });
+
+    } catch (err) {
+      console.log(err)
+      setTasks([{ Name: "check your connection" }])
+    }
+
+    setGroups(arr)
+    setallGroups(arr)
+  }
   // search for groups using group name
   useEffect(() => {
     const filteredData = allGroups.filter(
@@ -42,17 +61,21 @@ const ManageGroup = () => {
   const columns = [
     {
       name: "Group Name",
-      selector: (row) => row.name,
+      selector: (row) => row.Name,
       sortable: true,
     },
     {
       name: "Type",
-      selector: (row) => row.type,
+      selector: (row) => row.Type,
     },
   ];
 
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
+  }, []);
+
+  useEffect(() => {
+    getData()
   }, []);
 
   return (
@@ -156,9 +179,9 @@ const ManageGroup = () => {
                   <MdGroup className="w-12 h-12" />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].name}
+                  {selectedRows[0].Name}
                 </h4>
-                <p className="text-sm">{selectedRows[0].type}</p>
+                <p className="text-sm">{selectedRows[0].Type}</p>
               </div>
               <div className="relative flex justify-center py-4">
                 <button
@@ -172,7 +195,22 @@ const ManageGroup = () => {
                 <h3 className="p-2 text-lg font-semibold">Members</h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
+                  {selectedRows[0].Members && selectedRows[0].Members.map((row, index) =>(
                   <Link
+                    key={index}
+                    href="/admin/memebers/{userId}"
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                  >
+                    <p>{row}</p>
+                    <div className="flex gap-2">
+                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
+                        <BiUserPlus className="w-5 h-auto" />
+                        Assign Leader
+                      </button>
+                    </div>
+                  </Link>
+                  ))}
+                  {/* <Link
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
@@ -195,19 +233,7 @@ const ManageGroup = () => {
                         Assign Leader
                       </button>
                     </div>
-                  </Link>
-                  <Link
-                    href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
-                    <p>Senait Gobezie</p>
-                    <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
-                        <BiUserPlus className="w-5 h-auto" />
-                        Assign Leader
-                      </button>
-                    </div>
-                  </Link>
+                  </Link> */}
                 </ul>
               </div>
             </div>

@@ -1,33 +1,61 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { useState } from "react";
-import { allMembers } from "@/mock/members";
+import { doc, getDocs, getDoc, addDoc, collection } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { db } from "../../../../context/DbContext";
 import Select from "react-select";
 import { toast } from "react-toastify";
+import Router from "next/router";
 
+const router = Router
 const CreateGroup = () => {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [allMembers, setallMembers] = useState([]);
   const [members, setMembers] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
+  const temp = [];
+  const [data, setData] = useState({
+    Type: '',
+    Name: '',
+    Members: [],
+    Learder: '', 
+    Tasks: []
+  });
+ const customGroup = document.getElementById("customGroup");
+ const type = document.getElementById("type");
+ const groupName = document.getElementById("groupName");
 
-  const handleCreateGroup = () => {
-    console.log("create group");
-    const newGroup = {
-      name,
-      type,
-      members,
-    };
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
+      });
+    } catch (err) {
+      console.log(err)
+      setMembers([{ Name: "check your connection" }])
+    }
 
-    toast.success("Group created successfully");
-    console.log(newGroup);
+    setMembers(arr)
+    setallMembers(arr)
+  }
+  const handleCreateGroup = async () => {
+      await addDoc(collection(db, "KalCompany", "Groups", "Groups"), data);
+      clearForm();
+      toast.success("Group created successfully");
+      router.push('/admin/groups/manage')
+
   };
 
   const clearForm = () => {
-    setName("");
-    setType("");
-    setMembers([]);
+    if(customGroup){customGroup.value = "";}
+    groupName.value = "";
+    groupName.placeholder = "Enter Group Name";
+    type.value = "";
   };
-
+  useEffect(() => {
+    getData()
+  }, []);
   return (
     <AdminLayout>
       <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
@@ -57,11 +85,14 @@ const CreateGroup = () => {
                       <input
                         type="text"
                         name="group_name"
-                        id="group_name"
+                        id="groupName"
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder="Enter group name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={data.Name}
+                        onChange={(e) => {setData({
+                          ...data,
+                          Name: e.target.value
+                        })}}
                       />
                     </div>
 
@@ -70,13 +101,19 @@ const CreateGroup = () => {
                       <select
                         id="type"
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                        value={type}
+                        value={data.Type}
                         onChange={(e) => {
                           if (e.target.value === "custom") {
                             setShowCustomType(true);
-                            setType("");
+                            setData({
+                              ...data,
+                              Type : ""
+                            })
                           } else {
-                            setType(e.target.value);
+                            setData({
+                              ...data,
+                              Type: e.target.value
+                            })
                           }
                         }}
                       >
@@ -96,12 +133,17 @@ const CreateGroup = () => {
                         <input
                           type="text"
                           name="custom_group_type"
-                          id="custom_group_type"
+                          id="customGroup"
                           className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                           placeholder="Enter custom group type"
                           disabled={!showCustomType}
-                          value={type}
-                          onChange={(e) => setType(e.target.value)}
+                          value={data.Type}
+                          onChange={(e) => 
+                            
+                            setData({
+                              ...data,
+                              Type: e.target.value
+                            })}
                         />
                       </div>
                     )}
@@ -111,13 +153,20 @@ const CreateGroup = () => {
                         isMulti
                         name="members"
                         options={allMembers.map((member) => {
-                          return { label: member.name, value: member.id };
+                          return { label: member.Name, value: member.Name };
                         })}
                         val
                         onChange={(selectedMembers) => {
                           setMembers(
                             selectedMembers.map((member) => member.value)
                           );
+                          selectedMembers.map(member => {
+                            temp.push(member.value)
+                          });
+                          setData({
+                            ...data,
+                            Members: Array.from(new Set(temp))
+                          })
                         }}
                       />
                     </div>
@@ -125,15 +174,15 @@ const CreateGroup = () => {
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-8">
                           <button
-                            onClick={() => void clearForm()}
+                            onClick={clearForm}
                             className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck"
                           >
                             Cancel
                           </button>
                           <button
-                            disabled={!name || !type || !members.length}
+                            disabled={!data.Name || !data.Type || !data.Members.length}
                             className="px-4 py-2 font-bold text-white rounded disabled:brightness-90 disabled:cursor-not-allowed bg-primary hover:bg-bold"
-                            onClick={() => void handleCreateGroup()}
+                            onClick={handleCreateGroup}
                           >
                             Create Group
                           </button>

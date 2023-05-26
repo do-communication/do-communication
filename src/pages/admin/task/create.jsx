@@ -8,6 +8,7 @@ import Select from "react-select";
 // const { user } = useAuth()
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
+  const temp = [];
   const [members, setMembers] = useState([]);
   const [data, setData] = useState({
     Title: '',
@@ -103,19 +104,6 @@ const AddMember = () => {
       endDate.placeholder = "MM/DD/YYYY";
     }
   };
-  // const handleAssigned = (e) =>{
-  //   e.preventDefault();
-  //   setData({
-  //     ...data,
-  //     AssignedTo: e.target.value
-  //   })
-  //   if (assigned && assigned.classList.contains("ring-red-600")) {
-  //     assigned.classList.remove("ring-red-600");
-  //     assigned.classList.remove("ring-2");
-  //     assigned.placeholder = "search for a member or a group";
-  //   }
-
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -221,15 +209,6 @@ const AddMember = () => {
 
                   <div className="md:col-span-3">
                     <label for="address">Assigned To:</label>
-                    {/* <input
-                      type="text"
-                      name="assignedTo"
-                      id="assigned"
-                      onChange={handleAssigned}
-                      value={data.AssignedTo}
-                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      placeholder="search for a member or group"
-                    /> */}
                     <Select
                         isMulti
                         name="members"
@@ -242,8 +221,12 @@ const AddMember = () => {
                             selectedMembers.map((member) => member.value)
                           );
                           selectedMembers.map(member => {
-                            data.AssignedTo.push(member.value)
+                            temp.push(member.value)
                           });
+                          setData({
+                            ...data,
+                            AssignedTo: Array.from(new Set(temp))
+                          })
                           if (assigned && assigned.classList.contains("ring-red-600")) {
                             assigned.classList.remove("ring-red-600");
                             assigned.classList.remove("ring-2");
