@@ -8,10 +8,34 @@ import {
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
+import { auth } from "../../../../config/firebase";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/router";
+
+const router = Router
+
 const Header = () => {
+  const { user, logout } = useAuth()
+  // const [user, setUser] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
+
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(u => {
+  //     setUser(u)
+  //   })
+  // }, [])
+
+  const handleSingout = (e) => {
+    e.preventDefault()
+    try {
+      logout().then(() => router.push('/'))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -68,32 +92,7 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:block">
-                <form action="" className="app-search" method="GET">
-                  <div className="relative group ">
-                    <input
-                      type="text"
-                      className="form-input rounded-md bg-light_2 text-sm text-gray-700 pl-10 py-1.5 ml-5 border-transparent border-none outline-none focus:ring-0 focus:text-white transition-all duration-300 ease-in-out focus:w-60 w-48"
-                      placeholder="Search..."
-                      autoComplete="off"
-                    />
-                    <span className="absolute text-gray-400 transition-all duration-300 ease-in-out left-44 bottom-2 group-focus-within:left-8">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </form>
+                <div><p>Company Name</p></div>
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
@@ -140,7 +139,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>Mister X</span>
+                      <span>{user && user.displayName}</span>
                       <span>Admin</span>
                     </div>
                   </div>
@@ -150,34 +149,25 @@ const Header = () => {
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu-button"
-                      tabindex="-1"
+                      tabIndex="-1"
                     >
-                      <a
-                        href="#"
+                      <Link
+                        href="/admin/profile/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabindex="-1"
+                        tabIndex="-1"
                         id="user-menu-item-0"
                       >
                         My Profile
-                      </a>
+                      </Link>
 
                       <a
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabindex="-1"
+                        tabIndex="-1"
                         id="user-menu-item-1"
-                      >
-                        Projects
-                      </a>
-
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabindex="-1"
-                        id="user-menu-item-1"
+                        onClick={handleSingout}
                       >
                         Sign out
                       </a>
@@ -218,10 +208,10 @@ const Header = () => {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-gray-800">
-                    Senait Gobezie
+                    {user && user.displayName}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    sen@example.com
+                    {user && user.email}
                   </div>
                 </div>
                 <button
@@ -241,9 +231,11 @@ const Header = () => {
                 </Link>
 
                 <Link
-                  href="/logout"
+                  href="#"
+                  onClick={handleSingout}
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
+
                   <AiOutlineLogout className="w-5 h-auto" />
                   Sign out
                 </Link>

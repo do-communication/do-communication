@@ -132,6 +132,24 @@ const ChatLayout = ({ children }) => {
               <TbMessageCircle className="text-4xl text-secondary" />
               <h3 className="font-semibold">Direct Chat</h3>
             </div>
+            {/* profile part start */}
+            <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+              <div className="rounded-full h-50 w-50">
+                <img
+                  src="/images/pp.png"
+                  alt="Avatar"
+                  width={50}
+                  height={50}
+                  className="rounded-full"
+                />
+              </div>
+              <div className="mt-2 text-sm font-semibold">Lidiya Solomon</div>
+              <div className="text-xs text-gray-500">Banner Designer</div>
+              <div className="flex flex-row items-center mt-3">
+                
+              </div>
+            </div>
+            {/* profile part end */}
 
             {/* tab */}
             <div className="grid grid-cols-2 mt-6 font-semibold bg-gray-200 rounded-2xl">

@@ -67,7 +67,7 @@ const Sidebar = () => {
       children: [
         {
           url: "/admin/task/create",
-          name: "Creat Task",
+          name: "Create Task",
         },
         {
           url: "/admin/task/manage",
@@ -91,21 +91,20 @@ const Sidebar = () => {
     },
     {
       Icon: <TbReportAnalytics />,
-      url: "/admin/report",
+      url: "/admin/reports/reports",
       name: "Report",
     },
     {
       Icon: <RiLogoutBoxFill />,
       url: "/",
-      name: "Logout",
+      name: "Sign Out",
     },
   ];
 
   return (
     <div
-      className={`${
-        !openSideBar && "-translate-x-full"
-      } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
+      className={`${!openSideBar && "-translate-x-full"
+        } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
     >
       <nav className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
         <Link

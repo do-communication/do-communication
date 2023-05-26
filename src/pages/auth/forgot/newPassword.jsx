@@ -3,14 +3,34 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoIosArrowBack } from "react-icons/io";
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/dist/server/router";
+const router = Router
+
 const NewPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { user, resetPassword } = useAuth()
+
+  const handleNewPassword = async (e) =>{
+    e.preventDefault()
+    try {
+      await resetPassword(newPassword)
+      router.push("/login")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <AuthLayout title="Enter verification code">
       <div className="flex flex-col gap-9 py-10">
         {/*password input */}
         <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pr-5 pl-5">
           <input
+            onChange={(e) => setNewPassword(e.target.value)}
+            value={newPassword}
             type={showPassword ? "text" : "password"}
             className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[52px] outline-none"
             placeholder="Enter new password"
@@ -31,6 +51,8 @@ const NewPassword = () => {
         {/*password input */}
         <div className="bg-white group flex rounded-3xl gap-2 hover:ring-2 active:ring-2 ring-blue-300 pr-5 pl-5">
           <input
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
             type={showPassword ? "text" : "password"}
             className="bg-white text-gray-600 w-full rounded-3xl py-4 px-[52px] outline-none"
             placeholder="Confirm password"
@@ -50,7 +72,7 @@ const NewPassword = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <button className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
+        <button onClick = {handleNewPassword} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
           Send
         </button>
         <Link

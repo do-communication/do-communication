@@ -72,10 +72,11 @@ const CreateGroup = () => {
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         value={type}
                         onChange={(e) => {
-                          if (e.target.value === "custom") {
+                          if (e.target.value.toLowerCase() == "custom") {
                             setShowCustomType(true);
                             setType("");
                           } else {
+                            setShowCustomType(false);
                             setType(e.target.value);
                           }
                         }}
