@@ -6,6 +6,7 @@ const AuthHeader = () => {
   const [showHeader, setShowHeader] = useState(false);
   const [loginButtonStyle, setLoginButtonStyle] = useState("");
   const [signupButtonStyle, setSignupButtonStyle] = useState("");
+  const [menuHoverStyle, setMenuHoverStyle] = useState("");
 
   const router = useRouter();
   //change the  sign up button style
@@ -13,18 +14,34 @@ const AuthHeader = () => {
     const currentPath = router.asPath;
 
     if (currentPath === "/auth/signup") {
-      setLoginButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      setSignupButtonStyle(
+        "w-full text-white px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
       );
+      setLoginButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
+      setMenuHoverStyle(
+        "md:p-4 py-2 block hover:text-white"
+      );
+    } else if (currentPath === "/auth/login"){
       setSignupButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
+      setLoginButtonStyle(
+        "w-full text-white px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      );
+      setMenuHoverStyle(
+        "md:p-4 py-2 block hover:text-white" 
       );
     } else {
+      setSignupButtonStyle(
+        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
+      );
       setLoginButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
-      setSignupButtonStyle(
-        "w-full text-black px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
+      setMenuHoverStyle(
+        "md:p-4 py-2 block hover:underline"
       );
     }
   }, [router]);
@@ -69,13 +86,13 @@ const AuthHeader = () => {
              md:pt-0"
           >
             <li>
-              <Link className="md:p-4 py-2 block hover:text-black" href="/#">
+              <Link className={menuHoverStyle} href="/#">
                 Home
               </Link>
             </li>
             <li>
               <Link
-                className="md:p-4 py-2 block hover:text-black"
+                className={menuHoverStyle}
                 href="/#about"
               >
                 About us
@@ -83,7 +100,7 @@ const AuthHeader = () => {
             </li>
             <li>
               <Link
-                className="md:p-4 py-2 block hover:text-black"
+                className={menuHoverStyle}
                 href="/#contact"
               >
                 Contact us
@@ -106,12 +123,12 @@ const AuthHeader = () => {
           >
             <li>
               <Link className={loginButtonStyle} href="/auth/login">
-                Log in
+                Sign In
               </Link>
             </li>
             <li>
               <Link className={signupButtonStyle} href="/auth/signup">
-                Sign up
+                Sign Up
               </Link>
             </li>
           </ul>
