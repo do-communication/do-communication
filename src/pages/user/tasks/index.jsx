@@ -2,6 +2,7 @@ import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { allTasks } from "@/mock/tasks";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
+import { BiChevronDown } from "react-icons/bi";
 
 const Tasks = () => {
   const CARDS = [
@@ -26,8 +27,7 @@ const Tasks = () => {
     );
 
     return (
-      <div>
-        <h2>Tasks with status: {status}</h2>
+      <div className="mt-2 text-sm text-black dark:text-gray-50 ">
         <Droppable droppableId={status}>
           {(provided) => (
             <ul ref={provided.innerRef} {...provided.droppableProps}>
@@ -38,18 +38,23 @@ const Tasks = () => {
                   index={index}
                 >
                   {(provided) => (
-                    <li
+                    <div
+                      className="flex flex-col gap-2 p-3 mt-2 mb-3 bg-white border-b border-gray-100 rounded cursor-pointer dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-900"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <h3>{task.name}</h3>
-                      <p>Assigned To: {task.assignedTo}</p>
-                      <p>Detail: {task.detail}</p>
-                      <p>Issue Date: {task.issueDate}</p>
-                      <p>Due Date: {task.dueDate}</p>
-                      <p>Priority: {task.priority}</p>
-                    </li>
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold capitalize">
+                          {task.name}
+                        </h3>
+                        <span className="px-2 text-sm font-semibold rounded-lg bg-secondary">
+                          {task.priority}
+                        </span>
+                      </div>
+                      <p className="text-xs">Due Date: {task.dueDate}</p>
+                      <p>{task.detail}</p>
+                    </div>
                   )}
                 </Draggable>
               ))}
@@ -89,39 +94,39 @@ const Tasks = () => {
 
   return (
     <UserLayout>
-      <div className="w-full h-full">
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="BOARD" type="COLUMN" direction="horizontal">
-            {(provided) => (
-              <div
-                className="flex w-full h-full gap-4 bg-red-100"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                {CARDS.map((card, index) => (
-                  <Draggable
-                    key={card.status}
-                    draggableId={card.status}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`w-[${100 / CARDS.length}%] bg-white border`}
-                      >
-                        <h3 className="text-2xl">{card.title}</h3>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="BOARD" type="COLUMN" direction="horizontal">
+          {(provided) => (
+            <div
+              className="grid grid-cols-1 gap-12 p-4 text-black md:grid-cols-2 xl:grid-cols-3"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {CARDS.map((card, index) => (
+                <Draggable
+                  key={card.status}
+                  draggableId={card.status}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className="md:col-span-2 xl:col-span-1"
+                    >
+                      <div className="h-full p-3 text-black bg-white rounded">
+                        <h3 className="text-sm font-semibold">{card.title}</h3>
                         <TaskItems status={card.status} />
                       </div>
-                    )}
-                  </Draggable>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </UserLayout>
   );
 };

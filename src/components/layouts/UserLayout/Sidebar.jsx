@@ -30,7 +30,7 @@ const Sidebar = () => {
     {
       Icon: <FaTasks />,
       url: "/user/tasks",
-      name: "Tasks", //unqiue
+      name: "My Tasks", //unqiue
     },
 
     {
