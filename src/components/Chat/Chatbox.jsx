@@ -21,7 +21,7 @@ const Chatbox = ({ messages, name }) => {
 
   return (
     <div className="relative flex-col h-full bg-white rounded-2xl">
-      <header className="absolute top-0 z-40  flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
+      <header className="absolute top-0 z-40 flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white bg-primary rounded-t-2xl">
         <button
           onClick={() => {
             if (router.pathname === "/admin/chats/directChat/[userId]") {
@@ -42,7 +42,7 @@ const Chatbox = ({ messages, name }) => {
       {/* chatbox */}
       <div
         ref={chatboxRef}
-        className="absolute w-full grid grid-cols-12 gap-y-2 h-[440px] bottom-16 overflow-x-hidden overflow-y-auto"
+        className="absolute grid w-full h-full grid-cols-12 py-16 overflow-x-hidden overflow-y-auto gap-y-2"
       >
         {messages.map((msg) => {
           return msg.from.id === 1 ? (
