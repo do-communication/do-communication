@@ -33,8 +33,8 @@ const Tasks = () => {
             <ul ref={provided.innerRef} {...provided.droppableProps}>
               {filteredTasks.map((task, index) => (
                 <Draggable
-                  key={`${task.name}-${task.status}`}
-                  draggableId={`${task.name}-${task.status}`}
+                  key={`${task.id}`}
+                  draggableId={`${task.id}`}
                   index={index}
                 >
                   {(provided) => (

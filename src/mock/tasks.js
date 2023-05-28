@@ -1,5 +1,6 @@
 export const allTasks = [
   {
+    id: 1,
     name: "task 1",
     assignedTo: "kevin John",
     status: "inprogress",
@@ -10,6 +11,7 @@ export const allTasks = [
     priority: "High",
   },
   {
+    id: 2,
     name: "task 2",
     assignedTo: "kevin John",
     status: "done",
@@ -20,6 +22,7 @@ export const allTasks = [
     priority: "Medium",
   },
   {
+    id: 3,
     name: "task 3",
     assignedTo: "kevin John",
     status: "done",
@@ -30,6 +33,7 @@ export const allTasks = [
     priority: "High",
   },
   {
+    id: 4,
     name: "task 4",
     assignedTo: "kevin John",
     status: "todo",
