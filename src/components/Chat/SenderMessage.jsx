@@ -1,11 +1,20 @@
+import { useState } from "react";
+import { AiFillEdit } from "react-icons/ai";
+import { TbTrash } from "react-icons/tb";
+
 const SenderMessage = ({ msg }) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="col-start-6 col-end-13 p-3 rounded-lg">
+    <div className="relative col-start-6 col-end-13 p-3 rounded-lg">
       <div className="flex flex-row-reverse items-center justify-start">
         <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
           {msg.from.fullName[0]}
         </div>
-        <div className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow rounded-xl">
+        <div
+          className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow cursor-pointer rounded-xl"
+          onClick={() => setOpen(!open)}
+        >
           <div>{msg.message}</div>
         </div>
       </div>
@@ -24,10 +33,16 @@ const SenderMessage = ({ msg }) => {
           </li>
         ))}
       </ul>
-      <div className="flex justify-end gap-2 mr-12">
-        <button className="flex justify-end mt-1 text-xs">Edit</button>
-        <button className="flex justify-end mt-1 text-xs">Delete</button>
-      </div>
+      {open && (
+        <div className="absolute flex flex-col mr-12 bg-opacity-50 rounded-md bg-primary right-6">
+          <button className="flex items-center w-full gap-2 px-3 py-1 rounded-t-md hover:bg-secondary">
+            <AiFillEdit /> Edit
+          </button>
+          <button className="flex items-center w-full gap-2 px-3 py-1 rounded-b-md hover:bg-secondary">
+            <TbTrash /> Delete
+          </button>
+        </div>
+      )}
     </div>
   );
 };
