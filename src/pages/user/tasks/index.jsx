@@ -3,6 +3,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { allTasks } from "@/mock/tasks";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import { BiChevronDown } from "react-icons/bi";
+import Ticket from "@/components/Task/Ticket";
 
 const Tasks = () => {
   const CARDS = [
@@ -39,21 +40,12 @@ const Tasks = () => {
                 >
                   {(provided) => (
                     <div
-                      className="flex flex-col gap-2 p-3 mt-2 mb-3 bg-white border-b border-gray-100 rounded cursor-pointer dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-900"
+                      className="p-3 mt-2 mb-3 bg-white border-b border-gray-100 rounded cursor-pointer dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-900"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold capitalize">
-                          {task.name}
-                        </h3>
-                        <span className="px-2 text-sm font-semibold rounded-lg bg-secondary">
-                          {task.priority}
-                        </span>
-                      </div>
-                      <p className="text-xs">Due Date: {task.dueDate}</p>
-                      <p>{task.detail}</p>
+                      <Ticket task={task} />
                     </div>
                   )}
                 </Draggable>

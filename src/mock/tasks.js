@@ -4,8 +4,7 @@ export const allTasks = [
     name: "task 1",
     assignedTo: "kevin John",
     status: "inprogress",
-    detail:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus odio eaque nobis. Laborum blanditiis fugiat dolorem dignissimos cumque nesciunt itaque, eos ea sint sapiente magnam provident voluptatem corporis voluptatibus quidem?",
+    detail: "Lorem ipsum dolor sit amet, consectetur adipisicing ",
     issueDate: "11/03/2023",
     dueDate: "22/04/2023",
     priority: "High",
