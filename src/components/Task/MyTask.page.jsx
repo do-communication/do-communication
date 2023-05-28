@@ -7,7 +7,7 @@ import Ticket from "@/components/Task/Ticket";
 const MyTaskPage = () => {
   const CARDS = [
     {
-      title: "TODOs",
+      title: "New Tasks",
       status: "todo",
     },
     {
