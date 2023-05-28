@@ -1,9 +1,5 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { toast } from "react-toastify"
-
-
 const Profile = () => {
     const [user, setUser] = useState({
         full_name: 'Anani Samuel',
