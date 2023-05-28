@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
-import { db } from "../../../../context/DbContext"
+import { db } from "../../../../context/DbContext";
 import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 import {
   AiFillDelete,
@@ -29,30 +29,31 @@ const ManageMembers = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
+
   const getData = async () => {
-    let arr = []
+    let arr = [];
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push(d.data())
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push(d.data());
       });
-
     } catch (err) {
-      console.log(err)
-      setMembers([{ Name: "check your connection" }])
+      console.log(err);
+      setMembers([{ Name: "check your connection" }]);
     }
 
-    setMembers(arr)
-    setallMembers(arr)
-  }
+    setMembers(arr);
+    setallMembers(arr);
+  };
   // search for groups using group name
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
-        || item.department && item.department.toLowerCase().includes(search.toLowerCase())
-        || item.email && item.email.toLowerCase().includes(search.toLowerCase())
+        (item.name && item.name.toLowerCase().includes(search.toLowerCase())) ||
+        (item.department &&
+          item.department.toLowerCase().includes(search.toLowerCase())) ||
+        (item.email && item.email.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -67,19 +68,22 @@ const ManageMembers = () => {
     {
       name: "Name",
       selector: (row) => (
-        <p className="flex items-center justify-center gap-2"><div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
-          {row.ProfilePic === '' ? row.Name[0] : <img
-          src={row.ProfilePic}
-          width={50}
-          height={50}
-          alt= "pp"
-          className="rounded-full"
-        />}
-        </div>
-        <div>
-        {row.Name}
-      </div></p>
-
+        <p className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+            {row.ProfilePic === "" ? (
+              row.Name[0]
+            ) : (
+              <img
+                src={row.ProfilePic}
+                width={50}
+                height={50}
+                alt="pp"
+                className="rounded-full"
+              />
+            )}
+          </div>
+          <div>{row.Name}</div>
+        </p>
       ),
       sortable: true,
     },
@@ -98,7 +102,7 @@ const ManageMembers = () => {
   }, []);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   return (
@@ -222,14 +226,17 @@ const ManageMembers = () => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
-                    {selectedRows[0].ProfilePic === '' ? selectedRows[0].Name[0] : 
+                  {selectedRows[0].ProfilePic === "" ? (
+                    selectedRows[0].Name[0]
+                  ) : (
                     <img
-                    src={selectedRows[0].ProfilePic}
-                    width={50}
-                    height={50}
-                    alt= "pp"
-                    className="rounded-full"
-                  />}
+                      src={selectedRows[0].ProfilePic}
+                      width={50}
+                      height={50}
+                      alt="pp"
+                      className="rounded-full"
+                    />
+                  )}
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].Name}
@@ -240,10 +247,7 @@ const ManageMembers = () => {
                 <p className="text-sm">{selectedRows[0].type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button
-
-                  className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
-                >
+                <button className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
                   <TbMessage className="w-8 h-auto" />
                 </button>
               </div>
@@ -302,7 +306,7 @@ const ManageMembers = () => {
                 <h3 className="p-2 text-lg font-semibold text-center">
                   Joined Groups
                 </h3>
-                
+
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   {/* <Link
                     href="/admin/memebers/{userId}"
@@ -349,20 +353,21 @@ const ManageMembers = () => {
                       <BsEye /> View
                     </button>
                   </Link> */}
-                  {selectedRows[0].GroupId && selectedRows[0].GroupId.map((row, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
-                  >
-                    <p>{row}</p>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
-                    >
-                      <BsEye /> View
-                    </button>
-                  </li>
-                ))}
+                  {selectedRows[0].GroupId &&
+                    selectedRows[0].GroupId.map((row, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
+                      >
+                        <p>{row}</p>
+                        <button
+                          type="submit"
+                          className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                        >
+                          <BsEye /> View
+                        </button>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>
