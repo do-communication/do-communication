@@ -10,6 +10,7 @@ import {
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
+import Notification from "./Notification";
 const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -167,12 +168,7 @@ const Header = () => {
                 </div>
               </div>
               {/* notification */}
-              <div className="relative flex items-center justify-center mr-4">
-                <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
-                  <span className="sr-only">View notifications</span>
-                  <IoNotificationsOutline size={20} />
-                </div>
-              </div>
+              <Notification />
               {/* logout */}
               <div className="relative flex items-center justify-center mr-4">
                 <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
@@ -219,13 +215,9 @@ const Header = () => {
                     sen@example.com
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="flex-shrink-0 p-1 ml-auto text-gray-700 rounded-full bg-primary hover:text-gray-900 hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-700"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <AiOutlineBell className="w-6 h-6" />
-                </button>
+                <div className="flex-shrink-0 p-1 ml-auto">
+                  <Notification />
+                </div>
               </div>
               <div className="px-2 mt-3 space-y-1 border-t border-t-gray-700">
                 <Link
