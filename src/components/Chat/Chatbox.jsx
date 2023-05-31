@@ -5,14 +5,16 @@ import { RiAttachment2 } from "react-icons/ri";
 import { TbSend } from "react-icons/tb";
 import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
+import useFetch from "../useFetch";
 
 const Chatbox = ({ messages, name }) => {
   const chatboxRef = useRef(null);
   const router = useRouter();
+  const { user } = useFetch("KalCompany");
 
   const scrollToBottom = () => {
     chatboxRef.current?.scrollIntoView({ behavior: "smooth" });
-    console.log("scroll");
+    // console.log("scroll");
   };
 
   useEffect(() => {
@@ -45,7 +47,8 @@ const Chatbox = ({ messages, name }) => {
         className="absolute w-full grid grid-cols-12 gap-y-2 h-[440px] bottom-16 overflow-x-hidden overflow-y-auto"
       >
         {messages.map((msg) => {
-          return msg.from.id === 1 ? (
+          console.log(msg)
+          return msg.data.SenderId === user.uid ? (
             <ReceiverMessage msg={msg} key={msg.id} />
           ) : (
             <SenderMessage msg={msg} key={msg.id} />
