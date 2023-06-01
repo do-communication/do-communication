@@ -30,10 +30,6 @@ const ReceiverMessage = ({ msg }) => {
           </li>
         ) : <div></div>}
       </ul>
-      <div className="flex gap-2 ml-14">
-        <button className="flex justify-end mt-1 text-xs">Edit</button>
-        <button className="flex justify-end mt-1 text-xs">Delete</button>
-      </div>
     </div>
   );
 };

@@ -28,9 +28,10 @@ const ChatLayout = ({ children }) => {
   }
 
   useEffect(() => {
+
     const filteredData = allMembers.filter(
       (item) =>
-        item?.name && item?.name.toLowerCase().includes(search.toLowerCase())
+        item?.data.Name && item?.data.Name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -159,7 +160,6 @@ const ChatLayout = ({ children }) => {
               <div className="mt-2 text-sm font-semibold">Lidiya Solomon</div>
               <div className="text-xs text-gray-500">Banner Designer</div>
               <div className="flex flex-row items-center mt-3">
-
               </div>
             </div>
             {/* profile part end */}

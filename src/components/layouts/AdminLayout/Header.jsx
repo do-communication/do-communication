@@ -11,11 +11,12 @@ import Link from "next/link";
 import { auth } from "../../../../config/firebase";
 import { useAuth } from "../../../../context/AuthContext";
 import Router from "next/router";
+import Notification from "./Notification";
 
-const router = Router
+const router = Router;
 
 const Header = () => {
-  const { user, logout } = useAuth()
+  const { user, logout } = useAuth();
   // const [user, setUser] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -28,14 +29,13 @@ const Header = () => {
   // }, [])
 
   const handleSingout = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      logout().then(() => router.push('/'))
+      logout().then(() => router.push("/"));
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
-
+  };
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -92,31 +92,14 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:block">
-                <div><p>Company Name</p></div>
+                <div>
+                  <p>Company Name</p>
+                </div>
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
               <div className="flex ml-4 md:ml-6 ">
-                <div className="relative flex items-center justify-center mr-4">
-                  <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
-                    <span className="sr-only">View notifications</span>
-                    <svg
-                      className="w-6 h-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                <Notification />
 
                 {/* <!-- Profile dropdown --> */}
                 <div className="relative px-4 text-sm text-gray-700 shadow-2xl cursor-pointer bg-light bright hover:text-white">
@@ -214,13 +197,13 @@ const Header = () => {
                     {user && user.email}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="flex-shrink-0 p-1 ml-auto text-gray-700 rounded-full bg-primary hover:text-gray-900 hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-700"
-                >
+                <button type="button">
                   <span className="sr-only">View notifications</span>
                   <AiOutlineBell className="w-6 h-6" />
                 </button>
+                <div className="flex-shrink-0 p-1 ml-auto">
+                  <Notification />
+                </div>
               </div>
               <div className="px-2 mt-3 space-y-1 border-t border-t-gray-700">
                 <Link

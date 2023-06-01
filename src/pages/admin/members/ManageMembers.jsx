@@ -50,9 +50,10 @@ const ManageMembers = () => {
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
-        || item.department && item.department.toLowerCase().includes(search.toLowerCase())
-        || item.email && item.email.toLowerCase().includes(search.toLowerCase())
+        (item.name && item.name.toLowerCase().includes(search.toLowerCase())) ||
+        (item.department &&
+          item.department.toLowerCase().includes(search.toLowerCase())) ||
+        (item.email && item.email.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -67,19 +68,22 @@ const ManageMembers = () => {
     {
       name: "Name",
       selector: (row) => (
-        <p className="flex items-center justify-center gap-2"><div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
-          {row.ProfilePic === '' ? row.Name[0] : <img
-          src={row.ProfilePic}
-          width={50}
-          height={50}
-          alt= "pp"
-          className="rounded-full"
-        />}
-        </div>
-        <div>
-        {row.Name}
-      </div></p>
-
+        <p className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+            {row.ProfilePic === "" ? (
+              row.Name[0]
+            ) : (
+              <img
+                src={row.ProfilePic}
+                width={50}
+                height={50}
+                alt="pp"
+                className="rounded-full"
+              />
+            )}
+          </div>
+          <div>{row.Name}</div>
+        </p>
       ),
       sortable: true,
     },
@@ -129,7 +133,6 @@ const ManageMembers = () => {
             data={members}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
-            selectableRowsSingle={true}
             selectableRowsNoSelectAll={true}
             pagination={true}
           />
@@ -223,14 +226,14 @@ const ManageMembers = () => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
-                    {selectedRows[0].ProfilePic === '' ? selectedRows[0].Name[0] : 
+                  {selectedRows[0].ProfilePic === '' ? selectedRows[0].Name[0] :
                     <img
-                    src={selectedRows[0].ProfilePic}
-                    width={50}
-                    height={50}
-                    alt= "pp"
-                    className="rounded-full"
-                  />}
+                      src={selectedRows[0].ProfilePic}
+                      width={50}
+                      height={50}
+                      alt="pp"
+                      className="rounded-full"
+                    />}
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].Name}
@@ -303,7 +306,7 @@ const ManageMembers = () => {
                 <h3 className="p-2 text-lg font-semibold text-center">
                   Joined Groups
                 </h3>
-                
+
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   {/* <Link
                     href="/admin/memebers/{userId}"
@@ -350,20 +353,21 @@ const ManageMembers = () => {
                       <BsEye /> View
                     </button>
                   </Link> */}
-                  {selectedRows[0].GroupId && selectedRows[0].GroupId.map((row, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
-                  >
-                    <p>{row}</p>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
-                    >
-                      <BsEye /> View
-                    </button>
-                  </li>
-                ))}
+                  {selectedRows[0].GroupId &&
+                    selectedRows[0].GroupId.map((row, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
+                      >
+                        <p>{row}</p>
+                        <button
+                          type="submit"
+                          className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                        >
+                          <BsEye /> View
+                        </button>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>

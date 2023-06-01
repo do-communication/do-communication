@@ -28,20 +28,9 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <RiTeamFill />,
-      url: "/admin/members",
-      name: "Members", //unqiue
-    },
-    {
-      Icon: <MdGroupWork />,
-      url: "/admin/groups",
-      name: "Groups", //unqiue
-    },
-
-    {
       Icon: <FaTasks />,
-      url: "/admin/tasks",
-      name: "Tasks", //unqiue
+      url: "/user/tasks",
+      name: "My Tasks", //unqiue
     },
 
     {
