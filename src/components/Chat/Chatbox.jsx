@@ -96,7 +96,10 @@ const Chatbox = ({ messages, name, get }) => {
           </div>
         </div>
         <div className="ml-4">
-          <button onClick={async () => { await send(sendMessage, sendFile, userId); get(userId); setChange(!change) }} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+          <button onClick={async () => {
+            await send(sendMessage, sendFile, userId); get(userId); setSendMessage('');
+            setSendFile(null); setChange(!change)
+          }} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
             <span>Send</span>
             <TbSend />
           </button>

@@ -123,8 +123,6 @@ const useFetch = (collectionType) => {
                         // await getMessage();
                         // setSendMessage('');
                         // setSendFile(null);
-
-                        document.getElementById("message_send").value = ""
                     });
 
                 }
