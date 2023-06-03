@@ -1,11 +1,13 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { doc, getDocs, getDoc, addDoc, collection } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
 import Select from "react-select";
-// import { useAuth } from "../../../../context/AuthContext";
-// const { user } = useAuth()
+import { auth } from "../../../../config/firebase";
+const user = auth.currentUser;
+// const selectInputRef = useRef();
+
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
   const temp = [];
@@ -18,7 +20,7 @@ const AddMember = () => {
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
     Status: "Assigned",  
-    AssignedBy: "Admin" //it should be id of the current user
+    AssignedBy: user.displayName
   });
   const getData = async () => {
     let arr = []
@@ -161,6 +163,7 @@ const AddMember = () => {
     endDate.placeholder = "MM/DD/YYYY";
     select.value = "null";
     data.Priority = "";
+    // selectInputRef.current.select.clearValue();
   };
   useEffect(() => {
     getData()
@@ -210,6 +213,7 @@ const AddMember = () => {
                   <div className="md:col-span-3">
                     <label for="address">Assigned To:</label>
                     <Select
+                        // ref={selectInputRef}
                         isMulti
                         name="members"
                         id="assigned"

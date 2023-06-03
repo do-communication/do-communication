@@ -121,7 +121,7 @@ const Signup = () => {
         try {
           // console.log(db)
           console.log(cred)
-          await setDoc(doc(db, data.companyName + cred.user.uid, "Users", "Admin", cred.user.uid,), {
+          await setDoc(doc(db, data.companyName, "Users", "Admin", cred.user.uid,), {
             name: data.name,
             companyName: data.companyName,
             email: data.email,
