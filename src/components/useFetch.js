@@ -1,5 +1,5 @@
 import { db } from "../../context/DbContext"
-import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc } from "firebase/firestore";
+import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { auth } from "../../config/firebase";
 import { serverTimestamp } from '@firebase/firestore'
@@ -12,11 +12,22 @@ const useFetch = (collectionType) => {
 
     // get name by id
     const GetName = async (userId) => {
+
         if (userId) {
             const specific_user = doc(db, collectionType, "Users", "StaffMembers", userId);
             const docSnap = await getDoc(specific_user)
 
             return docSnap.data().Name;
+        }
+    }
+
+    const GetUser = async (userId) => {
+
+        if (userId) {
+            const specific_user = doc(db, collectionType, "Users", "StaffMembers", userId);
+            const docSnap = await getDoc(specific_user)
+
+            return docSnap.data();
         }
     }
 
@@ -60,9 +71,32 @@ const useFetch = (collectionType) => {
 
         return members
     };
+    const getRecentData = async () => {
+        let recentChat = []
+        try {
+
+            const all = collection(db, collectionType, "Messages", "Recent")
+            const q = query(all,
+                or(where("SenderId", '==', auth.currentUser.uid),
+                    where("RecieverId", '==', auth.currentUser.uid)
+                ), orderBy("CreatedAt", "desc")
+            );
+
+            const docs = await getDocs(q)
+
+            docs.forEach(d => {
+                recentChat.push({ id: d.data().RecieverId, data: d.data() })
+            });
+
+        } catch (err) {
+            setError(err)
+        };
+
+        return recentChat
+    };
 
     // send message
-    const send = async (sendMessage, sendFile, userId) => {
+    const send = async (sendMessage, sendFile, userId, setUpdate, update) => {
         if (sendMessage.trim() !== "") {
             await addDoc(collection(db, collectionType, "Messages", "Messages"), {
                 Content: sendMessage,
@@ -78,6 +112,20 @@ const useFetch = (collectionType) => {
             //   await getMessage();
             //   setSendMessage('');
             //   setSendFile(null);
+            const reciever = await GetUser(userId)
+            await setDoc(doc(db, collectionType, "Messages", "Recent", auth.currentUser.uid + "-" + userId), {
+                Content: sendMessage,
+                CreatedAt: serverTimestamp(),
+                RecieverId: userId,
+                Name: reciever.Name,
+                SenderId: auth.currentUser.uid,
+                SenderName: auth.currentUser.displayName,
+                Department: reciever.Department,
+                ProfilePic: reciever.ProfilePic,
+                seen: false,
+                file: false
+            });
+
 
             document.getElementById("message_send").value = ""
         }
@@ -119,6 +167,8 @@ const useFetch = (collectionType) => {
                             url: downloadURL
                         });
 
+                        setUpdate(!update);
+
                         document.getElementById('message_send').value = '';
                         // await getMessage();
                         // setSendMessage('');
@@ -128,9 +178,11 @@ const useFetch = (collectionType) => {
                 }
             );
         };
+
+
     };
 
-    return ({ send, GetName, getMessage, getMembersData, error, user });
+    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, error, user });
 }
 
 export default useFetch;

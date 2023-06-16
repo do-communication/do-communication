@@ -69,7 +69,6 @@ const ManageFiles = () => {
 
   const handleRowSelected = (state) => {
     setSelectedRows(state.selectedRows);
-    console.log(selectedRows)
   };
 
   const handleDeselectedRows = (index, row) => {
@@ -77,15 +76,12 @@ const ManageFiles = () => {
     console.log(selectedRows);
     arr.splice(index, 1)
     setSelectedRows(arr);
-    console.log(selectedRows);
-    console.log(index);
     const id = "select-row-" + row.id
     document.querySelector(`input[name=${id}]`).classList.remove("checked");
 
 
   }
   useEffect(() => {
-    console.log("changed")
   }, [selectedRows])
 
   useEffect(() => {

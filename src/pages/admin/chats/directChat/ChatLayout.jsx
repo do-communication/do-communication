@@ -1,5 +1,5 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { useEffect, useState } from "react";
+import { useEffect, useState, cloneElement } from "react";
 import { TbMessageCircle } from "react-icons/tb";
 // import { allMembers } from "@/mock/members";
 import useFetch from "@/components/useFetch";
@@ -8,18 +8,35 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
 
-const ChatLayout = ({ children }) => {
+const ChatLayout = ({ children, user }) => {
   const [messageTab, setMessageTab] = useState("recent");
   const [members, setMembers] = useState([]);
   const [allMembers, setallMembers] = useState([]);
+  const [recent, setRecent] = useState([]);
   const [search, setSearch] = useState("");
+  const [priorityChange, setPriorityChange] = useState(false);
+  const [selected, setSelected] = useState(user);
   const router = useRouter();
-  const { getMembersData } = useFetch("KalCompany")
+  const { getMembersData, getRecentData } = useFetch("KalCompany")
   // search for groups using group name
+
+  useEffect(() => {
+    getRecent()
+  }, [priorityChange]);
 
   useEffect(() => {
     getData()
   }, []);
+
+  useEffect(() => {
+    setSelected(user)
+  }, [user])
+
+
+  const getRecent = async () => {
+    const recentChat = await getRecentData();
+    setRecent(recentChat);
+  }
 
   const getData = async () => {
     const data = await getMembersData();
@@ -28,6 +45,9 @@ const ChatLayout = ({ children }) => {
   }
 
   useEffect(() => {
+    if (search.trim() != "") {
+      setMessageTab("member");
+    }
 
     const filteredData = allMembers.filter(
       (item) =>
@@ -59,8 +79,8 @@ const ChatLayout = ({ children }) => {
           </div>
         </div>
         <div className="flex flex-col gap-2 mt-4">
-          {members.length > 0 &&
-            members.slice(0, 3).map((member, index) => (
+          {recent.length > 0 &&
+            recent.map((member, index) => (
               <Link
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
@@ -68,20 +88,18 @@ const ChatLayout = ({ children }) => {
                   ? "bg-secondary text-white"
                   : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
+                onClick={() => setSelected(member.data)}
               >
                 <RecentMessageItem
                   name={member.data.Name}
-                  msg="Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Facilis accusamus ipsam officiis officia voluptates iusto,
-                    porro minima architecto corrupti. Nam deserunt accusantium
-                    natus labore numquam sunt voluptates aliquam aut. Quisquam."
+                  msg={member.data.Content}
                 />
               </Link>
             ))}
 
-          {members.length === 0 && (
+          {recent.length === 0 && (
             <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
-              <div className="ml-2 text-sm font-semibold">No members found</div>
+              <div className="ml-2 text-sm font-semibold">No recent chat</div>
             </div>
           )}
         </div>
@@ -114,6 +132,7 @@ const ChatLayout = ({ children }) => {
                   ? "bg-secondary text-white"
                   : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
+                onClick={() => setSelected(member.data)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
                   {member.data.Name[0]}
@@ -147,7 +166,25 @@ const ChatLayout = ({ children }) => {
               <h3 className="font-semibold">Direct Chat</h3>
             </div>
             {/* profile part start */}
-            <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+            {selected ? <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+              <div className="rounded-full h-50 w-50">
+                {selected.ProfilePic === "" ? <div className="items-center justify-center w-8 h-8 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                  <div className="flex items-center justify-center w-full h-full">
+                    {selected.Name[0]}
+                  </div>
+                </div> : <img
+                  src={selected.ProfilePic}
+                  alt="Avatar"
+                  width={50}
+                  height={50}
+                  className="rounded-full"
+                />}
+              </div>
+              <div className="mt-2 text-sm font-semibold">{selected.Name}</div>
+              <div className="text-xs text-gray-500">{selected.Department}</div>
+              <div className="flex flex-row items-center mt-3">
+              </div>
+            </div> : <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
               <div className="rounded-full h-50 w-50">
                 <img
                   src="/images/pp.png"
@@ -157,11 +194,11 @@ const ChatLayout = ({ children }) => {
                   className="rounded-full"
                 />
               </div>
-              <div className="mt-2 text-sm font-semibold">Lidiya Solomon</div>
-              <div className="text-xs text-gray-500">Banner Designer</div>
+              <div className="mt-2 text-sm font-semibold">Select to view profile</div>
+              <div className="text-xs text-gray-500"></div>
               <div className="flex flex-row items-center mt-3">
               </div>
-            </div>
+            </div>}
             {/* profile part end */}
 
             {/* tab */}
@@ -190,7 +227,7 @@ const ChatLayout = ({ children }) => {
             className={`lg:col-span-3 col-span-full lg:block ${router.query.userId ? "" : "hidden"
               }`}
           >
-            {children}
+            {children && cloneElement(children, { setPriorityChange: setPriorityChange, priorityChange: priorityChange })}
           </div>
         </div>
       </div>

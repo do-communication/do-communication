@@ -6,6 +6,7 @@ import { BiFileBlank } from "react-icons/bi";
 
 const SenderMessage = ({ msg }) => {
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   return (
     <div className="relative col-start-6 col-end-13 p-3 rounded-lg">
