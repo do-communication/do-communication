@@ -17,12 +17,11 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
 
 
   const sendMess = async () => {
-    await send(sendMessage, sendFile, userId, setUpdate, update);
+    await send(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange);
     await get(userId);
     setSendMessage('');
     setSendFile(null);
     scrollToBottom();
-    setPriorityChange(!priorityChange);
   }
 
   const scrollToBottom = () => {
@@ -70,7 +69,7 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
       >
         {messages.map((msg) => {
           return msg.data.SenderId === user.uid ? (
-            <SenderMessage msg={msg} key={msg.id} />
+            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} />
           ) : (
             <ReceiverMessage msg={msg} key={msg.id} />
           );
