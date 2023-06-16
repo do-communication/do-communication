@@ -218,6 +218,7 @@ const Header = () => {
                   onClick={handleSingout}
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
+
                   <AiOutlineLogout className="w-5 h-auto" />
                   Sign out
                 </Link>

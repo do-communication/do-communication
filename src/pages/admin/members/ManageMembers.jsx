@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
-import { db } from "../../../../context/DbContext";
+import { db } from "../../../../context/DbContext"
 import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 import {
   AiFillDelete,
@@ -29,23 +29,23 @@ const ManageMembers = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
-
   const getData = async () => {
-    let arr = [];
+    let arr = []
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
     try {
-      const doc = await getDocs(all);
-      doc.forEach((d) => {
-        arr.push(d.data());
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push(d.data())
       });
+
     } catch (err) {
-      console.log(err);
-      setMembers([{ Name: "check your connection" }]);
+      console.log(err)
+      setMembers([{ Name: "check your connection" }])
     }
 
-    setMembers(arr);
-    setallMembers(arr);
-  };
+    setMembers(arr)
+    setallMembers(arr)
+  }
   // search for groups using group name
   useEffect(() => {
     const filteredData = allMembers.filter(
@@ -102,7 +102,7 @@ const ManageMembers = () => {
   }, []);
 
   useEffect(() => {
-    getData();
+    getData()
   }, []);
 
   return (
@@ -226,17 +226,14 @@ const ManageMembers = () => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
-                  {selectedRows[0].ProfilePic === "" ? (
-                    selectedRows[0].Name[0]
-                  ) : (
+                  {selectedRows[0].ProfilePic === '' ? selectedRows[0].Name[0] :
                     <img
                       src={selectedRows[0].ProfilePic}
                       width={50}
                       height={50}
                       alt="pp"
                       className="rounded-full"
-                    />
-                  )}
+                    />}
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].Name}
@@ -247,7 +244,10 @@ const ManageMembers = () => {
                 <p className="text-sm">{selectedRows[0].type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
+                <button
+
+                  className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
+                >
                   <TbMessage className="w-8 h-auto" />
                 </button>
               </div>

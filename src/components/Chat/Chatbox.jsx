@@ -1,23 +1,38 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiChevronLeft, BiUser } from "react-icons/bi";
 import { RiAttachment2 } from "react-icons/ri";
 import { TbSend } from "react-icons/tb";
 import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
+import useFetch from "../useFetch";
 
-const Chatbox = ({ messages, name }) => {
+const Chatbox = ({ messages, name, get }) => {
+  const [sendMessage, setSendMessage] = useState("");
+  const [sendFile, setSendFile] = useState(null);
+  const [change, setChange] = useState(false);
   const chatboxRef = useRef(null);
   const router = useRouter();
+  const userId = router.query.userId;
+  const { user, send } = useFetch("KalCompany");
+  // console.log("Chatbox")
+
 
   const scrollToBottom = () => {
-    chatboxRef.current?.scrollIntoView({ behavior: "smooth" });
-    console.log("scroll");
+
+    setTimeout(() => {
+      if (chatboxRef.current) {
+        chatboxRef.current.scrollTo({
+          top: chatboxRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, 200);
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [change]);
 
   return (
     <div className="relative flex-col h-full bg-white rounded-2xl">
@@ -42,13 +57,14 @@ const Chatbox = ({ messages, name }) => {
       {/* chatbox */}
       <div
         ref={chatboxRef}
+        id="scroll"
         className="absolute grid w-full h-full grid-cols-12 py-16 overflow-x-hidden overflow-y-auto gap-y-2"
       >
         {messages.map((msg) => {
-          return msg.from.id === 1 ? (
-            <ReceiverMessage msg={msg} key={msg.id} />
-          ) : (
+          return msg.data.SenderId === user.uid ? (
             <SenderMessage msg={msg} key={msg.id} />
+          ) : (
+            <ReceiverMessage msg={msg} key={msg.id} />
           );
         })}
       </div>
@@ -66,18 +82,24 @@ const Chatbox = ({ messages, name }) => {
             id="file_upload"
             name="file_upload"
             className="hidden"
+            onChange={(e) => { if (e.target.files.length !== 0) { setSendFile(e.target.files[0]); document.getElementById("message_send").value = e.target.files[0].name; } }}
           />
         </div>
         <div className="flex-grow ml-4">
           <div className="relative w-full">
             <input
               type="text"
+              id="message_send"
               className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
+              onChange={(e) => { setSendMessage(e.target.value); document.getElementById("file_upload").value = "" }}
             />
           </div>
         </div>
         <div className="ml-4">
-          <button className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+          <button onClick={async () => {
+            await send(sendMessage, sendFile, userId); get(userId); setSendMessage('');
+            setSendFile(null); setChange(!change)
+          }} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
             <span>Send</span>
             <TbSend />
           </button>
