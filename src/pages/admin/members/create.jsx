@@ -284,7 +284,7 @@ const AddMember = () => {
                         />
                       </div>
                     </div>
-                    <div className="md:col-span-3">
+                    {/* <div className="md:col-span-3">
                       <label for="state">Date of Birth</label>
                       <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                         <input type="date"
@@ -293,7 +293,7 @@ const AddMember = () => {
                           id="state"
                           className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className="md:col-span-3">
                       <label for="state">Date of Birth</label>
