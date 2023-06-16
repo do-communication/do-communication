@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify"
