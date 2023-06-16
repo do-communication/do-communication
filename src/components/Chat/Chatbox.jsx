@@ -15,7 +15,6 @@ const Chatbox = ({ messages, name, get }) => {
   const router = useRouter();
   const userId = router.query.userId;
   const { user, send } = useFetch("KalCompany");
-  // console.log("Chatbox")
 
 
   const scrollToBottom = () => {

@@ -7,14 +7,16 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
+import Chatbox from "@/components/Chat/Chatbox";
 
 const ChatLayout = ({ children }) => {
   const [messageTab, setMessageTab] = useState("recent");
   const [members, setMembers] = useState([]);
   const [allMembers, setallMembers] = useState([]);
+  const [recent, setRecent] = useState([]);
   const [search, setSearch] = useState("");
   const router = useRouter();
-  const { getMembersData } = useFetch("KalCompany")
+  const { getMembersData, getRecentData } = useFetch("KalCompany")
   // search for groups using group name
 
   useEffect(() => {
@@ -23,6 +25,8 @@ const ChatLayout = ({ children }) => {
 
   const getData = async () => {
     const data = await getMembersData();
+    const recentChat = await getRecentData();
+    setRecent(recentChat);
     setMembers(data);
     setallMembers(data);
   }
@@ -59,8 +63,8 @@ const ChatLayout = ({ children }) => {
           </div>
         </div>
         <div className="flex flex-col gap-2 mt-4">
-          {members.length > 0 &&
-            members.slice(0, 3).map((member, index) => (
+          {recent.length > 0 &&
+            recent.map((member, index) => (
               <Link
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
@@ -70,18 +74,15 @@ const ChatLayout = ({ children }) => {
                   }`}
               >
                 <RecentMessageItem
-                  name={member.data.Name}
-                  msg="Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Facilis accusamus ipsam officiis officia voluptates iusto,
-                    porro minima architecto corrupti. Nam deserunt accusantium
-                    natus labore numquam sunt voluptates aliquam aut. Quisquam."
+                  name={member.data.RecieverName}
+                  msg={member.data.Content}
                 />
               </Link>
             ))}
 
-          {members.length === 0 && (
+          {recent.length === 0 && (
             <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
-              <div className="ml-2 text-sm font-semibold">No members found</div>
+              <div className="ml-2 text-sm font-semibold">No recent chat</div>
             </div>
           )}
         </div>

@@ -21,6 +21,7 @@ const AddFile = () => {
     if (sendFile !== null) {
 
       const storage = getStorage();
+      console.log(storage)
       const storageRef = ref(storage, auth.currentUser.uid + "/" + FileName);
       const uploadTask = uploadBytesResumable(storageRef, sendFile)
 
