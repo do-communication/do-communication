@@ -3,10 +3,13 @@ import { AiFillEdit } from "react-icons/ai";
 import { TbTrash } from "react-icons/tb";
 import Link from "next/link";
 import { BiFileBlank } from "react-icons/bi";
+import useFetch from "../useFetch";
 
-const SenderMessage = ({ msg }) => {
+const SenderMessage = ({ msg, setUpdate, update }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const { deleteMessage } = useFetch("KalCompany")
 
   return (
     <div className="relative col-start-6 col-end-13 p-3 rounded-lg">
@@ -17,7 +20,7 @@ const SenderMessage = ({ msg }) => {
           </div>
           <div
             className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow cursor-pointer rounded-xl"
-            onClick={() => setOpen(!open)}
+            onClick={() => { setOpen(!open); setSelectedFile(msg); setSelected(null) }}
           >
             <div><Link href={msg.data.url} className="flex flex-col">
               <BiFileBlank className="w-12 h-auto text-secondary" />
@@ -35,7 +38,7 @@ const SenderMessage = ({ msg }) => {
           </div>
           <div
             className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow cursor-pointer rounded-xl"
-            onClick={() => setOpen(!open)}
+            onClick={() => { setOpen(!open); setSelected(msg); setSelectedFile(null) }}
           >
             <div>{msg.data.Content}</div>
           </div>
@@ -44,10 +47,10 @@ const SenderMessage = ({ msg }) => {
 
       {open && (
         <div className=" float-right flex flex-col bg-opacity-50 rounded-md bg-primary right-6  w-24 mr-14">
-          <button className="flex items-center w-full gap-2 px-3 py-1 rounded-t-md hover:bg-secondary">
+          {selectedFile === null ? <button className="flex items-center w-full gap-2 px-3 py-1 rounded-t-md hover:bg-secondary">
             <AiFillEdit /> Edit
-          </button>
-          <button className="flex items-center w-full gap-2 px-3 py-1 rounded-b-md hover:bg-secondary">
+          </button> : <div></div>}
+          <button onClick={async () => { await deleteMessage(selected, selectedFile, setUpdate, update) }} className="flex items-center w-full gap-2 px-3 py-1 rounded-b-md hover:bg-secondary">
             <TbTrash /> Delete
           </button>
         </div>

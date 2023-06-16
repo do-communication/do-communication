@@ -1,9 +1,9 @@
 import { db } from "../../context/DbContext"
-import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { auth } from "../../config/firebase";
 import { serverTimestamp } from '@firebase/firestore'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 
 const useFetch = (collectionType) => {
 
@@ -96,7 +96,7 @@ const useFetch = (collectionType) => {
     };
 
     // send message
-    const send = async (sendMessage, sendFile, userId, setUpdate, update) => {
+    const send = async (sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange) => {
         if (sendMessage.trim() !== "") {
             await addDoc(collection(db, collectionType, "Messages", "Messages"), {
                 Content: sendMessage,
@@ -126,13 +126,14 @@ const useFetch = (collectionType) => {
                 file: false
             });
 
+            setPriorityChange(!priorityChange);
 
             document.getElementById("message_send").value = ""
         }
 
         if (sendFile !== null && sendMessage.trim() === "") {
             const storage = getStorage();
-            const storageRef = ref(storage, sendFile.name);
+            const storageRef = ref(storage, "chat/" + sendFile.name);
             const uploadTask = uploadBytesResumable(storageRef, sendFile)
             uploadTask.on('state_changed',
                 (snapshot) => {
@@ -167,7 +168,24 @@ const useFetch = (collectionType) => {
                             url: downloadURL
                         });
 
+
+                        const reciever = await GetUser(userId)
+                        await setDoc(doc(db, collectionType, "Messages", "Recent", auth.currentUser.uid + "-" + userId), {
+                            Content: sendFile.name,
+                            CreatedAt: serverTimestamp(),
+                            RecieverId: userId,
+                            Name: reciever.Name,
+                            SenderId: auth.currentUser.uid,
+                            SenderName: auth.currentUser.displayName,
+                            Department: reciever.Department,
+                            ProfilePic: reciever.ProfilePic,
+                            seen: false,
+                            file: true,
+                            url: downloadURL
+                        });
+
                         setUpdate(!update);
+                        setPriorityChange(!priorityChange);
 
                         document.getElementById('message_send').value = '';
                         // await getMessage();
@@ -182,7 +200,30 @@ const useFetch = (collectionType) => {
 
     };
 
-    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, error, user });
+    const deleteMessage = async (selected, selectedFile, setUpdate, update) => {
+        if (selected != null) {
+            await deleteDoc(doc(db, collectionType, "Messages", "Messages", selected.id));
+            setUpdate(!update);
+        }
+
+        if (selectedFile != null) {
+            const storage = getStorage();
+
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, "chat/" + selectedFile.data.Content);
+
+            // Delete the file
+            deleteObject(desertRef).then(async () => {
+                console.log("successfully deleted");
+                await deleteDoc(doc(db, collectionType, "Messages", "Messages", selectedFile.id));
+                setUpdate(!update);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }
+
+    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, deleteMessage, error, user });
 }
 
 export default useFetch;
