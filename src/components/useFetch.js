@@ -21,6 +21,16 @@ const useFetch = (collectionType) => {
         }
     }
 
+    const GetUser = async (userId) => {
+
+        if (userId) {
+            const specific_user = doc(db, collectionType, "Users", "StaffMembers", userId);
+            const docSnap = await getDoc(specific_user)
+
+            return docSnap.data();
+        }
+    }
+
     // Get members in the system
     const getMessage = async (userId) => {
         // console.log("getting chat message")
@@ -86,7 +96,7 @@ const useFetch = (collectionType) => {
     };
 
     // send message
-    const send = async (sendMessage, sendFile, userId) => {
+    const send = async (sendMessage, sendFile, userId, setUpdate, update) => {
         if (sendMessage.trim() !== "") {
             await addDoc(collection(db, collectionType, "Messages", "Messages"), {
                 Content: sendMessage,
@@ -102,14 +112,16 @@ const useFetch = (collectionType) => {
             //   await getMessage();
             //   setSendMessage('');
             //   setSendFile(null);
-            const recievername = await GetName(userId)
+            const reciever = await GetUser(userId)
             await setDoc(doc(db, collectionType, "Messages", "Recent", auth.currentUser.uid + "-" + userId), {
                 Content: sendMessage,
                 CreatedAt: serverTimestamp(),
                 RecieverId: userId,
-                RecieverName: recievername,
+                Name: reciever.Name,
                 SenderId: auth.currentUser.uid,
                 SenderName: auth.currentUser.displayName,
+                Department: reciever.Department,
+                ProfilePic: reciever.ProfilePic,
                 seen: false,
                 file: false
             });
@@ -155,6 +167,8 @@ const useFetch = (collectionType) => {
                             url: downloadURL
                         });
 
+                        setUpdate(!update);
+
                         document.getElementById('message_send').value = '';
                         // await getMessage();
                         // setSendMessage('');
@@ -164,9 +178,11 @@ const useFetch = (collectionType) => {
                 }
             );
         };
+
+
     };
 
-    return ({ send, GetName, getMessage, getMembersData, getRecentData, error, user });
+    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, error, user });
 }
 
 export default useFetch;

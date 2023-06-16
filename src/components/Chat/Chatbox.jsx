@@ -7,15 +7,23 @@ import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
 import useFetch from "../useFetch";
 
-const Chatbox = ({ messages, name, get }) => {
+const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update }) => {
   const [sendMessage, setSendMessage] = useState("");
   const [sendFile, setSendFile] = useState(null);
-  const [change, setChange] = useState(false);
   const chatboxRef = useRef(null);
   const router = useRouter();
   const userId = router.query.userId;
   const { user, send } = useFetch("KalCompany");
 
+
+  const sendMess = async () => {
+    await send(sendMessage, sendFile, userId, setUpdate, update);
+    await get(userId);
+    setSendMessage('');
+    setSendFile(null);
+    scrollToBottom();
+    setPriorityChange(!priorityChange);
+  }
 
   const scrollToBottom = () => {
 
@@ -31,7 +39,8 @@ const Chatbox = ({ messages, name, get }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [change]);
+  }, [messages]);
+
 
   return (
     <div className="relative flex-col h-full bg-white rounded-2xl">
@@ -91,14 +100,12 @@ const Chatbox = ({ messages, name, get }) => {
               id="message_send"
               className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
               onChange={(e) => { setSendMessage(e.target.value); document.getElementById("file_upload").value = "" }}
+              onKeyUp={(e) => { if (e.key == "Enter") { sendMess() } }}
             />
           </div>
         </div>
         <div className="ml-4">
-          <button onClick={async () => {
-            await send(sendMessage, sendFile, userId); get(userId); setSendMessage('');
-            setSendFile(null); setChange(!change)
-          }} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+          <button onClick={sendMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
             <span>Send</span>
             <TbSend />
           </button>
