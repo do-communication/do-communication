@@ -1,5 +1,5 @@
 import { db } from "../../context/DbContext"
-import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { auth } from "../../config/firebase";
 import { serverTimestamp } from '@firebase/firestore'
@@ -223,7 +223,19 @@ const useFetch = (collectionType) => {
         }
     }
 
-    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, deleteMessage, error, user });
+    const editMessage = async (sendMessage, selected, setUpdate, update) => {
+        if (selected != null && sendMessage.trim() != "") {
+            const messageRef = doc(db, collectionType, "Messages", "Messages", selected.id);
+
+            await updateDoc(messageRef, {
+                Content: sendMessage
+            });
+
+            setUpdate(!update);
+        }
+    }
+
+    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, error, user });
 }
 
 export default useFetch;

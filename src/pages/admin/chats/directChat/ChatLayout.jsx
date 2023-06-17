@@ -16,6 +16,7 @@ const ChatLayout = ({ children, user }) => {
   const [search, setSearch] = useState("");
   const [priorityChange, setPriorityChange] = useState(false);
   const [selected, setSelected] = useState(user);
+  const [editMode, setEditMode] = useState(false);
   const router = useRouter();
   const { getMembersData, getRecentData } = useFetch("KalCompany")
   // search for groups using group name
@@ -42,6 +43,12 @@ const ChatLayout = ({ children, user }) => {
     const data = await getMembersData();
     setMembers(data);
     setallMembers(data);
+  }
+
+  const handleSelect = (member) => {
+    setSelected(member.data)
+    setEditMode(false)
+    document.getElementById('message_send').value = "";
   }
 
   useEffect(() => {
@@ -88,7 +95,7 @@ const ChatLayout = ({ children, user }) => {
                   ? "bg-secondary text-white"
                   : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
-                onClick={() => setSelected(member.data)}
+                onClick={() => handleSelect(member)}
               >
                 <RecentMessageItem
                   name={member.data.Name}
@@ -132,7 +139,7 @@ const ChatLayout = ({ children, user }) => {
                   ? "bg-secondary text-white"
                   : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
-                onClick={() => setSelected(member.data)}
+                onClick={() => handleSelect(member)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
                   {member.data.Name[0]}
@@ -168,17 +175,17 @@ const ChatLayout = ({ children, user }) => {
             {/* profile part start */}
             {selected ? <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
               <div className="rounded-full h-50 w-50">
-                {selected.ProfilePic === "" ? <div className="items-center justify-center w-8 h-8 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
                   <div className="flex items-center justify-center w-full h-full">
-                    {selected.Name[0]}
+                    {selected.ProfilePic === "" ?
+                      selected.Name[0]
+                      : <img
+                        src={selected.ProfilePic}
+                        alt="Avatar"
+                        className="rounded-full"
+                      />}
                   </div>
-                </div> : <img
-                  src={selected.ProfilePic}
-                  alt="Avatar"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />}
+                </div>
               </div>
               <div className="mt-2 text-sm font-semibold">{selected.Name}</div>
               <div className="text-xs text-gray-500">{selected.Department}</div>
@@ -186,13 +193,15 @@ const ChatLayout = ({ children, user }) => {
               </div>
             </div> : <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
               <div className="rounded-full h-50 w-50">
-                <img
-                  src="/images/pp.png"
-                  alt="Avatar"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
+                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                  <div className="flex items-center justify-center w-full h-full">
+                    <img
+                      src="/images/pp.png"
+                      alt="Avatar"
+                      className="rounded-full"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="mt-2 text-sm font-semibold">Select to view profile</div>
               <div className="text-xs text-gray-500"></div>
@@ -227,7 +236,7 @@ const ChatLayout = ({ children, user }) => {
             className={`lg:col-span-3 col-span-full lg:block ${router.query.userId ? "" : "hidden"
               }`}
           >
-            {children && cloneElement(children, { setPriorityChange: setPriorityChange, priorityChange: priorityChange })}
+            {children && cloneElement(children, { setPriorityChange: setPriorityChange, priorityChange: priorityChange, editMode: editMode, setEditMode: setEditMode })}
           </div>
         </div>
       </div>
