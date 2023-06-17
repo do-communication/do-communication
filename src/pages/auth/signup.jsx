@@ -118,7 +118,7 @@ const Signup = () => {
       try {
         const cred = await signUp(data.email, data.password)
         try {
-          await setDoc(doc(db, "KalCompany", "Users", "Admin", cred.user.uid), {
+          await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), {
             name: data.name,
             companyName: data.companyName,
             email: data.email

@@ -12,21 +12,29 @@ import { auth } from "../../../../config/firebase";
 import { useAuth } from "../../../../context/AuthContext";
 import Router from "next/router";
 import Notification from "./Notification";
+import useFetch from "@/components/useFetch";
 
 const router = Router;
 
 const Header = () => {
   const { user, logout } = useAuth();
-  const [usr, setUsr] = useState(user);
+  const [usr, setUsr] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
+  const { GetAdmin } = useFetch("KalCompany");
+
+  const getinfo = async () => {
+    setUsr(await GetAdmin(auth.currentUser.uid));
+  }
 
   useEffect(() => {
-    auth.onAuthStateChanged(u => {
-      setUsr(u);
-    })
-  }, [usr])
+    // auth.onAuthStateChanged(u => {
+    //   setUsr(u);
+    // })
+    getinfo()
+
+  }, [user])
 
   const handleSingout = (e) => {
     e.preventDefault();
@@ -93,7 +101,7 @@ const Header = () => {
 
               <div className="hidden lg:block">
                 <div>
-                  <p>Company Name</p>
+                  <p><b>{usr && usr.companyName}</b></p>
                 </div>
               </div>
             </div>
@@ -122,7 +130,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>{usr && usr.displayName}</span>
+                      <span>{usr && usr.name}</span>
                       <span>Admin</span>
                     </div>
                   </div>

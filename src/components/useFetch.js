@@ -11,13 +11,12 @@ const useFetch = (collectionType) => {
     const user = auth.currentUser;
 
     // get name by id
-    const GetName = async (userId) => {
-
+    const GetAdmin = async (userId) => {
         if (userId) {
-            const specific_user = doc(db, collectionType, "Users", "StaffMembers", userId);
+            const specific_user = doc(db, collectionType, "Users", "Admin", userId);
             const docSnap = await getDoc(specific_user)
 
-            return docSnap.data().Name;
+            return docSnap.data();
         }
     }
 
@@ -143,8 +142,10 @@ const useFetch = (collectionType) => {
         try {
 
             const all = collection(db, collectionType, "GroupMessages", "Recent")
-            const q = query(all,
-                where("SenderId", '==', auth.currentUser.uid), orderBy("CreatedAt", "desc")
+            // const q = query(all,
+            //     where("SenderId", '==', auth.currentUser.uid), orderBy("CreatedAt", "desc")
+            // );
+            const q = query(all, orderBy("CreatedAt", "desc")
             );
 
             const docs = await getDocs(q)
@@ -428,7 +429,7 @@ const useFetch = (collectionType) => {
         }
     }
 
-    return ({ send, sendGroup, GetName, GetUser, GetGroup, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, getGroups, getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, error, user });
+    return ({ send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, getGroups, getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, error, user });
 }
 
 export default useFetch;
