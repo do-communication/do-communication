@@ -11,8 +11,18 @@ const SenderMessage = ({ msg, setUpdate, update }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const { deleteMessage } = useFetch("KalCompany")
 
+  const handleDelete = async () => {
+    await deleteMessage(selected, selectedFile, setUpdate, update)
+  }
+
+  const handleOpen = (message, file) => {
+    setOpen(!open);
+    setSelected(message);
+    setSelectedFile(file);
+  }
+
   return (
-    <div className="relative col-start-6 col-end-13 p-3 rounded-lg">
+    <div onMouseLeave={() => setOpen(false)} className="relative col-start-6 col-end-13 p-3 rounded-lg">
       {msg.data.file ?
         <div className="flex flex-row-reverse items-center justify-start">
           <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-primary">
@@ -20,7 +30,7 @@ const SenderMessage = ({ msg, setUpdate, update }) => {
           </div>
           <div
             className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow cursor-pointer rounded-xl"
-            onClick={() => { setOpen(!open); setSelectedFile(msg); setSelected(null) }}
+            onClick={() => handleOpen(null, msg)}
           >
             <div><Link href={msg.data.url} className="flex flex-col">
               <BiFileBlank className="w-12 h-auto text-secondary" />
@@ -38,7 +48,7 @@ const SenderMessage = ({ msg, setUpdate, update }) => {
           </div>
           <div
             className="relative px-4 py-2 mr-3 text-sm bg-indigo-100 shadow cursor-pointer rounded-xl"
-            onClick={() => { setOpen(!open); setSelected(msg); setSelectedFile(null) }}
+            onClick={() => handleOpen(msg, null)}
           >
             <div>{msg.data.Content}</div>
           </div>
@@ -50,7 +60,7 @@ const SenderMessage = ({ msg, setUpdate, update }) => {
           {selectedFile === null ? <button className="flex items-center w-full gap-2 px-3 py-1 rounded-t-md hover:bg-secondary">
             <AiFillEdit /> Edit
           </button> : <div></div>}
-          <button onClick={async () => { await deleteMessage(selected, selectedFile, setUpdate, update) }} className="flex items-center w-full gap-2 px-3 py-1 rounded-b-md hover:bg-secondary">
+          <button onClick={handleDelete} className="flex items-center w-full gap-2 px-3 py-1 rounded-b-md hover:bg-secondary">
             <TbTrash /> Delete
           </button>
         </div>
