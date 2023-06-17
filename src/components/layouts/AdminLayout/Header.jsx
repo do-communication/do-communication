@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
 import {
   AiOutlineMenu,
@@ -17,16 +17,16 @@ const router = Router;
 
 const Header = () => {
   const { user, logout } = useAuth();
-  // const [user, setUser] = useState(null);
+  const [usr, setUsr] = useState(user);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(u => {
-  //     setUser(u)
-  //   })
-  // }, [])
+  useEffect(() => {
+    auth.onAuthStateChanged(u => {
+      setUsr(u);
+    })
+  }, [usr])
 
   const handleSingout = (e) => {
     e.preventDefault();
@@ -122,7 +122,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>{user && user.displayName}</span>
+                      <span>{usr && usr.displayName}</span>
                       <span>Admin</span>
                     </div>
                   </div>

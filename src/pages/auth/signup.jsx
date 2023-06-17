@@ -117,15 +117,14 @@ const Signup = () => {
     if (passwordSignUp.value != "" && emailSignUp.value != "" && nameInput.value != "" && companyInput.value != "") {
       try {
         const cred = await signUp(data.email, data.password)
-        await updateProfile(auth.currentUser, { displayName: data.name });
         try {
-          // console.log(db)
-          console.log(cred)
-          await setDoc(doc(db, "KalCompany", "Users", "Admin", cred.user.uid,), {
+          await setDoc(doc(db, "KalCompany", "Users", "Admin", cred.user.uid), {
             name: data.name,
             companyName: data.companyName,
-            email: data.email,
-          })
+            email: data.email
+          });
+
+          await updateProfile(auth.currentUser, { displayName: data.name });
           router.push('/admin')
         } catch (errrr) {
           console.log(errrr);

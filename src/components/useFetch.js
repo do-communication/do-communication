@@ -30,8 +30,17 @@ const useFetch = (collectionType) => {
             return docSnap.data();
         }
     }
+    const GetGroup = async (groupId) => {
 
-    // Get members in the system
+        if (groupId) {
+            const specific_group = doc(db, collectionType, "Groups", "Groups", groupId);
+            const docSnap = await getDoc(specific_group)
+
+            return docSnap.data();
+        }
+    }
+
+    // Get messages in the system
     const getMessage = async (userId) => {
         // console.log("getting chat message")
         let messages = []
@@ -53,6 +62,40 @@ const useFetch = (collectionType) => {
 
         return messages
     };
+    const getGroupMessage = async (groupId) => {
+
+        let messages = []
+        if (groupId) {
+            const allMessages = collection(db, collectionType, "GroupMessages", "Messages")
+
+            const q = query(allMessages, where("GroupId", "==", groupId), orderBy("CreatedAt"));
+
+            const docs = await getDocs(q)
+
+            docs.forEach(d => {
+                messages.push({ id: d.id, data: d.data() })
+            });
+        }
+
+        return messages
+    };
+
+    const getGroups = async () => {
+        let groups = []
+        try {
+            const all = collection(db, collectionType, "Groups", "Groups")
+            const doc = await getDocs(all)
+            doc.forEach(d => {
+                groups.push({ id: d.id, data: d.data() })
+            });
+
+        } catch (err) {
+            setError(err)
+            console.log(err)
+        };
+
+        return groups
+    };
 
     // get all members
     const getMembersData = async () => {
@@ -67,6 +110,7 @@ const useFetch = (collectionType) => {
 
         } catch (err) {
             setError(err)
+            console.log(err)
         };
 
         return members
@@ -93,6 +137,27 @@ const useFetch = (collectionType) => {
         };
 
         return recentChat
+    };
+    const getRecentGroup = async () => {
+        let recentGroup = []
+        try {
+
+            const all = collection(db, collectionType, "GroupMessages", "Recent")
+            const q = query(all,
+                where("SenderId", '==', auth.currentUser.uid), orderBy("CreatedAt", "desc")
+            );
+
+            const docs = await getDocs(q)
+
+            docs.forEach(d => {
+                recentGroup.push({ id: d.data().GroupId, data: d.data() })
+            });
+
+        } catch (err) {
+            setError(err)
+        };
+
+        return recentGroup
     };
 
     // send message
@@ -199,6 +264,101 @@ const useFetch = (collectionType) => {
 
 
     };
+    const sendGroup = async (sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange) => {
+        if (sendMessage.trim() !== "") {
+            await addDoc(collection(db, collectionType, "GroupMessages", "Messages"), {
+                Content: sendMessage,
+                CreatedAt: serverTimestamp(),
+                GroupId: userId,
+                SenderId: auth.currentUser.uid,
+                SenderName: auth.currentUser.displayName,
+                seen: false,
+                file: false
+            });
+
+            const reciever = await GetGroup(userId)
+            await setDoc(doc(db, collectionType, "GroupMessages", "Recent", userId), {
+                Content: sendMessage,
+                CreatedAt: serverTimestamp(),
+                GroupId: userId,
+                Name: reciever.Name,
+                SenderId: auth.currentUser.uid,
+                SenderName: auth.currentUser.displayName,
+                seen: false,
+                file: false
+            });
+
+            setPriorityChange(!priorityChange);
+
+            document.getElementById("message_send").value = ""
+        }
+
+        if (sendFile !== null && sendMessage.trim() === "") {
+            const storage = getStorage();
+            const storageRef = ref(storage, "Groupchat/" + sendFile.name);
+            const uploadTask = uploadBytesResumable(storageRef, sendFile)
+            uploadTask.on('state_changed',
+                (snapshot) => {
+
+                    const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    // console.log('Upload is ' + progress + '% done');
+                    document.getElementById("message_send").value = sendFile.name + "  " + progress + '% Done';
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+
+
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                        await addDoc(collection(db, collectionType, "GroupMessages", "Messages"), {
+                            Content: sendFile.name,
+                            CreatedAt: serverTimestamp(),
+                            GroupId: userId,
+                            SenderId: auth.currentUser.uid,
+                            SenderName: auth.currentUser.displayName,
+                            seen: false,
+                            file: true,
+                            url: downloadURL
+                        });
+
+
+                        const reciever = await GetGroup(userId)
+                        await setDoc(doc(db, collectionType, "GroupMessages", "Recent", userId), {
+                            Content: sendFile.name,
+                            CreatedAt: serverTimestamp(),
+                            GroupId: userId,
+                            Name: reciever.Name,
+                            SenderId: auth.currentUser.uid,
+                            SenderName: auth.currentUser.displayName,
+                            seen: false,
+                            file: true,
+                            url: downloadURL
+                        });
+
+                        setUpdate(!update);
+                        setPriorityChange(!priorityChange);
+
+                        document.getElementById('message_send').value = '';
+                        // await getMessage();
+                        // setSendMessage('');
+                        // setSendFile(null);
+                    });
+
+                }
+            );
+        };
+
+
+    };
 
     const deleteMessage = async (selected, selectedFile, setUpdate, update) => {
         if (selected != null) {
@@ -222,6 +382,28 @@ const useFetch = (collectionType) => {
             });
         }
     }
+    const deleteGroupMessage = async (selected, selectedFile, setUpdate, update) => {
+        if (selected != null) {
+            await deleteDoc(doc(db, collectionType, "GroupMessages", "Messages", selected.id));
+            setUpdate(!update);
+        }
+
+        if (selectedFile != null) {
+            const storage = getStorage();
+
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, "Groupchat/" + selectedFile.data.Content);
+
+            // Delete the file
+            deleteObject(desertRef).then(async () => {
+                console.log("successfully deleted");
+                await deleteDoc(doc(db, collectionType, "GroupMessages", "Messages", selectedFile.id));
+                setUpdate(!update);
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }
 
     const editMessage = async (sendMessage, selected, setUpdate, update) => {
         if (selected != null && sendMessage.trim() != "") {
@@ -234,8 +416,19 @@ const useFetch = (collectionType) => {
             setUpdate(!update);
         }
     }
+    const editGroupMessage = async (sendMessage, selected, setUpdate, update) => {
+        if (selected != null && sendMessage.trim() != "") {
+            const messageRef = doc(db, collectionType, "GroupMessages", "Messages", selected.id);
 
-    return ({ send, GetName, GetUser, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, error, user });
+            await updateDoc(messageRef, {
+                Content: sendMessage
+            });
+
+            setUpdate(!update);
+        }
+    }
+
+    return ({ send, sendGroup, GetName, GetUser, GetGroup, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, getGroups, getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, error, user });
 }
 
 export default useFetch;

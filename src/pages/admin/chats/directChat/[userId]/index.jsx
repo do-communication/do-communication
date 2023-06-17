@@ -3,7 +3,6 @@ import Chatbox from "@/components/Chat/Chatbox";
 import { useRouter } from "next/router";
 import ChatLayout from "../ChatLayout";
 import { useEffect, useState } from "react";
-import { auth } from "../../../../../../config/firebase"
 import useFetch from "@/components/useFetch";
 
 const DirectChat = () => {
@@ -30,7 +29,7 @@ const DirectChat = () => {
 
   return (
     <ChatLayout user={reciever}>
-      <Chatbox messages={messages} name={reciever ? reciever.Name : ""} get={get} setUpdate={setUpdate} update={update} />
+      <Chatbox messages={messages} name={reciever ? reciever.Name : ""} get={get} setUpdate={setUpdate} update={update} isgroup={false} />
     </ChatLayout>
   );
 };

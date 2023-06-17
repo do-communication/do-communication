@@ -48,7 +48,10 @@ const ChatLayout = ({ children, user }) => {
   const handleSelect = (member) => {
     setSelected(member.data)
     setEditMode(false)
-    document.getElementById('message_send').value = "";
+    const elem = document.getElementById('message_send');
+    if (elem) {
+      elem.value = "";
+    }
   }
 
   useEffect(() => {
