@@ -2,19 +2,36 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { BiChevronLeft, BiUser } from "react-icons/bi";
 import { RiAttachment2 } from "react-icons/ri";
-import { TbSend } from "react-icons/tb";
+import { TbSend, TbEdit } from "react-icons/tb";
 import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
 import useFetch from "../useFetch";
 
-const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update }) => {
+const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update, editMode, setEditMode }) => {
   const [sendMessage, setSendMessage] = useState("");
   const [sendFile, setSendFile] = useState(null);
+  const [selected, setSelected] = useState(null);
   const chatboxRef = useRef(null);
   const router = useRouter();
   const userId = router.query.userId;
-  const { user, send } = useFetch("KalCompany");
+  const { user, send, editMessage } = useFetch("KalCompany");
 
+  const sendData = (select) => {
+    console.log("sendData called")
+    console.log(editMode)
+    setEditMode(true);
+    setSelected(select)
+    document.getElementById('message_send').value = select.data.Content;
+  }
+
+  const editMess = async () => {
+    await editMessage(sendMessage, selected, setUpdate, update);
+    await get(userId);
+    setSendMessage('');
+    setSendFile(null);
+    setEditMode(false);
+    document.getElementById('message_send').value = "";
+  }
 
   const sendMess = async () => {
     await send(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange);
@@ -69,7 +86,7 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
       >
         {messages.map((msg) => {
           return msg.data.SenderId === user.uid ? (
-            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} />
+            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} sendData={sendData} setEditMode={setEditMode} />
           ) : (
             <ReceiverMessage msg={msg} key={msg.id} />
           );
@@ -99,15 +116,31 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
               id="message_send"
               className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
               onChange={(e) => { setSendMessage(e.target.value); document.getElementById("file_upload").value = "" }}
-              onKeyUp={(e) => { if (e.key == "Enter") { sendMess() } }}
+              onKeyUp={(e) => {
+                if (e.key == "Enter") {
+                  if (editMode) {
+                    editMess();
+                  }
+                  else {
+                    sendMess();
+                  }
+                }
+              }}
             />
           </div>
         </div>
         <div className="ml-4">
-          <button onClick={sendMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
-            <span>Send</span>
-            <TbSend />
-          </button>
+          {editMode ?
+            <button onClick={editMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+              <span>Edit</span>
+              <TbEdit />
+            </button>
+            :
+            <button onClick={sendMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+              <span>Send</span>
+              <TbSend />
+            </button>
+          }
         </div>
       </div>
     </div>

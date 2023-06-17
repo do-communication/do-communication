@@ -5,7 +5,7 @@ import Link from "next/link";
 import { BiFileBlank } from "react-icons/bi";
 import useFetch from "../useFetch";
 
-const SenderMessage = ({ msg, setUpdate, update }) => {
+const SenderMessage = ({ msg, setUpdate, update, sendData, setEditMode }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,10 +15,16 @@ const SenderMessage = ({ msg, setUpdate, update }) => {
     await deleteMessage(selected, selectedFile, setUpdate, update)
   }
 
+  const handleEdit = () => {
+    sendData(selected)
+  }
+
   const handleOpen = (message, file) => {
     setOpen(!open);
     setSelected(message);
     setSelectedFile(file);
+    setEditMode(false);
+    document.getElementById('message_send').value = "";
   }
 
   return (
@@ -57,7 +63,7 @@ const SenderMessage = ({ msg, setUpdate, update }) => {
 
       {open && (
         <div className=" float-right flex flex-col bg-opacity-50 rounded-md bg-primary right-6  w-24 mr-14">
-          {selectedFile === null ? <button className="flex items-center w-full gap-2 px-3 py-1 rounded-t-md hover:bg-secondary">
+          {selectedFile === null ? <button onClick={handleEdit} className="flex items-center w-full gap-2 px-3 py-1 rounded-t-md hover:bg-secondary">
             <AiFillEdit /> Edit
           </button> : <div></div>}
           <button onClick={handleDelete} className="flex items-center w-full gap-2 px-3 py-1 rounded-b-md hover:bg-secondary">
