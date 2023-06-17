@@ -62,7 +62,6 @@ const ManageMembers = () => {
       setMembers(filteredData);
     } else {
       setMembers(allMembers);
-      console.log(members);
     }
   }, [search]);
 
@@ -132,7 +131,6 @@ const ManageMembers = () => {
             data={members}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
-            selectableRowsSingle={true}
             selectableRowsNoSelectAll={true}
             pagination={true}
           />
@@ -219,9 +217,12 @@ const ManageMembers = () => {
                           const id = selectedRows[0].id
                           setSelectedRows([]);
                           setClearSelectedRows(true);
+                          const check = confirm("Do you want to delete the member?");
+                          if(check){
                           const docRef = doc(db,"KalCompany", "Users", "StaffMembers", id);
                           await deleteDoc(docRef)
-                          toast.success("Member deleted successfully");}}
+                          toast.success("Member deleted successfully");
+                        }}}
                         className="flex items-center gap-2"
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Member
@@ -251,6 +252,7 @@ const ManageMembers = () => {
               </div>
               <div className="relative flex justify-center py-4">
                 <button
+
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <TbMessage className="w-8 h-auto" />
@@ -311,7 +313,7 @@ const ManageMembers = () => {
                 <h3 className="p-2 text-lg font-semibold text-center">
                   Joined Groups
                 </h3>
-                
+
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   {/* <Link
                     href="/admin/memebers/{userId}"

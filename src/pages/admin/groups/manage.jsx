@@ -1,7 +1,8 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { db } from "../../../../context/DbContext"
-import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
 import {
   AiFillDelete,
@@ -48,7 +49,7 @@ const ManageGroup = () => {
   useEffect(() => {
     const filteredData = allGroups.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase()) || item.type && item.type.toLowerCase().includes(search.toLowerCase())
+        item.Name && item.Name.toLowerCase().includes(search.toLowerCase()) || item.Type && item.Type.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -165,8 +166,17 @@ const ManageGroup = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                        href="/admin/groups/delete/{groupId}"
                         className="flex items-center gap-2"
+                        // onClick={async (e) => {e.stopPropagation();
+                        //   const id = selectedRows[0].id
+                        //   setSelectedRows([]);
+                        //   setClearSelectedRows(true);
+                        //   const check = confirm("Do you want to delete the group?");
+                        //   if(check){
+                        //   const docRef = doc(db,"KalCompany", "Groups", "Groups", id);
+                        //   await deleteDoc(docRef)
+                        //   toast.success("Group deleted successfully");
+                        // }}}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Group
                       </button>
@@ -201,7 +211,7 @@ const ManageGroup = () => {
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
                   >
-                    <p>{row}</p>
+                    <p>{row.value}</p>
                     <div className="flex gap-2">
                       <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
                         <BiUserPlus className="w-5 h-auto" />

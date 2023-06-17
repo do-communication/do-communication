@@ -1,10 +1,11 @@
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import { useEffect, useState } from "react";
 import { TbMessageCircle } from "react-icons/tb";
 import { allMembers } from "@/mock/members";
 import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import UserLayout from "@/components/layouts/UserLayout/UserLayout";
+import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
 
 const ChatLayout = ({ children }) => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -44,7 +45,7 @@ const ChatLayout = ({ children }) => {
           {members.length > 0 &&
             members.slice(0, 3).map((member, index) => (
               <Link
-                href={`/user/chats/directChat/${member.id}`}
+                href={`/admin/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2 rounded-xl  ${
                   member.id === router.query.userId
@@ -52,18 +53,13 @@ const ChatLayout = ({ children }) => {
                     : "hover:bg-opacity-25 hover:bg-secondary"
                 }`}
               >
-                <div className="items-center justify-center hidden w-8 h-8 bg-blue-200 rounded-full xl:flex">
-                  {member.name[0]}
-                </div>
-                <div className="flex flex-col items-start justify-start ml-4 font-semibold">
-                  <p>{member.name}</p>
-                  <p className="w-32 text-sm font-light truncate">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                <RecentMessageItem
+                  name={member.name}
+                  msg="Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                     Facilis accusamus ipsam officiis officia voluptates iusto,
                     porro minima architecto corrupti. Nam deserunt accusantium
-                    natus labore numquam sunt voluptates aliquam aut. Quisquam.
-                  </p>
-                </div>
+                    natus labore numquam sunt voluptates aliquam aut. Quisquam."
+                />
               </Link>
             ))}
 
@@ -96,7 +92,7 @@ const ChatLayout = ({ children }) => {
           {members.length > 0 &&
             members.map((member, index) => (
               <Link
-                href={`/user/chats/directChat/${member.id}`}
+                href={`/admin/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2  rounded-xl ${
                   member.id === router.query.userId
@@ -127,14 +123,14 @@ const ChatLayout = ({ children }) => {
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md md:col-span-1 col-span-full md:block rounded-2xl ${
+            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${
               router.query.userId ? "hidden" : ""
             }`}
           >
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
               <TbMessageCircle className="text-4xl text-secondary" />
-              <h3 className="font-se mibold">Direct Chat</h3>
+              <h3 className="font-semibold">Direct Chat</h3>
             </div>
 
             {/* tab */}
@@ -161,7 +157,13 @@ const ChatLayout = ({ children }) => {
               {messageTab === "recent" ? renderRecent() : renderMembers()}
             </div>
           </div>
-          {children}
+          <div
+            className={`lg:col-span-3 col-span-full lg:block ${
+              router.query.userId ? "" : "hidden"
+            }`}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </UserLayout>

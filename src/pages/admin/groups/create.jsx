@@ -1,5 +1,5 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { doc, getDocs, getDoc, addDoc, collection } from "firebase/firestore";
+import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../../../../context/DbContext";
 import Select from "react-select";
@@ -11,7 +11,7 @@ const CreateGroup = () => {
   const [allMembers, setallMembers] = useState([]);
   const [members, setMembers] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
-  const temp = [];
+  const selected = [];
   const [data, setData] = useState({
     Type: '',
     Name: '',
@@ -29,7 +29,7 @@ const CreateGroup = () => {
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push(d.data())
+        arr.push({id:d.id, data:d.data()})
       });
     } catch (err) {
       console.log(err)
@@ -39,12 +39,64 @@ const CreateGroup = () => {
     setMembers(arr)
     setallMembers(arr)
   }
+  const updateMember = async(i) =>{
+    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
+    const mem = await getDoc(docRef)
+    let tempGroup = [];
+    let tempReport = [];
+    let tempTask = [];
+    const temp = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    if(temp){
+    temp.forEach(t => {
+      if(t){
+      tempGroup.push(t.stringValue);}
+    });
+  }
+  if(report){
+    report.forEach(r => {
+      if(r){
+      tempReport.push(r.stringValue);}
+    });
+  }
+  if(task){
+    task.forEach(ts => {
+      if(ts){
+      tempTask.push(ts.stringValue);}
+    });
+  }
+    tempGroup.push(data.Name)
+    const newData = {
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
+      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+      Reports: tempReport,
+      Tasks: tempTask,
+      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+      GroupId: tempGroup
+    }
+    updateDoc(docRef, newData)
+    .then(docRef => {
+        console.log("A New Document Field has been added to an existing document");
+    })
+    .catch(error => {
+        console.log(error);
+    })
+  }
   const handleCreateGroup = async () => {
+      data.Members.forEach(m =>{
+        updateMember(m.id);
+      });
+      
       await addDoc(collection(db, "KalCompany", "Groups", "Groups"), data);
       clearForm();
       toast.success("Group created successfully");
-      router.push('/admin/groups/manage')
-
   };
 
   const clearForm = () => {
@@ -103,7 +155,7 @@ const CreateGroup = () => {
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         value={data.Type}
                         onChange={(e) => {
-                          if (e.target.value === "custom") {
+                          if (e.target.value.toLowerCase() == "custom") {
                             setShowCustomType(true);
                             setData({
                               ...data,
@@ -114,6 +166,7 @@ const CreateGroup = () => {
                               ...data,
                               Type: e.target.value
                             })
+                            setShowCustomType(false);
                           }
                         }}
                       >
@@ -153,19 +206,19 @@ const CreateGroup = () => {
                         isMulti
                         name="members"
                         options={allMembers.map((member) => {
-                          return { label: member.Name, value: member.Name };
+                          return { label: member.data.Name, value: member.data.Name, GroupId: member.data.GroupId, id:member.id };
                         })}
                         val
                         onChange={(selectedMembers) => {
                           setMembers(
-                            selectedMembers.map((member) => member.value)
+                            selectedMembers.map((member) => member.value )
                           );
                           selectedMembers.map(member => {
-                            temp.push(member.value)
+                            selected.push({GroupId:member.GroupId, value:member.value, id:member.id})
                           });
                           setData({
                             ...data,
-                            Members: Array.from(new Set(temp))
+                            Members: Array.from(new Set(selected))
                           })
                         }}
                       />

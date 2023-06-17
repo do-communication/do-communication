@@ -28,25 +28,14 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <RiTeamFill />,
-      url: "/admin/members",
-      name: "Members", //unqiue
-    },
-    {
-      Icon: <MdGroupWork />,
-      url: "/admin/groups",
-      name: "Groups", //unqiue
-    },
-
-    {
       Icon: <FaTasks />,
-      url: "/admin/tasks",
-      name: "Tasks", //unqiue
+      url: "/user/tasks",
+      name: "My Tasks", //unqiue
     },
 
     {
       Icon: <TbReportAnalytics />,
-      url: "/admin/report",
+      url: "/user/reports/report",
       name: "Report",
     },
     {
