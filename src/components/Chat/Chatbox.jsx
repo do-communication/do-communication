@@ -7,25 +7,29 @@ import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
 import useFetch from "../useFetch";
 
-const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update, editMode, setEditMode }) => {
+const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update, editMode, setEditMode, isgroup }) => {
   const [sendMessage, setSendMessage] = useState("");
   const [sendFile, setSendFile] = useState(null);
   const [selected, setSelected] = useState(null);
   const chatboxRef = useRef(null);
   const router = useRouter();
-  const userId = router.query.userId;
-  const { user, send, editMessage } = useFetch("KalCompany");
+  let userId = router.query.userId;
+  if (isgroup) {
+    userId = router.query.groupId;
+  }
+
+  const { user, send, sendGroup, editMessage, editGroupMessage } = useFetch("KalCompany");
 
   const sendData = (select) => {
-    console.log("sendData called")
-    console.log(editMode)
     setEditMode(true);
     setSelected(select)
     document.getElementById('message_send').value = select.data.Content;
   }
 
   const editMess = async () => {
-    await editMessage(sendMessage, selected, setUpdate, update);
+    if (isgroup) { await editGroupMessage(sendMessage, selected, setUpdate, update); }
+    else { await editMessage(sendMessage, selected, setUpdate, update); }
+
     await get(userId);
     setSendMessage('');
     setSendFile(null);
@@ -34,7 +38,9 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
   }
 
   const sendMess = async () => {
-    await send(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange);
+    if (isgroup) { await sendGroup(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange); }
+    else { await send(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange); }
+
     await get(userId);
     setSendMessage('');
     setSendFile(null);
@@ -86,7 +92,7 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
       >
         {messages.map((msg) => {
           return msg.data.SenderId === user.uid ? (
-            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} sendData={sendData} setEditMode={setEditMode} />
+            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} sendData={sendData} setEditMode={setEditMode} isgroup={isgroup} />
           ) : (
             <ReceiverMessage msg={msg} key={msg.id} />
           );

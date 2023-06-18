@@ -5,14 +5,15 @@ import Link from "next/link";
 import { BiFileBlank } from "react-icons/bi";
 import useFetch from "../useFetch";
 
-const SenderMessage = ({ msg, setUpdate, update, sendData, setEditMode }) => {
+const SenderMessage = ({ msg, setUpdate, update, sendData, setEditMode, isgroup }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const { deleteMessage } = useFetch("KalCompany")
+  const { deleteMessage, deleteGroupMessage } = useFetch("KalCompany")
 
   const handleDelete = async () => {
-    await deleteMessage(selected, selectedFile, setUpdate, update)
+    if (isgroup) { await deleteGroupMessage(selected, selectedFile, setUpdate, update); }
+    else { await deleteMessage(selected, selectedFile, setUpdate, update); }
   }
 
   const handleEdit = () => {
