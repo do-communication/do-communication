@@ -81,11 +81,12 @@ const Profile = () => {
                                             src={src}
                                         />
                                         ) : (
+                                            <div className=" justify-center">
                                         <img
                                             src={preview}
                                             alt="Cropped"
-                                            className="pt-10 sm:pb-3"
-                                        />
+                                            className="pt-10 sm:pb-3 justify-center"
+                                        /></div>
                                         )}
                                         {showAvatar && (
                                         <button
