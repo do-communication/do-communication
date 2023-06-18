@@ -14,12 +14,12 @@ const Sidebar = () => {
 
   const navList = [
     {
-      Icon: <AiFillAccountBook />,
+      Icon: <AiFillAccountBook size={20} />,
       url: "/admin",
       name: "Dashboard",
     },
     {
-      Icon: <BsFillChatDotsFill />,
+      Icon: <BsFillChatDotsFill size={20} />,
       name: "Chat",
       children: [
         {
@@ -33,7 +33,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <RiTeamFill />,
+      Icon: <RiTeamFill size={20}  />,
       name: "Members", //unqiue
       children: [
         {
@@ -47,7 +47,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <MdGroupWork />,
+      Icon: <MdGroupWork  size={20} />,
       name: "Groups", //unqiue
       children: [
         {
@@ -62,7 +62,7 @@ const Sidebar = () => {
     },
 
     {
-      Icon: <FaTasks />,
+      Icon: <FaTasks size={20}  />,
       name: "Tasks", //unqiue
       children: [
         {
@@ -76,7 +76,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <AiFillFileAdd />,
+      Icon: <AiFillFileAdd size={20}  />,
       name: "Files", //unqiue
       children: [
         {
@@ -90,12 +90,12 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <TbReportAnalytics />,
+      Icon: <TbReportAnalytics size={20}  />,
       url: "/admin/reports/reports",
       name: "Report",
     },
     {
-      Icon: <RiLogoutBoxFill />,
+      Icon: <RiLogoutBoxFill size={20} />,
       url: "/",
       name: "Sign Out",
     },
