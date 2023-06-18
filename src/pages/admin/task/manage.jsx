@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import { db } from "../../../../context/DbContext"
-import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -21,10 +22,11 @@ const ManageTasks = () => {
   const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
+  let assignedMem = [];
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
   const getData = async () => {
     let arr = []
+    let temp = []
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
       const doc = await getDocs(all)
@@ -43,10 +45,10 @@ const ManageTasks = () => {
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
-        || item.assignedTo && item.assignedTo.toLowerCase().includes(search.toLowerCase())
-        || item.status && item.status.toLowerCase().includes(search.toLowerCase())
-        || item.priority && item.priority.toLowerCase().includes(search.toLowerCase())
+        item.Title && item.Title.toLowerCase().includes(search.toLowerCase())
+        || item.AssignedTo && item.AssignedTo.includes(search.toLowerCase())
+        || item.Status && item.Status.toLowerCase().includes(search.toLowerCase())
+        || item.Priority && item.Priority.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -64,7 +66,7 @@ const ManageTasks = () => {
     },
     {
       name: "Assigned To",
-      selector: (row) => new Set(row.AssignedTo).toString(),
+      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" ")
     },
     {
       name: "Status",
@@ -182,8 +184,17 @@ const ManageTasks = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                        href="/admin/task/delete/{taskId}"
                         className="flex items-center gap-2"
+                        // onClick={async (e) => {e.stopPropagation();
+                        //   const id = selectedRows[0].id
+                        //   setSelectedRows([]);
+                        //   // setClearSelectedRows(true);
+                        //   const check = confirm("Do you want to delete the task?");
+                        //   if(check){
+                        //   const docRef = doc(db,"KalCompany", "Tasks", "Tasks", id);
+                        //   await deleteDoc(docRef)
+                        //   toast.success("Task deleted successfully");
+                        // }}}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Task
                       </button>
@@ -198,7 +209,7 @@ const ManageTasks = () => {
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].Title}
                 </h4>
-                <p className="text-sm">Assigned to {new Set(selectedRows[0].AssignedTo).toString(", ")}  </p>
+                <p className="text-sm">Assigned to {Array.from(new Set(selectedRows[0].AssignedTo)).toString(" ")} </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>

@@ -1,13 +1,17 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { doc, getDocs, getDoc, addDoc, collection } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
+import { useState, useEffect, useRef } from "react";
 import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
 import Select from "react-select";
-// import { useAuth } from "../../../../context/AuthContext";
-// const { user } = useAuth()
+import { auth } from "../../../../config/firebase";
+const user = auth.currentUser;
+// const selectInputRef = useRef();
+
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
+  const temp = [];
+  const [assignedto, setassignedto] = useState([]);
   const [members, setMembers] = useState([]);
   const [data, setData] = useState({
     Title: '',
@@ -16,8 +20,8 @@ const AddMember = () => {
     Priority: '',
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
-    Status: "Assigned",
-    AssignedBy: "Admin" //it should be id of the current user
+    Status: "Assigned",  
+    AssignedBy: user.displayName
   });
   const getData = async () => {
     let arr = []
@@ -25,7 +29,7 @@ const AddMember = () => {
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push(d.data())
+        arr.push({id:d.id, data:d.data()})
       });
     } catch (err) {
       console.log(err)
@@ -34,6 +38,55 @@ const AddMember = () => {
 
     setMembers(arr)
     setallMembers(arr)
+  }
+
+  const updateMember = async(i) =>{
+    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
+    const mem = await getDoc(docRef)
+    let tempTask = [];
+    let tempReport = [];
+    let tempGroup = [];
+    const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+    if(temp){
+    temp.forEach(t => {
+      if(t){
+      tempTask.push(t.stringValue);}
+    });}
+    if(report){
+      report.forEach(r => {
+        if(r){
+        tempReport.push(r.stringValue);}
+      });
+    }
+    if(group){
+      group.forEach(g => {
+        if(g){
+        tempGroup.push(g.stringValue);}
+      });}
+    tempTask.push(data.Title)
+    const newData = {
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
+      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+      GroupId: tempGroup,
+      Reports: tempReport,
+      Tasks: tempTask
+    }
+    updateDoc(docRef, newData)
+    .then(docRef => {
+        console.log("A New Document Field has been added to an existing document");
+    })
+    .catch(error => {
+        console.log(error);
+    })
   }
 
   const select = document.getElementById('selectPriority');
@@ -103,19 +156,6 @@ const AddMember = () => {
       endDate.placeholder = "MM/DD/YYYY";
     }
   };
-  // const handleAssigned = (e) =>{
-  //   e.preventDefault();
-  //   setData({
-  //     ...data,
-  //     AssignedTo: e.target.value
-  //   })
-  //   if (assigned && assigned.classList.contains("ring-red-600")) {
-  //     assigned.classList.remove("ring-red-600");
-  //     assigned.classList.remove("ring-2");
-  //     assigned.placeholder = "search for a member or a group";
-  //   }
-
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -148,6 +188,10 @@ const AddMember = () => {
       end.classList.add("ring-2");
       endDate.placeholder = "Please select the due date";
     }
+    assignedto.forEach(m =>{
+      updateMember(m.id);
+     
+    });
     if (data.Title != "" && data.Description != "" && data.AssignedTo != "" && data.StartDate != null && data.DueDate != null && data.Priority != "null") {
       await addDoc(collection(db, "KalCompany", "Tasks", "Tasks"), data);
       handleClear();
@@ -173,6 +217,7 @@ const AddMember = () => {
     endDate.placeholder = "MM/DD/YYYY";
     select.value = "null";
     data.Priority = "";
+    // selectInputRef.current.select.clearValue();
   };
   useEffect(() => {
     getData()
@@ -219,31 +264,29 @@ const AddMember = () => {
                       />
                     </div>
 
-                    <div className="md:col-span-3">
-                      <label for="address">Assigned To:</label>
-                      {/* <input
-                      type="text"
-                      name="assignedTo"
-                      id="assigned"
-                      onChange={handleAssigned}
-                      value={data.AssignedTo}
-                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                      placeholder="search for a member or group"
-                    /> */}
-                      <Select
+                  <div className="md:col-span-3">
+                    <label for="address">Assigned To:</label>
+                    <Select
+                        // ref={selectInputRef}
                         isMulti
                         name="members"
                         id="assigned"
                         options={allMembers.map((member) => {
-                          return { label: member.Name, value: member.Name };
+                          return { label: member.data.Name, value: member.data.Name, id:member.id, Tasks:member.data.Tasks };
                         })}
                         onChange={(selectedMembers) => {
                           setMembers(
                             selectedMembers.map((member) => member.value)
                           );
+                          setData({
+                            ...data,
+                            AssignedTo: selectedMembers.map((member) => member.value)
+                          })
                           selectedMembers.map(member => {
-                            data.AssignedTo.push(member.value)
+                            temp.push({Tasks:member.Tasks, value:member.value, id:member.id})
                           });
+                          setassignedto(Array.from(new Set(temp)))
+                          
                           if (assigned && assigned.classList.contains("ring-red-600")) {
                             assigned.classList.remove("ring-red-600");
                             assigned.classList.remove("ring-2");
