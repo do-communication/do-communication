@@ -16,8 +16,10 @@ const AddMember = () => {
     PhoneNumber: '',
     DateOfBirth: new Date("10/10/2030"),
     ProfilePic: '',
-    RegisteredAt: new Date(),
-    GroupId: []
+    RegisteredAt: new Date().toDateString(),
+    GroupId: [],
+    Reports: [],
+    Tasks: []
   });
   const select = document.getElementById('selectGender');
   const email = document.getElementById('email');

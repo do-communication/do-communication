@@ -3,7 +3,10 @@ import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import { db } from "../../../../context/DbContext"
-import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
+import { auth } from "../../../../config/firebase";
+const user = auth.currentUser;
 import {
   AiFillDelete,
   AiFillEdit,
@@ -35,7 +38,7 @@ const ManageMembers = () => {
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push(d.data())
+        arr.push({id:d.id, data:d.data()})
       });
 
     } catch (err) {
@@ -50,17 +53,15 @@ const ManageMembers = () => {
   useEffect(() => {
     const filteredData = allMembers.filter(
       (item) =>
-        (item.name && item.name.toLowerCase().includes(search.toLowerCase())) ||
-        (item.department &&
-          item.department.toLowerCase().includes(search.toLowerCase())) ||
-        (item.email && item.email.toLowerCase().includes(search.toLowerCase()))
+        item.data.Name && item.data.Name.toLowerCase().includes(search.toLowerCase())
+        || item.data.Department && item.data.Department.toLowerCase().includes(search.toLowerCase())
+        || item.data.Email && item.data.Email.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
       setMembers(filteredData);
     } else {
       setMembers(allMembers);
-      console.log(members);
     }
   }, [search]);
 
@@ -68,32 +69,29 @@ const ManageMembers = () => {
     {
       name: "Name",
       selector: (row) => (
-        <p className="flex items-center justify-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
-            {row.ProfilePic === "" ? (
-              row.Name[0]
-            ) : (
-              <img
-                src={row.ProfilePic}
-                width={50}
-                height={50}
-                alt="pp"
-                className="rounded-full"
-              />
-            )}
-          </div>
-          <div>{row.Name}</div>
-        </p>
+        <p className="flex items-center justify-center gap-2"><div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+          {row.data && row.data.ProfilePic === '' ? row.data.Name[0] : <img
+          src={row.data && row.data.ProfilePic}
+          width={50}
+          height={50}
+          alt= "pp"
+          className="rounded-full"
+        />}
+        </div>
+        <div>
+        {row.data && row.data.Name}
+      </div></p>
+
       ),
       sortable: true,
     },
     {
       name: "Email",
-      selector: (row) => row.Email,
+      selector: (row) => row.data && row.data.Email,
     },
     {
       name: "Department",
-      selector: (row) => row.Department,
+      selector: (row) => row.data && row.data.Department,
     },
   ];
 
@@ -160,7 +158,7 @@ const ManageMembers = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.Name}</p>
+                    <p>{row.data.Name}</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -215,7 +213,16 @@ const ManageMembers = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                        href="/admin/groups/edit"
+                        onClick={async (e) => {e.stopPropagation();
+                          const id = selectedRows[0].id
+                          setSelectedRows([]);
+                          setClearSelectedRows(true);
+                          const check = confirm("Do you want to delete the member?");
+                          if(check){
+                          const docRef = doc(db,"KalCompany", "Users", "StaffMembers", id);
+                          await deleteDoc(docRef)
+                          toast.success("Member deleted successfully");
+                        }}}
                         className="flex items-center gap-2"
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Member
@@ -226,22 +233,22 @@ const ManageMembers = () => {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
-                  {selectedRows[0].ProfilePic === '' ? selectedRows[0].Name[0] :
+                    {selectedRows[0].data.ProfilePic === '' ? selectedRows[0].data.Name[0] : 
                     <img
-                      src={selectedRows[0].ProfilePic}
-                      width={50}
-                      height={50}
-                      alt="pp"
-                      className="rounded-full"
-                    />}
+                    src={selectedRows[0].data.ProfilePic}
+                    width={50}
+                    height={50}
+                    alt= "pp"
+                    className="rounded-full"
+                  />}
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].Name}
+                  {selectedRows[0].data.Name}
                 </h4>
                 <p className="font-light text-md" mt-1>
-                  {selectedRows[0].Email}
+                  {selectedRows[0].data.Email}
                 </p>
-                <p className="text-sm">{selectedRows[0].type}</p>
+                <p className="text-sm">{selectedRows[0].data.type}</p>
               </div>
               <div className="relative flex justify-center py-4">
                 <button
@@ -265,7 +272,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="Lidiya Solomon Tamru">
-                      {selectedRows[0].Name}
+                      {selectedRows[0].data.Name}
                     </p>
                   </div>
 
@@ -276,7 +283,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="Product Manager">
-                      {selectedRows[0].Department}
+                      {selectedRows[0].data.Department}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -286,7 +293,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="Addis Ababa/Ethiopia">
-                      {selectedRows[0].Address}
+                      {selectedRows[0].data.Address}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
@@ -296,7 +303,7 @@ const ManageMembers = () => {
                       </p>
                     </div>
                     <p className="w-40 truncate" title="+251910******">
-                      {selectedRows[0].PhoneNumber}
+                      {selectedRows[0].data.PhoneNumber}
                     </p>
                   </div>
                 </ul>
@@ -353,21 +360,20 @@ const ManageMembers = () => {
                       <BsEye /> View
                     </button>
                   </Link> */}
-                  {selectedRows[0].GroupId &&
-                    selectedRows[0].GroupId.map((row, index) => (
-                      <li
-                        key={index}
-                        className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
-                      >
-                        <p>{row}</p>
-                        <button
-                          type="submit"
-                          className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
-                        >
-                          <BsEye /> View
-                        </button>
-                      </li>
-                    ))}
+                  {selectedRows[0].data.GroupId && selectedRows[0].data.GroupId.map((row, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
+                  >
+                    <p>{row}</p>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
+                    >
+                      <BsEye /> View
+                    </button>
+                  </li>
+                ))}
                 </ul>
               </div>
             </div>
