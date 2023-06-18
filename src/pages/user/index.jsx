@@ -1,5 +1,6 @@
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import { CgProfile } from "react-icons/cg";
+import Link from "next/link";
 const User = () => {
   return (
     <UserLayout>
@@ -45,7 +46,11 @@ const User = () => {
           </div>
           <div className=" flex justify-center items-center py-6 mt-2">
             <button className="text-white py-3 capitalize px-6 rounded-full bg-primary hover:bg-sky-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
-              Edit your profile
+              <Link
+                href="/user/profile/profile"
+              >
+              Edit your profile 
+              </Link>
             </button>
           </div>
         </div>
