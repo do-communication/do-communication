@@ -121,7 +121,9 @@ const Signup = () => {
           await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), {
             name: data.name,
             companyName: data.companyName,
-            email: data.email
+            email: data.email,
+            ProfilePic: "",
+            phoneNumber: ""
           });
 
           await updateProfile(auth.currentUser, { displayName: data.name });

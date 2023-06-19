@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { useState } from "react";
+import useFetch from "@/components/useFetch";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify"
 // import React,{useEffect,useState} from "react";
@@ -9,12 +10,13 @@ import Avatar from "react-avatar-edit";
 const Profile = () => {
     const [src, setSrc] = useState(null);
     const [preview, setPreview] = useState(null);
-    
+    const { GetAdmin } = useFetch("KalCompany")
 
-    const onClose = ()=>{
+
+    const onClose = () => {
         setPreview(null);
     }
-    const onCrop = view =>{
+    const onCrop = view => {
         setPreview(view);
     }
     const [user, setUser] = useState({
@@ -30,9 +32,9 @@ const Profile = () => {
         );
     };
 
-    const setImage = () =>{
+    const setImage = () => {
         setPreview(view);
-        
+
     };
 
     const handleSubmit = (e) => {
@@ -43,20 +45,23 @@ const Profile = () => {
     const [showAvatar, setShowAvatar] = useState(true);
     const [unshowAvatar, setunShowAvatar] = useState(false);
 
-    
-      const handleChangePicture = () => {
-        setSrc(preview);
-        // setSrc(null); // Clear the current picture
-        setShowAvatar(false); // Hide the Avatar
-        setunShowAvatar(true);
-      };
-      const changePicture = view => {
+
+    const handleChangePicture = () => {
+        if (preview != null) {
+            setSrc(preview);
+            // setSrc(null); // Clear the current picture
+            setShowAvatar(false); // Hide the Avatar
+            setunShowAvatar(true);
+        }
+    };
+    const changePicture = view => {
         // setPreview(view);
         // setSrc(preview);
         setunShowAvatar(false);
         setSrc(null);
         setShowAvatar(true);
-      }
+        setPreview(null)
+    }
 
 
     return (
@@ -80,29 +85,29 @@ const Profile = () => {
                                             onClose={onClose}
                                             src={src}
                                         />
-                                        ) : (
-                                            <div className=" justify-center">
-                                        <img
-                                            src={preview}
-                                            alt="Cropped"
-                                            className="pt-10 sm:pb-3 justify-center"
-                                        /></div>
-                                        )}
-                                        {showAvatar && (
+                                    ) : (
+                                        <div className=" justify-center">
+                                            <img
+                                                src={preview}
+                                                alt="Cropped"
+                                                className="pt-10 sm:pb-3 justify-center"
+                                            /></div>
+                                    )}
+                                    {showAvatar && (
                                         <button
                                             className="ml-20 mt-5 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
                                             onClick={handleChangePicture}
                                         >
                                             Upload Picture
                                         </button>
-                                        )}
-                                        {unshowAvatar && (
-                                            <button
-                                                className="ml-20 mt-5 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
-                                                onClick={changePicture}
-                                            >
-                                                Upload New</button>
-                                        )}
+                                    )}
+                                    {unshowAvatar && (
+                                        <button
+                                            className="ml-20 mt-5 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
+                                            onClick={changePicture}
+                                        >
+                                            Upload New</button>
+                                    )}
                                 </div>
 
                                 <div className="pl-6 lg:col-span-2">

@@ -10,17 +10,16 @@ import Router from "next/router";
 const router = Router;
 
 const AdminLayout = ({ children, noFooter = false }) => {
-      const [openSideBar, openSideBarDispatch] = useReducer(
-      openSideBarReducer,
-      false
-    );
-    
+  const [openSideBar, openSideBarDispatch] = useReducer(
+    openSideBarReducer,
+    false
+  );
+
   if (!auth.currentUser) {
     console.log("router going back")
     router.push("/");
   }
   else {
-
 
     return (
       <div className="md:flex">

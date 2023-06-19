@@ -15,8 +15,8 @@ const GroupChat = () => {
   const { getGroupMessage, user, GetGroup } = useFetch("KalCompany");
   const groupId = router.query.groupId;
   const get = async (groupId) => {
-    setReciever(await GetGroup(groupId))
-    setMessages(await getGroupMessage(groupId))
+    setReciever(await GetGroup(groupId));
+    await getGroupMessage(groupId, setMessages);
   }
 
   useEffect(() => { get(groupId) }, [groupId])
