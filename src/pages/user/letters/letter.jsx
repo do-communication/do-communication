@@ -16,7 +16,9 @@ const AddReport = () => {
     e.preventDefault();
     console.log("submit");
 
-    toast.success("Report submitted successfully");
+    toast.success("Letter Created successfully");
+    // create it in firestore
+    // redirect to /letters/[letterId]
   };
 
   return (
