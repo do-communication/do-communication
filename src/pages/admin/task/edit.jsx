@@ -195,7 +195,7 @@ const AddMember = () => {
     if (data.Title != "" && data.Description != "" && data.AssignedTo != "" && data.StartDate != null && data.DueDate != null && data.Priority != "null") {
       await addDoc(collection(db, "KalCompany", "Tasks", "Tasks"), data);
       handleClear();
-      toast.success("Task Assigned successfully");
+      toast.success("Task edited successfully");
     }
   };
   const handleClear = (e) => {
@@ -227,7 +227,7 @@ const AddMember = () => {
       <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
         <div className="container max-w-screen-lg mx-auto">
           <div>
-            <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Assign Task</h2>
+            <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Edit Task</h2>
 
             <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
               <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
@@ -339,7 +339,7 @@ const AddMember = () => {
                           <button onClick={handleClear} className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
                             Cancel
                           </button>
-                          <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded"> Assign
+                          <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded"> Edit
                           </button>
                         </div>
                       </div>

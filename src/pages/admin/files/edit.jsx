@@ -70,7 +70,7 @@ const AddFile = () => {
 
             // e.target.reset();
 
-            toast.success("File uploaded successfully");
+            toast.success("File edited successfully");
           });
 
         }
@@ -82,7 +82,7 @@ const AddFile = () => {
       <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
         <div className="container max-w-screen-lg mx-auto">
           <div>
-            <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Add File</h2>
+            <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Edit File</h2>
 
             <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
               <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
@@ -159,7 +159,7 @@ const AddFile = () => {
                             Cancel
                           </button>
                           <button onClick={(e) => UploadFile(e)} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
-                            Upload
+                            Edit
                           </button>
                         </div>
                       </div>

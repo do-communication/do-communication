@@ -141,8 +141,14 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
-                        My Profile
+                        <Link 
+                          href="/user/profile/profile"
+                        >
+                          My Profile
+                        </Link>
+                        
                       </a>
+
 
                       <a
                         href="#"
@@ -151,17 +157,11 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-1"
                       >
-                        Projects
-                      </a>
-
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                        tabindex="-1"
-                        id="user-menu-item-1"
-                      >
-                        Sign out
+                        <Link
+                          href="#"
+                        >
+                          Sign out
+                        </Link>
                       </a>
                     </div>
                   )}
@@ -221,10 +221,10 @@ const Header = () => {
               </div>
               <div className="px-2 mt-3 space-y-1 border-t border-t-gray-700">
                 <Link
-                  href="/admin/profile"
+                  href="/user/profile/profile"
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
-                  <AiOutlineUser className="w-5 h-auto" /> Your Profile
+                  <AiOutlineUser className="w-5 h-auto" /> My Profile
                 </Link>
 
                 <Link

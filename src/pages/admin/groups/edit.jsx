@@ -96,7 +96,7 @@ const CreateGroup = () => {
       
       await addDoc(collection(db, "KalCompany", "Groups", "Groups"), data);
       clearForm();
-      toast.success("Group created successfully");
+      toast.success("Group edited successfully");
   };
 
   const clearForm = () => {
@@ -114,7 +114,7 @@ const CreateGroup = () => {
         <div className="container max-w-screen-lg mx-auto">
           <div>
             <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
-              Create Group
+              Edit Group
             </h2>
 
             <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
@@ -237,7 +237,7 @@ const CreateGroup = () => {
                             className="px-4 py-2 font-bold text-white rounded disabled:brightness-90 disabled:cursor-not-allowed bg-primary hover:bg-bold"
                             onClick={handleCreateGroup}
                           >
-                            Create Group
+                            Edit
                           </button>
                         </div>
                       </div>

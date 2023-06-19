@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
 import {
   AiOutlineMenu,
@@ -12,21 +12,27 @@ import { auth } from "../../../../config/firebase";
 import { useAuth } from "../../../../context/AuthContext";
 import Router from "next/router";
 import Notification from "./Notification";
+import useFetch from "@/components/useFetch";
 
 const router = Router;
 
 const Header = () => {
   const { user, logout } = useAuth();
-  // const [user, setUser] = useState(null);
+  const [usr, setUsr] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
+  const { GetAdmin } = useFetch("KalCompany");
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(u => {
-  //     setUser(u)
-  //   })
-  // }, [])
+
+  const getinfo = async () => {
+    setUsr(await GetAdmin(auth.currentUser.uid));
+  }
+
+
+  useEffect(() => {
+    getinfo()
+  }, [user])
 
   const handleSingout = (e) => {
     e.preventDefault();
@@ -93,7 +99,7 @@ const Header = () => {
 
               <div className="hidden lg:block">
                 <div>
-                  <p>Company Name</p>
+                  <p><b>{usr && usr.companyName}</b></p>
                 </div>
               </div>
             </div>
@@ -122,7 +128,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>{user && user.displayName}</span>
+                      <span>{usr && usr.name}</span>
                       <span>Admin</span>
                     </div>
                   </div>
@@ -207,10 +213,10 @@ const Header = () => {
               </div>
               <div className="px-2 mt-3 space-y-1 border-t border-t-gray-700">
                 <Link
-                  href="/admin/profile"
+                  href="/admin/profile/profile"
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
-                  <AiOutlineUser className="w-5 h-auto" /> Your Profile
+                  <AiOutlineUser className="w-5 h-auto" /> My Profile
                 </Link>
 
                 <Link

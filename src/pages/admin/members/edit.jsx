@@ -152,7 +152,7 @@ const AddMember = () => {
     if (data.Name != "" && data.Email != "" && data.PhoneNumber != "" && data.Address != "" && data.Department != "" && data.DateOfBirth != "" && data.Gender != "null") {
       await addDoc(collection(db, "KalCompany", "Users", "StaffMembers"), data);
       handleClear();
-      toast.success("Member added successfully");
+      toast.success("Member edited successfully");
     }
   };
   const handleClear = (e) => {
@@ -183,7 +183,7 @@ const AddMember = () => {
         <div className="container max-w-screen-lg mx-auto">
           <form>
             <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
-              Add Member
+              Edit Member
             </h2>
             <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
               <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
@@ -307,7 +307,7 @@ const AddMember = () => {
                             Cancel
                           </button>
                           <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
-                            Submit
+                            Edit
                           </button>
                         </div>
                       </div>

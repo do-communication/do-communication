@@ -4,6 +4,7 @@ import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
 import { MdGroupWork } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
+import {SlEnvolopeLetter} from"react-icons/sl";
 import { TbReportAnalytics } from "react-icons/tb";
 import SideNav from "./SideNav";
 import Link from "next/link";
@@ -14,7 +15,7 @@ const Sidebar = () => {
 
   const navList = [
     {
-      Icon: <BsFillChatDotsFill />,
+      Icon: <BsFillChatDotsFill size={20} />,
       name: "Chat",
       children: [
         {
@@ -28,32 +29,37 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <FaTasks />,
+      Icon: <FaTasks size={20} />,
       url: "/user/tasks",
       name: "My Tasks", //unqiue
     },
 
     {
-      Icon: <TbReportAnalytics />,
+      Icon: <TbReportAnalytics size={20} />,
       url: "/user/reports/report",
       name: "Report",
     },
     {
-      Icon: <AiFillFileAdd />,
+      Icon: <SlEnvolopeLetter size={20} />,
+      url: "/user/letters/letter",
+      name: "Letter",
+    },
+    {
+      Icon: <AiFillFileAdd size={20} />,
       name: "Files", //unqiue
       children: [
         {
-          url: "/admin/files/create",
+          url: "/user/files/create",
           name: "Add File",
         },
         {
-          url: "/admin/files/ManageFiles",
+          url: "/user/files/manageFiles",
           name: "Manage files",
         },
       ],
     },
     {
-      Icon: <RiLogoutBoxFill />,
+      Icon: <RiLogoutBoxFill  size={20}/>,
       url: "/",
       name: "Logout",
     },

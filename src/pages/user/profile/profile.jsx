@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify"
@@ -81,12 +81,11 @@ const Profile = () => {
                                             src={src}
                                         />
                                         ) : (
-                                            <div className=" justify-center">
                                         <img
                                             src={preview}
                                             alt="Cropped"
-                                            className="pt-10 sm:pb-3 justify-center"
-                                        /></div>
+                                            className="pt-10 sm:pb-3"
+                                        />
                                         )}
                                         {showAvatar && (
                                         <button
