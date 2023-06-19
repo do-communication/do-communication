@@ -207,7 +207,7 @@ const ManageMembers = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/groups/edit/{groupId}"
+                        href="/admin/members/edit"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Member

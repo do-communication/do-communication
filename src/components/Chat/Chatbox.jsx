@@ -2,21 +2,50 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { BiChevronLeft, BiUser } from "react-icons/bi";
 import { RiAttachment2 } from "react-icons/ri";
-import { TbSend } from "react-icons/tb";
+import { TbSend, TbEdit } from "react-icons/tb";
 import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
 import useFetch from "../useFetch";
 
-const Chatbox = ({ messages, name, get }) => {
+const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update, editMode, setEditMode, isgroup }) => {
   const [sendMessage, setSendMessage] = useState("");
   const [sendFile, setSendFile] = useState(null);
-  const [change, setChange] = useState(false);
+  const [selected, setSelected] = useState(null);
   const chatboxRef = useRef(null);
   const router = useRouter();
-  const userId = router.query.userId;
-  const { user, send } = useFetch("KalCompany");
-  // console.log("Chatbox")
+  let userId = router.query.userId;
+  if (isgroup) {
+    userId = router.query.groupId;
+  }
 
+  const { user, send, sendGroup, editMessage, editGroupMessage } = useFetch("KalCompany");
+
+  const sendData = (select) => {
+    setEditMode(true);
+    setSelected(select)
+    document.getElementById('message_send').value = select.data.Content;
+  }
+
+  const editMess = async () => {
+    if (isgroup) { await editGroupMessage(sendMessage, selected, setUpdate, update); }
+    else { await editMessage(sendMessage, selected, setUpdate, update); }
+
+    await get(userId);
+    setSendMessage('');
+    setSendFile(null);
+    setEditMode(false);
+    document.getElementById('message_send').value = "";
+  }
+
+  const sendMess = async () => {
+    if (isgroup) { await sendGroup(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange); }
+    else { await send(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange); }
+
+    await get(userId);
+    setSendMessage('');
+    setSendFile(null);
+    scrollToBottom();
+  }
 
   const scrollToBottom = () => {
 
@@ -32,7 +61,8 @@ const Chatbox = ({ messages, name, get }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [change]);
+  }, [messages]);
+
 
   return (
     <div className="relative flex-col h-full bg-white rounded-2xl">
@@ -62,7 +92,7 @@ const Chatbox = ({ messages, name, get }) => {
       >
         {messages.map((msg) => {
           return msg.data.SenderId === user.uid ? (
-            <SenderMessage msg={msg} key={msg.id} />
+            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} sendData={sendData} setEditMode={setEditMode} isgroup={isgroup} />
           ) : (
             <ReceiverMessage msg={msg} key={msg.id} />
           );
@@ -92,17 +122,31 @@ const Chatbox = ({ messages, name, get }) => {
               id="message_send"
               className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
               onChange={(e) => { setSendMessage(e.target.value); document.getElementById("file_upload").value = "" }}
+              onKeyUp={(e) => {
+                if (e.key == "Enter") {
+                  if (editMode) {
+                    editMess();
+                  }
+                  else {
+                    sendMess();
+                  }
+                }
+              }}
             />
           </div>
         </div>
         <div className="ml-4">
-          <button onClick={async () => {
-            await send(sendMessage, sendFile, userId); get(userId); setSendMessage('');
-            setSendFile(null); setChange(!change)
-          }} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
-            <span>Send</span>
-            <TbSend />
-          </button>
+          {editMode ?
+            <button onClick={editMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+              <span>Edit</span>
+              <TbEdit />
+            </button>
+            :
+            <button onClick={sendMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+              <span>Send</span>
+              <TbSend />
+            </button>
+          }
         </div>
       </div>
     </div>

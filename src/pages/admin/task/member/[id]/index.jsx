@@ -192,7 +192,7 @@ const ManageTasks = () => {
                   <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/reports/{taskId}"
+                        href="/admin/reports/member/id"
                         className="flex items-center gap-2"
                       >
                         <HiDocumentChartBar className="w-5 h-auto" /> Reports
@@ -200,7 +200,7 @@ const ManageTasks = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/task/edit/{taskId}"
+                        href="/admin/task/edit"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Task

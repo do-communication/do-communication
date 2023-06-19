@@ -77,7 +77,7 @@ const Login = () => {
     e.preventDefault()
     try {
       await signInGoogle(auth, provider)
-      router.push('/')
+      router.push('/admin')
     } catch (err) {
       if (err.message == "Firebase: Error (auth/wrong-password).") {
         passwordInput.value = "";
@@ -150,14 +150,14 @@ const Login = () => {
         </Link>
       </div >
       <div className="flex flex-col gap-4">
-        <button onClick={handleLogin} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
+        <button onClick={handleLogin} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black text-white hover:brightness-95">
           Sign in
         </button>
         <h1 className="error-txt text-red-700"></h1>
         <fieldset class="border-t border-black">
           <legend class="mx-auto px-4 text-black text-lg">or</legend>
         </fieldset>
-        <button onClick={handleLoginGoogle} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black hover:brightness-95">
+        <button onClick={handleLoginGoogle} className="w-full text-lg font-semibold flex items-center justify-center bg-primary py-4 rounded-full shadow-sm shadow-black text-white hover:brightness-95">
           Sign in with &nbsp; <FcGoogle className="h-auto w-6" />
         </button>
       </div>

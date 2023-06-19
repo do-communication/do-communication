@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
@@ -12,33 +12,24 @@ import {
   AiOutlineFile,
   AiFillLike,
 } from "react-icons/ai";
-// import { TfiFiles } from "react-icons/tfi";
+import { TfiFiles } from "react-icons/tfi";
 import { GiShare } from "react-icons/gi";
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
-// import { BsEye } from "react-icons/bs";
-// import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-// import { MdChecklist } from "react-icons/md";
-// import { TbMessage } from "react-icons/tb";
+import { BsEye } from "react-icons/bs";
+import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
+import { MdChecklist } from "react-icons/md";
+import { TbMessage } from "react-icons/tb";
 import { db } from "../../../../context/DbContext"
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, where, or, orderBy, and, addDoc } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
-import useFetch from "@/components/useFetch";
 
 const ManageFiles = () => {
   const [files, setFiles] = useState([]);
   const [allFiles, setAllFiles] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-  const [update, setUpdate] = useState(false);
+
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
-  const [toggledClearRows, setToggleClearRows] = useState(false);
-  const { deleteFile } = useFetch("KalCompany")
-
-
-  const handleDelete = async () => {
-    await deleteFile(selectedRows[0], setUpdate, update, setSelectedRows);
-    setToggleClearRows(!toggledClearRows)
-  }
 
   // search for groups using group name
   useEffect(() => {
@@ -82,16 +73,20 @@ const ManageFiles = () => {
 
   const handleDeselectedRows = (index, row) => {
     let arr = [...selectedRows];
+    console.log(selectedRows);
     arr.splice(index, 1)
     setSelectedRows(arr);
-  }
+    const id = "select-row-" + row.id
+    document.querySelector(`input[name=${id}]`).classList.remove("checked");
 
+
+  }
   useEffect(() => {
   }, [selectedRows])
 
   useEffect(() => {
     getFiles()
-  }, [update])
+  }, [])
 
   const getFiles = async () => {
     let arr = []
@@ -137,7 +132,6 @@ const ManageFiles = () => {
             data={files}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
-            clearSelectedRows={toggledClearRows}
             pagination
           />
           {/* try */}
@@ -195,7 +189,7 @@ const ManageFiles = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/files/edit"
+                        href="/admin/groups/edit/{groupId}"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit file
@@ -205,7 +199,6 @@ const ManageFiles = () => {
                       <button
                         href="/admin/groups/edit"
                         className="flex items-center gap-2"
-                        onClick={handleDelete}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete file
                       </button>

@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
 import Select from 'react-select'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth } from "../../../../config/firebase";

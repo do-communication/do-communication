@@ -1,15 +1,33 @@
 import Link from "next/link";
 import { useState } from "react";
 import { BiChevronUp } from "react-icons/bi";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/router";
+
+const router = Router;
+
 const SideNav = ({ nav }) => {
+  const { user, logout } = useAuth();
   const [isSelected, setIsSelected] = useState(false);
+
+  const handleSingout = (e) => {
+    e.preventDefault();
+    try {
+      logout().then(() => router.push("/"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const { Icon, url, name, children } = nav;
   return (
     <li className="text-gray-700 ">
       <Link
         href={url ? url : "#"}
-        onClick={() => {
+        onClick={(e) => {
+          if (name == "Sign Out") {
+            handleSingout(e);
+          }
           if (!url) {
             setIsSelected(!isSelected);
           }
