@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
 const user = auth.currentUser;
+import Router from 'next/router';
+const router = Router;
 import {
   AiFillDelete,
   AiFillEdit,
@@ -188,20 +190,20 @@ const ManageMembers = () => {
                 {showManageGroupMenu && (
                   <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/task/member/Id"
+                      <button
+                        onClick={() => {router.push(`/admin/task/member/${selectedRows[0].id}`)}}
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Tasks
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/reports/{groupId}"
+                      <button
+                        onClick={() => {router.push(`/admin/reports/member/${selectedRows[0].id}`)}}
                         className="flex items-center gap-2"
                       >
                         <HiDocumentChartBar className="w-5 h-auto" /> Reports
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
