@@ -1,9 +1,10 @@
 import { db } from "../../context/DbContext"
-import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getDocs, collection, query, where, or, orderBy, and, addDoc, doc, getDoc, setDoc, deleteDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { auth } from "../../config/firebase";
 import { serverTimestamp } from '@firebase/firestore'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import { toast } from "react-toastify";
 
 const useFetch = (collectionType) => {
 
@@ -40,9 +41,8 @@ const useFetch = (collectionType) => {
     }
 
     // Get messages in the system
-    const getMessage = async (userId) => {
+    const getMessage = async (userId, setMessages) => {
         // console.log("getting chat message")
-        let messages = []
         if (userId) {
             const allMessages = collection(db, collectionType, "Messages", "Messages")
 
@@ -52,31 +52,33 @@ const useFetch = (collectionType) => {
                 ), orderBy("CreatedAt")
             );
 
-            const docs = await getDocs(q)
-
-            docs.forEach(d => {
-                messages.push({ id: d.id, data: d.data() })
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const messages = [];
+                querySnapshot.forEach((doc) => {
+                    messages.push({ id: doc.id, data: doc.data() });
+                });
+                document.getElementById("message_send").value = ""
+                setMessages(messages);
             });
         }
-
-        return messages
     };
-    const getGroupMessage = async (groupId) => {
+    const getGroupMessage = async (groupId, setMessages) => {
 
-        let messages = []
         if (groupId) {
             const allMessages = collection(db, collectionType, "GroupMessages", "Messages")
 
             const q = query(allMessages, where("GroupId", "==", groupId), orderBy("CreatedAt"));
 
-            const docs = await getDocs(q)
-
-            docs.forEach(d => {
-                messages.push({ id: d.id, data: d.data() })
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const messages = [];
+                querySnapshot.forEach((doc) => {
+                    messages.push({ id: doc.id, data: doc.data() });
+                });
+                document.getElementById("message_send").value = ""
+                setMessages(messages);
             });
-        }
 
-        return messages
+        }
     };
 
     const getGroups = async () => {
@@ -194,7 +196,7 @@ const useFetch = (collectionType) => {
 
             setPriorityChange(!priorityChange);
 
-            document.getElementById("message_send").value = ""
+
         }
 
         if (sendFile !== null && sendMessage.trim() === "") {
@@ -253,7 +255,7 @@ const useFetch = (collectionType) => {
                         setUpdate(!update);
                         setPriorityChange(!priorityChange);
 
-                        document.getElementById('message_send').value = '';
+
                         // await getMessage();
                         // setSendMessage('');
                         // setSendFile(null);
@@ -291,7 +293,7 @@ const useFetch = (collectionType) => {
 
             setPriorityChange(!priorityChange);
 
-            document.getElementById("message_send").value = ""
+
         }
 
         if (sendFile !== null && sendMessage.trim() === "") {
@@ -348,7 +350,7 @@ const useFetch = (collectionType) => {
                         setUpdate(!update);
                         setPriorityChange(!priorityChange);
 
-                        document.getElementById('message_send').value = '';
+
                         // await getMessage();
                         // setSendMessage('');
                         // setSendFile(null);
@@ -429,7 +431,28 @@ const useFetch = (collectionType) => {
         }
     }
 
-    return ({ send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, getGroups, getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, error, user });
+    const deleteFile = async (selectedFile, setUpdate, update, setSelectedRows) => {
+        if (selectedFile != null) {
+
+            const storage = getStorage();
+
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, auth.currentUser.uid + "/" + selectedFile.data.FileName);
+
+            // Delete the file
+            deleteObject(desertRef).then(async () => {
+                console.log("successfully deleted");
+                await deleteDoc(doc(db, collectionType, "Files", selectedFile.data.Owner, selectedFile.id));
+                setSelectedRows([]);
+                setUpdate(!update);
+                toast.success("File Deleted");
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }
+
+    return ({ send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, getGroups, getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile, error, user });
 }
 
 export default useFetch;
