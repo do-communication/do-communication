@@ -77,7 +77,7 @@ const Login = () => {
     e.preventDefault()
     try {
       await signInGoogle(auth, provider)
-      router.push('/')
+      router.push('/admin')
     } catch (err) {
       if (err.message == "Firebase: Error (auth/wrong-password).") {
         passwordInput.value = "";
