@@ -49,11 +49,11 @@ const Sidebar = () => {
       name: "Files", //unqiue
       children: [
         {
-          url: "/admin/files/create",
+          url: "/user/files/create",
           name: "Add File",
         },
         {
-          url: "/admin/files/ManageFiles",
+          url: "/user/files/manageFiles",
           name: "Manage files",
         },
       ],
