@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import { db} from "context/DbContext";
 import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+// import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import {
   AiFillDelete,
   AiFillEdit,
@@ -21,10 +23,30 @@ const ManageTasks = () => {
   const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
+  const [user, setUser] = useState("");
+  let tempTask = [];
+  // const { asPath, pathname } = useRouter();
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("member/");
+  const id = currentPage.slice(i+7)
+
+  const getMem = async() => {
+    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
+    const mem = await getDoc(docRef);
+    setUser(mem._document.data.value.mapValue.fields.Name.stringValue);
+    const tasks = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    if(tasks){
+      tasks.forEach(t => {
+        if(t){
+        tempTask.push(t.stringValue);
+      }
+      });}
+  }
+  getMem();
   const getData = async () => {
     let arr = []
+    let selected = []
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
       const doc = await getDocs(all)
@@ -36,17 +58,21 @@ const ManageTasks = () => {
       console.log(err)
       setTasks([{ Name: "check your connection" }])
     }
-
-    setTasks(arr)
-    setallTasks(arr)
+    arr.map(element => {
+      if(tempTask.includes(element.Title)){
+        selected.push(element)
+      } 
+    })
+    setTasks(selected)
+    setallTasks(selected)
   }
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) =>
-        item.name && item.name.toLowerCase().includes(search.toLowerCase())
-        || item.assignedTo && item.assignedTo.toLowerCase().includes(search.toLowerCase())
-        || item.status && item.status.toLowerCase().includes(search.toLowerCase())
-        || item.priority && item.priority.toLowerCase().includes(search.toLowerCase())
+        item.Title && item.Title.toLowerCase().includes(search.toLowerCase())
+        // || item.AssignedTo && item.AssignedTo.includes(search.toLowerCase())
+        || item.Status && item.Status.toLowerCase().includes(search.toLowerCase())
+        || item.Priority && item.Priority.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -64,7 +90,7 @@ const ManageTasks = () => {
     },
     {
       name: "Assigned To",
-      selector: (row) => new Set(row.AssignedTo).toString(),
+      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" "),
     },
     {
       name: "Status",
@@ -94,7 +120,7 @@ const ManageTasks = () => {
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
-          <h1 className="mb-4 text-2xl font-semibold">[MEMBER NAME] Tasks</h1>
+          <h1 className="mb-4 text-2xl font-semibold">{user} Tasks</h1>
           <div className="flex items-center justify-between mt-6 mb-4">
             <Link
               href="/admin/task/create"
@@ -144,7 +170,7 @@ const ManageTasks = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.name}</p>
+                    <p>{row.Name}</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -198,7 +224,7 @@ const ManageTasks = () => {
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].Title}
                 </h4>
-                <p className="text-sm">Assigned to {new Set(selectedRows[0].AssignedTo).toString(", ")}  </p>
+                <p className="text-sm">Assigned to {Array.from(new Set(selectedRows[0].AssignedTo)).toString(" ")}  </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>
