@@ -1,12 +1,13 @@
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import { letters } from "@/mock/letters";
 import dynamic from "next/dynamic";
+import { useRef } from "react";
 import { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { BiPrinter } from "react-icons/bi";
 
 const Letters = () => {
   const [allLetters, setallLetters] = useState([]);
-  const [letters, setLetters] = useState(allLetters);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const Letters = () => {
     },
     {
       name: "Date",
-      selector: (row) => row.createdAt,
+      selector: (row) => row.createdAt.toString(),
     },
   ];
 
@@ -50,7 +51,7 @@ const Letters = () => {
         </div>
         <ClientOnlyTable
           columns={columns}
-          data={letters}
+          data={allLetters}
           pagination={true}
           expandableRows
           expandableRowsComponent={ShowLetterDetail}
@@ -60,10 +61,54 @@ const Letters = () => {
   );
 };
 
-const ShowLetterDetail = ({ data }) => (
-  <div className="px-8 py-4">
-    <h1 className="pb-2 text-lg font-semibold">Letter Detail</h1>
-    <p dangerouslySetInnerHTML={{ __html: data.Detail }}></p>
-  </div>
-);
+const ShowLetterDetail = ({ data }) => {
+  const [isPrinting, setIsPrinting] = useState(false);
+  const printPreviewRef = useRef(null);
+
+  const handlePrint = () => {
+    setIsPrinting(true);
+    const printContent = printPreviewRef.current.innerHTML;
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+    setIsPrinting(false);
+  };
+
+  return (
+    <div className="flex flex-col gap-10 px-8 py-4 bg-gray-200">
+      <div className="flex justify-between items-center w-3/4 mx-auto pt-4">
+        <h3 className="text-2xl">View Letter</h3>
+        {!isPrinting && (
+          <button
+            className="bg-slate-600 text-white px-5 py-1 hover:bg-slate-500 flex justify-center rounded"
+            onClick={handlePrint}
+          >
+            <BiPrinter className="w-6 h-auto" />
+          </button>
+        )}
+      </div>
+      <div
+        className="bg-white flex flex-col gap-10 w-3/4 mx-auto rounded px-10 py-24 "
+        id="print-preview"
+        ref={printPreviewRef}
+      >
+        <div className="flex flex-col gap-1">
+          <p>Company Name</p>
+          <p>Address, Location</p>
+        </div>
+        <h3>{data.createdAt.toString()}</h3>
+        <div className="flex flex-col gap-1">
+          <p>Mr. Name</p>
+          <p>Address, Location</p>
+        </div>
+
+        <h3 className="font-semibold">Subject: {data.subject}</h3>
+
+        <p>{data.body}</p>
+      </div>
+    </div>
+  );
+};
+
 export default Letters;
