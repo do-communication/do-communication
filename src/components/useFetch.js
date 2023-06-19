@@ -452,7 +452,11 @@ const useFetch = (collectionType) => {
         }
     }
 
-    return ({ send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage, getMembersData, getRecentData, deleteMessage, editMessage, getGroups, getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile, error, user });
+    return ({
+        send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
+        getMembersData, getRecentData, deleteMessage, editMessage, getGroups,
+        getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile, error, user
+    });
 }
 
 export default useFetch;
