@@ -39,7 +39,27 @@ const AddReport = () => {
                     className="pt-10 sm:pb-3"
                   />
                 </div>
-                <div className="lg:col-span-2 ">
+                <div className="flex flex-col gap-3 lg:col-span-2 ">
+                  <div className="md:col-span-6">
+                    <label for="full_name"> To:</label>
+                    <input
+                      type="text"
+                      name="report_title"
+                      className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                      id="task_title"
+                      placeholder="enter recipient name"
+                    />
+                  </div>
+                  <div className="md:col-span-6">
+                    <label for="full_name">Address:</label>
+                    <input
+                      type="text"
+                      name="report_title"
+                      className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                      id="task_title"
+                      placeholder="enter recipient address"
+                    />
+                  </div>
                   <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-6">
                     <div className="md:col-span-6">
                       <label for="full_name"> Subject:</label>
@@ -51,26 +71,7 @@ const AddReport = () => {
                         placeholder="enter report title"
                       />
                     </div>
-                    <div className="md:col-span-6">
-                      <label for="full_name"> To:</label>
-                      <input
-                        type="text"
-                        name="report_title"
-                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                        id="task_title"
-                        placeholder="enter recipient name"
-                      />
-                    </div>
-                    <div className="md:col-span-6">
-                      <label for="full_name">Addres:</label>
-                      <input
-                        type="text"
-                        name="report_title"
-                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                        id="task_title"
-                        placeholder="enter recipient adress"
-                      />
-                    </div>
+
                     <div className="md:col-span-6">
                       <label for="detail">Body</label>
                       <QuillNoSSRWrapper
@@ -81,9 +82,7 @@ const AddReport = () => {
                         style={{ height: 180 }}
                       />
                     </div>
-                    <div className="md:col-span-6 mt-10 ">
-              
-                    </div>
+                    <div className="md:col-span-6 mt-10 "></div>
                     <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-8">
@@ -94,7 +93,7 @@ const AddReport = () => {
                             className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
                             onClick={handleSubmit}
                           >
-                           View
+                            Compose Letter
                           </button>
                         </div>
                       </div>
