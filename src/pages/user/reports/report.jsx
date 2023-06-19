@@ -64,9 +64,9 @@ const AddReport = () => {
                       <label for="full_name">Attach File</label>
                       <input
                         type="file"
-                        name="report_title"
+                        name="attach_file"
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                        id="task_title"
+                        id="attach_file"
                         placeholder="Attach File"
                       />
                     </div>
