@@ -77,7 +77,7 @@ const Reports = () => {
     },
     {
       name: "Date",
-      selector: (row) => row.date,
+      selector: (row) => row.Date,
     },
   ];
 
