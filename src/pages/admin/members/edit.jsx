@@ -1,23 +1,12 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { toast } from "react-toastify";
 
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../../../context/DbContext";
 import Router from 'next/router';
-import { generate } from "generate-password"
-import { useAuth } from "../../../../context/AuthContext";
-import { auth } from "../../../../config/firebase";
-import emailjs from "@emailjs/browser"
-import useFetch from "@/components/useFetch";
-
 const router = Router
-
-
-
 const AddMember = () => {
-  const { GetAdmin } = useFetch("KalCompany")
-  const { signUp, logIn } = useAuth()
   const [data, setData] = useState({
     Name: '',
     Address: '',
@@ -53,32 +42,6 @@ const AddMember = () => {
       select.classList.remove("ring-2");
     }
   });
-
-
-  const sendEmail = async (password, adminId, toName, toEmail) => {
-    GetAdmin(adminId).then((admin) => {
-
-      console.log(admin)
-      const templateParams = {
-        from_name: admin.CompanyName,
-        to_name: toName,
-        email_address: toEmail,
-        password: password,
-        admin_name: admin.Name
-      };
-
-      emailjs.send("service_uerr5ct", "template_8jjq65l", templateParams, "e50BbMlytQDi-Ulw1")
-        .then((response) => {
-          console.log('SUCCESS!', response.status, response.text);
-        }, (error) => {
-          console.log('FAILED...', error);
-        });
-    }).catch((err) => {
-      console.log(err);
-    });
-
-  }
-
   const handleName = (e) => {
     e.preventDefault();
     setData({
@@ -187,30 +150,9 @@ const AddMember = () => {
       dob.classList.add("ring-2");
     }
     if (data.Name != "" && data.Email != "" && data.PhoneNumber != "" && data.Address != "" && data.Department != "" && data.DateOfBirth != "" && data.Gender != "null") {
-      const password = generate({
-        length: 8,
-        lowercase: true,
-        uppercase: true,
-        numbers: true,
-        symbols: true
-      });
-      const email = auth.currentUser.email;
-      const pass = auth.currentUser.photoURL;
-      const adminId = auth.currentUser.uid;
-
-
-      signUp(data.Email, password).then(async (cred) => {
-        try {
-          await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", cred.user.uid), data);
-          console.log(password);
-          logIn(email, pass);
-          sendEmail(password, adminId, data.Name, data.Email)
-          handleClear();
-          toast.success("Member added successfully");
-        } catch (errrr) {
-          console.log(errrr);
-        }
-      })
+      await addDoc(collection(db, "KalCompany", "Users", "StaffMembers"), data);
+      handleClear();
+      toast.success("Member edited successfully");
     }
   };
   const handleClear = (e) => {
@@ -241,7 +183,7 @@ const AddMember = () => {
         <div className="container max-w-screen-lg mx-auto">
           <form>
             <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
-              Add Member
+              Edit Member
             </h2>
             <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
               <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
@@ -365,7 +307,7 @@ const AddMember = () => {
                             Cancel
                           </button>
                           <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
-                            Submit
+                            Edit
                           </button>
                         </div>
                       </div>

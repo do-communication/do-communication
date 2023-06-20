@@ -11,12 +11,20 @@ const useFetch = (collectionType) => {
     const [error, setError] = useState(null);
     const user = auth.currentUser;
 
+    const GetCompanyName = async () => {
+        const company = doc(db, collectionType, "Company");
+        const docSnap = await getDoc(company)
+
+        return docSnap.data();
+    }
+
     // get name by id
     const GetAdmin = async (userId) => {
+        console.log(userId)
         if (userId) {
             const specific_user = doc(db, collectionType, "Users", "Admin", userId);
             const docSnap = await getDoc(specific_user)
-
+            console.log(docSnap.data())
             return docSnap.data();
         }
     }
@@ -453,7 +461,7 @@ const useFetch = (collectionType) => {
     }
 
     return ({
-        send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
+        GetCompanyName, send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
         getMembersData, getRecentData, deleteMessage, editMessage, getGroups,
         getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile, error, user
     });

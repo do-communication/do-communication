@@ -189,7 +189,7 @@ const ManageMembers = () => {
                   <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/tasks/{groupId}"
+                        href="/admin/task/member/Id"
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Tasks
@@ -197,7 +197,7 @@ const ManageMembers = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/reports/{groupId}"
+                        href="/admin/reports/member/id"
                         className="flex items-center gap-2"
                       >
                         <HiDocumentChartBar className="w-5 h-auto" /> Reports
@@ -205,7 +205,7 @@ const ManageMembers = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/groups/edit/{groupId}"
+                        href="/admin/members/edit"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Member

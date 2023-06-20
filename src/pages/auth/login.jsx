@@ -23,8 +23,13 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      await logIn(data.email, data.password)
-      router.push('/admin')
+      const cred = await logIn(data.email, data.password)
+      if (auth.currentUser.displayName == "true") {
+        router.push('/admin')
+      }
+      else {
+        router.push('/user')
+      }
     } catch (err) {
       if (err.message == "Firebase: Error (auth/wrong-password).") {
         passwordInput.value = "";
@@ -76,7 +81,7 @@ const Login = () => {
   const handleLoginGoogle = async (e) => {
     e.preventDefault()
     try {
-      await signInGoogle(auth, provider)
+      const cred = await signInGoogle(auth, provider)
       router.push('/admin')
     } catch (err) {
       if (err.message == "Firebase: Error (auth/wrong-password).") {
