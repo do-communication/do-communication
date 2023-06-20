@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
-import { db } from "../../../../context/DbContext"
+import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
 import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
@@ -206,12 +206,12 @@ const ManageMembers = () => {
                       </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/members/edit"
+                      <button
+                        onClick={() => {router.push(`/admin/members/edit/${selectedRows[0].id}`)}}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Member
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
