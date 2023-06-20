@@ -24,7 +24,6 @@ const DirectChat = () => {
   useEffect(() => {
     get(userId);
   }, [update])
-  console.log("index.jsx")
 
 
   return (

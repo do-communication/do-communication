@@ -23,7 +23,7 @@ const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-  const { GetAdmin, GetCompanyName, GetUser } = useFetch("KalCompany");
+  const { GetAdmin, GetCompanyName } = useFetch("KalCompany");
 
   const getinfo = async () => {
     console.log(auth.currentUser.uid)

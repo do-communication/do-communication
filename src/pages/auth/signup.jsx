@@ -130,7 +130,7 @@ const Signup = () => {
               PhoneNumber: "",
             });
 
-            await updateProfile(auth.currentUser, { displayName: "true", photoURL: data.password });
+            await updateProfile(auth.currentUser, { displayName: data.name + "$", photoURL: data.password });
             router.push('/admin')
           } catch (errrr) {
             console.log(errrr);

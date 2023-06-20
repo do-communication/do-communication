@@ -7,8 +7,16 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
+// import { auth } from "../../../../../config/firebase";
+// import { updateProfile } from "firebase/auth"
 
 const ChatLayout = ({ children, user }) => {
+  // console.log(auth.currentUser.displayName[auth.currentUser.displayName.length - 1])
+  // updateProfile(auth.currentUser, { displayName: "Test user side" }).then(() => {
+  //   console.log(auth.currentUser);
+  // }).catch((err) => {
+  //   console.log(err)
+  // })
   const [messageTab, setMessageTab] = useState("recent");
   const [members, setMembers] = useState([]);
   const [allMembers, setallMembers] = useState([]);
