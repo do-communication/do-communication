@@ -4,13 +4,14 @@ import { db } from "../../../../context/DbContext"
 import { toast } from "react-toastify";
 import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
+import {FaPersonCircleCheck} from "react-icons/fa";
 import {
   AiFillDelete,
   AiFillEdit,
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiDotsVertical, BiUserPlus, BiX } from "react-icons/bi";
+import { BiDotsVertical, BiUserMinus, BiUserPlus, BiX } from "react-icons/bi";
 import { HiDocumentChartBar } from "react-icons/hi2";
 import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
@@ -213,11 +214,17 @@ const ManageGroup = () => {
                   >
                     <p>{row.value}</p>
                     <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
-                        <BiUserPlus className="w-5 h-auto" />
+                      <button className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+                       
                         Assign Leader
                       </button>
                     </div>
+                    <button className="flex gap-2">
+                      <d className="flex items-center gap-1 p-1 px-2 text-red-600">
+                        {/* < BiX className="w-5 h-auto" /> */}
+                        Remove
+                      </d>
+                    </button>
                   </Link>
                   ))}
                   {/* <Link
