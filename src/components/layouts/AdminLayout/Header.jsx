@@ -19,14 +19,16 @@ const router = Router;
 const Header = () => {
   const { user, logout } = useAuth();
   const [usr, setUsr] = useState(null);
+  const [company, setCompany] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-  const { GetAdmin } = useFetch("KalCompany");
-
+  const { GetAdmin, GetCompanyName, GetUser } = useFetch("KalCompany");
 
   const getinfo = async () => {
+    console.log(auth.currentUser.uid)
     setUsr(await GetAdmin(auth.currentUser.uid));
+    setCompany(await GetCompanyName());
   }
 
 
@@ -99,7 +101,7 @@ const Header = () => {
 
               <div className="hidden lg:block">
                 <div>
-                  <p><b>{usr && usr.companyName}</b></p>
+                  <p><b>{company && company.companyName}</b></p>
                 </div>
               </div>
             </div>
@@ -128,7 +130,7 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>{usr && usr.name}</span>
+                      <span>{usr && usr.Name}</span>
                       <span>Admin</span>
                     </div>
                   </div>
@@ -197,10 +199,10 @@ const Header = () => {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-gray-800">
-                    {user && user.displayName}
+                    {usr && usr.Name}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    {user && user.email}
+                    {company && company.email}
                   </div>
                 </div>
                 <button type="button">

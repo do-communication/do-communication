@@ -1,12 +1,16 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { toast } from "react-toastify";
 
-import { addDoc, collection } from "firebase/firestore";
-import { useState } from "react";
-import { db } from "../../../../context/DbContext";
+import { doc, getDocs, getDoc, collection, addDoc, updateDoc } from "firebase/firestore";
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { db } from "../../../../../../context/DbContext";
 import Router from 'next/router';
 const router = Router
 const AddMember = () => {
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("edit/");
+  const id = currentPage.slice(i + 5)
   const [data, setData] = useState({
     Name: '',
     Address: '',
@@ -14,7 +18,7 @@ const AddMember = () => {
     Gender: '',
     Department: '',
     PhoneNumber: '',
-    DateOfBirth: new Date("10/10/2030"),
+    DateOfBirth: new Date("10/10/2030").toDateString(),
     ProfilePic: '',
     RegisteredAt: new Date().toDateString(),
     GroupId: [],
@@ -32,6 +36,58 @@ const AddMember = () => {
   const pho = document.getElementById('pho');
   const dep = document.getElementById('dep');
 
+  const getMem = async () => {
+    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
+    // const user = ;
+    const mem = await getDoc(docRef);
+    let tempTask = [];
+    let tempReport = [];
+    let tempGroup = [];
+    const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+    if (task) {
+      task.forEach(t => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+    if (report) {
+      report.forEach(r => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+    if (group) {
+      group.forEach(g => {
+        if (g) {
+          tempGroup.push(g.stringValue);
+        }
+      });
+    }
+
+    setData({
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
+      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+      GroupId: tempGroup,
+      Reports: tempReport,
+      Tasks: tempTask
+    })
+    console.log(mem)
+  }
+  useEffect(() => {
+    getMem()
+
+  }, [])
   select && select.addEventListener('change', function handleChange(event) {
     setData({
       ...data,
@@ -114,6 +170,7 @@ const AddMember = () => {
       dob.placeholder = "MM/DD/YYYY";
     }
   };
+  console.log(data);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email && data.Email == "") {
@@ -150,9 +207,16 @@ const AddMember = () => {
       dob.classList.add("ring-2");
     }
     if (data.Name != "" && data.Email != "" && data.PhoneNumber != "" && data.Address != "" && data.Department != "" && data.DateOfBirth != "" && data.Gender != "null") {
-      await addDoc(collection(db, "KalCompany", "Users", "StaffMembers"), data);
-      handleClear();
-      toast.success("Member edited successfully");
+      const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
+      updateDoc(docRef, data)
+        .then(docRef => {
+          handleClear();
+          toast.success("Member edited successfully");
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
     }
   };
   const handleClear = (e) => {
@@ -323,4 +387,3 @@ const AddMember = () => {
   );
 };
 export default AddMember;
-

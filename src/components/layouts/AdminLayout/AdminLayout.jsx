@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import OpenSideBarContext, {
@@ -6,17 +6,21 @@ import OpenSideBarContext, {
 } from "./context/openSideBarContext";
 import { auth } from "../../../../config/firebase";
 import Router from "next/router";
+import { useAuth } from "../../../../context/AuthContext";
+// import useFetch from "@/components/useFetch";
 
 const router = Router;
 
 const AdminLayout = ({ children, noFooter = false }) => {
+  const { logout } = useAuth();
   const [openSideBar, openSideBarDispatch] = useReducer(
     openSideBarReducer,
     false
   );
-
+  // || auth.currentUser.displayName != "true"
   if (!auth.currentUser) {
     console.log("router going back")
+    logout();
     router.push("/");
   }
   else {

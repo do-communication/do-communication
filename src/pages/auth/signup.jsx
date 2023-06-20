@@ -7,7 +7,7 @@ import AuthLayout from "@/components/layouts/AuthLayout/AuthLayout";
 import { useAuth } from "../../../context/AuthContext";
 import Router from 'next/router'
 import { db } from "../../../context/DbContext"
-import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth"
 import { auth } from "../../../config/firebase";
 // import { collection } from "../config/firebase";
@@ -116,21 +116,27 @@ const Signup = () => {
     }
     if (passwordSignUp.value != "" && emailSignUp.value != "" && nameInput.value != "" && companyInput.value != "") {
       try {
-        const cred = await signUp(data.email, data.password)
-        try {
-          await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), {
-            name: data.name,
-            companyName: data.companyName,
-            email: data.email,
-            ProfilePic: "",
-            phoneNumber: ""
-          });
+        signUp(data.email, data.password).then(async (cred) => {
+          try {
+            await setDoc(doc(db, "KalCompany", "Company"), {
+              companyName: data.companyName,
+              email: data.email
+            })
+            await setDoc(doc(db, "KalCompany", "Users", "Admin", cred.user.uid), {
+              Name: data.name,
+              CompanyName: data.companyName,
+              Email: data.email,
+              ProfilePic: "",
+              PhoneNumber: "",
+            });
 
-          await updateProfile(auth.currentUser, { displayName: data.name });
-          router.push('/admin')
-        } catch (errrr) {
-          console.log(errrr);
-        }
+            await updateProfile(auth.currentUser, { displayName: "true", photoURL: data.password });
+            router.push('/admin')
+          } catch (errrr) {
+            console.log(errrr);
+          }
+        })
+
       } catch (err) {
         if (err.message == "Firebase: Password should be at least 6 characters (auth/weak-password).") {
           passwordSignUp.value = "";
