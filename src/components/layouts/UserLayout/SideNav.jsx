@@ -14,7 +14,7 @@ const SideNav = ({ nav }) => {
             setIsSelected(!isSelected);
           }
         }}
-        className="relative flex items-center w-full px-2 py-1 rounded hover:text-white hover:bg-gray-700"
+        className="relative flex items-center w-full px-2 py-1 rounded hover:text-white hover:bg-gray-700 active:bg-gray-700"
       >
         <div className="pr-2">{Icon}</div>
         <div>{name}</div>

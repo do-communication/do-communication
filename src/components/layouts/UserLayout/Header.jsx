@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import { useState, useContext,useEffect } from "react";
-=======
-import { useState, useContext, useEffect } from "react";
->>>>>>> origin/DagmLast
 import { BiMenuAltLeft } from "react-icons/bi";
 import { useAuth } from "../../../../context/AuthContext";
-
 import {
   AiOutlineMenu,
   AiOutlineUser,
@@ -14,18 +9,8 @@ import {
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
 import { auth } from "../../../../config/firebase";
-import { useAuth } from "../../../../context/AuthContext";
-import Router from "next/router";
 import Notification from "./Notification";
-<<<<<<< HEAD
-import { auth } from "../../../../config/firebase";
 import useFetch from "@/components/useFetch";
-=======
-import useFetch from "@/components/useFetch";
-
-const router = Router;
-
->>>>>>> origin/DagmLast
 const Header = () => {
   const { user, logout } = useAuth();
   const [usr, setUsr] = useState(null);
@@ -33,23 +18,12 @@ const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-<<<<<<< HEAD
-  const { user, logout } = useAuth();
-  const [usr, setUsr] = useState(null);
-  const [company, setCompany] = useState(null);
   const { GetAdmin, GetCompanyName, GetUser } = useFetch("KalCompany");
 
 
   const getinfo = async () => {
     console.log(auth.currentUser.uid)
     setUsr(await GetAdmin(auth.currentUser.uid));
-=======
-  const { GetCompanyName, GetUser } = useFetch("KalCompany");
-
-  const getinfo = async () => {
-    console.log(auth.currentUser.uid)
-    setUsr(await GetUser(auth.currentUser.uid));
->>>>>>> origin/DagmLast
     setCompany(await GetCompanyName());
   }
 
@@ -57,18 +31,6 @@ const Header = () => {
   useEffect(() => {
     getinfo()
   }, [user])
-<<<<<<< HEAD
-=======
-
-  const handleSingout = (e) => {
-    e.preventDefault();
-    try {
-      logout().then(() => router.push("/"));
-    } catch (err) {
-      console.log(err);
-    }
-  };
->>>>>>> origin/DagmLast
 
   const toggleSidebar = () => {
     if (openSideBar) {
