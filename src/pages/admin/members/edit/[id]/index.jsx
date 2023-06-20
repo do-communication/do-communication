@@ -170,7 +170,7 @@ const AddMember = () => {
       dob.placeholder = "MM/DD/YYYY";
     }
   };
-  console.log(data);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email && data.Email == "") {
@@ -233,7 +233,7 @@ const AddMember = () => {
     data.PhoneNumber = "";
     pho.placeholder = "+251 9";
     date.value = null;
-    data.DateOfBirth = new Date("10/10/2030")
+    data.DateOfBirth = new Date("10/10/2030").toDateString()
     date.placeholder = "MM/DD/YYYY";
     dep.value = "";
     data.Department = "";

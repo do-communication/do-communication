@@ -17,7 +17,8 @@ const CreateGroup = () => {
     Name: '',
     Members: [],
     Learder: '', 
-    Tasks: []
+    Tasks: [],
+    Reports: [] 
   });
  const customGroup = document.getElementById("customGroup");
  const type = document.getElementById("type");
