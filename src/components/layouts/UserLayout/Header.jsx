@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { IoNotificationsOutline } from "react-icons/io5";
@@ -10,11 +10,42 @@ import {
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
+import { auth } from "../../../../config/firebase";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/router";
 import Notification from "./Notification";
+import useFetch from "@/components/useFetch";
+
+const router = Router;
+
 const Header = () => {
+  const { user, logout } = useAuth();
+  const [usr, setUsr] = useState(null);
+  const [company, setCompany] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
+  const { GetCompanyName, GetUser } = useFetch("KalCompany");
+
+  const getinfo = async () => {
+    console.log(auth.currentUser.uid)
+    setUsr(await GetUser(auth.currentUser.uid));
+    setCompany(await GetCompanyName());
+  }
+
+
+  useEffect(() => {
+    getinfo()
+  }, [user])
+
+  const handleSingout = (e) => {
+    e.preventDefault();
+    try {
+      logout().then(() => router.push("/"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -124,8 +155,8 @@ const Header = () => {
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>Member1</span>
-                      <span>Product Manager</span>
+                      <span>{usr && usr.Name}</span>
+                      <span>{usr && usr.Department}</span>
                     </div>
                   </div>
                   {open && (
@@ -143,12 +174,12 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
-                        <Link 
+                        <Link
                           href="/user/profile/profile"
                         >
                           My Profile
                         </Link>
-                        
+
                       </a>
 
 
@@ -158,6 +189,7 @@ const Header = () => {
                         role="menuitem"
                         tabindex="-1"
                         id="user-menu-item-1"
+                        onClick={handleSingout}
                       >
                         <Link
                           href="#"
@@ -169,7 +201,7 @@ const Header = () => {
                   )}
                 </div>
               </div>
-              
+
             </div>
 
             <div className="flex px-2 -mr-2 md:hidden">
@@ -203,10 +235,10 @@ const Header = () => {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-gray-800">
-                    Senait Gobezie
+                    {usr && usr.Name}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    sen@example.com
+                    {usr && usr.Email}
                   </div>
                 </div>
                 <div className="flex-shrink-0 p-1 ml-auto">
@@ -223,6 +255,7 @@ const Header = () => {
 
                 <Link
                   href="/logout"
+                  onClick={handleSingout}
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
                   <AiOutlineLogout className="w-5 h-auto" />

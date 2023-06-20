@@ -20,11 +20,10 @@ const useFetch = (collectionType) => {
 
     // get name by id
     const GetAdmin = async (userId) => {
-        console.log(userId)
         if (userId) {
             const specific_user = doc(db, collectionType, "Users", "Admin", userId);
             const docSnap = await getDoc(specific_user)
-            console.log(docSnap.data())
+
             return docSnap.data();
         }
     }
@@ -50,7 +49,7 @@ const useFetch = (collectionType) => {
 
     // Get messages in the system
     const getMessage = async (userId, setMessages) => {
-        // console.log("getting chat message")
+
         if (userId) {
             const allMessages = collection(db, collectionType, "Messages", "Messages")
 
@@ -108,7 +107,7 @@ const useFetch = (collectionType) => {
 
     // get all members
     const getMembersData = async () => {
-        // console.log("getting member")
+
         let members = []
         try {
             const all = collection(db, collectionType, "Users", "StaffMembers")
@@ -215,7 +214,7 @@ const useFetch = (collectionType) => {
                 (snapshot) => {
 
                     const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                    // console.log('Upload is ' + progress + '% done');
+
                     document.getElementById("message_send").value = sendFile.name + "  " + progress + '% Done';
                     switch (snapshot.state) {
                         case 'paused':
