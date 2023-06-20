@@ -100,6 +100,8 @@ const Header = () => {
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
+              {/* notification */}
+              <Notification />
               <div className="flex ml-4 md:ml-6 ">
                 {/* <!-- Profile dropdown --> */}
                 <div className="relative px-4 text-sm text-gray-700 shadow-2xl cursor-pointer bg-light bright hover:text-white">
@@ -167,15 +169,7 @@ const Header = () => {
                   )}
                 </div>
               </div>
-              {/* notification */}
-              <Notification />
-              {/* logout */}
-              <div className="relative flex items-center justify-center mr-4">
-                <div className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black">
-                  <span className="sr-only">View notifications</span>
-                  <RiLogoutBoxRLine size={20} />
-                </div>
-              </div>
+              
             </div>
 
             <div className="flex px-2 -mr-2 md:hidden">

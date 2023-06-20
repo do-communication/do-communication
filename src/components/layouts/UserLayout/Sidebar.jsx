@@ -59,9 +59,16 @@ const Sidebar = () => {
       ],
     },
     {
+      Icon: <MdGroupWork size={20} />,
+      name: "Groups", //unqiue
+      url: "/user/groups/manage",
+         
+      
+    },
+    {
       Icon: <RiLogoutBoxFill  size={20}/>,
       url: "/",
-      name: "Logout",
+      name: "Sign out",
     },
   ];
 
