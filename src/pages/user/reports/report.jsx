@@ -3,7 +3,9 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-
+import Select from "react-select";
+import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
+import { db } from "../../../../context/DbContext";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -11,12 +13,34 @@ const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 
 const AddReport = () => {
   const [reportDetail, setReportDetail] = useState("");
+  const [allMembers, setallMembers] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [data, setData] = useState({
+    AssignedTo: [],
+    Priority: '',
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("submit");
 
     toast.success("Report submitted successfully");
   };
+  const getData = async () => {
+    let arr = []
+    const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push({id:d.id, data:d.data()})
+      });
+    } catch (err) {
+      console.log(err)
+      setMembers([{ Name: "check your connection" }])
+    }
+
+    setMembers(arr)
+    setallMembers(arr)
+  }
 
   return (
     <UserLayout>
@@ -50,6 +74,7 @@ const AddReport = () => {
                         placeholder="enter report title"
                       />
                     </div>
+                    
                     <div className="md:col-span-6">
                       <label for="detail">Detail Description</label>
                       <QuillNoSSRWrapper
@@ -61,6 +86,38 @@ const AddReport = () => {
                       />
                     </div>
                     <div className="md:col-span-6 mt-10 ">
+                    <label for="address">Submitted To:</label>
+                    <Select
+                        // ref={selectInputRef}
+                        isMulti
+                        name="members"
+                        id="assigned"
+                        options={allMembers.map((member) => {
+                          return { label: member.data.Name, value: member.data.Name, id:member.id, Tasks:member.data.Tasks };
+                        })}
+                        onChange={(selectedMembers) => {
+                          setMembers(
+                            selectedMembers.map((member) => member.value)
+                          );
+                          setData({
+                            ...data,
+                            AssignedTo: selectedMembers.map((member) => member.value)
+                          })
+                          selectedMembers.map(member => {
+                            temp.push({Tasks:member.Tasks, value:member.value, id:member.id})
+                          });
+                          setassignedto(Array.from(new Set(temp)))
+                          
+                          if (assigned && assigned.classList.contains("ring-red-600")) {
+                            assigned.classList.remove("ring-red-600");
+                            assigned.classList.remove("ring-2");
+                            assigned.placeholder = "search for a member or a group";
+                          }
+
+                        }}
+                      />
+                    </div>
+                    <div className="md:col-span-6 mt-3 ">
                       <label for="full_name">Attach File</label>
                       <input
                         type="file"
@@ -70,6 +127,8 @@ const AddReport = () => {
                         placeholder="Attach File"
                       />
                     </div>
+          
+
                     <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-8">
