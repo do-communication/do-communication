@@ -44,7 +44,7 @@ const AddReport = () => {
 
   return (
     <UserLayout>
-      <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
+      <div className="flex justify-center min-h-screen p-6 pt-4 bg-gray-100">
         <div className="container max-w-screen-lg mx-auto">
           <form>
             <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
@@ -82,7 +82,7 @@ const AddReport = () => {
                         value={reportDetail}
                         onChange={setReportDetail}
                         placeholder="Write some description about the report"
-                        style={{ height: 200 }}
+                        style={{ height: 180 }}
                       />
                     </div>
                     <div className="md:col-span-6 mt-10 ">
@@ -117,7 +117,7 @@ const AddReport = () => {
                         }}
                       />
                     </div>
-                    <div className="md:col-span-6 mt-3 ">
+                    <div className="md:col-span-6 ">
                       <label for="full_name">Attach File</label>
                       <input
                         type="file"
@@ -128,10 +128,9 @@ const AddReport = () => {
                       />
                     </div>
           
-
                     <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
-                        <div className="flex-row gap-10 pt-8">
+                        <div className="flex-row gap-10 pt-6">
                           <button className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck">
                             Cancel
                           </button>
