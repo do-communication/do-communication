@@ -2,11 +2,10 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
-import { db } from "../../../../context/DbContext"
-import { toast } from "react-toastify";
-import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
-import Router from 'next/router';
-const router = Router;
+import { db} from "context/DbContext";
+import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+// import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import {
   AiFillDelete,
   AiFillEdit,
@@ -24,34 +23,55 @@ const ManageTasks = () => {
   const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-  const [clearSelectedRows, setClearSelectedRows] = useState(false);
-  let assignedMem = [];
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
+  const [user, setUser] = useState("");
+  let tempTask = [];
+  // const { asPath, pathname } = useRouter();
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("group/");
+  const id = currentPage.slice(i+6)
+  const getMem = async() => {
+    const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+    const mem = await getDoc(docRef);
+    setUser(mem._document.data.value.mapValue.fields.Name.stringValue);
+    const tasks = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    if(tasks){
+      tasks.forEach(t => {
+        if(t){
+        tempTask.push(t.stringValue);
+      }
+      });}
+  }
+  getMem();
   const getData = async () => {
     let arr = []
-    let temp = []
+    let selected = []
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push({id:d.id, data:d.data()})
+        arr.push(d.data())
       });
 
     } catch (err) {
       console.log(err)
       setTasks([{ Name: "check your connection" }])
     }
-
-    setTasks(arr)
-    setallTasks(arr)
+    arr.map(element => {
+      if(tempTask.includes(element.Title)){
+        selected.push(element)
+      } 
+    })
+    setTasks(selected)
+    setallTasks(selected)
   }
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) =>
-        item.data.Title && item.data.Title.toLowerCase().includes(search.toLowerCase())
-        || item.data.AssignedTo && item.data.AssignedTo.includes(search.toLowerCase())
-        || item.data.Status && item.data.Status.toLowerCase().includes(search.toLowerCase())
-        || item.data.Priority && item.data.Priority.toLowerCase().includes(search.toLowerCase())
+        item.Title && item.Title.toLowerCase().includes(search.toLowerCase())
+        // || item.AssignedTo && item.AssignedTo.includes(search.toLowerCase())
+        || item.Status && item.Status.toLowerCase().includes(search.toLowerCase())
+        || item.Priority && item.Priority.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -64,79 +84,31 @@ const ManageTasks = () => {
   const columns = [
     {
       name: "Tasks",
-      selector: (row) => row.data && row.data.Title,
+      selector: (row) => row.Title,
       sortable: true,
     },
     {
       name: "Assigned To",
-      selector: (row) => row.data && Array.from(new Set(row.data.AssignedTo)).toString(" ")
+      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" "),
     },
     {
       name: "Status",
-      selector: (row) => row.data && row.data.Status,
+      selector: (row) => row.Status,
     },
     {
       name: "Issue Date",
-      selector: (row) => row.data && row.data.StartDate,
+      selector: (row) => row.StartDate,
     },
     {
       name: "Due Date",
-      selector: (row) => row.data && row.data.DueDate,
+      selector: (row) => row.DueDate,
     },
     {
       name: "Priority",
-      selector: (row) => row.data && row.data.Priority,
+      selector: (row) => row.Priority,
     }
   ];
-  const handleClick = async(i, name) => {
-    const memRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
-    const mem = await getDoc(memRef)
-    let tempTask = [];
-    let tempReport = [];
-    let tempGroup = [];
-    const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
-    if(temp){
-    temp.forEach(t => {
-      if(t){
-        if(t.stringValue != name){
-      tempTask.push(t.stringValue);}}
-    });}
-    if(report){
-      report.forEach(r => {
-        if(r){
-        tempReport.push(r.stringValue);}
-      });
-    }
-    if(group){
-      group.forEach(g => {
-        if(g){
-        if(g.stringValue != name){
-        tempGroup.push(g.stringValue);}}
-      });}
-    const newData = {
-      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
-      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
-      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
-      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
-      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
-      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
-      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
-      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
-      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
-      GroupId: tempGroup,
-      Reports: tempReport,
-      Tasks: tempTask
-    }
-    updateDoc(memRef, newData)
-    .then(memRef => {
-        console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
-        console.log(error);
-    })
-  }
+
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
   }, []);
@@ -147,8 +119,8 @@ const ManageTasks = () => {
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last md:col-span-2 col-span-full md:order-first">
-          <h1 className="mb-4 text-3xl font-semibold">Manage Tasks</h1>
-          <div className="flex items-center justify-between mb-4">
+          <h1 className="mb-4 text-2xl font-semibold">{user} Tasks</h1>
+          <div className="flex items-center justify-between mt-6 mb-4">
             <Link
               href="/admin/task/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
@@ -197,7 +169,7 @@ const ManageTasks = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.data.Name}</p>
+                    <p>{row.Name}</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -226,32 +198,17 @@ const ManageTasks = () => {
                       </Link>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <button
-                        onClick={() => {router.push(`/admin/task/edit/${selectedRows[0].id}`)}}
+                      <Link
+                        href="/admin/task/edit"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Task
-                      </button>
+                      </Link>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
+                        href="/admin/task/delete/{taskId}"
                         className="flex items-center gap-2"
-                        onClick={async (e) => {e.stopPropagation();
-                          setSelectedRows([]);
-                          setClearSelectedRows(true);
-                          // setClearSelectedRows(true);
-                          const id = selectedRows[0].id;
-                          // selectedRows[0].data.map(m => {
-                            // handleClick(m.id, selectedRows[0].data.Title);
-                            // console.log(selectedRows[0].data)
-                          // })
-                          const check = confirm("Do you want to delete the task?");
-                          if(check){
-                          const docRef = doc(db,"KalCompany", "Tasks", "Tasks", id);
-                          await deleteDoc(docRef)
-                          getData();
-                          toast.success("Task deleted successfully");
-                        }}}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Task
                       </button>
@@ -260,33 +217,33 @@ const ManageTasks = () => {
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center justify-center w-20 h-20 bg-green-400 rounded-full">
+                <div className="flex items-center justify-center w-20 h-20 bg-light rounded-full">
                   <MdTask className="w-12 h-12" />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].data.Title}
+                  {selectedRows[0].Title}
                 </h4>
-                <p className="text-sm">Assigned to {Array.from(new Set(selectedRows[0].data.AssignedTo)).toString(" ")} </p>
+                <p className="text-sm">Assigned to {Array.from(new Set(selectedRows[0].AssignedTo)).toString(" ")}  </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>
-                <p className="flex flex-col p-2 gap-2 overflow-y-auto max-h-64">{selectedRows[0].data.Description}</p>
+                <p className="flex flex-col p-2 gap-2 overflow-y-auto max-h-64">{selectedRows[0].Description}</p>
                 <table>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Priority:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].data.Priority}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].Priority}</p></td>
                   </tr>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Status:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].data.Status}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].Status}</p></td>
                   </tr>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Issue Date:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].data.StartDate}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].StartDate}</p></td>
                   </tr>
                   <tr>
                     <td><h2 className="inline-block p-2 text-lg font-semibold">Due Date:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].data.DueDate}</p></td>
+                    <td><p className="inline-block gap-2">{selectedRows[0].DueDate}</p></td>
                   </tr>
                 </table>
 
