@@ -199,7 +199,7 @@ const ChatLayout = ({ children, group }) => {
                       <img
                         src="/images/pp.png"
                         alt="Avatar"
-                        className="rounded-full"
+                        className="flex items-center justify-center w-full h-full rounded-full"
                       />
                     </div>
                   </div>

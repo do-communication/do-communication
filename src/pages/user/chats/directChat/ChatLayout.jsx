@@ -183,14 +183,15 @@ const ChatLayout = ({ children, user }) => {
               <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
                 <div className="rounded-full h-50 w-50">
                   <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                    <div className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full rounded-full">
                       {selected.ProfilePic === "" ? (
                         selected.Name ? selected.Name[0] : selected.RecieverName[0]
                       ) : (
                         <img
                           src={selected.ProfilePic}
                           alt="Avatar"
-                          className="rounded-full"
+                          className="flex items-center justify-center w-full h-full rounded-full"
+
                         />
                       )}
                     </div>
@@ -208,7 +209,7 @@ const ChatLayout = ({ children, user }) => {
               <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
                 <div className="rounded-full h-50 w-50">
                   <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                    <div className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full rounded-full">
                       <img
                         src="/images/pp.png"
                         alt="Avatar"

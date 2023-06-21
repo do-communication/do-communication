@@ -1,7 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { IoNotificationsOutline } from "react-icons/io5";
 import {
   AiOutlineMenu,
   AiOutlineBell,
