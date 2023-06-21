@@ -86,13 +86,13 @@ const Header = () => {
                 </a>
               </div>
 
-              <div className="hidden lg:block">
+            
               <div className="hidden lg:block">
                 <div>
                   <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
                 </div>
               </div>
-              </div>
+              
             </div>
             <div className="items-stretch hidden md:flex">
               {/* notification */}
