@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { BiChevronUp } from "react-icons/bi";
-const SideNav = ({ nav }) => {
-  const [isSelected, setIsSelected] = useState(false);
+
+const SideNav = ({ nav, isActive, currentPath }) => {
+  const [isSelected, setIsSelected] = useState(isActive);
 
   const { Icon, url, name, children } = nav;
   return (
@@ -14,7 +15,11 @@ const SideNav = ({ nav }) => {
             setIsSelected(!isSelected);
           }
         }}
-        className="relative flex items-center w-full px-2 py-1 rounded hover:text-white hover:bg-gray-700 active:bg-gray-700"
+        className={`relative flex items-center w-full px-2 py-1 rounded ${
+          isActive && !nav.children
+            ? "bg-gray-700 text-white hover:text-gray-400"
+            : "hover:text-white hover:bg-gray-700 hover:active:bg-gray-700"
+        }`}
       >
         <div className="pr-2">{Icon}</div>
         <div>{name}</div>
@@ -24,7 +29,7 @@ const SideNav = ({ nav }) => {
               isSelected ? "rotate-180" : ""
             }`}
           >
-            <BiChevronUp></BiChevronUp>
+            <BiChevronUp />
           </div>
         )}
       </Link>
@@ -39,7 +44,11 @@ const SideNav = ({ nav }) => {
               <li className="text-sm text-gray-600 " key={index}>
                 <Link
                   href={child.url}
-                  className="relative flex items-center w-full px-2 py-1 rounded hover:text-white hover:bg-gray-700"
+                  className={`relative flex items-center w-full px-2 py-1 rounded ${
+                    child.url === currentPath
+                      ? "bg-gray-700 text-white hover:text-gray-400"
+                      : "hover:text-white hover:bg-gray-700 hover:active:bg-gray-700"
+                  }`}
                 >
                   <div>{child.name}</div>
                 </Link>
