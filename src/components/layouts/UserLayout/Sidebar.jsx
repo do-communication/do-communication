@@ -43,8 +43,17 @@ const Sidebar = () => {
     },
     {
       Icon: <SlEnvolopeLetter size={20} />,
-      url: "/user/letters/letter",
-      name: "Letter",
+      name: "Letters", //unqiue
+      children: [
+        {
+          url: "/user/letters/create",
+          name: "Create Letter",
+        },
+        {
+          url: "/user/letters/manageLetters",
+          name: "Manage Letters",
+        },
+      ],
     },
     {
       Icon: <AiFillFileAdd size={20} />,

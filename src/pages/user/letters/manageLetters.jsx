@@ -25,7 +25,7 @@ const Letters = () => {
     },
     {
       name: "Date",
-      selector: (row) => row.createdAt.toString(),
+      selector: (row) => row.createdAt.toDateString(),
     },
   ];
 
