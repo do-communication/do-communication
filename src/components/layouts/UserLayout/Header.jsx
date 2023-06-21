@@ -102,32 +102,9 @@ const Header = () => {
               </div>
 
               <div className="hidden lg:block">
-                <form action="" className="app-search" method="GET">
-                  <div className="relative group ">
-                    <input
-                      type="text"
-                      className="form-input rounded-md bg-light_2 text-sm text-gray-700 pl-10 py-1.5 ml-5 border-transparent border-none outline-none focus:ring-0 focus:text-white transition-all duration-300 ease-in-out focus:w-60 w-48"
-                      placeholder="Search..."
-                      autoComplete="off"
-                    />
-                    <span className="absolute text-gray-400 transition-all duration-300 ease-in-out left-44 bottom-2 group-focus-within:left-8">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </form>
+                <div>
+                  <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
+                </div>
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
