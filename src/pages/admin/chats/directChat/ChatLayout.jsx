@@ -7,6 +7,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
+import { auth } from "../../../../../config/firebase";
 
 const ChatLayout = ({ children, user }) => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -35,14 +36,11 @@ const ChatLayout = ({ children, user }) => {
 
 
   const getRecent = async () => {
-    const recentChat = await getRecentData();
-    setRecent(recentChat);
+    await getRecentData(setRecent);
   }
 
   const getData = async () => {
-    const data = await getMembersData();
-    setMembers(data);
-    setallMembers(data);
+    await getMembersData(setMembers, setallMembers);
   }
 
   const handleSelect = (member) => {
@@ -101,7 +99,7 @@ const ChatLayout = ({ children, user }) => {
                 onClick={() => handleSelect(member)}
               >
                 <RecentMessageItem
-                  name={member.data.Name}
+                  name={member.data.RecieverId == auth.currentUser.uid ? member.data.SenderName : member.data.RecieverName}
                   msg={member.data.Content}
                 />
               </Link>
@@ -181,7 +179,7 @@ const ChatLayout = ({ children, user }) => {
                 <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
                   <div className="flex items-center justify-center w-full h-full">
                     {selected.ProfilePic === "" ?
-                      selected.Name[0]
+                      selected.Name ? selected.Name[0] : selected.RecieverName[0]
                       : <img
                         src={selected.ProfilePic}
                         alt="Avatar"
@@ -190,7 +188,7 @@ const ChatLayout = ({ children, user }) => {
                   </div>
                 </div>
               </div>
-              <div className="mt-2 text-sm font-semibold">{selected.Name}</div>
+              <div className="mt-2 text-sm font-semibold">{selected.Name ? selected.Name : selected.RecieverName}</div>
               <div className="text-xs text-gray-500">{selected.Department}</div>
               <div className="flex flex-row items-center mt-3">
               </div>

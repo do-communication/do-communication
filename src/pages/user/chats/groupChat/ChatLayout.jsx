@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
+import { auth } from "../../../../../config/firebase";
 
 const ChatLayout = ({ children, group }) => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -18,7 +19,7 @@ const ChatLayout = ({ children, group }) => {
   const [selected, setSelected] = useState(group);
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
-  const { getGroups, getRecentGroup } = useFetch("KalCompany")
+  const { getGroupsUser, getRecentGroupUser } = useFetch("KalCompany")
 
   useEffect(() => {
     getRecent()
@@ -34,14 +35,11 @@ const ChatLayout = ({ children, group }) => {
 
 
   const getRecent = async () => {
-    const recentChat = await getRecentGroup();
-    setRecent(recentChat);
+    await getRecentGroupUser(setRecent, auth.currentUser.uid);
   }
 
   const getData = async () => {
-    const data = await getGroups();
-    setGroups(data);
-    setAllGroups(data);
+    await getGroupsUser(setGroups, setAllGroups, auth.currentUser.uid);
   }
 
   const handleSelect = (member) => {

@@ -34,14 +34,11 @@ const ChatLayout = ({ children, group }) => {
 
 
   const getRecent = async () => {
-    const recentChat = await getRecentGroup();
-    setRecent(recentChat);
+    await getRecentGroup(setRecent);
   }
 
   const getData = async () => {
-    const data = await getGroups();
-    setGroups(data);
-    setAllGroups(data);
+    await getGroups(setGroups, setAllGroups);
   }
 
   const handleSelect = (member) => {
