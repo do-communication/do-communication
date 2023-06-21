@@ -7,7 +7,18 @@ import ReceiverMessage from "./ReceiverMessage";
 import SenderMessage from "./SenderMessage";
 import useFetch from "../useFetch";
 
-const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUpdate, update, editMode, setEditMode, isgroup }) => {
+const Chatbox = ({
+  messages,
+  name,
+  get,
+  setPriorityChange,
+  priorityChange,
+  setUpdate,
+  update,
+  editMode,
+  setEditMode,
+  isgroup,
+}) => {
   const [sendMessage, setSendMessage] = useState("");
   const [sendFile, setSendFile] = useState(null);
   const [selected, setSelected] = useState(null);
@@ -18,42 +29,64 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
     userId = router.query.groupId;
   }
 
-  const { user, send, sendGroup, editMessage, editGroupMessage } = useFetch("KalCompany");
+  const { user, send, sendGroup, editMessage, editGroupMessage } =
+    useFetch("KalCompany");
 
   const sendData = (select) => {
     setEditMode(true);
-    setSelected(select)
-    document.getElementById('message_send').value = select.data.Content;
-  }
+    setSelected(select);
+    document.getElementById("message_send").value = select.data.Content;
+  };
 
   const editMess = async () => {
-    if (isgroup) { await editGroupMessage(sendMessage, selected, setUpdate, update); }
-    else { await editMessage(sendMessage, selected, setUpdate, update); }
+    if (isgroup) {
+      await editGroupMessage(sendMessage, selected, setUpdate, update);
+    } else {
+      await editMessage(sendMessage, selected, setUpdate, update);
+    }
 
     await get(userId);
-    setSendMessage('');
+    setSendMessage("");
     setSendFile(null);
     setEditMode(false);
-    document.getElementById('message_send').value = "";
-  }
+    document.getElementById("message_send").value = "";
+  };
 
   const sendMess = async () => {
-    if (isgroup) { await sendGroup(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange); }
-    else { await send(sendMessage, sendFile, userId, setUpdate, update, setPriorityChange, priorityChange); }
+    if (isgroup) {
+      await sendGroup(
+        sendMessage,
+        sendFile,
+        userId,
+        setUpdate,
+        update,
+        setPriorityChange,
+        priorityChange
+      );
+    } else {
+      await send(
+        sendMessage,
+        sendFile,
+        userId,
+        setUpdate,
+        update,
+        setPriorityChange,
+        priorityChange
+      );
+    }
 
     await get(userId);
-    setSendMessage('');
+    setSendMessage("");
     setSendFile(null);
     scrollToBottom();
-  }
+  };
 
   const scrollToBottom = () => {
-
     setTimeout(() => {
       if (chatboxRef.current) {
         chatboxRef.current.scrollTo({
           top: chatboxRef.current.scrollHeight,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }, 200);
@@ -62,7 +95,6 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
 
   return (
     <div className="relative flex-col h-full bg-white rounded-2xl">
@@ -98,7 +130,15 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
       >
         {messages.map((msg) => {
           return msg.data.SenderId === user.uid ? (
-            <SenderMessage msg={msg} key={msg.id} setUpdate={setUpdate} update={update} sendData={sendData} setEditMode={setEditMode} isgroup={isgroup} />
+            <SenderMessage
+              msg={msg}
+              key={msg.id}
+              setUpdate={setUpdate}
+              update={update}
+              sendData={sendData}
+              setEditMode={setEditMode}
+              isgroup={isgroup}
+            />
           ) : (
             <ReceiverMessage msg={msg} key={msg.id} />
           );
@@ -118,7 +158,13 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
             id="file_upload"
             name="file_upload"
             className="hidden"
-            onChange={(e) => { if (e.target.files.length !== 0) { setSendFile(e.target.files[0]); document.getElementById("message_send").value = e.target.files[0].name; } }}
+            onChange={(e) => {
+              if (e.target.files.length !== 0) {
+                setSendFile(e.target.files[0]);
+                document.getElementById("message_send").value =
+                  e.target.files[0].name;
+              }
+            }}
           />
         </div>
         <div className="flex-grow ml-4">
@@ -127,13 +173,15 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
               type="text"
               id="message_send"
               className="flex w-full h-10 pl-4 border rounded-xl focus:outline-none focus:border-indigo-300"
-              onChange={(e) => { setSendMessage(e.target.value); document.getElementById("file_upload").value = "" }}
+              onChange={(e) => {
+                setSendMessage(e.target.value);
+                document.getElementById("file_upload").value = "";
+              }}
               onKeyUp={(e) => {
                 if (e.key == "Enter") {
                   if (editMode) {
                     editMess();
-                  }
-                  else {
+                  } else {
                     sendMess();
                   }
                 }
@@ -142,17 +190,23 @@ const Chatbox = ({ messages, name, get, setPriorityChange, priorityChange, setUp
           </div>
         </div>
         <div className="ml-4">
-          {editMode ?
-            <button onClick={editMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+          {editMode ? (
+            <button
+              onClick={editMess}
+              className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl"
+            >
               <span>Edit</span>
               <TbEdit />
             </button>
-            :
-            <button onClick={sendMess} className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl">
+          ) : (
+            <button
+              onClick={sendMess}
+              className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white bg-primary hover:bg-Bold rounded-xl"
+            >
               <span>Send</span>
               <TbSend />
             </button>
-          }
+          )}
         </div>
       </div>
     </div>

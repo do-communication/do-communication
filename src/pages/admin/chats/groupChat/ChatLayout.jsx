@@ -18,20 +18,19 @@ const ChatLayout = ({ children, group }) => {
   const [selected, setSelected] = useState(group);
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
-  const { getGroups, getRecentGroup } = useFetch("KalCompany")
+  const { getGroups, getRecentGroup } = useFetch("KalCompany");
 
   useEffect(() => {
-    getRecent()
+    getRecent();
   }, [priorityChange]);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   useEffect(() => {
-    setSelected(group)
-  }, [group])
-
+    setSelected(group);
+  }, [group]);
 
   const getRecent = async () => {
     await getRecentGroup(setRecent);
@@ -42,14 +41,13 @@ const ChatLayout = ({ children, group }) => {
   }
 
   const handleSelect = (member) => {
-    setSelected(member.data)
-    setEditMode(false)
-    const elem = document.getElementById('message_send');
+    setSelected(member.data);
+    setEditMode(false);
+    const elem = document.getElementById("message_send");
     if (elem) {
       elem.value = "";
     }
-  }
-
+  };
 
   // search for groups using group name
   useEffect(() => {
@@ -59,7 +57,8 @@ const ChatLayout = ({ children, group }) => {
 
     const filteredData = allGroups.filter(
       (item) =>
-        item?.data.Name && item?.data.Name.toLowerCase().includes(search.toLowerCase())
+        item?.data.Name &&
+        item?.data.Name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -91,8 +90,8 @@ const ChatLayout = ({ children, group }) => {
                 href={`/admin/chats/groupChat/${group.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2 rounded-xl ${group.id === router.query.groupId
-                  ? "bg-secondary text-white"
-                  : "hover:bg-opacity-25 hover:bg-secondary"
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
                 onClick={() => handleSelect(group)}
               >
@@ -137,15 +136,17 @@ const ChatLayout = ({ children, group }) => {
                 href={`/admin/chats/groupChat/${group.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2  rounded-xl ${group.id === router.query.groupId
-                  ? "bg-secondary text-white"
-                  : "hover:bg-opacity-25 hover:bg-secondary"
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
                 onClick={() => handleSelect(group)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
                   {group.data.Name[0]}
                 </div>
-                <div className="ml-2 text-sm font-semibold">{group.data.Name}</div>
+                <div className="ml-2 text-sm font-semibold">
+                  {group.data.Name}
+                </div>
               </Link>
             ))}
 
@@ -174,35 +175,41 @@ const ChatLayout = ({ children, group }) => {
               <h3 className="font-semibold">Group Chat</h3>
             </div>
             {/* profile part start */}
-            {selected ? <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                  <div className="flex items-center justify-center w-full h-full">
-                    {selected.Name[0]}
+            {selected ? (
+              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                    <div className="flex items-center justify-center w-full h-full">
+                      {selected.Name[0]}
+                    </div>
                   </div>
                 </div>
+                <div className="mt-2 text-sm font-semibold">
+                  {selected.Name}
+                </div>
+                <div className="text-xs text-gray-500">{selected.Type}</div>
+                <div className="flex flex-row items-center mt-3"></div>
               </div>
-              <div className="mt-2 text-sm font-semibold">{selected.Name}</div>
-              <div className="text-xs text-gray-500">{selected.Type}</div>
-              <div className="flex flex-row items-center mt-3">
-              </div>
-            </div> : <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                  <div className="flex items-center justify-center w-full h-full">
-                    <img
-                      src="/images/pp.png"
-                      alt="Avatar"
-                      className="rounded-full"
-                    />
+            ) : (
+              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <img
+                        src="/images/pp.png"
+                        alt="Avatar"
+                        className="rounded-full"
+                      />
+                    </div>
                   </div>
                 </div>
+                <div className="mt-2 text-sm font-semibold">
+                  Select to view profile
+                </div>
+                <div className="text-xs text-gray-500"></div>
+                <div className="flex flex-row items-center mt-3"></div>
               </div>
-              <div className="mt-2 text-sm font-semibold">Select to view profile</div>
-              <div className="text-xs text-gray-500"></div>
-              <div className="flex flex-row items-center mt-3">
-              </div>
-            </div>}
+            )}
             {/* profile part end */}
 
             {/* tab */}
@@ -223,7 +230,7 @@ const ChatLayout = ({ children, group }) => {
               </button>
             </div>
 
-            <div className="w-full max-h-[450px] overflow-x-hidden overflow-y-auto mt-4">
+            <div className="w-full max-h-[270px] overflow-x-hidden overflow-y-auto mt-4">
               {messageTab === "recent" ? renderRecent() : renderGroups()}
             </div>
           </div>
@@ -231,7 +238,13 @@ const ChatLayout = ({ children, group }) => {
             className={`lg:col-span-3 col-span-full lg:block ${router.query.groupId ? "" : "hidden"
               }`}
           >
-            {children && cloneElement(children, { setPriorityChange: setPriorityChange, priorityChange: priorityChange, editMode: editMode, setEditMode: setEditMode })}
+            {children &&
+              cloneElement(children, {
+                setPriorityChange: setPriorityChange,
+                priorityChange: priorityChange,
+                editMode: editMode,
+                setEditMode: setEditMode,
+              })}
           </div>
         </div>
       </div>

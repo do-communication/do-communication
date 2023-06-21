@@ -101,7 +101,7 @@ const Header = () => {
 
               <div className="hidden lg:block">
                 <div>
-                  <p><b>{company && company.companyName}</b></p>
+                  <p className="font-sans text-2xl "><i><b>{company && company.companyName}</b></i></p>
                 </div>
               </div>
             </div>

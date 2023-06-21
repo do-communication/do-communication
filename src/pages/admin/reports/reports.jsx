@@ -47,6 +47,16 @@ const Reports = () => {
       setReports(allReports);
     }
   }, [search]);
+   //loading till fetch
+   const [pending, setPending] =useState(true);
+   const [rows, setRows] = useState([]);
+   useEffect(() => {
+     const timeout = setTimeout(() => {
+       setRows(allReports);
+       setPending(false);
+     }, 2000);
+     return () => clearTimeout(timeout);
+   }, []);
 
   const columns = [
     {
@@ -108,6 +118,7 @@ const Reports = () => {
         <ClientOnlyTable
           columns={columns}
           data={reports}
+          progressPending={pending}
           pagination={true}
           expandableRows
           expandableRowsComponent={ShowReportDetail}
