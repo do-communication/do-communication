@@ -53,6 +53,17 @@ const ManageFiles = () => {
       setFiles(allFiles);
     }
   }, [search]);
+   //loading till fetch
+   const [pending, setPending] =useState(true);
+   const [rows, setRows] = useState([]);
+   useEffect(() => {
+     const timeout = setTimeout(() => {
+       setRows(allFiles);
+       setPending(false);
+     }, 2000);
+     return () => clearTimeout(timeout);
+   }, []);
+ 
 
   const columns = [
     {
@@ -138,6 +149,7 @@ const ManageFiles = () => {
             selectableRows
             onSelectedRowsChange={handleRowSelected}
             clearSelectedRows={toggledClearRows}
+            progressPending={pending}
             pagination
           />
           {/* try */}

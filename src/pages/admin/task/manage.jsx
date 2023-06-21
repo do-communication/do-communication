@@ -57,6 +57,17 @@ const ManageTasks = () => {
       setTasks(allTasks);
     }
   }, [search]);
+  //loading till fetch
+  const [pending, setPending] =useState(true);
+	const [rows, setRows] = useState([]);
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setRows(allTasks);
+			setPending(false);
+		}, 2000);
+		return () => clearTimeout(timeout);
+	}, []);
+
 
   const columns = [
     {
@@ -120,6 +131,7 @@ const ManageTasks = () => {
             data={tasks}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
+            progressPending={pending}
             pagination
           />
         </div>

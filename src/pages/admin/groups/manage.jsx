@@ -59,6 +59,17 @@ const ManageGroup = () => {
       setGroups(allGroups);
     }
   }, [search]);
+  //loading till fetch
+  const [pending, setPending] =useState(true);
+	const [rows, setRows] = useState([]);
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setRows(allGroups);
+			setPending(false);
+		}, 2000);
+		return () => clearTimeout(timeout);
+	}, []);
+
 
   const columns = [
     {
@@ -111,6 +122,7 @@ const ManageGroup = () => {
             selectableRowsSingle={true}
             selectableRowsNoSelectAll={true}
             clearSelectedRows={clearSelectedRows}
+            progressPending={pending}
             pagination={true}
           />
         </div>
