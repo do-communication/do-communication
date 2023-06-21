@@ -1,28 +1,62 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState, useEffect, useRef } from "react";
-import { db } from "../../../../context/DbContext";
+import Router from "next/router";
+const router = Router
 import { toast } from "react-toastify";
 import Select from "react-select";
-import { auth } from "../../../../config/firebase";
+import { auth } from "../../../../../../config/firebase";
 const user = auth.currentUser;
-// const selectInputRef = useRef();
+import { usePathname } from 'next/navigation';
+import { db } from "../../../../../../context/DbContext";
 
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
   const temp = [];
   const [assignedto, setassignedto] = useState([]);
   const [members, setMembers] = useState([]);
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("edit/");
+  const id = currentPage.slice(i + 5)
   const [data, setData] = useState({
     Title: '',
     Description: '',
     AssignedTo: [],
     Priority: '',
-    StartDate: new Date("10/10/2030"),
-    DueDate: new Date("10/10/2030"),
+    StartDate: new Date("10/10/2030").toDateString(),
+    DueDate: new Date("10/10/2030").toDateString,
     Status: "Assigned",  
     AssignedBy: user.displayName
   });
+  const getMem = async () => {
+    const docRef = doc(db, "KalCompany", "Tasks", "Tasks", id);
+    // const user = ;
+    const mem = await getDoc(docRef);
+    let tempAssigned = [];
+    const assigned = mem._document.data.value.mapValue.fields.AssignedTo.arrayValue.values;
+    if (assigned) {
+      assigned.forEach(t => {
+        if (t) {
+          tempAssigned.push(t.stringValue);
+        }
+      });
+    }
+  
+    setData({
+      Title: mem._document.data.value.mapValue.fields.Title.stringValue,
+      Description: mem._document.data.value.mapValue.fields.Description.stringValue,
+      Priority: mem._document.data.value.mapValue.fields.Priority.stringValue,
+      StartDate: mem._document.data.value.mapValue.fields.StartDate.stringValue,
+      DueDate: mem._document.data.value.mapValue.fields.DueDate.stringValue,
+      AssignedTo: tempAssigned,
+      Status: mem._document.data.value.mapValue.fields.Status.stringValue,
+      AssignedBy: mem._document.data.value.mapValue.fields.AssignedBy.stringValue
+    })
+  }
+  useEffect(() => {
+    getMem()
+  
+  }, [])
   const getData = async () => {
     let arr = []
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
@@ -193,9 +227,15 @@ const AddMember = () => {
      
     });
     if (data.Title != "" && data.Description != "" && data.AssignedTo != "" && data.StartDate != null && data.DueDate != null && data.Priority != "null") {
-      await addDoc(collection(db, "KalCompany", "Tasks", "Tasks"), data);
-      handleClear();
-      toast.success("Task edited successfully");
+      const docRef = doc(db, "KalCompany", "Tasks", "Tasks", id);
+      updateDoc(docRef, data)
+        .then(docRef => {
+          handleClear();
+          toast.success("Task edited successfully");
+        })
+        .catch(error => {
+          console.log(error);
+        })
     }
   };
   const handleClear = (e) => {

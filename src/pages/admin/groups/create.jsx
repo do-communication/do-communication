@@ -19,6 +19,7 @@ const CreateGroup = () => {
     Members: [],
     Learder: '',
     Tasks: [],
+    Reports: [],
     People: []
   });
   const customGroup = document.getElementById("customGroup");

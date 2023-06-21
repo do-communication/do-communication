@@ -1,28 +1,77 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { db } from "../../../../context/DbContext";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import Router from "next/router";
-
 const router = Router
+import { doc, getDocs, getDoc, collection, addDoc, updateDoc } from "firebase/firestore";
+import { usePathname } from 'next/navigation';
+import { db } from "../../../../../../context/DbContext";
+
 const CreateGroup = () => {
   const [allMembers, setallMembers] = useState([]);
   const [members, setMembers] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
   const selected = [];
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("edit/");
+  const id = currentPage.slice(i + 5)
   const [data, setData] = useState({
     Type: '',
     Name: '',
     Members: [],
     Learder: '', 
-    Tasks: []
+    Tasks: [], 
+    Reports: []
   });
  const customGroup = document.getElementById("customGroup");
  const type = document.getElementById("type");
  const groupName = document.getElementById("groupName");
+ const getMem = async () => {
+  const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+  // const user = ;
+  const mem = await getDoc(docRef);
+  let tempTask = [];
+  let tempReport = [];
+  let tempGroup = [];
+  const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+  const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+  const group = mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+  if (task) {
+    task.forEach(t => {
+      if (t) {
+        tempTask.push(t.stringValue);
+      }
+    });
+  }
+  if (report) {
+    report.forEach(r => {
+      if (r) {
+        tempReport.push(r.stringValue);
+      }
+    });
+  }
+  if (group) {
+    group.forEach(g => {
+      if (g) {
+        tempGroup.push(g.stringValue);
+      }
+    });
+  }
 
+  setData({
+    Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+    Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+    Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+    Members: tempGroup,
+    Reports: tempReport,
+    Tasks: tempTask
+  })
+}
+useEffect(() => {
+  getMem()
+
+}, [])
   const getData = async () => {
     let arr = []
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
@@ -88,15 +137,22 @@ const CreateGroup = () => {
     .catch(error => {
         console.log(error);
     })
-  }
+  } 
   const handleCreateGroup = async () => {
       data.Members.forEach(m =>{
         updateMember(m.id);
       });
       
-      await addDoc(collection(db, "KalCompany", "Groups", "Groups"), data);
-      clearForm();
-      toast.success("Group edited successfully");
+      const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+      updateDoc(docRef, data)
+        .then(docRef => {
+          clearForm();
+          toast.success("Group edited successfully");
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      
   };
 
   const clearForm = () => {
