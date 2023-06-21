@@ -1,16 +1,23 @@
-import { useState, useContext,useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { useAuth } from "../../../../context/AuthContext";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import { IoNotificationsOutline } from "react-icons/io5";
 import {
   AiOutlineMenu,
+  AiOutlineBell,
   AiOutlineUser,
   AiOutlineLogout,
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
 import { auth } from "../../../../config/firebase";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/router";
 import Notification from "./Notification";
 import useFetch from "@/components/useFetch";
+
+const router = Router;
+
 const Header = () => {
   const { user, logout } = useAuth();
   const [usr, setUsr] = useState(null);
@@ -18,19 +25,35 @@ const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-  const { GetAdmin, GetCompanyName, GetUser } = useFetch("KalCompany");
-
+  const { GetCompanyName, GetUser } = useFetch("KalCompany");
 
   const getinfo = async () => {
     console.log(auth.currentUser.uid)
-    setUsr(await GetAdmin(auth.currentUser.uid));
+    setUsr(await GetUser(auth.currentUser.uid));
     setCompany(await GetCompanyName());
-  }
-
+  };
 
   useEffect(() => {
-    getinfo()
-  }, [user])
+    getinfo();
+  }, [user]);
+
+  const handleSingout = (e) => {
+    e.preventDefault();
+    try {
+      logout().then(() => router.push("/"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSingout = (e) => {
+    e.preventDefault();
+    try {
+      logout().then(() => router.push("/"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -86,13 +109,15 @@ const Header = () => {
                 </a>
               </div>
 
-            
               <div className="hidden lg:block">
                 <div>
-                  <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
+                  <p className="font-sans text-2xl">
+                    <i>
+                      <b>{company && company.companyName}</b>
+                    </i>
+                  </p>
                 </div>
               </div>
-              
             </div>
             <div className="items-stretch hidden md:flex">
               {/* notification */}
@@ -138,14 +163,8 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
-                        <Link
-                          href="/user/profile/profile"
-                        >
-                          My Profile
-                        </Link>
-
+                        <Link href="/user/profile/profile">My Profile</Link>
                       </a>
-
 
                       <a
                         href="#"
@@ -155,17 +174,12 @@ const Header = () => {
                         id="user-menu-item-1"
                         onClick={handleSingout}
                       >
-                        <Link
-                          href="#"
-                        >
-                          Sign out
-                        </Link>
+                        <Link href="#">Sign out</Link>
                       </a>
                     </div>
                   )}
                 </div>
               </div>
-
             </div>
 
             <div className="flex px-2 -mr-2 md:hidden">

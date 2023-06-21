@@ -24,12 +24,11 @@ const DirectChat = () => {
   useEffect(() => {
     get(userId);
   }, [update])
-  console.log("index.jsx")
 
 
   return (
     <ChatLayout user={reciever}>
-      <Chatbox messages={messages} name={reciever ? reciever.Name : ""} get={get} setUpdate={setUpdate} update={update} isgroup={false} />
+      <Chatbox messages={messages} name={reciever ? reciever.Name ? reciever.Name : reciever.RecieverName : ""} get={get} setUpdate={setUpdate} update={update} isgroup={false} />
     </ChatLayout>
   );
 };

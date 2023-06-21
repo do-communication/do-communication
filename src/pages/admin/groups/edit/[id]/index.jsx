@@ -1,35 +1,97 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { db } from "../../../../context/DbContext";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import Router from "next/router";
-
 const router = Router
+import { doc, getDocs, getDoc, collection, addDoc, updateDoc } from "firebase/firestore";
+import { usePathname } from 'next/navigation';
+import { db } from "../../../../../../context/DbContext";
+
 const CreateGroup = () => {
   const [allMembers, setallMembers] = useState([]);
   const [members, setMembers] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
   const selected = [];
+  const ids = [];
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("edit/");
+  const id = currentPage.slice(i + 5)
   const [data, setData] = useState({
     Type: '',
     Name: '',
     Members: [],
-    Learder: '', 
-    Tasks: []
+    Learder: '',
+    Tasks: [],
+    Reports: [],
+    People: []
   });
- const customGroup = document.getElementById("customGroup");
- const type = document.getElementById("type");
- const groupName = document.getElementById("groupName");
+  const customGroup = document.getElementById("customGroup");
+  const type = document.getElementById("type");
+  const groupName = document.getElementById("groupName");
+  const getMem = async () => {
+    const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+    // const user = ;
+    const mem = await getDoc(docRef);
+    let tempTask = [];
+    let tempReport = [];
+    let tempGroup = [];
+    let tempPeople = [];
+    const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    console.log(mem._document.data.value.mapValue.fields)
+    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const people = mem._document.data.value.mapValue.fields.People.arrayValue.values;
+    const group = mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    if (task) {
+      task.forEach(t => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+    if (people) {
+      people.forEach(p => {
+        if (p) {
+          tempPeople.push(p.stringValue);
+        }
+      });
+    }
+    if (report) {
+      report.forEach(r => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+    if (group) {
+      group.forEach(g => {
+        if (g) {
+          tempGroup.push(g.stringValue);
+        }
+      });
+    }
 
+    setData({
+      Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+      Members: tempGroup,
+      Reports: tempReport,
+      Tasks: tempTask,
+      People: tempPeople
+    })
+  }
+  useEffect(() => {
+    getMem()
+
+  }, [])
   const getData = async () => {
     let arr = []
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push({id:d.id, data:d.data()})
+        arr.push({ id: d.id, data: d.data() })
       });
     } catch (err) {
       console.log(err)
@@ -39,7 +101,7 @@ const CreateGroup = () => {
     setMembers(arr)
     setallMembers(arr)
   }
-  const updateMember = async(i) =>{
+  const updateMember = async (i) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(docRef)
     let tempGroup = [];
@@ -48,24 +110,27 @@ const CreateGroup = () => {
     const temp = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
     const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
     const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    if(temp){
-    temp.forEach(t => {
-      if(t){
-      tempGroup.push(t.stringValue);}
-    });
-  }
-  if(report){
-    report.forEach(r => {
-      if(r){
-      tempReport.push(r.stringValue);}
-    });
-  }
-  if(task){
-    task.forEach(ts => {
-      if(ts){
-      tempTask.push(ts.stringValue);}
-    });
-  }
+    if (temp) {
+      temp.forEach(t => {
+        if (t) {
+          tempGroup.push(t.stringValue);
+        }
+      });
+    }
+    if (report) {
+      report.forEach(r => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+    if (task) {
+      task.forEach(ts => {
+        if (ts) {
+          tempTask.push(ts.stringValue);
+        }
+      });
+    }
     tempGroup.push(data.Name)
     const newData = {
       Name: mem._document.data.value.mapValue.fields.Name.stringValue,
@@ -82,25 +147,32 @@ const CreateGroup = () => {
       GroupId: tempGroup
     }
     updateDoc(docRef, newData)
-    .then(docRef => {
+      .then(docRef => {
         console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.log(error);
-    })
+      })
   }
   const handleCreateGroup = async () => {
-      data.Members.forEach(m =>{
-        updateMember(m.id);
-      });
-      
-      await addDoc(collection(db, "KalCompany", "Groups", "Groups"), data);
-      clearForm();
-      toast.success("Group edited successfully");
+    data.Members.forEach(m => {
+      updateMember(m.id);
+    });
+
+    const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+    updateDoc(docRef, data)
+      .then(docRef => {
+        clearForm();
+        toast.success("Group edited successfully");
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
   };
 
   const clearForm = () => {
-    if(customGroup){customGroup.value = "";}
+    if (customGroup) { customGroup.value = ""; }
     groupName.value = "";
     groupName.placeholder = "Enter Group Name";
     type.value = "";
@@ -141,10 +213,12 @@ const CreateGroup = () => {
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder="Enter group name"
                         value={data.Name}
-                        onChange={(e) => {setData({
-                          ...data,
-                          Name: e.target.value
-                        })}}
+                        onChange={(e) => {
+                          setData({
+                            ...data,
+                            Name: e.target.value
+                          })
+                        }}
                       />
                     </div>
 
@@ -159,7 +233,7 @@ const CreateGroup = () => {
                             setShowCustomType(true);
                             setData({
                               ...data,
-                              Type : ""
+                              Type: ""
                             })
                           } else {
                             setData({
@@ -191,8 +265,8 @@ const CreateGroup = () => {
                           placeholder="Enter custom group type"
                           disabled={!showCustomType}
                           value={data.Type}
-                          onChange={(e) => 
-                            
+                          onChange={(e) =>
+
                             setData({
                               ...data,
                               Type: e.target.value
@@ -206,19 +280,21 @@ const CreateGroup = () => {
                         isMulti
                         name="members"
                         options={allMembers.map((member) => {
-                          return { label: member.data.Name, value: member.data.Name, GroupId: member.data.GroupId, id:member.id };
+                          return { label: member.data.Name, value: member.data.Name, GroupId: member.data.GroupId, id: member.id };
                         })}
                         val
                         onChange={(selectedMembers) => {
                           setMembers(
-                            selectedMembers.map((member) => member.value )
+                            selectedMembers.map((member) => member.value)
                           );
                           selectedMembers.map(member => {
-                            selected.push({GroupId:member.GroupId, value:member.value, id:member.id})
+                            selected.push({ GroupId: member.GroupId, value: member.value, id: member.id })
+                            ids.push(member.id)
                           });
                           setData({
                             ...data,
-                            Members: Array.from(new Set(selected))
+                            Members: Array.from(new Set(selected)),
+                            People: Array.from(new Set(ids))
                           })
                         }}
                       />

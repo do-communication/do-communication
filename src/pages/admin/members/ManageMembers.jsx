@@ -234,6 +234,7 @@ const ManageMembers = () => {
                           if(check){
                           const docRef = doc(db,"KalCompany", "Users", "StaffMembers", id);
                           await deleteDoc(docRef)
+                          getData();
                           toast.success("Member deleted successfully");
                         }}}
                         className="flex items-center gap-2"

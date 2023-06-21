@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { allTasks } from "@/mock/tasks";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import Ticket from "@/components/Task/Ticket";
 
 const MyTaskPage = () => {
+  const [allTasks, setallTasks] = useState([]);
+  const [tasks, setTasks] = useState([allTasks]);
+  const getData = async () => {
+    let arr = []
+    let temp = []
+    const all = collection(db, "KalCompany", "Tasks", "Tasks");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        arr.push({id:d.id, data:d.data()})
+      });
+
+    } catch (err) {
+      console.log(err)
+      setTasks([{ Name: "check your connection" }])
+    }
+
+    setTasks(arr)
+    setallTasks(arr)
+  }
   const CARDS = [
     {
       title: "New Tasks",
@@ -23,7 +43,7 @@ const MyTaskPage = () => {
   const TaskItems = ({ status }) => {
     // Filter tasks based on the status prop
     const filteredTasks = allTasks.filter(
-      (task) => task.status.toLowerCase() === status
+      (task) => task.data.Status.toLowerCase() === status
     );
 
     return (
@@ -74,12 +94,12 @@ const MyTaskPage = () => {
 
     const task = allTasks.find(
       (task) =>
-        task.status.toLowerCase() === sourceStatus &&
+        task.data.Status.toLowerCase() === sourceStatus &&
         `${task.id}` === result.draggableId
     );
 
     if (task) {
-      task.status = destinationStatus;
+      task.data.Status = destinationStatus;
     }
   };
 

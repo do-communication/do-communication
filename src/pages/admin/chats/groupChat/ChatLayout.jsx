@@ -33,15 +33,12 @@ const ChatLayout = ({ children, group }) => {
   }, [group]);
 
   const getRecent = async () => {
-    const recentChat = await getRecentGroup();
-    setRecent(recentChat);
-  };
+    await getRecentGroup(setRecent);
+  }
 
   const getData = async () => {
-    const data = await getGroups();
-    setGroups(data);
-    setAllGroups(data);
-  };
+    await getGroups(setGroups, setAllGroups);
+  }
 
   const handleSelect = (member) => {
     setSelected(member.data);
@@ -92,11 +89,10 @@ const ChatLayout = ({ children, group }) => {
               <Link
                 href={`/admin/chats/groupChat/${group.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2 rounded-xl ${
-                  group.id === router.query.groupId
+                className={`flex flex-row items-center p-2 rounded-xl ${group.id === router.query.groupId
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
-                }`}
+                  }`}
                 onClick={() => handleSelect(group)}
               >
                 <RecentMessageItem
@@ -139,11 +135,10 @@ const ChatLayout = ({ children, group }) => {
               <Link
                 href={`/admin/chats/groupChat/${group.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2  rounded-xl ${
-                  group.id === router.query.groupId
+                className={`flex flex-row items-center p-2  rounded-xl ${group.id === router.query.groupId
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
-                }`}
+                  }`}
                 onClick={() => handleSelect(group)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
@@ -171,9 +166,8 @@ const ChatLayout = ({ children, group }) => {
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${
-              router.query.groupId ? "hidden" : ""
-            }`}
+            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${router.query.groupId ? "hidden" : ""
+              }`}
           >
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
@@ -221,17 +215,15 @@ const ChatLayout = ({ children, group }) => {
             {/* tab */}
             <div className="grid grid-cols-2 mt-6 font-semibold bg-gray-200 rounded-2xl">
               <button
-                className={`py-2 rounded-2xl ${
-                  messageTab === "recent" ? "bg-primary" : ""
-                }`}
+                className={`py-2 rounded-2xl ${messageTab === "recent" ? "bg-primary" : ""
+                  }`}
                 onClick={() => setMessageTab("recent")}
               >
                 Recent
               </button>
               <button
-                className={`py-2 rounded-2xl ${
-                  messageTab === "group" ? "bg-primary" : ""
-                }`}
+                className={`py-2 rounded-2xl ${messageTab === "group" ? "bg-primary" : ""
+                  }`}
                 onClick={() => setMessageTab("group")}
               >
                 Groups
@@ -243,9 +235,8 @@ const ChatLayout = ({ children, group }) => {
             </div>
           </div>
           <div
-            className={`lg:col-span-3 col-span-full lg:block ${
-              router.query.groupId ? "" : "hidden"
-            }`}
+            className={`lg:col-span-3 col-span-full lg:block ${router.query.groupId ? "" : "hidden"
+              }`}
           >
             {children &&
               cloneElement(children, {

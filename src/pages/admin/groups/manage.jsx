@@ -2,9 +2,10 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { db } from "../../../../context/DbContext"
 import { toast } from "react-toastify";
-import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
+import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
-import {FaPersonCircleCheck} from "react-icons/fa";
+import Router from 'next/router';
+const router = Router;
 import {
   AiFillDelete,
   AiFillEdit,
@@ -35,7 +36,7 @@ const ManageGroup = () => {
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push(d.data())
+        arr.push({ id: d.id, data: d.data() })
       });
 
     } catch (err) {
@@ -50,7 +51,7 @@ const ManageGroup = () => {
   useEffect(() => {
     const filteredData = allGroups.filter(
       (item) =>
-        item.Name && item.Name.toLowerCase().includes(search.toLowerCase()) || item.Type && item.Type.toLowerCase().includes(search.toLowerCase())
+        item.data.Name && item.data.Name.toLowerCase().includes(search.toLowerCase()) || item.data.Type && item.data.Type.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -60,28 +61,82 @@ const ManageGroup = () => {
     }
   }, [search]);
   //loading till fetch
-  const [pending, setPending] =useState(true);
-	const [rows, setRows] = useState([]);
-	useEffect(() => {
-		const timeout = setTimeout(() => {
-			setRows(allGroups);
-			setPending(false);
-		}, 2000);
-		return () => clearTimeout(timeout);
-	}, []);
+  const [pending, setPending] = useState(true);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setRows(allGroups);
+      setPending(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
 
 
   const columns = [
     {
       name: "Group Name",
-      selector: (row) => row.Name,
+      selector: (row) => row.data.Name,
       sortable: true,
     },
     {
       name: "Type",
-      selector: (row) => row.Type,
+      selector: (row) => row.data.Type,
     },
   ];
+  const handleClick = async (i, name) => {
+    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
+    const mem = await getDoc(docRef)
+    let tempTask = [];
+    let tempReport = [];
+    let tempGroup = [];
+    const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+    if (temp) {
+      temp.forEach(t => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+    if (report) {
+      report.forEach(r => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+    if (group) {
+      group.forEach(g => {
+        if (g) {
+          if (g.stringValue != name) {
+            tempGroup.push(g.stringValue);
+          }
+        }
+      });
+    }
+    const newData = {
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
+      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+      GroupId: tempGroup,
+      Reports: tempReport,
+      Tasks: tempTask
+    }
+    updateDoc(docRef, newData)
+      .then(docRef => {
+        console.log("A New Document Field has been added to an existing document");
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
 
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
@@ -154,42 +209,54 @@ const ManageGroup = () => {
                 {showManageGroupMenu && (
                   <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/task/member/id"
+                      <button
+                        onClick={() => {
+                          router.push(`/admin/task/group/${selectedRows[0].id}`)
+                        }}
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Tasks
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/reports/member/id"
+                      <button
+                        onClick={() => {
+                          router.push(`/admin/reports/group/${selectedRows[0].id}`)
+                        }}
                         className="flex items-center gap-2"
                       >
-                        <HiDocumentChartBar className="w-5 h-auto" /> Reports
-                      </Link>
+                        <MdChecklist className="w-5 h-auto" /> Reports
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/groups/edit"
+                      <button
+                        onClick={() => {
+                          router.push(`/admin/groups/edit/${selectedRows[0].id}`)
+                        }}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Group
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
                         className="flex items-center gap-2"
-                        // onClick={async (e) => {e.stopPropagation();
-                        //   const id = selectedRows[0].id
-                        //   setSelectedRows([]);
-                        //   setClearSelectedRows(true);
-                        //   const check = confirm("Do you want to delete the group?");
-                        //   if(check){
-                        //   const docRef = doc(db,"KalCompany", "Groups", "Groups", id);
-                        //   await deleteDoc(docRef)
-                        //   toast.success("Group deleted successfully");
-                        // }}}
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          setSelectedRows([]);
+                          setClearSelectedRows(true);
+                          const id = selectedRows[0].id;
+                          selectedRows[0].data.Members.map(m => {
+                            handleClick(m.id, selectedRows[0].data.Name);
+                          })
+                          const check = confirm("Do you want to delete the group?");
+                          if (check) {
+                            const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+                            await deleteDoc(docRef)
+                            getData();
+                            toast.success("Group deleted successfully");
+                          }
+                        }}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Group
                       </button>
@@ -202,9 +269,9 @@ const ManageGroup = () => {
                   <MdGroup className="w-12 h-12" />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
-                  {selectedRows[0].Name}
+                  {selectedRows[0].data.Name}
                 </h4>
-                <p className="text-sm">{selectedRows[0].Type}</p>
+                <p className="text-sm">{selectedRows[0].data.Type}</p>
               </div>
               <div className="relative flex justify-center py-4">
                 <button
@@ -218,26 +285,26 @@ const ManageGroup = () => {
                 <h3 className="p-2 text-lg font-semibold">Members</h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  {selectedRows[0].Members && selectedRows[0].Members.map((row, index) =>(
-                  <Link
-                    key={index}
-                    href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
-                    <p>{row.value}</p>
-                    <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-                       
-                        Assign Leader
+                  {selectedRows[0].data.Members && selectedRows[0].data.Members.map((row, index) => (
+                    <Link
+                      key={index}
+                      href="/admin/memebers/{userId}"
+                      className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    >
+                      <p>{row.value}</p>
+                      <div className="flex gap-2">
+                        <button className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+
+                          Assign Leader
+                        </button>
+                      </div>
+                      <button className="flex gap-2">
+                        <d className="flex items-center gap-1 p-1 px-2 text-red-600">
+                          {/* < BiX className="w-5 h-auto" /> */}
+                          Remove
+                        </d>
                       </button>
-                    </div>
-                    <button className="flex gap-2">
-                      <d className="flex items-center gap-1 p-1 px-2 text-red-600">
-                        {/* < BiX className="w-5 h-auto" /> */}
-                        Remove
-                      </d>
-                    </button>
-                  </Link>
+                    </Link>
                   ))}
                   {/* <Link
                     href="/admin/memebers/{userId}"

@@ -103,8 +103,14 @@ const Chatbox = ({
           onClick={() => {
             if (router.pathname === "/admin/chats/directChat/[userId]") {
               router.push("/admin/chats/directChat");
-            } else {
+            } else if (router.pathname === "/admin/chats/groupChat/[groupId]") {
               router.push("/admin/chats/groupChat");
+            }
+            else if (router.pathname === "/user/chats/groupChat/[groupId]") {
+              router.push("/user/chats/groupChat");
+            }
+            else if (router.pathname === "/user/chats/directChat/[userId]") {
+              router.push("/user/chats/directChat");
             }
           }}
           className="block w-10 h-10 rounded-full hover:bg-secondary lg:hidden"

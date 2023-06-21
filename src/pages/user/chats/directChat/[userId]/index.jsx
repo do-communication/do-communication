@@ -14,6 +14,7 @@ const DirectChat = () => {
 
   const { getMessage, user, GetUser } = useFetch("KalCompany");
   const userId = router.query.userId;
+
   const get = async (userId) => {
     setReciever(await GetUser(userId));
     await getMessage(userId, setMessages);
@@ -28,7 +29,7 @@ const DirectChat = () => {
 
   return (
     <ChatLayout user={reciever}>
-      <Chatbox messages={messages} name={reciever ? reciever.Name : ""} get={get} setUpdate={setUpdate} update={update} isgroup={false} />
+      <Chatbox messages={messages} name={reciever ? reciever.Name ? reciever.Name : reciever.RecieverName : ""} get={get} setUpdate={setUpdate} update={update} isgroup={false} />
     </ChatLayout>
   );
 };

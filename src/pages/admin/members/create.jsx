@@ -10,13 +10,14 @@ import { useAuth } from "../../../../context/AuthContext";
 import { auth } from "../../../../config/firebase";
 import emailjs from "@emailjs/browser"
 import useFetch from "@/components/useFetch";
+import { updateProfile } from "firebase/auth"
 
 const router = Router
 
 
 
 const AddMember = () => {
-  const { GetAdmin } = useFetch("KalCompany")
+  const { GetAdmin, GetCompanyName } = useFetch("KalCompany")
   const { signUp, logIn } = useAuth()
   const [data, setData] = useState({
     Name: '',
@@ -197,11 +198,14 @@ const AddMember = () => {
       const email = auth.currentUser.email;
       const pass = auth.currentUser.photoURL;
       const adminId = auth.currentUser.uid;
+      const company = await GetCompanyName();
 
 
       signUp(data.Email, password).then(async (cred) => {
         try {
           await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", cred.user.uid), data);
+          console.log(company);
+          await updateProfile(auth.currentUser, { displayName: data.Name, photoURL: company.companyName });
           console.log(password);
           logIn(email, pass);
           sendEmail(password, adminId, data.Name, data.Email)
