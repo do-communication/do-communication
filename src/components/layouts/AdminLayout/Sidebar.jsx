@@ -8,9 +8,11 @@ import { TbReportAnalytics } from "react-icons/tb";
 import SideNav from "./SideNav";
 import Link from "next/link";
 import OpenSideBarContext from "./context/openSideBarContext";
+import { useRouter } from "next/router";
 
 const Sidebar = () => {
   const [openSideBar] = useContext(OpenSideBarContext);
+  const router = useRouter();
 
   const navList = [
     {
@@ -33,7 +35,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <RiTeamFill size={20}  />,
+      Icon: <RiTeamFill size={20} />,
       name: "Members", //unqiue
       children: [
         {
@@ -47,7 +49,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <MdGroupWork  size={20} />,
+      Icon: <MdGroupWork size={20} />,
       name: "Groups", //unqiue
       children: [
         {
@@ -62,7 +64,7 @@ const Sidebar = () => {
     },
 
     {
-      Icon: <FaTasks size={20}  />,
+      Icon: <FaTasks size={20} />,
       name: "Tasks", //unqiue
       children: [
         {
@@ -76,7 +78,7 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <AiFillFileAdd size={20}  />,
+      Icon: <AiFillFileAdd size={20} />,
       name: "Files", //unqiue
       children: [
         {
@@ -90,21 +92,38 @@ const Sidebar = () => {
       ],
     },
     {
-      Icon: <TbReportAnalytics size={20}  />,
+      Icon: <TbReportAnalytics size={20} />,
       url: "/admin/reports/reports",
       name: "Report",
     },
     {
       Icon: <RiLogoutBoxFill size={20} />,
-      url: "/",
+      url: "/signout",
       name: "Sign Out",
     },
   ];
 
+  const checkIsNavActive = (nav) => {
+    const currentRoute = router.pathname;
+
+    if (!nav.url && nav.children) {
+      for (const link of nav.children) {
+        if (currentRoute === link.url) {
+          return true;
+        }
+      }
+    } else {
+      return currentRoute === nav.url;
+    }
+
+    return false;
+  };
+
   return (
     <div
-      className={`${!openSideBar && "-translate-x-full"
-        } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
+      className={`${
+        !openSideBar && "-translate-x-full"
+      } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
     >
       <nav className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
         <Link
@@ -114,12 +133,19 @@ const Sidebar = () => {
           <img src="/images/white_logo.png" alt="logo" width="80" />
         </Link>
       </nav>
-
       <nav className="px-4 pt-4 scroller overflow-y-scroll max-h-[calc(100vh-64px)]">
         <ul className="flex flex-col space-y-2">
-          {navList.map((nav, index) => (
-            <SideNav nav={nav} key={index} />
-          ))}
+          {navList.map((nav, index) => {
+            const isActive = checkIsNavActive(nav);
+            return (
+              <SideNav
+                nav={nav}
+                key={index}
+                isActive={isActive}
+                currentPath={router.pathname}
+              />
+            );
+          })}
         </ul>
       </nav>
     </div>
