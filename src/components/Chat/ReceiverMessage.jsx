@@ -1,3 +1,4 @@
+import { formatTimeAgo } from "@/utils/formatTimeAgo";
 import Link from "next/link";
 import { BiFileBlank } from "react-icons/bi";
 
@@ -26,9 +27,14 @@ const ReceiverMessage = ({ msg }) => {
               >
                 {msg.data.Content}
               </p>
+              <small className="text-[10px]">
+                {formatTimeAgo(new Date(msg.data.CreatedAt?.seconds * 1000))}
+              </small>
             </Link>
           </li>
-        ) : <div></div>}
+        ) : (
+          <div></div>
+        )}
       </ul>
     </div>
   );
