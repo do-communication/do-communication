@@ -31,20 +31,12 @@ const Header = () => {
     console.log(auth.currentUser.uid)
     setUsr(await GetUser(auth.currentUser.uid));
     setCompany(await GetCompanyName());
-  };
+  }
+
 
   useEffect(() => {
-    getinfo();
-  }, [user]);
-
-  const handleSingout = (e) => {
-    e.preventDefault();
-    try {
-      logout().then(() => router.push("/"));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    getinfo()
+  }, [user])
 
   const handleSingout = (e) => {
     e.preventDefault();
@@ -109,13 +101,10 @@ const Header = () => {
                 </a>
               </div>
 
-              <div className="hidden lg:block">
+
+<div className="hidden lg:block">
                 <div>
-                  <p className="font-sans text-2xl">
-                    <i>
-                      <b>{company && company.companyName}</b>
-                    </i>
-                  </p>
+                  <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
                 </div>
               </div>
             </div>
@@ -163,8 +152,14 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
-                        <Link href="/user/profile/profile">My Profile</Link>
+                        <Link
+                          href="/user/profile/profile"
+                        >
+                          My Profile
+                        </Link>
+
                       </a>
+
 
                       <a
                         href="#"
@@ -174,12 +169,17 @@ const Header = () => {
                         id="user-menu-item-1"
                         onClick={handleSingout}
                       >
-                        <Link href="#">Sign out</Link>
+                        <Link
+                          href="#"
+                        >
+                          Sign out
+                        </Link>
                       </a>
                     </div>
                   )}
                 </div>
               </div>
+
             </div>
 
             <div className="flex px-2 -mr-2 md:hidden">
@@ -198,7 +198,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* <!-- Mobile menu, show/hide based on menu state. --> */}
+{/* <!-- Mobile menu, show/hide based on menu state. --> */}
         {mobileMenu && (
           <div className="absolute w-full transition duration-100 ease-out bg-secondary md:hidden">
             <div className="pt-4 pb-3 border-t border-gray-700">
@@ -207,7 +207,7 @@ const Header = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                    src="/images/admin.png"
                     alt=""
                   />
                 </div>
