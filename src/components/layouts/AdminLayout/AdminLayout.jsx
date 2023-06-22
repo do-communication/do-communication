@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import OpenSideBarContext, {
@@ -19,12 +19,10 @@ const AdminLayout = ({ children, noFooter = false }) => {
   );
   // || auth.currentUser.displayName != "true"
   if (!auth.currentUser) {
-    console.log("router going back")
+    console.log("router going back");
     logout();
     router.push("/");
-  }
-  else {
-
+  } else {
     return (
       <div className="md:flex">
         <OpenSideBarContext.Provider value={[openSideBar, openSideBarDispatch]}>
@@ -33,7 +31,9 @@ const AdminLayout = ({ children, noFooter = false }) => {
             {/* <!-- Top navbar --> */}
             <Header />
             {/* <!-- End Top navbar --> */}
-            <main className="bg-[#f3f3f9] mb-auto flex-grow p-5">{children}</main>
+            <main className="bg-[#f3f3f9] mb-auto flex-grow p-5">
+              {children}
+            </main>
 
             {!noFooter && (
               <footer className="p-4 pb-3 text-xs bg-gray-100 border-t">

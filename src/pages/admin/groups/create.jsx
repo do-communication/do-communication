@@ -10,15 +10,18 @@ const router = Router
 const CreateGroup = () => {
   const [allMembers, setallMembers] = useState([]);
   const [members, setMembers] = useState([]);
+  const [assigned, setassignedto] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
   const selected = [];
+  const ids = [];
   const [data, setData] = useState({
     Type: '',
     Name: '',
     Members: [],
     Learder: '', 
     Tasks: [],
-    Reports: [] 
+    Reports: [], 
+    People: []
   });
  const customGroup = document.getElementById("customGroup");
  const type = document.getElementById("type");
@@ -66,7 +69,7 @@ const CreateGroup = () => {
       if(ts){
       tempTask.push(ts.stringValue);}
     });
-  }
+  } 
     tempGroup.push(data.Name)
     const newData = {
       Name: mem._document.data.value.mapValue.fields.Name.stringValue,
@@ -91,7 +94,7 @@ const CreateGroup = () => {
     })
   }
   const handleCreateGroup = async () => {
-      data.Members.forEach(m =>{
+      assigned.forEach(m =>{
         updateMember(m.id);
       });
       
@@ -214,12 +217,16 @@ const CreateGroup = () => {
                           setMembers(
                             selectedMembers.map((member) => member.value )
                           );
+                          
                           selectedMembers.map(member => {
-                            selected.push({GroupId:member.GroupId, value:member.value, id:member.id})
+                            selected.push({value:member.value, id:member.id});
+                            ids.push(member.id);
                           });
+                          setassignedto(Array.from(new Set(selected)))
                           setData({
                             ...data,
-                            Members: Array.from(new Set(selected))
+                            Members: selectedMembers.map((member) => member.value ),
+                            People: Array.from(new Set(ids))
                           })
                         }}
                       />

@@ -18,41 +18,39 @@ const ChatLayout = ({ children, group }) => {
   const [selected, setSelected] = useState(group);
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
-  const { getGroups, getRecentGroup } = useFetch("KalCompany")
+  const { getGroups, getRecentGroup } = useFetch("KalCompany");
 
   useEffect(() => {
-    getRecent()
+    getRecent();
   }, [priorityChange]);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   useEffect(() => {
-    setSelected(group)
-  }, [group])
-
+    setSelected(group);
+  }, [group]);
 
   const getRecent = async () => {
     const recentChat = await getRecentGroup();
     setRecent(recentChat);
-  }
+  };
 
   const getData = async () => {
     const data = await getGroups();
     setGroups(data);
     setAllGroups(data);
-  }
+  };
 
   const handleSelect = (member) => {
-    setSelected(member.data)
-    setEditMode(false)
-    const elem = document.getElementById('message_send');
+    setSelected(member.data);
+    setEditMode(false);
+    const elem = document.getElementById("message_send");
     if (elem) {
       elem.value = "";
     }
-  }
-
+  };
 
   // search for groups using group name
   useEffect(() => {
@@ -62,7 +60,8 @@ const ChatLayout = ({ children, group }) => {
 
     const filteredData = allGroups.filter(
       (item) =>
-        item?.data.Name && item?.data.Name.toLowerCase().includes(search.toLowerCase())
+        item?.data.Name &&
+        item?.data.Name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -93,10 +92,11 @@ const ChatLayout = ({ children, group }) => {
               <Link
                 href={`/user/chats/groupChat/${group.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2 rounded-xl ${group.id === router.query.groupId
-                  ? "bg-secondary text-white"
-                  : "hover:bg-opacity-25 hover:bg-secondary"
-                  }`}
+                className={`flex flex-row items-center p-2 rounded-xl ${
+                  group.id === router.query.groupId
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
+                }`}
                 onClick={() => handleSelect(group)}
               >
                 <RecentMessageItem
@@ -139,16 +139,19 @@ const ChatLayout = ({ children, group }) => {
               <Link
                 href={`/user/chats/groupChat/${group.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2  rounded-xl ${group.id === router.query.groupId
-                  ? "bg-secondary text-white"
-                  : "hover:bg-opacity-25 hover:bg-secondary"
-                  }`}
+                className={`flex flex-row items-center p-2  rounded-xl ${
+                  group.id === router.query.groupId
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
+                }`}
                 onClick={() => handleSelect(group)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
                   {group.data.Name[0]}
                 </div>
-                <div className="ml-2 text-sm font-semibold">{group.data.Name}</div>
+                <div className="ml-2 text-sm font-semibold">
+                  {group.data.Name}
+                </div>
               </Link>
             ))}
 
@@ -168,8 +171,9 @@ const ChatLayout = ({ children, group }) => {
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${router.query.groupId ? "hidden" : ""
-              }`}
+            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${
+              router.query.groupId ? "hidden" : ""
+            }`}
           >
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
@@ -177,64 +181,79 @@ const ChatLayout = ({ children, group }) => {
               <h3 className="font-semibold">Group Chat</h3>
             </div>
             {/* profile part start */}
-            {selected ? <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                  <div className="flex items-center justify-center w-full h-full">
-                    {selected.Name[0]}
+            {selected ? (
+              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                    <div className="flex items-center justify-center w-full h-full">
+                      {selected.Name[0]}
+                    </div>
                   </div>
                 </div>
+                <div className="mt-2 text-sm font-semibold">
+                  {selected.Name}
+                </div>
+                <div className="text-xs text-gray-500">{selected.Type}</div>
+                <div className="flex flex-row items-center mt-3"></div>
               </div>
-              <div className="mt-2 text-sm font-semibold">{selected.Name}</div>
-              <div className="text-xs text-gray-500">{selected.Type}</div>
-              <div className="flex flex-row items-center mt-3">
-              </div>
-            </div> : <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                  <div className="flex items-center justify-center w-full h-full">
-                    <img
-                      src="/images/pp.png"
-                      alt="Avatar"
-                      className="rounded-full"
-                    />
+            ) : (
+              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <img
+                        src="/images/pp.png"
+                        alt="Avatar"
+                        className="rounded-full"
+                      />
+                    </div>
                   </div>
                 </div>
+                <div className="mt-2 text-sm font-semibold">
+                  Select to view profile
+                </div>
+                <div className="text-xs text-gray-500"></div>
+                <div className="flex flex-row items-center mt-3"></div>
               </div>
-              <div className="mt-2 text-sm font-semibold">Select to view profile</div>
-              <div className="text-xs text-gray-500"></div>
-              <div className="flex flex-row items-center mt-3">
-              </div>
-            </div>}
+            )}
             {/* profile part end */}
 
             {/* tab */}
             <div className="grid grid-cols-2 mt-6 font-semibold bg-gray-200 rounded-2xl">
               <button
-                className={`py-2 rounded-2xl ${messageTab === "recent" ? "bg-primary" : ""
-                  }`}
+                className={`py-2 rounded-2xl ${
+                  messageTab === "recent" ? "bg-primary" : ""
+                }`}
                 onClick={() => setMessageTab("recent")}
               >
                 Recent
               </button>
               <button
-                className={`py-2 rounded-2xl ${messageTab === "group" ? "bg-primary" : ""
-                  }`}
+                className={`py-2 rounded-2xl ${
+                  messageTab === "group" ? "bg-primary" : ""
+                }`}
                 onClick={() => setMessageTab("group")}
               >
                 Groups
               </button>
             </div>
 
-            <div className="w-full max-h-[450px] overflow-x-hidden overflow-y-auto mt-4">
+            <div className="w-full max-h-[270px] overflow-x-hidden overflow-y-auto mt-4">
               {messageTab === "recent" ? renderRecent() : renderGroups()}
             </div>
           </div>
           <div
-            className={`lg:col-span-3 col-span-full lg:block ${router.query.groupId ? "" : "hidden"
-              }`}
+            className={`lg:col-span-3 col-span-full lg:block ${
+              router.query.groupId ? "" : "hidden"
+            }`}
           >
-            {children && cloneElement(children, { setPriorityChange: setPriorityChange, priorityChange: priorityChange, editMode: editMode, setEditMode: setEditMode })}
+            {children &&
+              cloneElement(children, {
+                setPriorityChange: setPriorityChange,
+                priorityChange: priorityChange,
+                editMode: editMode,
+                setEditMode: setEditMode,
+              })}
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ const CreateGroup = () => {
   const [members, setMembers] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
   const selected = [];
+  const ids = [];
   const currentPage = usePathname();
   let i = currentPage.lastIndexOf("edit/");
   const id = currentPage.slice(i + 5)
@@ -22,7 +23,8 @@ const CreateGroup = () => {
     Members: [],
     Learder: '', 
     Tasks: [], 
-    Reports: []
+    Reports: [],
+    People: []
   });
  const customGroup = document.getElementById("customGroup");
  const type = document.getElementById("type");
@@ -34,9 +36,11 @@ const CreateGroup = () => {
   let tempTask = [];
   let tempReport = [];
   let tempGroup = [];
+  let tempPeople = [];
   const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
   const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
   const group = mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+  const people = mem._document.data.value.mapValue.fields.People.arrayValue.values;
   if (task) {
     task.forEach(t => {
       if (t) {
@@ -58,14 +62,21 @@ const CreateGroup = () => {
       }
     });
   }
-
+  if (people) {
+    people.forEach(p => {
+      if (p) {
+        tempPeople.push(p.stringValue);
+      }
+    });
+  }
   setData({
     Type: mem._document.data.value.mapValue.fields.Type.stringValue,
     Name: mem._document.data.value.mapValue.fields.Name.stringValue,
     Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
     Members: tempGroup,
     Reports: tempReport,
-    Tasks: tempTask
+    Tasks: tempTask, 
+    People: tempPeople
   })
 }
 useEffect(() => {
@@ -139,8 +150,8 @@ useEffect(() => {
     })
   } 
   const handleCreateGroup = async () => {
-      data.Members.forEach(m =>{
-        updateMember(m.id);
+      data.People.forEach(m =>{
+        updateMember(m);
       });
       
       const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
@@ -269,12 +280,15 @@ useEffect(() => {
                           setMembers(
                             selectedMembers.map((member) => member.value )
                           );
+                          
                           selectedMembers.map(member => {
-                            selected.push({GroupId:member.GroupId, value:member.value, id:member.id})
+                            selected.push({GroupId:member.GroupId, value:member.value, id:member.id});
+                            ids.push(member.id);
                           });
                           setData({
                             ...data,
-                            Members: Array.from(new Set(selected))
+                            Members: selectedMembers.map((member) => member.value ),
+                            People: Array.from(new Set(ids))
                           })
                         }}
                       />
