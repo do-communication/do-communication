@@ -71,6 +71,8 @@ const AddReport = () => {
 
         }
       );
+    }else{
+      await addData();
     }
   }
 
@@ -128,8 +130,7 @@ const AddReport = () => {
     e.preventDefault();
     // console.log(sendFile)
     await uploadFile(e);
-  };
-
+  }
 
   useEffect(() => {
     const values = {...data, Detail: reportDetail, File:url}
@@ -152,7 +153,6 @@ const AddReport = () => {
     setMembers(arr)
     setallMembers(arr)
   }
-
   useEffect(async() => {
     getData()
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", user.uid);
