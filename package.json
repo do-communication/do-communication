@@ -16,6 +16,7 @@
     "firebase": "^9.19.1",
     "generate-password": "^1.7.0",
     "l": "^0.6.0",
+    "localforage": "^1.10.0",
     "next": "13.3.0",
     "ngx-quill": "^22.0.0",
     "postcss": "8.4.21",

@@ -1,12 +1,30 @@
 import React, { useState } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
+import{ useEffect } from "react";
+import { firebaseCloudMessaging } from "./webpush";
 
 const Notification = () => {
   const [openNotification, setOpenNotification] = useState(false);
-
+  useEffect(() => {
+    setToken();
+    async function setToken() {
+    try {
+    const token = await firebaseCloudMessaging.init();
+    if (token) {
+    getMessage();
+    }
+    } catch (error) {
+    console.log(error);
+    }
+    }
+    function getMessage() {
+    const messaging = firebase.messaging();
+    messaging.onMessage((message) => console.log("foreground ", message));
+    }
+    }, []);
   return (
     <div className="relative flex items-center justify-center mr-4">
-      <button
+      {/* <button
         onClick={() => setOpenNotification(!openNotification)}
         className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black"
       >
@@ -71,7 +89,8 @@ const Notification = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
+     <p>Note you!</p> 
     </div>
   );
 };
