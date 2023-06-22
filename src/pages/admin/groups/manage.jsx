@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { db } from "../../../../context/DbContext"
 import { toast } from "react-toastify";
-import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
 import Router from 'next/router';
 const router = Router;
@@ -18,6 +18,7 @@ import { HiDocumentChartBar } from "react-icons/hi2";
 import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
 import dynamic from "next/dynamic";
+import DataTable from "react-data-table-component";
 
 const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
   ssr: false,
@@ -32,21 +33,28 @@ const ManageGroup = () => {
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
   const users = [];
   const getData = async () => {
-    let arr = []
-    const all = collection(db, "KalCompany", "Groups", "Groups");
+    
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push({ id: d.id, data: d.data() })
-      });
+      const all = collection(db, "KalCompany", "Groups", "Groups");
 
+      const unsubscribe = onSnapshot(all, (querySnapshot) => {
+        let arr = []
+        querySnapshot.forEach((doc) => {
+            arr.push({ id: doc.id, data: doc.data() });
+        });
+       
+        setGroups(arr)
+        setallGroups(arr)
+        setSelectedRows([])
+        setClearSelectedRows(!clearSelectedRows)
+       
+    });
     } catch (err) {
       console.log(err)
-      setTasks([{ Name: "check your connection" }])
+      setGroups([{ Name: "check your connection" }])
     }
 
-    setGroups(arr)
-    setallGroups(arr)
+   
   }
   // search for groups using group name
   useEffect(() => {
@@ -84,6 +92,7 @@ const ManageGroup = () => {
       selector: (row) => row.data.Type,
     },
   ];
+  console.log("fetch Group")
   const fetchGroup = async (groupId, index) => {
     const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     const mem = await getDoc(docRef);
@@ -284,6 +293,7 @@ const ManageGroup = () => {
     getData()
   }, []);
 
+
   return (
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
@@ -307,7 +317,7 @@ const ManageGroup = () => {
               <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
-          <ClientOnlyTable
+          <DataTable
             columns={columns}
             data={groups}
             selectableRows
