@@ -124,7 +124,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-8 h-8 rounded-full"
-                        src="/images/admin.png"
+                        src={usr ? usr.ProfilePic ? usr.ProfilePic : "/images/admin.png" : "/images/admin.png"}
                         alt=""
                       />
                     </div>
@@ -202,7 +202,7 @@ const Header = () => {
                     {usr && usr.Name}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    {company && company.email}
+                    {usr && usr.Email}
                   </div>
                 </div>
                 <button type="button">

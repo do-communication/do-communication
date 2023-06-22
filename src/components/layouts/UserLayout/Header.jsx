@@ -126,7 +126,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-10 h-10 rounded-full"
-                        src="/images/pp.png"
+                        src={usr ? usr.ProfilePic ? usr.ProfilePic : "/images/pp.png" : "/images/pp.png"}
                         alt=""
                       />
                     </div>
