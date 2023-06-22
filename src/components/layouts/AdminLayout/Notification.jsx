@@ -24,7 +24,7 @@ const Notification = () => {
     }, []);
   return (
     <div className="relative flex items-center justify-center mr-4">
-      {/* <button
+      <button
         onClick={() => setOpenNotification(!openNotification)}
         className="block p-1 text-gray-700 rounded-full bg-light_2 hover:text-black"
       >
@@ -89,8 +89,8 @@ const Notification = () => {
             </div>
           </div>
         </div>
-      )} */}
-     <p>Note you!</p> 
+      )}
+     {/* <p>Note yonu!</p>  */}
     </div>
   );
 };
