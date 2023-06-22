@@ -13,7 +13,7 @@ import {
   AiFillLike,
 } from "react-icons/ai";
 // import { TfiFiles } from "react-icons/tfi";
-import { GiShare } from "react-icons/gi";
+import { GiShare, GiOpenBook } from "react-icons/gi";
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
 // import { BsEye } from "react-icons/bs";
 // import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
@@ -23,6 +23,7 @@ import { db } from "../../../../context/DbContext"
 import { getDocs, collection } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
 import useFetch from "@/components/useFetch";
+import { toast } from "react-toastify";
 
 const ManageFiles = () => {
   const [files, setFiles] = useState([]);
@@ -44,7 +45,7 @@ const ManageFiles = () => {
   useEffect(() => {
     const filteredData = allFiles.filter(
       (item) =>
-        item.data.FileName && item.data.FileName.toLowerCase().includes(search.toLowerCase())
+        item.data.FileName && item.data.FileName.toLowerCase().includes(search.toLowerCase()) || item.data.Description && item.data.Description.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -53,17 +54,17 @@ const ManageFiles = () => {
       setFiles(allFiles);
     }
   }, [search]);
-   //loading till fetch
-   const [pending, setPending] =useState(true);
-   const [rows, setRows] = useState([]);
-   useEffect(() => {
-     const timeout = setTimeout(() => {
-       setRows(allFiles);
-       setPending(false);
-     }, 2000);
-     return () => clearTimeout(timeout);
-   }, []);
- 
+  //loading till fetch
+  const [pending, setPending] = useState(true);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setRows(allFiles);
+      setPending(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
+
 
   const columns = [
     {
@@ -95,6 +96,11 @@ const ManageFiles = () => {
     let arr = [...selectedRows];
     arr.splice(index, 1)
     setSelectedRows(arr);
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(selectedRows[0].data.url)
+    toast.success("Link Copied");
   }
 
   useEffect(() => {
@@ -147,6 +153,7 @@ const ManageFiles = () => {
             columns={columns}
             data={files}
             selectableRows
+            selectableRowsSingle={true}
             onSelectedRowsChange={handleRowSelected}
             clearSelectedRows={toggledClearRows}
             progressPending={pending}
@@ -199,8 +206,17 @@ const ManageFiles = () => {
                   <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/tasks/{groupId}"
+                        href={selectedRows[0].data.url}
                         className="flex items-center gap-2"
+                      >
+                        <GiOpenBook className="w-5 h-auto" /> Open
+                      </Link>
+                    </li>
+                    <li className="p-1 rounded hover:bg-primary">
+                      <Link
+                        href=""
+                        className="flex items-center gap-2"
+                        onClick={handleCopy}
                       >
                         <GiShare className="w-5 h-auto" /> Share
                       </Link>
@@ -283,11 +299,11 @@ const ManageFiles = () => {
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
-                        Location
+                        Shelf Location
                       </p>
                     </div>
                     <p className="w-40 truncate text-sm" title="+251910******">
-                      {selectedRows[0].data.location}
+                      {selectedRows[0].data.ShelfLocation}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">

@@ -38,21 +38,13 @@ const CreateGroup = () => {
     let tempGroup = [];
     let tempPeople = [];
     const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    console.log(mem._document.data.value.mapValue.fields)
     const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const people = mem._document.data.value.mapValue.fields.People.arrayValue.values;
     const group = mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    const people = mem._document.data.value.mapValue.fields.People.arrayValue.values;
     if (task) {
       task.forEach(t => {
         if (t) {
           tempTask.push(t.stringValue);
-        }
-      });
-    }
-    if (people) {
-      people.forEach(p => {
-        if (p) {
-          tempPeople.push(p.stringValue);
         }
       });
     }
@@ -70,7 +62,13 @@ const CreateGroup = () => {
         }
       });
     }
-
+    if (people) {
+      people.forEach(p => {
+        if (p) {
+          tempPeople.push(p.stringValue);
+        }
+      });
+    }
     setData({
       Type: mem._document.data.value.mapValue.fields.Type.stringValue,
       Name: mem._document.data.value.mapValue.fields.Name.stringValue,
@@ -155,8 +153,8 @@ const CreateGroup = () => {
       })
   }
   const handleCreateGroup = async () => {
-    data.Members.forEach(m => {
-      updateMember(m.id);
+    data.People.forEach(m => {
+      updateMember(m);
     });
 
     const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
@@ -287,13 +285,14 @@ const CreateGroup = () => {
                           setMembers(
                             selectedMembers.map((member) => member.value)
                           );
+
                           selectedMembers.map(member => {
-                            selected.push({ GroupId: member.GroupId, value: member.value, id: member.id })
-                            ids.push(member.id)
+                            selected.push({ GroupId: member.GroupId, value: member.value, id: member.id });
+                            ids.push(member.id);
                           });
                           setData({
                             ...data,
-                            Members: Array.from(new Set(selected)),
+                            Members: selectedMembers.map((member) => member.value),
                             People: Array.from(new Set(ids))
                           })
                         }}

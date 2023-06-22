@@ -27,6 +27,14 @@ const useFetch = (collectionType) => {
             return docSnap.data();
         }
     }
+    const GetFile = async (userId, fileId) => {
+        if (userId) {
+            const specific_user = doc(db, collectionType, "Files", userId, fileId);
+            const docSnap = await getDoc(specific_user)
+
+            return docSnap.data();
+        }
+    }
 
     const GetUser = async (userId) => {
 

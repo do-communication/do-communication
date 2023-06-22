@@ -15,6 +15,7 @@ const AddFile = () => {
   const [FileName, setFileName] = useState("");
   const [Discription, setDiscription] = useState("");
   const [progress, setProgress] = useState("");
+  const [shelfLocation, setShelfLocation] = useState("none");
 
   const UploadFile = async (e) => {
 
@@ -52,18 +53,21 @@ const AddFile = () => {
               Owner: auth.currentUser.uid,
               SenderName: auth.currentUser.displayName,
               Description: Discription,
-              url: downloadURL
+              url: downloadURL,
+              ShelfLocation: shelfLocation
             });
 
             document.getElementById('type').value = '';
             document.getElementById('full_name').value = '';
             document.getElementById('file').value = [];
             document.getElementById('progress').value = "";
+            document.getElementById("shelfLocation").value = "";
 
             setProgress('');
             setFileName('');
             setDiscription('');
             setSendFile(null);
+            setShelfLocation("none")
 
             e.preventDefault();
             console.log("submit");
@@ -105,13 +109,14 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="address">Location</label>
+                      <label for="address">Shelf Location</label>
                       <input
                         type="text"
-                        name="location"
-                        id="location"
+                        name="shelfLocation"
+                        id="shelfLocation"
                         className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                         placeholder="none"
+                        onChange={(e) => setShelfLocation(e.target.value)}
                       />
                     </div>
                     <div className="md:col-span-3">
@@ -158,7 +163,9 @@ const AddFile = () => {
                           <button className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
                             Cancel
                           </button>
-                          <button onClick={(e) => UploadFile(e)} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
+                          <button
+                            disabled={!FileName || !Discription || !sendFile || !shelfLocation}
+                            onClick={(e) => UploadFile(e)} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
                             Upload
                           </button>
                         </div>
