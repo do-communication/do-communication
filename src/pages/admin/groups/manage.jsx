@@ -196,9 +196,7 @@ const ManageGroup = () => {
     })
   }
   const handleAssign = async (groupId, data) => {
-    // setData({...data, Learder:data.People[index]});
     const groupRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
-    console.log(data);
     updateDoc(groupRef, data)
     .then(groupRef => {
         console.log("A New Document Field has been added to an existing document");
