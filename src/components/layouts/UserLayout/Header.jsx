@@ -31,6 +31,9 @@ const Header = () => {
     setCompany(await GetCompanyName());
   }
 
+  const handleProfile = () => {
+    router.push("/user/profile/profile")
+  }
 
   useEffect(() => {
     getinfo()
@@ -100,7 +103,7 @@ const Header = () => {
               </div>
 
 
-<div className="hidden lg:block">
+              <div className="hidden lg:block">
                 <div>
                   <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
                 </div>
@@ -150,11 +153,9 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
-                        <Link
-                          href="/user/profile/profile"
-                        >
+                        <button onClick={handleProfile} >
                           My Profile
-                        </Link>
+                        </button>
 
                       </a>
 
@@ -196,7 +197,7 @@ const Header = () => {
           </div>
         </div>
 
-{/* <!-- Mobile menu, show/hide based on menu state. --> */}
+        {/* <!-- Mobile menu, show/hide based on menu state. --> */}
         {mobileMenu && (
           <div className="absolute w-full transition duration-100 ease-out bg-secondary md:hidden">
             <div className="pt-4 pb-3 border-t border-gray-700">
