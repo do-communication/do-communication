@@ -114,7 +114,7 @@ const AddFile = () => {
                 <div className="lg:col-span-2 ">
                   <div className="grid grid-cols-1 gap-6 gap-y-7 text-sm md:grid-cols-6">
                     <div className="md:col-span-3">
-                      <label for="full_name">File Name</label>
+                      <label htmlFor="full_name">File Name</label>
                       <input
                         type="text"
                         name="file_name"
@@ -125,7 +125,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="address">Shelf Location</label>
+                      <label htmlFor="address">Shelf Location</label>
                       <input
                         type="text"
                         name="shelfLocation"
@@ -136,7 +136,7 @@ const AddFile = () => {
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label for="email">Description</label>
+                      <label htmlFor="email">Description</label>
                       <textarea
                         name="type"
                         id="type"
@@ -147,7 +147,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Upload File</label>
+                      <label htmlFor="state">Upload File</label>
                       <div className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50">
                         <input
                           type="file"
@@ -162,7 +162,7 @@ const AddFile = () => {
 
                     {progress && (
                       <div className="md:col-span-3">
-                        <label for="address">Progress</label>
+                        <label htmlFor="address">Progress</label>
                         <input
                           type="text"
                           id="progress"

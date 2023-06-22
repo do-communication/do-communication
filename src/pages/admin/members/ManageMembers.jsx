@@ -292,10 +292,10 @@ const ManageMembers = () => {
                     />
                   )}
                 </div>
-                <h4 className="text-xl font-semibold capitalize" mt-1>
+                <h4 className="mt-1 text-xl font-semibold capitalize">
                   {selectedRows[0].data.Name}
                 </h4>
-                <p className="text-md font-light" mt-1>
+                <p className="text-md mt-1 font-light">
                   {selectedRows[0].data.Email}
                 </p>
                 <p className="text-sm">{selectedRows[0].data.type}</p>

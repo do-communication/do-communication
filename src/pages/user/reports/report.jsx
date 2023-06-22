@@ -213,7 +213,7 @@ const AddReport = () => {
                 <div className="lg:col-span-2 ">
                   <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-6">
-                      <label for="full_name">Report Title</label>
+                      <label htmlFor="full_name">Report Title</label>
                       <input
                         type="text"
                         name="report_title"
@@ -229,7 +229,7 @@ const AddReport = () => {
                     </div>
 
                     <div className="md:col-span-6">
-                      <label for="detail">Detail Description</label>
+                      <label htmlFor="detail">Detail Description</label>
                       <QuillNoSSRWrapper
                         theme="snow"
                         value={reportDetail}
@@ -244,7 +244,7 @@ const AddReport = () => {
                       />
                     </div>
                     <div className="mt-10 md:col-span-6 ">
-                      <label for="address">Submitted To:</label>
+                      <label htmlFor="address">Submitted To:</label>
                       <Select
                         // ref={selectInputRef}
                         isMulti
@@ -287,7 +287,7 @@ const AddReport = () => {
                       />
                     </div>
                     <div className="md:col-span-6 ">
-                      <label for="full_name">Attach File</label>
+                      <label htmlFor="full_name">Attach File</label>
                       <input
                         type="file"
                         name="attach_file"
@@ -301,7 +301,7 @@ const AddReport = () => {
                     </div>
                     {progress && (
                       <div className="md:col-span-3">
-                        <label for="address">Progress</label>
+                        <label htmlFor="address">Progress</label>
                         <input
                           type="text"
                           id="progress"

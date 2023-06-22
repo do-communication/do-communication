@@ -109,15 +109,15 @@ const Login = () => {
         {/* email input */}
         <div
           id="emaildiv"
-          className="group flex gap-2 rounded-3xl bg-white pl-5 ring-blue-300 hover:ring-2 active:ring-2"
+          className="flex gap-2 pl-5 bg-white group rounded-3xl ring-blue-300 hover:ring-2 active:ring-2"
         >
-          <MdOutlineEmail className="h-auto w-10 pl-2 text-gray-600" />
+          <MdOutlineEmail className="w-10 h-auto pl-2 text-gray-600" />
           <input
             id="emailInput"
             onChange={handleEmailChange}
             value={data.email}
             type="email"
-            className="w-full rounded-3xl bg-white px-2 py-4 text-gray-600 outline-none"
+            className="w-full px-2 py-4 text-gray-600 bg-white outline-none rounded-3xl"
             placeholder="Enter your email"
             size="lg"
           />
@@ -126,9 +126,9 @@ const Login = () => {
         {/*password input */}
         <div
           id="passworddiv"
-          className="group flex gap-2 rounded-3xl bg-white pl-5 pr-5 ring-blue-300 hover:ring-2 active:ring-2"
+          className="flex gap-2 pl-5 pr-5 bg-white group rounded-3xl ring-blue-300 hover:ring-2 active:ring-2"
         >
-          <MdLockOutline className="h-auto w-10 pl-2 text-gray-600" />
+          <MdLockOutline className="w-10 h-auto pl-2 text-gray-600" />
           <input
             onChange={handlePasswordChange}
             value={data.password}
@@ -140,12 +140,12 @@ const Login = () => {
           />
           {showPassword ? (
             <AiOutlineEye
-              className="h-auto w-10 cursor-pointer pr-3 text-gray-600"
+              className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
               onClick={() => setShowPassword(false)}
             />
           ) : (
             <AiOutlineEyeInvisible
-              className="h-auto w-10 cursor-pointer pr-3 text-gray-600"
+              className="w-10 h-auto pr-3 text-gray-600 cursor-pointer"
               onClick={() => setShowPassword(true)}
             />
           )}
@@ -160,19 +160,19 @@ const Login = () => {
       <div className="flex flex-col gap-4">
         <button
           onClick={handleLogin}
-          className="flex w-full items-center justify-center rounded-full bg-primary py-4 text-lg font-semibold text-white shadow-sm shadow-black hover:brightness-95"
+          className="flex items-center justify-center w-full py-4 text-lg font-semibold text-white rounded-full shadow-sm bg-primary shadow-black hover:brightness-95"
         >
           Sign in
         </button>
-        <h1 className="error-txt text-red-700"></h1>
-        <fieldset class="border-t border-black">
-          <legend class="mx-auto px-4 text-lg text-black">or</legend>
+        <h1 className="text-red-700 error-txt"></h1>
+        <fieldset className="border-t border-black">
+          <legend className="px-4 mx-auto text-lg text-black">or</legend>
         </fieldset>
         <button
           onClick={handleLoginGoogle}
-          className="flex w-full items-center justify-center rounded-full bg-primary py-4 text-lg font-semibold text-white shadow-sm shadow-black hover:brightness-95"
+          className="flex items-center justify-center w-full py-4 text-lg font-semibold text-white rounded-full shadow-sm bg-primary shadow-black hover:brightness-95"
         >
-          Sign in with &nbsp; <FcGoogle className="h-auto w-6" />
+          Sign in with &nbsp; <FcGoogle className="w-6 h-auto" />
         </button>
       </div>
     </AuthLayout>

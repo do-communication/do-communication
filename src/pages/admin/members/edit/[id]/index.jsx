@@ -296,7 +296,7 @@ const AddMember = () => {
                 <div className="lg:col-span-2 ">
                   <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-3">
-                      <label for="full_name">Full Name</label>
+                      <label htmlFor="full_name">Full Name</label>
                       <input
                         onChange={handleName}
                         value={data.Name}
@@ -308,7 +308,7 @@ const AddMember = () => {
                     </div>
 
                     <div id="emailDiv" className="md:col-span-3">
-                      <label for="email">Email Address</label>
+                      <label htmlFor="email">Email Address</label>
                       <input
                         onChange={handleEmail}
                         type="text"
@@ -321,7 +321,7 @@ const AddMember = () => {
                     </div>
 
                     <div id="addressDiv" className="md:col-span-3">
-                      <label for="address">Address</label>
+                      <label htmlFor="address">Address</label>
                       <input
                         onChange={handleAddress}
                         type="text"
@@ -334,7 +334,7 @@ const AddMember = () => {
                     </div>
 
                     <div id="genderDiv" className="md:col-span-3">
-                      <label for="Gender">Gender</label>
+                      <label htmlFor="Gender">Gender</label>
                       <select
                         id="selectGender"
                         className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
@@ -346,7 +346,7 @@ const AddMember = () => {
                     </div>
 
                     <div id="phoneDiv" className="md:col-span-3">
-                      <label for="country">Phone Number</label>
+                      <label htmlFor="country">Phone Number</label>
                       <div
                         id="phoneNumber"
                         className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
@@ -366,7 +366,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Department</label>
+                      <label htmlFor="state">Department</label>
                       <div
                         id="department"
                         className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
@@ -383,7 +383,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Date of Birth</label>
+                      <label htmlFor="state">Date of Birth</label>
                       <div
                         id="dob"
                         className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
@@ -393,7 +393,7 @@ const AddMember = () => {
                           id="date"
                           onChange={handleDob}
                           value={data.DateOfBirth}
-                          onfocus="(this.type='date')"
+                          onFocus="(this.type='date')"
                           name="DB"
                           placeholder="MM/DD/YYYY"
                           className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"

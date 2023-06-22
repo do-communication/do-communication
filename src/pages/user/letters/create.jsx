@@ -90,7 +90,7 @@ const AddReport = () => {
                 </div>
                 <div className="flex flex-col gap-3 lg:col-span-2 ">
                   <div className="md:col-span-6">
-                    <label for="full_name"> To:</label>
+                    <label htmlFor="full_name"> To:</label>
                     <input
                       type="text"
                       name="report_title"
@@ -104,7 +104,7 @@ const AddReport = () => {
                     />
                   </div>
                   <div className="md:col-span-6">
-                    <label for="full_name">Address:</label>
+                    <label htmlFor="full_name">Address:</label>
                     <input
                       type="text"
                       name="report_title"
@@ -119,7 +119,7 @@ const AddReport = () => {
                   </div>
                   <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-6">
-                      <label for="full_name"> Subject:</label>
+                      <label htmlFor="full_name"> Subject:</label>
                       <input
                         type="text"
                         name="report_title"
@@ -134,7 +134,7 @@ const AddReport = () => {
                     </div>
 
                     <div className="md:col-span-6">
-                      <label for="detail">Body</label>
+                      <label htmlFor="detail">Body</label>
                       <QuillNoSSRWrapper
                         theme="snow"
                         id="body"

@@ -91,15 +91,15 @@ const AddFile = () => {
   };
   return (
     <AdminLayout>
-      <div className="flex min-h-screen justify-center bg-gray-100 p-6  pt-8">
-        <div className="container mx-auto max-w-screen-lg">
+      <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
+        <div className="container max-w-screen-lg mx-auto">
           <div>
-            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
+            <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
               Add File
             </h2>
 
-            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
-              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
+            <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="pb-3 pl-4 text-lg font-medium">File Details</p>
                   <img
@@ -112,49 +112,49 @@ const AddFile = () => {
                 </div>
 
                 <div className="lg:col-span-2 ">
-                  <div className="grid grid-cols-1 gap-6 gap-y-7 text-sm md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 text-sm gap-y-7 md:grid-cols-6">
                     <div className="md:col-span-3">
-                      <label for="full_name">File Name</label>
+                      <label htmlFor="full_name">File Name</label>
                       <input
                         type="text"
                         name="file_name"
                         id="full_name"
-                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         onChange={(e) => setFileName(e.target.value)}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="address">Shelf Location</label>
+                      <label htmlFor="address">Shelf Location</label>
                       <input
                         type="text"
                         name="shelfLocation"
                         id="shelfLocation"
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder="none"
                         onChange={(e) => setShelfLocation(e.target.value)}
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label for="email">Description</label>
+                      <label htmlFor="email">Description</label>
                       <textarea
                         name="type"
                         id="type"
-                        className="mt-1 h-24 w-full rounded border  bg-gray-50 px-4"
+                        className="w-full h-24 px-4 mt-1 border rounded bg-gray-50"
                         placeholder=" "
                         onChange={(e) => setDiscription(e.target.value)}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Upload File</label>
-                      <div className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50">
+                      <label htmlFor="state">Upload File</label>
+                      <div className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50">
                         <input
                           type="file"
                           name="file"
                           id="file"
                           placeholder=" "
-                          className="w-full appearance-none border-none  bg-transparent p-2 px-4 text-sm text-gray-500 outline-none"
+                          className="w-full p-2 px-4 text-sm text-gray-500 bg-transparent border-none outline-none appearance-none"
                           onChange={(e) => setSendFile(e.target.files[0])}
                         />
                       </div>
@@ -162,11 +162,11 @@ const AddFile = () => {
 
                     {progress && (
                       <div className="md:col-span-3">
-                        <label for="address">Progress</label>
+                        <label htmlFor="address">Progress</label>
                         <input
                           type="text"
                           id="progress"
-                          className="mt-1 h-10 w-full rounded-lg border bg-gray-50 px-4"
+                          className="w-full h-10 px-4 mt-1 border rounded-lg bg-gray-50"
                           value={progress}
                           disabled
                         />
@@ -176,7 +176,7 @@ const AddFile = () => {
                     <div className="mb-10 ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-2">
-                          <button className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary">
+                          <button className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded text-balck hover:bg-primary">
                             Cancel
                           </button>
                           <button
@@ -187,7 +187,7 @@ const AddFile = () => {
                               !shelfLocation
                             }
                             onClick={(e) => UploadFile(e)}
-                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
+                            className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
                           >
                             Upload
                           </button>

@@ -276,7 +276,7 @@ const AddMember = () => {
                 <div className="lg:col-span-2 ">
                   <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-3">
-                      <label for="full_name">Task Title</label>
+                      <label htmlFor="full_name">Task Title</label>
                       <input
                         type="text"
                         name="task_title"
@@ -288,7 +288,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="task">Task Description</label>
+                      <label htmlFor="task">Task Description</label>
                       <textarea
                         type="text"
                         name="description"
@@ -303,7 +303,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="address">Assigned To:</label>
+                      <label htmlFor="address">Assigned To:</label>
                       <Select
                         // ref={selectInputRef}
                         isMulti
@@ -350,7 +350,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="Gender">Priority</label>
+                      <label htmlFor="Gender">Priority</label>
                       <select
                         required
                         id="selectPriority"
@@ -364,7 +364,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Start Date</label>
+                      <label htmlFor="state">Start Date</label>
                       <div
                         id="start"
                         className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
@@ -372,7 +372,7 @@ const AddMember = () => {
                         <input
                           required
                           type="date"
-                          onfocus="(this.type='date')"
+                          onFocus="(this.type='date')"
                           name="startDate"
                           placeholder="MM/DD/YYYY"
                           onChange={handleStart}
@@ -384,7 +384,7 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Due Date</label>
+                      <label htmlFor="state">Due Date</label>
                       <div
                         id="end"
                         className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
@@ -395,7 +395,7 @@ const AddMember = () => {
                           onChange={handleEnd}
                           value={data.DueDate}
                           id="endDate"
-                          onfocus="(this.type='date')"
+                          onFocus="(this.type='date')"
                           name="dueDate"
                           placeholder="MM/DD/YYYY"
                           className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"

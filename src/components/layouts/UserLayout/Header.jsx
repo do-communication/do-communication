@@ -149,13 +149,13 @@ const Header = () => {
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu-button"
-                      tabindex="-1"
+                      tabIndex="-1"
                     >
                       <a
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabindex="-1"
+                        tabIndex="-1"
                         id="user-menu-item-0"
                       >
                         <Link href="/user/profile/profile">My Profile</Link>
@@ -165,7 +165,7 @@ const Header = () => {
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
-                        tabindex="-1"
+                        tabIndex="-1"
                         id="user-menu-item-1"
                         onClick={handleSingout}
                       >

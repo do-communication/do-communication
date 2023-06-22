@@ -123,22 +123,22 @@ const ManageTasks = () => {
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-4 text-2xl font-semibold">{user} Tasks</h1>
-          <div className="mb-4 mt-6 flex items-center justify-between">
+          <div className="flex items-center justify-between mt-6 mb-4">
             <Link
               href="/admin/task/create"
-              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-base font-semibold hover:bg-secondary"
+              className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Assign Task
             </Link>
-            <div className="flex rounded-md border-gray-700 bg-white pr-4">
+            <div className="flex pr-4 bg-white border-gray-700 rounded-md">
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="bg-transparent py-2 pl-4 outline-none"
+                className="py-2 pl-4 bg-transparent outline-none"
                 placeholder="Search from Tasks"
               />
-              <AiOutlineSearch className="h-auto w-6" />
+              <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
           <DataTable
@@ -149,10 +149,10 @@ const ManageTasks = () => {
             pagination
           />
         </div>
-        <div className="col-span-full border-none border-primary md:col-span-1 md:border-l-4">
+        <div className="border-none col-span-full border-primary md:col-span-1 md:border-l-4">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
-            <div className="flex h-full w-full items-center justify-center text-xl">
+            <div className="flex items-center justify-center w-full h-full text-xl">
               <p>Select task to see detail.</p>
             </div>
           )}
@@ -161,8 +161,8 @@ const ManageTasks = () => {
             <>
               <h3 className="flex justify-between px-2 pb-4 text-xl font-semibold">
                 Selected Tasks
-                <button className="flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-base text-white hover:bg-red-500">
-                  <AiOutlineClose className="h-auto w-5" />
+                <button className="flex items-center gap-1 px-2 py-1 text-base text-white bg-red-600 rounded-lg hover:bg-red-500">
+                  <AiOutlineClose className="w-5 h-auto" />
                   Delete All
                 </button>
               </h3>
@@ -170,10 +170,10 @@ const ManageTasks = () => {
                 {selectedRows.map((row, index) => (
                   <li
                     key={index}
-                    className="flex justify-between rounded-lg bg-white px-4 py-2 shadow-sm shadow-black"
+                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
                     <p>{row.Name}</p>
-                    <button className="rounded-lg bg-red-600 p-1 text-white hover:bg-red-500">
+                    <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
                   </li>
@@ -188,42 +188,42 @@ const ManageTasks = () => {
                 <button
                   onClick={() => setShowManageTaskMenu(!showManageTaskMenu)}
                 >
-                  <BiDotsVertical className="h-auto w-8 hover:text-gray-600" />
+                  <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
                 {showManageTaskMenu && (
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <Link
                         href="/admin/reports/member/id"
                         className="flex items-center gap-2"
                       >
-                        <HiDocumentChartBar className="h-auto w-5" /> Reports
+                        <HiDocumentChartBar className="w-5 h-auto" /> Reports
                       </Link>
                     </li>
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <Link
                         href="/admin/task/edit"
                         className="flex items-center gap-2"
                       >
-                        <AiFillEdit className="h-auto w-5" /> Edit Task
+                        <AiFillEdit className="w-5 h-auto" /> Edit Task
                       </Link>
                     </li>
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <button
                         href="/admin/task/delete/{taskId}"
                         className="flex items-center gap-2"
                       >
-                        <AiFillDelete className="h-auto w-5" /> Delete Task
+                        <AiFillDelete className="w-5 h-auto" /> Delete Task
                       </button>
                     </li>
                   </ul>
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-light">
-                  <MdTask className="h-12 w-12" />
+                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-light">
+                  <MdTask className="w-12 h-12" />
                 </div>
-                <h4 className="text-xl font-semibold capitalize" mt-1>
+                <h4 className="mt-1 text-xl font-semibold capitalize">
                   {selectedRows[0].Title}
                 </h4>
                 <p className="text-sm">
@@ -233,9 +233,9 @@ const ManageTasks = () => {
                   )}{" "}
                 </p>
               </div>
-              <div className="ml-2 h-full w-full rounded-xl bg-gray-200 p-2">
+              <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>
-                <p className="flex max-h-64 flex-col gap-2 overflow-y-auto p-2">
+                <p className="flex flex-col gap-2 p-2 overflow-y-auto max-h-64">
                   {selectedRows[0].Description}
                 </p>
                 <table>
