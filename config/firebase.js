@@ -11,22 +11,22 @@ import { getAuth } from "firebase/auth";
 //     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 // };
 
-
 // const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 // export const auth = getAuth(app)
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDj0B7jYE0Km0_9xMKnp3b3dN96f6C098Q",
-    authDomain: "dodemo-e627f.firebaseapp.com",
-    projectId: "dodemo-e627f",
-    storageBucket: "dodemo-e627f.appspot.com",
-    messagingSenderId: "14160058425",
-    appId: "1:14160058425:web:ae42ad81c1adcea9d0d5e8",
-    measurementId: "G-ZLZTGMT0YP"
+  apiKey: "AIzaSyDj0B7jYE0Km0_9xMKnp3b3dN96f6C098Q",
+  authDomain: "dodemo-e627f.firebaseapp.com",
+  projectId: "dodemo-e627f",
+  storageBucket: "dodemo-e627f.appspot.com",
+  messagingSenderId: "14160058425",
+  appId: "1:14160058425:web:ae42ad81c1adcea9d0d5e8",
+  measurementId: "G-ZLZTGMT0YP",
 };
 
 // Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const auth = getAuth(app)
-export { auth, app }
+const app =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const auth = getAuth(app);
+export { auth, app };

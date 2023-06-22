@@ -8,23 +8,22 @@ const MyTaskPage = () => {
   const [allTasks, setallTasks] = useState([]);
   const [tasks, setTasks] = useState([allTasks]);
   const getData = async () => {
-    let arr = []
-    let temp = []
+    let arr = [];
+    let temp = [];
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push({id:d.id, data:d.data()})
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push({ id: d.id, data: d.data() });
       });
-
     } catch (err) {
-      console.log(err)
-      setTasks([{ Name: "check your connection" }])
+      console.log(err);
+      setTasks([{ Name: "check your connection" }]);
     }
 
-    setTasks(arr)
-    setallTasks(arr)
-  }
+    setTasks(arr);
+    setallTasks(arr);
+  };
   const CARDS = [
     {
       title: "New Tasks",
@@ -59,7 +58,7 @@ const MyTaskPage = () => {
                 >
                   {(provided) => (
                     <div
-                      className="p-3 mt-2 mb-3 bg-white border-b border-gray-100 rounded cursor-pointer dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-900"
+                      className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -126,7 +125,7 @@ const MyTaskPage = () => {
                       {...provided.dragHandleProps}
                       className="md:col-span-2 xl:col-span-1"
                     >
-                      <div className="h-full p-3 text-black bg-white rounded">
+                      <div className="h-full rounded bg-white p-3 text-black">
                         <h3 className="text-sm font-semibold">{card.title}</h3>
                         <TaskItems status={card.status} />
                       </div>

@@ -5,7 +5,7 @@ export const allFiles = [
     description: "Customer information",
     owner: "somemember/admin",
     location: "documents/customers/customers information ",
-    createdAt: "date"
+    createdAt: "date",
   },
   {
     name: "Employeesfile.pdf",
@@ -13,7 +13,7 @@ export const allFiles = [
     description: "Employee information",
     owner: "somemember/admin",
     location: "onshelf employees/RowNO4",
-    createdAt: "date"
+    createdAt: "date",
   },
   {
     name: "Flyer design.png",
@@ -21,7 +21,7 @@ export const allFiles = [
     description: "Flayer",
     owner: "somemember/admin",
     location: "documents/DesignFiles/flyers",
-    createdAt: "date"
+    createdAt: "date",
   },
   {
     name: "T-shirt design",
@@ -29,7 +29,7 @@ export const allFiles = [
     description: "cloth Design",
     owner: "somemember/admin",
     location: "onshelf T-shirDesign/Rowno7",
-    createdAt: "date"
+    createdAt: "date",
   },
   {
     name: "Report.docx",
@@ -37,6 +37,6 @@ export const allFiles = [
     description: "Progress report",
     owner: "somemember/admin",
     location: "documents/reports/weekly report ",
-    createdAt: "date"
+    createdAt: "date",
   },
 ];

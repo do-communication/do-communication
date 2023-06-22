@@ -17,18 +17,31 @@ const DirectChat = () => {
   const get = async (userId) => {
     setReciever(await GetUser(userId));
     await getMessage(userId, setMessages);
-  }
+  };
 
-
-  useEffect(() => { get(userId) }, [userId])
   useEffect(() => {
     get(userId);
-  }, [update])
-
+  }, [userId]);
+  useEffect(() => {
+    get(userId);
+  }, [update]);
 
   return (
     <ChatLayout user={reciever}>
-      <Chatbox messages={messages} name={reciever ? reciever.Name ? reciever.Name : reciever.RecieverName : ""} get={get} setUpdate={setUpdate} update={update} isgroup={false} />
+      <Chatbox
+        messages={messages}
+        name={
+          reciever
+            ? reciever.Name
+              ? reciever.Name
+              : reciever.RecieverName
+            : ""
+        }
+        get={get}
+        setUpdate={setUpdate}
+        update={update}
+        isgroup={false}
+      />
     </ChatLayout>
   );
 };

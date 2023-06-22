@@ -35,18 +35,18 @@ const Letters = () => {
 
   return (
     <AdminLayout>
-      <div className="order-last md:col-span-2 col-span-full md:order-first">
+      <div className="order-last col-span-full md:order-first md:col-span-2">
         <h1 className="mb-5 text-2xl font-semibold">My Letters</h1>
-        <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
-          <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
+        <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:justify-between md:items-center">
+          <div className="flex rounded-md border-gray-700 bg-white pr-4 ">
             <input
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+              className="w-11/12 bg-transparent py-2 pl-4 outline-none"
               placeholder="Search letters"
             />
-            <AiOutlineSearch className="w-6 h-auto" />
+            <AiOutlineSearch className="h-auto w-6" />
           </div>
         </div>
         <ClientOnlyTable
@@ -76,20 +76,20 @@ const ShowLetterDetail = ({ data }) => {
   };
 
   return (
-    <div className="flex flex-col gap-10 px-8 py-4 bg-gray-200">
-      <div className="flex justify-between items-center w-3/4 mx-auto pt-4">
+    <div className="flex flex-col gap-10 bg-gray-200 px-8 py-4">
+      <div className="mx-auto flex w-3/4 items-center justify-between pt-4">
         <h3 className="text-2xl">View Letter</h3>
         {!isPrinting && (
           <button
-            className="bg-slate-600 text-white px-5 py-1 hover:bg-slate-500 flex justify-center rounded"
+            className="flex justify-center rounded bg-slate-600 px-5 py-1 text-white hover:bg-slate-500"
             onClick={handlePrint}
           >
-            <BiPrinter className="w-6 h-auto" />
+            <BiPrinter className="h-auto w-6" />
           </button>
         )}
       </div>
       <div
-        className="bg-white flex flex-col gap-10 w-3/4 mx-auto rounded px-10 py-24 "
+        className="mx-auto flex w-3/4 flex-col gap-10 rounded bg-white px-10 py-24 "
         id="print-preview"
         ref={printPreviewRef}
       >

@@ -1,10 +1,17 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
-import { db } from "../../../../context/DbContext"
+import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
-import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  getDocs,
+  getDoc,
+  collection,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
-import Router from 'next/router';
+import Router from "next/router";
 const router = Router;
 import { FaPersonCircleCheck } from "react-icons/fa";
 import {
@@ -32,27 +39,29 @@ const ManageGroup = () => {
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
   const users = [];
   const getData = async () => {
-    let arr = []
+    let arr = [];
     const all = collection(db, "KalCompany", "Groups", "Groups");
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push({ id: d.id, data: d.data() })
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push({ id: d.id, data: d.data() });
       });
-
     } catch (err) {
-      console.log(err)
-      setTasks([{ Name: "check your connection" }])
+      console.log(err);
+      setTasks([{ Name: "check your connection" }]);
     }
 
-    setGroups(arr)
-    setallGroups(arr)
-  }
+    setGroups(arr);
+    setallGroups(arr);
+  };
   // search for groups using group name
   useEffect(() => {
     const filteredData = allGroups.filter(
       (item) =>
-        item.data.Name && item.data.Name.toLowerCase().includes(search.toLowerCase()) || item.data.Type && item.data.Type.toLowerCase().includes(search.toLowerCase())
+        (item.data.Name &&
+          item.data.Name.toLowerCase().includes(search.toLowerCase())) ||
+        (item.data.Type &&
+          item.data.Type.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -71,7 +80,6 @@ const ManageGroup = () => {
     }, 2000);
     return () => clearTimeout(timeout);
   }, []);
-
 
   const columns = [
     {
@@ -92,13 +100,17 @@ const ManageGroup = () => {
     let tempGroup = [];
     let tempPeople = [];
     let lead = "";
-    const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group = mem._document.data.value.mapValue.fields.Members.arrayValue.values;
-    const people = mem._document.data.value.mapValue.fields.People.arrayValue.values;
+    const task =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report =
+      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group =
+      mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    const people =
+      mem._document.data.value.mapValue.fields.People.arrayValue.values;
     var j = 0;
     if (people) {
-      people.forEach(p => {
+      people.forEach((p) => {
         if (p) {
           if (j == index) {
             lead = p.stringValue;
@@ -110,21 +122,21 @@ const ManageGroup = () => {
       });
     }
     if (task) {
-      task.forEach(t => {
+      task.forEach((t) => {
         if (t) {
           tempTask.push(t.stringValue);
         }
       });
     }
     if (report) {
-      report.forEach(r => {
+      report.forEach((r) => {
         if (r) {
           tempReport.push(r.stringValue);
         }
       });
     }
     if (group) {
-      group.forEach(g => {
+      group.forEach((g) => {
         if (g) {
           tempGroup.push(g.stringValue);
         }
@@ -138,40 +150,49 @@ const ManageGroup = () => {
       Members: tempGroup,
       Reports: tempReport,
       Tasks: tempTask,
-      Learder: lead
-    }
+      Learder: lead,
+    };
 
     handleAssign(groupId, data);
-    const leaderRef = doc(db, "KalCompany", "Users", "StaffMembers", data.People[index]);
+    const leaderRef = doc(
+      db,
+      "KalCompany",
+      "Users",
+      "StaffMembers",
+      data.People[index]
+    );
     const selected = await getDoc(leaderRef);
-    const n = selected._document.data.value.mapValue.fields.Name.stringValue
+    const n = selected._document.data.value.mapValue.fields.Name.stringValue;
     toast.success(`${n} is assigned as a leader of this group`);
-  }
+  };
   const handleClick = async (i, name) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
-    const mem = await getDoc(docRef)
+    const mem = await getDoc(docRef);
     let tempTask = [];
     let tempReport = [];
     let tempGroup = [];
-    const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+    const temp =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report =
+      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group =
+      mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
     if (temp) {
-      temp.forEach(t => {
+      temp.forEach((t) => {
         if (t) {
           tempTask.push(t.stringValue);
         }
       });
     }
     if (report) {
-      report.forEach(r => {
+      report.forEach((r) => {
         if (r) {
           tempReport.push(r.stringValue);
         }
       });
     }
     if (group) {
-      group.forEach(g => {
+      group.forEach((g) => {
         if (g) {
           if (g.stringValue != name) {
             tempGroup.push(g.stringValue);
@@ -184,36 +205,44 @@ const ManageGroup = () => {
       Address: mem._document.data.value.mapValue.fields.Address.stringValue,
       Email: mem._document.data.value.mapValue.fields.Email.stringValue,
       Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
-      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
-      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
-      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
-      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
-      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+      Department:
+        mem._document.data.value.mapValue.fields.Department.stringValue,
+      PhoneNumber:
+        mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+      DateOfBirth:
+        mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+      ProfilePic:
+        mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+      RegisteredAt:
+        mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
       GroupId: tempGroup,
       Reports: tempReport,
-      Tasks: tempTask
-    }
+      Tasks: tempTask,
+    };
     updateDoc(docRef, newData)
-      .then(docRef => {
-        console.log("A New Document Field has been added to an existing document");
+      .then((docRef) => {
+        console.log(
+          "A New Document Field has been added to an existing document"
+        );
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-      })
-  }
+      });
+  };
   const handleAssign = async (groupId, data) => {
     // setData({...data, Learder:data.People[index]});
     const groupRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     console.log(data);
     updateDoc(groupRef, data)
-      .then(groupRef => {
-        console.log("A New Document Field has been added to an existing document");
+      .then((groupRef) => {
+        console.log(
+          "A New Document Field has been added to an existing document"
+        );
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-      })
-  }
-
+      });
+  };
 
   const handleRemove = async (groupId, index) => {
     const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
@@ -222,13 +251,17 @@ const ManageGroup = () => {
     let tempReport = [];
     let tempGroup = [];
     let tempPeople = [];
-    const task = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group = mem._document.data.value.mapValue.fields.Members.arrayValue.values;
-    const people = mem._document.data.value.mapValue.fields.People.arrayValue.values;
+    const task =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report =
+      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group =
+      mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    const people =
+      mem._document.data.value.mapValue.fields.People.arrayValue.values;
     // var j = 0;
     if (group) {
-      group.forEach(g => {
+      group.forEach((g) => {
         if (g) {
           if (g.stringValue !== index) {
             tempGroup.push(g.stringValue);
@@ -237,7 +270,7 @@ const ManageGroup = () => {
       });
     }
     if (people) {
-      people.forEach(p => {
+      people.forEach((p) => {
         if (p) {
           // if(j == index){
           //   lead = p.stringValue;
@@ -249,20 +282,19 @@ const ManageGroup = () => {
       });
     }
     if (task) {
-      task.forEach(t => {
+      task.forEach((t) => {
         if (t) {
           tempTask.push(t.stringValue);
         }
       });
     }
     if (report) {
-      report.forEach(r => {
+      report.forEach((r) => {
         if (r) {
           tempReport.push(r.stringValue);
         }
       });
     }
-
 
     const data = {
       People: tempPeople,
@@ -271,42 +303,42 @@ const ManageGroup = () => {
       Members: tempGroup,
       Reports: tempReport,
       Tasks: tempTask,
-      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue
-    }
+      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+    };
 
     handleAssign(groupId, data);
     toast.success(`${index} is removed from this group`);
     getData();
-  }
+  };
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
   }, []);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   return (
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
-        <div className="order-last md:col-span-2 col-span-full md:order-first">
+        <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-4 text-3xl font-semibold">Manage Groups</h1>
-          <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
+          <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:justify-between md:items-center">
             <Link
               href="/admin/groups/create"
-              className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-base font-semibold hover:bg-secondary"
             >
               <AiOutlinePlus /> Create Group
             </Link>
-            <div className="flex justify-between pr-4 bg-white border-gray-700 rounded-md ">
+            <div className="flex justify-between rounded-md border-gray-700 bg-white pr-4 ">
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+                className="w-11/12 bg-transparent py-2 pl-4 outline-none"
                 placeholder="Search from groups"
               />
-              <AiOutlineSearch className="w-6 h-auto" />
+              <AiOutlineSearch className="h-auto w-6" />
             </div>
           </div>
           <ClientOnlyTable
@@ -321,10 +353,10 @@ const ManageGroup = () => {
             pagination={true}
           />
         </div>
-        <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
+        <div className="col-span-full border-none border-primary md:col-span-1 md:border-l-4">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
-            <div className="flex items-center justify-center w-full h-full text-xl">
+            <div className="flex h-full w-full items-center justify-center text-xl">
               <p>Select group to see details</p>
             </div>
           )}
@@ -344,41 +376,47 @@ const ManageGroup = () => {
                 <button
                   onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                 >
-                  <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
+                  <BiDotsVertical className="h-auto w-8 hover:text-gray-600" />
                 </button>
                 {showManageGroupMenu && (
-                  <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
-                    <li className="p-1 rounded hover:bg-primary">
+                  <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
+                    <li className="rounded p-1 hover:bg-primary">
                       <button
                         onClick={() => {
-                          router.push(`/admin/task/group/${selectedRows[0].id}`)
+                          router.push(
+                            `/admin/task/group/${selectedRows[0].id}`
+                          );
                         }}
                         className="flex items-center gap-2"
                       >
-                        <MdChecklist className="w-5 h-auto" /> Tasks
+                        <MdChecklist className="h-auto w-5" /> Tasks
                       </button>
                     </li>
-                    <li className="p-1 rounded hover:bg-primary">
+                    <li className="rounded p-1 hover:bg-primary">
                       <button
                         onClick={() => {
-                          router.push(`/admin/reports/group/${selectedRows[0].id}`)
+                          router.push(
+                            `/admin/reports/group/${selectedRows[0].id}`
+                          );
                         }}
                         className="flex items-center gap-2"
                       >
-                        <MdChecklist className="w-5 h-auto" /> Reports
+                        <MdChecklist className="h-auto w-5" /> Reports
                       </button>
                     </li>
-                    <li className="p-1 rounded hover:bg-primary">
+                    <li className="rounded p-1 hover:bg-primary">
                       <button
                         onClick={() => {
-                          router.push(`/admin/groups/edit/${selectedRows[0].id}`)
+                          router.push(
+                            `/admin/groups/edit/${selectedRows[0].id}`
+                          );
                         }}
                         className="flex items-center gap-2"
                       >
-                        <AiFillEdit className="w-5 h-auto" /> Edit Group
+                        <AiFillEdit className="h-auto w-5" /> Edit Group
                       </button>
                     </li>
-                    <li className="p-1 rounded hover:bg-primary">
+                    <li className="rounded p-1 hover:bg-primary">
                       <button
                         className="flex items-center gap-2"
                         onClick={async (e) => {
@@ -386,27 +424,35 @@ const ManageGroup = () => {
                           setSelectedRows([]);
                           setClearSelectedRows(true);
                           const id = selectedRows[0].id;
-                          selectedRows[0].data.Members.map(m => {
+                          selectedRows[0].data.Members.map((m) => {
                             handleClick(m.id, selectedRows[0].data.Name);
-                          })
-                          const check = confirm("Do you want to delete the group?");
+                          });
+                          const check = confirm(
+                            "Do you want to delete the group?"
+                          );
                           if (check) {
-                            const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
-                            await deleteDoc(docRef)
+                            const docRef = doc(
+                              db,
+                              "KalCompany",
+                              "Groups",
+                              "Groups",
+                              id
+                            );
+                            await deleteDoc(docRef);
                             getData();
                             toast.success("Group deleted successfully");
                           }
                         }}
                       >
-                        <AiFillDelete className="w-5 h-auto" /> Delete Group
+                        <AiFillDelete className="h-auto w-5" /> Delete Group
                       </button>
                     </li>
                   </ul>
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center justify-center w-20 h-20 bg-red-400 rounded-full">
-                  <MdGroup className="w-12 h-12" />
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-400">
+                  <MdGroup className="h-12 w-12" />
                 </div>
                 <h4 className="text-xl font-semibold capitalize" mt-1>
                   {selectedRows[0].data.Name}
@@ -414,44 +460,47 @@ const ManageGroup = () => {
                 <p className="text-sm">{selectedRows[0].data.Type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button
-                  className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
-                >
-                  <TbMessage className="w-8 h-auto" />
+                <button className="rounded-full bg-secondary bg-opacity-80 p-2 text-white">
+                  <TbMessage className="h-auto w-8" />
                 </button>
               </div>
 
-              <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
+              <div className="ml-2 h-full w-full rounded-xl bg-gray-200 p-2">
                 <h3 className="p-2 text-lg font-semibold">Members</h3>
 
-                <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  {selectedRows[0].data.Members && selectedRows[0].data.Members.map((row, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                    >
-                      <p>{row}</p>
-                      <div className="flex gap-2">
-                        {(selectedRows[0].data.Learder !== users[index]) &&
-                          <button onClick={async () => {
-                            await fetchGroup(selectedRows[0].id, index)
-                          }}
-                            className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-
-                            Assign Leader
-                          </button>
-                        }
-                      </div>
-                      <button onClick={async () => {
-                        await handleRemove(selectedRows[0].id, row)
-                      }} className="flex gap-2">
-                        <div className="flex items-center gap-1 p-1 px-2 text-red-600">
-                          {/* < BiX className="w-5 h-auto" /> */}
-                          Remove
+                <ul className="flex max-h-64 flex-col gap-2 overflow-y-auto">
+                  {selectedRows[0].data.Members &&
+                    selectedRows[0].data.Members.map((row, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between rounded-md p-2 hover:bg-secondary hover:bg-opacity-25"
+                      >
+                        <p>{row}</p>
+                        <div className="flex gap-2">
+                          {selectedRows[0].data.Learder !== users[index] && (
+                            <button
+                              onClick={async () => {
+                                await fetchGroup(selectedRows[0].id, index);
+                              }}
+                              className="flex items-center gap-1 rounded-lg bg-secondary p-1 px-4 text-white hover:bg-primary"
+                            >
+                              Assign Leader
+                            </button>
+                          )}
                         </div>
-                      </button>
-                    </div>
-                  ))}
+                        <button
+                          onClick={async () => {
+                            await handleRemove(selectedRows[0].id, row);
+                          }}
+                          className="flex gap-2"
+                        >
+                          <div className="flex items-center gap-1 p-1 px-2 text-red-600">
+                            {/* < BiX className="w-5 h-auto" /> */}
+                            Remove
+                          </div>
+                        </button>
+                      </div>
+                    ))}
                   {/* <Link
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"

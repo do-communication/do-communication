@@ -8,7 +8,7 @@ const Ticket = ({ task }) => {
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold capitalize">{task.name}</h3>
-        <span className="px-2 text-sm font-semibold rounded-lg bg-secondary">
+        <span className="rounded-lg bg-secondary px-2 text-sm font-semibold">
           {task.priority}
         </span>
       </div>
@@ -18,7 +18,7 @@ const Ticket = ({ task }) => {
           <p className="">
             {task.detail}{" "}
             <button
-              className="underline text-primary"
+              className="text-primary underline"
               onClick={() => setShowDetail(false)}
             >
               Read Less
@@ -28,7 +28,7 @@ const Ticket = ({ task }) => {
           <p className="">
             {task.detail.substring(0, 100)}...
             <button
-              className="underline text-primary"
+              className="text-primary underline"
               onClick={() => setShowDetail(true)}
             >
               Read More

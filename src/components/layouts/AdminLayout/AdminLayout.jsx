@@ -27,16 +27,16 @@ const AdminLayout = ({ children, noFooter = false }) => {
       <div className="md:flex">
         <OpenSideBarContext.Provider value={[openSideBar, openSideBarDispatch]}>
           <Sidebar />
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-1 flex-col">
             {/* <!-- Top navbar --> */}
             <Header />
             {/* <!-- End Top navbar --> */}
-            <main className="bg-[#f3f3f9] mb-auto flex-grow p-5">
+            <main className="mb-auto flex-grow bg-[#f3f3f9] p-5">
               {children}
             </main>
 
             {!noFooter && (
-              <footer className="p-4 pb-3 text-xs bg-gray-100 border-t">
+              <footer className="border-t bg-gray-100 p-4 pb-3 text-xs">
                 2023 @ Do communication all right reserved.
               </footer>
             )}

@@ -7,18 +7,18 @@ const Home = () => {
       <AuthHeader />
       <main>
         {/* home section */}
-        <section className="px-2 pt-10 bg-white py-30 md:px-0">
-          <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
+        <section className="py-30 bg-white px-2 pt-10 md:px-0">
+          <div className="container mx-auto max-w-6xl items-center px-8 xl:px-5">
             <div className="flex flex-wrap items-center sm:-mx-3">
               <div className="w-full md:w-1/2 md:px-3">
-                <div className="w-full pb-6 space-y-6 sm:max-w-md lg:max-w-lg md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-0 md:pb-0">
+                <div className="w-full space-y-6 pb-6 sm:max-w-md sm:pr-5 md:space-y-4 md:pb-0 lg:max-w-lg lg:space-y-8 lg:pr-0 xl:space-y-9">
                   <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl">
                     <span className="block xl:inline">Make your </span>
                     <span className="block text-secondary xl:inline">
                       Company more productive.
                     </span>
                   </h1>
-                  <p className="mx-auto text-base text-gray-500 sm:max-w-md lg:text-xl md:max-w-3xl">
+                  <p className="mx-auto text-base text-gray-500 sm:max-w-md md:max-w-3xl lg:text-xl">
                     Independent and all-in-one workspace for mid-sized
                     organizations to conduct their work in a manner that is
                     well-planned and productive
@@ -26,12 +26,12 @@ const Home = () => {
                   <div className="relative flex flex-col sm:flex-row sm:space-x-4">
                     <Link
                       href="/auth/signup"
-                      className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-secondary rounded-md sm:mb-0 hover:bg-blue-600 sm:w-auto"
+                      className="mb-3 flex w-full items-center rounded-md bg-secondary px-6 py-3 text-lg text-white hover:bg-blue-600 sm:mb-0 sm:w-auto"
                     >
                       Try It
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5 ml-1"
+                        className="ml-1 h-5 w-5"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -45,7 +45,7 @@ const Home = () => {
                     </Link>
                     <Link
                       href="/auth/login"
-                      className="flex items-center px-6 py-3 text-gray-500 bg-gray-100 rounded-md hover:bg-gray-200 hover:text-gray-600"
+                      className="flex items-center rounded-md bg-gray-100 px-6 py-3 text-gray-500 hover:bg-gray-200 hover:text-gray-600"
                     >
                       Sign In
                     </Link>
@@ -53,7 +53,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="w-full md:w-1/2">
-                <div className="w-full h-auto overflow-hidden rounded-md sm:rounded-xl">
+                <div className="h-auto w-full overflow-hidden rounded-md sm:rounded-xl">
                   <img src="/images/office.svg" />
                 </div>
               </div>
@@ -62,17 +62,17 @@ const Home = () => {
         </section>
 
         {/* about page */}
-        <section className="w-full bg-white pt-30 pb-7 md:pt-20 md:pb-24">
+        <section className="pt-30 w-full bg-white pb-7 md:pb-24 md:pt-20">
           <div className="flex items-start justify-center pb-4">
             <h2
               id="about"
-              className="pt-10 pb-12 m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl"
+              className="m-0 border-0 border-gray-300 pb-12 pt-10 text-xl font-semibold leading-tight md:text-2xl lg:text-3xl"
             >
               About us
             </h2>
           </div>
-          <div className="box-border flex flex-col items-center content-center px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row max-w-7xl lg:px-16">
-            <div className="box-border relative w-full max-w-md px-4 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10">
+          <div className="mx-auto box-border flex max-w-7xl flex-col content-center items-center border-0 border-solid border-gray-300 px-8 leading-6 text-black md:flex-row lg:px-16">
+            <div className="relative -ml-5 mb-4 mt-5 box-border w-full max-w-md border-solid bg-contain bg-no-repeat px-4 text-center md:ml-0 md:mt-0 md:w-1/2 md:max-w-none lg:mb-0 xl:pl-10">
               <img
                 src="/images/task.svg"
                 className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20 "
@@ -80,29 +80,29 @@ const Home = () => {
               />
             </div>
 
-            <div className="box-border order-first w-full text-black border-solid md:w-1/2 md:pl-10 md:order-none">
-              <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
+            <div className="order-first box-border w-full border-solid text-black md:order-none md:w-1/2 md:pl-10">
+              <h2 className="m-0 border-0 border-gray-300 text-xl font-semibold leading-tight md:text-2xl lg:text-3xl">
                 Automated Tasks
               </h2>
-              <p className="pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 xl:pr-32 lg:text-lg">
+              <p className="m-0 border-0 border-gray-300 pb-8 pt-4 leading-7 text-gray-700 sm:pr-12 lg:text-lg xl:pr-32">
                 Build an atmosphere that creates productivity in your
                 organization and your company culture.
               </p>
-              <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
-                <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
+              <ul className="m-0 border-0 border-gray-300 p-0 leading-6">
+                <li className="relative box-border border-solid py-1 pl-0 text-left text-gray-500">
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Maximize productivity and growth
                 </li>
-                <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
+                <li className="relative box-border border-solid py-1 pl-0 text-left text-gray-500">
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Efficient Task Management
                 </li>
-                <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
+                <li className="relative box-border border-solid py-1 pl-0 text-left text-gray-500">
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Improved File Management
@@ -110,30 +110,30 @@ const Home = () => {
               </ul>
             </div>
           </div>
-          <div className="box-border flex flex-col items-center content-center px-8 mx-auto mt-2 leading-6 text-black border-0 border-gray-300 border-solid md:mt-20 xl:mt-0 md:flex-row max-w-7xl lg:px-16">
-            <div className="box-border w-full pt-32 text-black border-solid md:w-1/2 md:pl-6 xl:pl-32">
-              <h2 className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
+          <div className="mx-auto mt-2 box-border flex max-w-7xl flex-col content-center items-center border-0 border-solid border-gray-300 px-8 leading-6 text-black md:mt-20 md:flex-row lg:px-16 xl:mt-0">
+            <div className="box-border w-full border-solid pt-32 text-black md:w-1/2 md:pl-6 xl:pl-32">
+              <h2 className="m-0 border-0 border-gray-300 text-xl font-semibold leading-tight md:text-2xl lg:text-3xl">
                 Boost Productivity
               </h2>
-              <p className="pt-4 pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-10 lg:text-lg">
+              <p className="m-0 border-0 border-gray-300 pb-8 pt-4 leading-7 text-gray-700 sm:pr-10 lg:text-lg">
                 enhance your company staff relations and efficiency by
                 facilitating office communications
               </p>
-              <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
-                <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
+              <ul className="m-0 border-0 border-gray-300 p-0 leading-6">
+                <li className="relative box-border border-solid py-1 pl-0 text-left text-gray-500">
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Chat capability
                 </li>
-                <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
+                <li className="relative box-border border-solid py-1 pl-0 text-left text-gray-500">
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Improved Communication
                 </li>
-                <li className="box-border relative py-1 pl-0 text-left text-gray-500 border-solid">
-                  <span className="inline-flex items-center justify-center w-6 h-6 mr-2 text-white rounded-full bg-primary">
+                <li className="relative box-border border-solid py-1 pl-0 text-left text-gray-500">
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <span className="text-sm font-bold">✓</span>
                   </span>{" "}
                   Independent from personal affair
@@ -141,10 +141,10 @@ const Home = () => {
               </ul>
             </div>
 
-            <div className="box-border relative w-full max-w-md px-4 mt-10 mb-4 text-center bg-no-repeat bg-contain border-solid md:mt-0 md:max-w-none lg:mb-0 md:w-1/2">
+            <div className="relative mb-4 mt-10 box-border w-full max-w-md border-solid bg-contain bg-no-repeat px-4 text-center md:mt-0 md:w-1/2 md:max-w-none lg:mb-0">
               <img
                 src="/images/group.svg"
-                className="pl-4 sm:pr-10 xl:pl-10 lg:pr-32"
+                className="pl-4 sm:pr-10 lg:pr-32 xl:pl-10"
                 alt="group chat"
               />
             </div>
@@ -152,16 +152,16 @@ const Home = () => {
         </section>
         {/* contact page  */}
         <section className="bg-white">
-          <div className="max-w-screen-xl px-4 py-12 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-screen-xl space-y-8 overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
             <div className="flex items-start justify-center pb-4">
               <h2
                 id="contact"
-                className="m-0 text-xl font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl "
+                className="m-0 border-0 border-gray-300 text-xl font-semibold leading-tight md:text-2xl lg:text-3xl "
               >
                 Contact us
               </h2>
             </div>
-            <nav className="flex flex-wrap justify-center -mx-5 -my-2">
+            <nav className="-mx-5 -my-2 flex flex-wrap justify-center">
               <div className="px-5 py-2">
                 <Link
                   href="/"
@@ -188,11 +188,11 @@ const Home = () => {
                 </Link>
               </div>
             </nav>
-            <div className="flex justify-center mt-8 space-x-6">
+            <div className="mt-8 flex justify-center space-x-6">
               <Link href="#" className="text-gray-400 hover:text-gray-500">
                 <span className="sr-only">Facebook</span>
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -207,7 +207,7 @@ const Home = () => {
               <Link href="#" className="text-gray-400 hover:text-gray-500">
                 <span className="sr-only">Instagram</span>
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -222,7 +222,7 @@ const Home = () => {
               <Link href="#" className="text-gray-400 hover:text-gray-500">
                 <span className="sr-only">Twitter</span>
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -233,7 +233,7 @@ const Home = () => {
               <Link href="#" className="text-gray-400 hover:text-gray-500">
                 <span className="sr-only">GitHub</span>
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -246,7 +246,7 @@ const Home = () => {
                 </svg>
               </Link>
             </div>
-            <p className="mt-8 text-base leading-6 text-center text-gray-400">
+            <p className="mt-8 text-center text-base leading-6 text-gray-400">
               © 2023 Digital Office, Inc. All rights reserved.
             </p>
           </div>

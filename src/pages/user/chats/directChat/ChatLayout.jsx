@@ -42,11 +42,11 @@ const ChatLayout = ({ children, user }) => {
 
   const getRecent = async () => {
     await getRecentData(setRecent);
-  }
+  };
 
   const getData = async () => {
     await getMembersData(setMembers, setallMembers);
-  }
+  };
 
   const handleSelect = (member) => {
     setSelected(member.data);
@@ -55,7 +55,7 @@ const ChatLayout = ({ children, user }) => {
     if (elem) {
       elem.value = "";
     }
-  }
+  };
 
   useEffect(() => {
     if (search.trim() != "") {
@@ -79,38 +79,43 @@ const ChatLayout = ({ children, user }) => {
     return (
       <div className="flex flex-col">
         <div className="flex flex-row items-center justify-between text-sm">
-          <div className="flex w-full pr-4 mr-4 bg-white border rounded-md border-secondary ">
+          <div className="mr-4 flex w-full rounded-md border border-secondary bg-white pr-4 ">
             <input
               type="Search messages"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+              className="w-11/12 bg-transparent py-2 pl-4 outline-none"
               placeholder="Search"
             />
-            <AiOutlineSearch className="w-6 h-auto" />
+            <AiOutlineSearch className="h-auto w-6" />
           </div>
         </div>
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           {recent.length > 0 &&
             recent.map((member, index) => (
               <Link
                 href={`/user/chats/directChat/${member.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2 rounded-xl  ${member.id === router.query.userId
+                className={`flex flex-row items-center rounded-xl p-2  ${
+                  member.id === router.query.userId
                     ? "bg-secondary text-white"
-                    : "hover:bg-opacity-25 hover:bg-secondary"
-                  }`}
+                    : "hover:bg-secondary hover:bg-opacity-25"
+                }`}
                 onClick={() => handleSelect(member)}
               >
                 <RecentMessageItem
-                  name={member.data.RecieverId == auth.currentUser.uid ? member.data.SenderName : member.data.RecieverName}
+                  name={
+                    member.data.RecieverId == auth.currentUser.uid
+                      ? member.data.SenderName
+                      : member.data.RecieverName
+                  }
                   msg={member.data.Content}
                 />
               </Link>
             ))}
 
           {recent.length === 0 && (
-            <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
+            <div className="flex flex-row items-center rounded-xl p-2 hover:bg-secondary hover:bg-opacity-25">
               <div className="ml-2 text-sm font-semibold">No members found</div>
             </div>
           )}
@@ -123,29 +128,30 @@ const ChatLayout = ({ children, user }) => {
     return (
       <div className="flex flex-col">
         <div className="flex flex-row items-center justify-between text-sm">
-          <div className="flex w-full pr-4 mr-4 bg-white border rounded-md border-secondary ">
+          <div className="mr-4 flex w-full rounded-md border border-secondary bg-white pr-4 ">
             <input
               type="search members"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+              className="w-11/12 bg-transparent py-2 pl-4 outline-none"
               placeholder="Search"
             />
-            <AiOutlineSearch className="w-6 h-auto" />
+            <AiOutlineSearch className="h-auto w-6" />
           </div>
         </div>
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           {members.length > 0 &&
             members.map((member, index) => (
               <Link
                 href={`/user/chats/directChat/${member.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2  rounded-xl ${member.id === router.query.userId
+                className={`flex flex-row items-center rounded-xl  p-2 ${
+                  member.id === router.query.userId
                     ? "bg-secondary text-white"
-                    : "hover:bg-opacity-25 hover:bg-secondary"
-                  }`}
+                    : "hover:bg-secondary hover:bg-opacity-25"
+                }`}
               >
-                <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-200">
                   {member.data.Name[0]}
                 </div>
                 <div className="ml-2 text-sm font-semibold">
@@ -155,7 +161,7 @@ const ChatLayout = ({ children, user }) => {
             ))}
 
           {members.length === 0 && (
-            <div className="flex flex-row items-center p-2 hover:bg-opacity-25 hover:bg-secondary rounded-xl">
+            <div className="flex flex-row items-center rounded-xl p-2 hover:bg-secondary hover:bg-opacity-25">
               <div className="ml-2 text-sm font-semibold">No members found</div>
             </div>
           )}
@@ -166,12 +172,13 @@ const ChatLayout = ({ children, user }) => {
 
   return (
     <UserLayout noFooter={true}>
-      <div className="relative w-full md:h-full h-[calc(100vh-130px)]">
-        <div className="absolute grid w-full h-full grid-cols-4 gap-5">
+      <div className="relative h-[calc(100vh-130px)] w-full md:h-full">
+        <div className="absolute grid h-full w-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${router.query.userId ? "hidden" : ""
-              }`}
+            className={`col-span-full max-h-full rounded-2xl bg-white px-4 py-5 shadow-md lg:col-span-1 lg:block ${
+              router.query.userId ? "hidden" : ""
+            }`}
           >
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
@@ -180,18 +187,21 @@ const ChatLayout = ({ children, user }) => {
             </div>
             {/* profile part start */}
             {selected ? (
-              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-                <div className="rounded-full h-50 w-50">
-                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                    <div className="flex items-center justify-center w-full h-full rounded-full">
+              <div className="opacity-3 mr-6 mt-4 flex flex-col items-center justify-center rounded-lg border-gray-200 bg-light px-4 py-6">
+                <div className="h-50 w-50 rounded-full">
+                  <div className="h-16 w-16 items-center justify-center rounded-full bg-blue-200 md:flex lg:hidden xl:flex">
+                    <div className="flex h-full w-full items-center justify-center rounded-full">
                       {selected.ProfilePic === "" ? (
-                        selected.Name ? selected.Name[0] : selected.RecieverName[0]
+                        selected.Name ? (
+                          selected.Name[0]
+                        ) : (
+                          selected.RecieverName[0]
+                        )
                       ) : (
                         <img
                           src={selected.ProfilePic}
                           alt="Avatar"
-                          className="flex items-center justify-center w-full h-full rounded-full"
-
+                          className="flex h-full w-full items-center justify-center rounded-full"
                         />
                       )}
                     </div>
@@ -203,13 +213,13 @@ const ChatLayout = ({ children, user }) => {
                 <div className="text-xs text-gray-500">
                   {selected.Department}
                 </div>
-                <div className="flex flex-row items-center mt-3"></div>
+                <div className="mt-3 flex flex-row items-center"></div>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-                <div className="rounded-full h-50 w-50">
-                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                    <div className="flex items-center justify-center w-full h-full rounded-full">
+              <div className="opacity-3 mr-6 mt-4 flex flex-col items-center justify-center rounded-lg border-gray-200 bg-light px-4 py-6">
+                <div className="h-50 w-50 rounded-full">
+                  <div className="h-16 w-16 items-center justify-center rounded-full bg-blue-200 md:flex lg:hidden xl:flex">
+                    <div className="flex h-full w-full items-center justify-center rounded-full">
                       <img
                         src="/images/pp.png"
                         alt="Avatar"
@@ -222,36 +232,39 @@ const ChatLayout = ({ children, user }) => {
                   Select to view profile
                 </div>
                 <div className="text-xs text-gray-500"></div>
-                <div className="flex flex-row items-center mt-3"></div>
+                <div className="mt-3 flex flex-row items-center"></div>
               </div>
             )}
             {/* profile part end */}
 
             {/* tab */}
-            <div className="grid grid-cols-2 mt-6 font-semibold bg-gray-200 rounded-2xl">
+            <div className="mt-6 grid grid-cols-2 rounded-2xl bg-gray-200 font-semibold">
               <button
-                className={`py-2 rounded-2xl ${messageTab === "recent" ? "bg-primary" : ""
-                  }`}
+                className={`rounded-2xl py-2 ${
+                  messageTab === "recent" ? "bg-primary" : ""
+                }`}
                 onClick={() => setMessageTab("recent")}
               >
                 Recent
               </button>
               <button
-                className={`py-2 rounded-2xl ${messageTab === "member" ? "bg-primary" : ""
-                  }`}
+                className={`rounded-2xl py-2 ${
+                  messageTab === "member" ? "bg-primary" : ""
+                }`}
                 onClick={() => setMessageTab("member")}
               >
                 Members
               </button>
             </div>
 
-            <div className="w-full max-h-[270px] overflow-x-hidden overflow-y-auto mt-4">
+            <div className="mt-4 max-h-[270px] w-full overflow-y-auto overflow-x-hidden">
               {messageTab === "recent" ? renderRecent() : renderMembers()}
             </div>
           </div>
           <div
-            className={`lg:col-span-3 col-span-full lg:block ${router.query.userId ? "" : "hidden"
-              }`}
+            className={`col-span-full lg:col-span-3 lg:block ${
+              router.query.userId ? "" : "hidden"
+            }`}
           >
             {children &&
               cloneElement(children, {

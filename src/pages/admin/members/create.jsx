@@ -4,88 +4,95 @@ import { toast } from "react-toastify";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../../../../context/DbContext";
-import Router from 'next/router';
-import { generate } from "generate-password"
+import Router from "next/router";
+import { generate } from "generate-password";
 import { useAuth } from "../../../../context/AuthContext";
 import { auth } from "../../../../config/firebase";
-import emailjs from "@emailjs/browser"
+import emailjs from "@emailjs/browser";
 import useFetch from "@/components/useFetch";
-import { updateProfile } from "firebase/auth"
+import { updateProfile } from "firebase/auth";
 
-const router = Router
-
-
+const router = Router;
 
 const AddMember = () => {
-  const { GetAdmin, GetCompanyName } = useFetch("KalCompany")
-  const { signUp, logIn } = useAuth()
+  const { GetAdmin, GetCompanyName } = useFetch("KalCompany");
+  const { signUp, logIn } = useAuth();
   const [data, setData] = useState({
-    Name: '',
-    Address: '',
-    Email: '',
-    Gender: '',
-    Department: '',
-    PhoneNumber: '',
+    Name: "",
+    Address: "",
+    Email: "",
+    Gender: "",
+    Department: "",
+    PhoneNumber: "",
     DateOfBirth: new Date("10/10/2030"),
-    ProfilePic: '',
+    ProfilePic: "",
     RegisteredAt: new Date().toDateString(),
     GroupId: [],
     Reports: [],
-    Tasks: []
+    Tasks: [],
   });
-  const select = document.getElementById('selectGender');
-  const email = document.getElementById('email');
-  const name = document.getElementById('full_name');
-  const address = document.getElementById('address');
-  const phone = document.getElementById('phoneNumber');
-  const department = document.getElementById('department');
-  const dob = document.getElementById('dob');
-  const date = document.getElementById('date');
-  const pho = document.getElementById('pho');
-  const dep = document.getElementById('dep');
+  const select = document.getElementById("selectGender");
+  const email = document.getElementById("email");
+  const name = document.getElementById("full_name");
+  const address = document.getElementById("address");
+  const phone = document.getElementById("phoneNumber");
+  const department = document.getElementById("department");
+  const dob = document.getElementById("dob");
+  const date = document.getElementById("date");
+  const pho = document.getElementById("pho");
+  const dep = document.getElementById("dep");
 
-  select && select.addEventListener('change', function handleChange(event) {
-    setData({
-      ...data,
-      Gender: event.target.value
+  select &&
+    select.addEventListener("change", function handleChange(event) {
+      setData({
+        ...data,
+        Gender: event.target.value,
+      });
+      if (select && select.classList.contains("ring-red-600")) {
+        select.classList.remove("ring-red-600");
+        select.classList.remove("ring-2");
+      }
     });
-    if (select && select.classList.contains("ring-red-600")) {
-      select.classList.remove("ring-red-600");
-      select.classList.remove("ring-2");
-    }
-  });
-
 
   const sendEmail = async (password, adminId, toName, toEmail) => {
-    GetAdmin(adminId).then((admin) => {
+    GetAdmin(adminId)
+      .then((admin) => {
+        console.log(admin);
+        const templateParams = {
+          from_name: admin.CompanyName,
+          to_name: toName,
+          email_address: toEmail,
+          password: password,
+          admin_name: admin.Name,
+        };
 
-      console.log(admin)
-      const templateParams = {
-        from_name: admin.CompanyName,
-        to_name: toName,
-        email_address: toEmail,
-        password: password,
-        admin_name: admin.Name
-      };
-
-      emailjs.send("service_uerr5ct", "template_8jjq65l", templateParams, "e50BbMlytQDi-Ulw1")
-        .then((response) => {
-          console.log('SUCCESS!', response.status, response.text);
-        }, (error) => {
-          console.log('FAILED...', error);
-        });
-    }).catch((err) => {
-      console.log(err);
-    });
-
-  }
+        emailjs
+          .send(
+            "service_uerr5ct",
+            "template_8jjq65l",
+            templateParams,
+            "e50BbMlytQDi-Ulw1"
+          )
+          .then(
+            (response) => {
+              console.log("SUCCESS!", response.status, response.text);
+            },
+            (error) => {
+              console.log("FAILED...", error);
+            }
+          );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleName = (e) => {
     e.preventDefault();
     setData({
       ...data,
-      Name: e.target.value
-    })
+      Name: e.target.value,
+    });
     if (name && name.classList.contains("ring-red-600")) {
       name.classList.remove("ring-red-600");
       name.classList.remove("ring-2");
@@ -96,8 +103,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      Email: e.target.value
-    })
+      Email: e.target.value,
+    });
     if (email && email.classList.contains("ring-red-600")) {
       email.classList.remove("ring-red-600");
       email.classList.remove("ring-2");
@@ -108,8 +115,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      Address: e.target.value
-    })
+      Address: e.target.value,
+    });
     if (address && address.classList.contains("ring-red-600")) {
       address.classList.remove("ring-red-600");
       address.classList.remove("ring-2");
@@ -120,8 +127,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      Department: e.target.value
-    })
+      Department: e.target.value,
+    });
     if (department && department.classList.contains("ring-red-600")) {
       department.classList.remove("ring-red-600");
       department.classList.remove("ring-2");
@@ -132,8 +139,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      PhoneNumber: e.target.value
-    })
+      PhoneNumber: e.target.value,
+    });
     if (phone && phone.classList.contains("ring-red-600")) {
       phone.classList.remove("ring-red-600");
       phone.classList.remove("ring-2");
@@ -144,8 +151,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      DateOfBirth: e.target.value
-    })
+      DateOfBirth: e.target.value,
+    });
     if (dob && dob.classList.contains("ring-red-600")) {
       dob.classList.remove("ring-red-600");
       dob.classList.remove("ring-2");
@@ -179,7 +186,7 @@ const AddMember = () => {
       phone.classList.add("ring-red-600");
       phone.classList.add("ring-2");
     }
-    if (select && (data.Gender == "null" || data.Gender === '')) {
+    if (select && (data.Gender == "null" || data.Gender === "")) {
       select.classList.add("ring-red-600");
       select.classList.add("ring-2");
     }
@@ -187,34 +194,47 @@ const AddMember = () => {
       dob.classList.add("ring-red-600");
       dob.classList.add("ring-2");
     }
-    if (data.Name != "" && data.Email != "" && data.PhoneNumber != "" && data.Address != "" && data.Department != "" && data.DateOfBirth != "" && data.Gender != "null") {
+    if (
+      data.Name != "" &&
+      data.Email != "" &&
+      data.PhoneNumber != "" &&
+      data.Address != "" &&
+      data.Department != "" &&
+      data.DateOfBirth != "" &&
+      data.Gender != "null"
+    ) {
       const password = generate({
         length: 8,
         lowercase: true,
         uppercase: true,
         numbers: true,
-        symbols: true
+        symbols: true,
       });
       const email = auth.currentUser.email;
       const pass = auth.currentUser.photoURL;
       const adminId = auth.currentUser.uid;
       const company = await GetCompanyName();
 
-
       signUp(data.Email, password).then(async (cred) => {
         try {
-          await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", cred.user.uid), data);
+          await setDoc(
+            doc(db, "KalCompany", "Users", "StaffMembers", cred.user.uid),
+            data
+          );
           console.log(company);
-          await updateProfile(auth.currentUser, { displayName: data.Name, photoURL: company.companyName });
+          await updateProfile(auth.currentUser, {
+            displayName: data.Name,
+            photoURL: company.companyName,
+          });
           console.log(password);
           logIn(email, pass);
-          sendEmail(password, adminId, data.Name, data.Email)
+          sendEmail(password, adminId, data.Name, data.Email);
           handleClear();
           toast.success("Member added successfully");
         } catch (errrr) {
           console.log(errrr);
         }
-      })
+      });
     }
   };
   const handleClear = (e) => {
@@ -231,7 +251,7 @@ const AddMember = () => {
     data.PhoneNumber = "";
     pho.placeholder = "+251 9";
     date.value = null;
-    data.DateOfBirth = new Date("10/10/2030")
+    data.DateOfBirth = new Date("10/10/2030");
     date.placeholder = "MM/DD/YYYY";
     dep.value = "";
     data.Department = "";
@@ -241,14 +261,14 @@ const AddMember = () => {
   };
   return (
     <AdminLayout>
-      <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
-        <div className="container max-w-screen-lg mx-auto">
+      <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-8">
+        <div className="container mx-auto max-w-screen-lg">
           <form>
-            <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
+            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
               Add Member
             </h2>
-            <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
-              <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
+            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="pb-3 pl-4 text-lg font-medium">
                     Employee Details
@@ -270,7 +290,7 @@ const AddMember = () => {
                     </div> */}
 
                 <div className="lg:col-span-2 ">
-                  <div className="grid gap-6 gap-y-5 text-sm grid-cols-1 md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-3">
                       <label for="full_name">Full Name</label>
                       <input
@@ -279,7 +299,7 @@ const AddMember = () => {
                         type="text"
                         name="full_name"
                         id="full_name"
-                        className="h-10 border mt-1 rounded px-4  w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
                       />
                     </div>
 
@@ -291,7 +311,7 @@ const AddMember = () => {
                         name="email"
                         value={data.Email}
                         id="email"
-                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="email@employee.com"
                       />
                     </div>
@@ -304,14 +324,17 @@ const AddMember = () => {
                         name="address"
                         value={data.Address}
                         id="address"
-                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder=""
                       />
                     </div>
 
                     <div id="genderDiv" className="md:col-span-3">
                       <label for="Gender">Gender</label>
-                      <select id="selectGender" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+                      <select
+                        id="selectGender"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                      >
                         <option value="null">Select gender</option>
                         <option value="f">Female</option>
                         <option value="m">Male</option>
@@ -320,55 +343,73 @@ const AddMember = () => {
 
                     <div id="phoneDiv" className="md:col-span-3">
                       <label for="country">Phone Number</label>
-                      <div id="phoneNumber" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                      <div
+                        id="phoneNumber"
+                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                      >
                         <input
                           onChange={handlePhone}
                           value={data.PhoneNumber}
                           type="tel"
                           id="pho"
-                          pattern="[789][0-9]{9}" required
+                          pattern="[789][0-9]{9}"
+                          required
                           name="country"
                           placeholder="+251 9 "
-                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
-
+                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="md:col-span-3">
                       <label for="state">Department</label>
-                      <div id="department" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                      <div
+                        id="department"
+                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                      >
                         <input
                           onChange={handleDepartment}
                           name="state"
                           id="dep"
                           value={data.Department}
                           placeholder="Department"
-                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
+                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
                         />
                       </div>
                     </div>
 
                     <div className="md:col-span-3">
                       <label for="state">Date of Birth</label>
-                      <div id="dob" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                        <input type="date"
+                      <div
+                        id="dob"
+                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                      >
+                        <input
+                          type="date"
                           id="date"
                           onChange={handleDob}
                           value={data.DateOfBirth}
-                          onfocus="(this.type='date')" name="DB"
+                          onfocus="(this.type='date')"
+                          name="DB"
                           placeholder="MM/DD/YYYY"
-                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
+                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                        />
                       </div>
                     </div>
 
-                    <div className="md:col-span-6 text-right ml-auto">
+                    <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-8">
-                          <button onClick={handleClear} className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
+                          <button
+                            onClick={handleClear}
+                            className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
+                          >
                             Cancel
                           </button>
-                          <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
+                          <button
+                            onClick={handleSubmit}
+                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
+                          >
                             Submit
                           </button>
                         </div>
@@ -385,4 +426,3 @@ const AddMember = () => {
   );
 };
 export default AddMember;
-
