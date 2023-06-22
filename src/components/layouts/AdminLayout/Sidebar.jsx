@@ -6,10 +6,10 @@ import { MdGroupWork } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import SideNav from "./SideNav";
+import {SlEnvolopeLetter} from "react-icons/sl"
 import Link from "next/link";
 import OpenSideBarContext from "./context/openSideBarContext";
 import { useRouter } from "next/router";
-
 const Sidebar = () => {
   const [openSideBar] = useContext(OpenSideBarContext);
   const router = useRouter();
@@ -88,6 +88,20 @@ const Sidebar = () => {
         {
           url: "/admin/files/ManageFiles",
           name: "Manage files",
+        },
+      ],
+    },
+    {
+      Icon: <SlEnvolopeLetter size={20} />,
+      name: "Letters", //unqiue
+      children: [
+        {
+          url: "/admin/letters/create",
+          name: "Create Letter",
+        },
+        {
+          url: "/admin/letters/manageLetters",
+          name: "My Letters",
         },
       ],
     },

@@ -11,6 +11,9 @@ const ReceiverMessage = ({ msg }) => {
         </div>
         <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
           <div>{msg.data.Content}</div>
+          <small className="text-[10px]">
+              {formatTimeAgo(new Date(msg.data.CreatedAt?.seconds * 1000))}
+            </small>
         </div>
       </div>
       <ul className="flex gap-4 ml-14">

@@ -1,16 +1,21 @@
-import { useState, useContext,useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { useAuth } from "../../../../context/AuthContext";
 import {
   AiOutlineMenu,
+  AiOutlineBell,
   AiOutlineUser,
   AiOutlineLogout,
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
 import { auth } from "../../../../config/firebase";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/router";
 import Notification from "./Notification";
 import useFetch from "@/components/useFetch";
+
+const router = Router;
+
 const Header = () => {
   const { user, logout } = useAuth();
   const [usr, setUsr] = useState(null);
@@ -18,12 +23,11 @@ const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-  const { GetAdmin, GetCompanyName, GetUser } = useFetch("KalCompany");
-
+  const { GetCompanyName, GetUser } = useFetch("KalCompany");
 
   const getinfo = async () => {
     console.log(auth.currentUser.uid)
-    setUsr(await GetAdmin(auth.currentUser.uid));
+    setUsr(await GetUser(auth.currentUser.uid));
     setCompany(await GetCompanyName());
   }
 
@@ -31,6 +35,15 @@ const Header = () => {
   useEffect(() => {
     getinfo()
   }, [user])
+
+  const handleSingout = (e) => {
+    e.preventDefault();
+    try {
+      logout().then(() => router.push("/"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -86,12 +99,11 @@ const Header = () => {
                 </a>
               </div>
 
-              <div className="hidden lg:block">
-              <div className="hidden lg:block">
+
+<div className="hidden lg:block">
                 <div>
                   <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
                 </div>
-              </div>
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
@@ -113,7 +125,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-10 h-10 rounded-full"
-                        src="/images/pp.png"
+                        src={usr ? usr.ProfilePic ? usr.ProfilePic : "/images/pp.png" : "/images/pp.png"}
                         alt=""
                       />
                     </div>
@@ -184,7 +196,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* <!-- Mobile menu, show/hide based on menu state. --> */}
+{/* <!-- Mobile menu, show/hide based on menu state. --> */}
         {mobileMenu && (
           <div className="absolute w-full transition duration-100 ease-out bg-secondary md:hidden">
             <div className="pt-4 pb-3 border-t border-gray-700">
@@ -193,7 +205,7 @@ const Header = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                    src="/images/admin.png"
                     alt=""
                   />
                 </div>

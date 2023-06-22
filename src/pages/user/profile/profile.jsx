@@ -1,28 +1,62 @@
 import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify"
 // import React,{useEffect,useState} from "react";
 import Avatar from "react-avatar-edit";
+import { auth } from "../../../../config/firebase";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { setDoc, doc } from "firebase/firestore";
+import { db } from "../../../../context/DbContext";
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import useFetch from "@/components/useFetch";
 
 
 const Profile = () => {
     const [src, setSrc] = useState(null);
     const [preview, setPreview] = useState(null);
-    
+    const { GetUser } = useFetch("KalCompany")
+    const [picture, setPicture] = useState(null);
+    const [progress, setProgress] = useState("");
+    const [password, setPassword] = useState({});
 
-    const onClose = ()=>{
+    const handleSubmitPassword = async () => {
+        const usr = auth.currentUser;
+
+        const credential = EmailAuthProvider.credential(
+            usr.email,
+            password.oldPassword
+        );
+
+        if (password.confirmPassword === password.newPassword) {
+
+            reauthenticateWithCredential(usr, credential).then(() => {
+                updatePassword(usr, password.newPassword).then(() => {
+                    toast.success("Password updated successfully");
+                }).catch((error) => {
+                    console.log(error)
+                });
+            }).catch((error) => {
+                console.log(error);
+                toast.error("Old password incorrect!")
+            });
+        } else {
+            toast.error("New password and Confirm password dont match!")
+        }
+
+    }
+
+    const getData = async () => {
+        setUser(await GetUser(auth.currentUser.uid))
+    }
+
+    const onClose = () => {
         setPreview(null);
     }
-    const onCrop = view =>{
+    const onCrop = view => {
         setPreview(view);
     }
-    const [user, setUser] = useState({
-        full_name: 'Anani Samuel',
-        company_name: 'ananisamuelhope@gmail.com',
-        dob: '11/11/2000',
-        phone_number: '0977558899'
-    });
+    const [user, setUser] = useState({});
 
     const handleChange = (e) => {
         setUser(
@@ -30,33 +64,103 @@ const Profile = () => {
         );
     };
 
-    const setImage = () =>{
-        setPreview(view);
-        
+    const handleChangePassword = (e) => {
+        setPassword(
+            { ...password, [e.target.name]: e.target.value }
+        );
     };
 
-    const handleSubmit = (e) => {
+    // const setImage = () => {
+    //     setPreview(view);
+
+    // };
+
+    const convertToFile = async (dataUrl) => {
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        let newFile = new File([blob], "profilePic", { type: "image/jpeg" });
+        return newFile
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        await UploadFile();
         console.log('User profile updated:', user);
     }
+
 
     const [showAvatar, setShowAvatar] = useState(true);
     const [unshowAvatar, setunShowAvatar] = useState(false);
 
-    
-      const handleChangePicture = () => {
-        setSrc(preview);
-        // setSrc(null); // Clear the current picture
-        setShowAvatar(false); // Hide the Avatar
-        setunShowAvatar(true);
-      };
-      const changePicture = view => {
+
+    const handleChangePicture = async () => {
+        if (preview != null) {
+            setSrc(preview);
+            setPicture(await convertToFile(preview))
+            // setSrc(null); // Clear the current picture
+            setShowAvatar(false); // Hide the Avatar
+            setunShowAvatar(true);
+        }
+    };
+    const changePicture = view => {
         // setPreview(view);
         // setSrc(preview);
         setunShowAvatar(false);
         setSrc(null);
         setShowAvatar(true);
-      }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    const UploadFile = async (e) => {
+
+        if (picture !== null) {
+
+            const storage = getStorage();
+            console.log(storage)
+            const storageRef = ref(storage, auth.currentUser.uid + "/" + picture.name);
+            const uploadTask = uploadBytesResumable(storageRef, picture)
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+
+                    setProgress(picture.name + "  " + (Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100)) + '% Done');
+
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+
+
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                        await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", auth.currentUser.uid), { ...user, ProfilePic: downloadURL });
+
+                        document.getElementById('progress').value = "";
+
+                        setProgress('');
+                        changePicture();
+
+                        toast.success("Profile updated successfully");
+                    });
+
+                }
+            );
+        } else {
+            await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", auth.currentUser.uid), user);
+            toast.success("Profile updated successfully");
+        }
+    }
 
 
     return (
@@ -80,28 +184,28 @@ const Profile = () => {
                                             onClose={onClose}
                                             src={src}
                                         />
-                                        ) : (
+                                    ) : (
                                         <img
                                             src={preview}
                                             alt="Cropped"
                                             className="pt-10 sm:pb-3"
                                         />
-                                        )}
-                                        {showAvatar && (
+                                    )}
+                                    {showAvatar && (
                                         <button
                                             className="ml-20 mt-5 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
                                             onClick={handleChangePicture}
                                         >
                                             Upload Picture
                                         </button>
-                                        )}
-                                        {unshowAvatar && (
-                                            <button
-                                                className="ml-20 mt-5 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
-                                                onClick={changePicture}
-                                            >
-                                                Upload New</button>
-                                        )}
+                                    )}
+                                    {unshowAvatar && (
+                                        <button
+                                            className="ml-20 mt-5 px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
+                                            onClick={changePicture}
+                                        >
+                                            Upload New</button>
+                                    )}
                                 </div>
 
                                 <div className="pl-6 lg:col-span-2">
@@ -110,22 +214,22 @@ const Profile = () => {
                                             <label htmlFor="full_name" className="flex pr-10">Full Name</label>
                                             <input
                                                 type="text"
-                                                name="full_name"
-                                                id="full_name"
+                                                name="Name"
+                                                id="Name"
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                                                value={user.full_name}
+                                                value={user.Name}
                                                 onChange={handleChange}
 
                                             />
                                         </div>
                                         <div className="md:col-span-5">
-                                            <label htmlFor="company_name" className="flex pr-10">Company Name</label>
+                                            <label htmlFor="company_name" className="flex pr-10">Department</label>
                                             <input
                                                 type="text"
-                                                name="company_name"
-                                                id="company_name"
+                                                name="Department"
+                                                id="Department"
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                                                value={user.company_name}
+                                                value={user.Department}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -133,22 +237,47 @@ const Profile = () => {
                                             <label htmlFor="full_name" className="flex pr-10">Date of Birth</label>
                                             <input
                                                 type="date"
-                                                name="date_of_birth"
-                                                id="date_of_birth"
+                                                name="DateOfBirth"
+                                                id="DateOfBirth"
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                                                value={user.DateOfBirth}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className="md:col-span-5">
                                             <label htmlFor="full_name" className="flex pr-10">Phone Number</label>
                                             <input
                                                 type="text"
-                                                name="phone_number"
-                                                id="phone_number"
+                                                name="PhoneNumber"
+                                                id="PhoneNumber"
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                                                value={user.phone_number}
+                                                value={user.PhoneNumber}
                                                 onChange={handleChange}
                                             />
                                         </div>
+                                        <div className="md:col-span-5">
+                                            <label htmlFor="full_name" className="flex pr-10">Gender</label>
+                                            <input
+                                                type="text"
+                                                name="Gender"
+                                                id="Gender"
+                                                className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                                                value={user.Gender}
+                                                onChange={handleChange}
+                                                maxLength={1}
+                                            />
+                                        </div>
+
+                                        {progress && <div className="md:col-span-3">
+                                            <label for="address">Progress</label>
+                                            <input
+                                                type="text"
+                                                id="progress"
+                                                className="h-10 border mt-1 rounded-lg px-4 w-full bg-gray-50"
+                                                value={progress}
+                                                disabled
+                                            />
+                                        </div>}
 
                                         <div className="ml-auto text-right md:col-span-6">
                                             <div className="inline-flex items-end justify-end">
@@ -156,7 +285,9 @@ const Profile = () => {
                                                     <button className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck">
                                                         Cancel
                                                     </button>
-                                                    <button className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold">
+                                                    <button
+                                                        disabled={!user.Name || !user.Department || !user.PhoneNumber || !user.DateOfBirth || !user.Gender}
+                                                        onClick={handleSubmit} className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold">
                                                         Update
                                                     </button>
                                                 </div>
@@ -192,27 +323,33 @@ const Profile = () => {
                                             <label htmlFor="full_name" className="flex pr-10">Old Password</label>
                                             <input
                                                 type="password"
-                                                name="old_password"
-                                                id="old_password"
+                                                name="oldPassword"
+                                                id="oldPassword"
+                                                value={password.oldPassword}
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                                                onChange={handleChangePassword}
                                             />
                                         </div>
                                         <div className="md:col-span-5">
                                             <label htmlFor="company_name" className="flex pr-10">New Password</label>
                                             <input
                                                 type="password"
-                                                name="new_password"
-                                                id="new_password"
+                                                name="newPassword"
+                                                id="newPassword"
+                                                value={password.newPassword}
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                                                onChange={handleChangePassword}
                                             />
                                         </div>
                                         <div className="md:col-span-5">
                                             <label htmlFor="full_name" className="flex pr-10">Confirm Password</label>
                                             <input
                                                 type="password"
-                                                name="confirm_password"
-                                                id="confirm_password"
+                                                name="confirmPassword"
+                                                id="confirmPassword"
+                                                value={password.confirmPassword}
                                                 className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                                                onChange={handleChangePassword}
                                             />
                                         </div>
 
@@ -223,7 +360,9 @@ const Profile = () => {
                                                     <button className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck">
                                                         Cancel
                                                     </button>
-                                                    <button className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold">
+                                                    <button
+                                                        disabled={!password.oldPassword || !password.newPassword || !password.confirmPassword}
+                                                        onClick={handleSubmitPassword} className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold">
                                                         Change
                                                     </button>
                                                 </div>

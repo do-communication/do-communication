@@ -51,7 +51,7 @@ const Sidebar = () => {
         },
         {
           url: "/user/letters/manageLetters",
-          name: "Manage Letters",
+          name: "My Letters",
         },
       ],
     },
@@ -65,7 +65,7 @@ const Sidebar = () => {
         },
         {
           url: "/user/files/manageFiles",
-          name: "Manage files",
+          name: "My Files",
         },
       ],
     },

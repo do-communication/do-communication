@@ -7,6 +7,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
+import { auth } from "../../../../../config/firebase";
 
 const ChatLayout = ({ children, user }) => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -34,15 +35,12 @@ const ChatLayout = ({ children, user }) => {
   }, [user]);
 
   const getRecent = async () => {
-    const recentChat = await getRecentData();
-    setRecent(recentChat);
-  };
+    await getRecentData(setRecent);
+  }
 
   const getData = async () => {
-    const data = await getMembersData();
-    setMembers(data);
-    setallMembers(data);
-  };
+    await getMembersData(setMembers, setallMembers);
+  }
 
   const handleSelect = (member) => {
     setSelected(member.data);
@@ -92,15 +90,14 @@ const ChatLayout = ({ children, user }) => {
               <Link
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2 rounded-xl  ${
-                  member.id === router.query.userId
+                className={`flex flex-row items-center p-2 rounded-xl  ${member.id === router.query.userId
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
-                }`}
+                  }`}
                 onClick={() => handleSelect(member)}
               >
                 <RecentMessageItem
-                  name={member.data.Name}
+                  name={member.data.RecieverId == auth.currentUser.uid ? member.data.SenderName : member.data.RecieverName}
                   msg={member.data.Content}
                 />
               </Link>
@@ -137,11 +134,10 @@ const ChatLayout = ({ children, user }) => {
               <Link
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
-                className={`flex flex-row items-center p-2  rounded-xl ${
-                  member.id === router.query.userId
+                className={`flex flex-row items-center p-2  rounded-xl ${member.id === router.query.userId
                     ? "bg-secondary text-white"
                     : "hover:bg-opacity-25 hover:bg-secondary"
-                }`}
+                  }`}
                 onClick={() => handleSelect(member)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
@@ -169,9 +165,8 @@ const ChatLayout = ({ children, user }) => {
         <div className="absolute grid w-full h-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${
-              router.query.userId ? "hidden" : ""
-            }`}
+            className={`max-h-full px-4 py-5 bg-white shadow-md lg:col-span-1 col-span-full lg:block rounded-2xl ${router.query.userId ? "hidden" : ""
+              }`}
           >
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
@@ -183,14 +178,14 @@ const ChatLayout = ({ children, user }) => {
               <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
                 <div className="rounded-full h-50 w-50">
                   <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                    <div className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full rounded-full">
                       {selected.ProfilePic === "" ? (
-                        selected.Name[0]
+                        selected.Name ? selected.Name[0] : selected.RecieverName[0]
                       ) : (
                         <img
                           src={selected.ProfilePic}
                           alt="Avatar"
-                          className="rounded-full"
+                          className="flex items-center justify-center w-full h-full rounded-full"
                         />
                       )}
                     </div>
@@ -208,7 +203,7 @@ const ChatLayout = ({ children, user }) => {
               <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
                 <div className="rounded-full h-50 w-50">
                   <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                    <div className="flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full rounded-full">
                       <img
                         src="/images/pp.png"
                         alt="Avatar"
@@ -229,17 +224,15 @@ const ChatLayout = ({ children, user }) => {
             {/* tab */}
             <div className="grid grid-cols-2 mt-6 font-semibold bg-gray-200 rounded-2xl">
               <button
-                className={`py-2 rounded-2xl ${
-                  messageTab === "recent" ? "bg-primary" : ""
-                }`}
+                className={`py-2 rounded-2xl ${messageTab === "recent" ? "bg-primary" : ""
+                  }`}
                 onClick={() => setMessageTab("recent")}
               >
                 Recent
               </button>
               <button
-                className={`py-2 rounded-2xl ${
-                  messageTab === "member" ? "bg-primary" : ""
-                }`}
+                className={`py-2 rounded-2xl ${messageTab === "member" ? "bg-primary" : ""
+                  }`}
                 onClick={() => setMessageTab("member")}
               >
                 Members
@@ -251,9 +244,8 @@ const ChatLayout = ({ children, user }) => {
             </div>
           </div>
           <div
-            className={`lg:col-span-3 col-span-full lg:block ${
-              router.query.userId ? "" : "hidden"
-            }`}
+            className={`lg:col-span-3 col-span-full lg:block ${router.query.userId ? "" : "hidden"
+              }`}
           >
             {children &&
               cloneElement(children, {

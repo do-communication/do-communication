@@ -6,7 +6,7 @@ import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc } from "firebase
 import { useState, useEffect, useCallback } from "react";
 import Router from 'next/router';
 const router = Router;
-import {FaPersonCircleCheck} from "react-icons/fa";
+import { FaPersonCircleCheck } from "react-icons/fa";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -37,7 +37,7 @@ const ManageGroup = () => {
     try {
       const doc = await getDocs(all)
       doc.forEach(d => {
-        arr.push({id:d.id, data:d.data()})
+        arr.push({ id: d.id, data: d.data() })
       });
 
     } catch (err) {
@@ -62,15 +62,15 @@ const ManageGroup = () => {
     }
   }, [search]);
   //loading till fetch
-  const [pending, setPending] =useState(true);
-	const [rows, setRows] = useState([]);
-	useEffect(() => {
-		const timeout = setTimeout(() => {
-			setRows(allGroups);
-			setPending(false);
-		}, 2000);
-		return () => clearTimeout(timeout);
-	}, []);
+  const [pending, setPending] = useState(true);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setRows(allGroups);
+      setPending(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
 
 
   const columns = [
@@ -84,7 +84,7 @@ const ManageGroup = () => {
       selector: (row) => row.data.Type,
     },
   ];
-  const fetchGroup = async(groupId, index) => {
+  const fetchGroup = async (groupId, index) => {
     const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     const mem = await getDoc(docRef);
     let tempTask = [];
@@ -100,7 +100,7 @@ const ManageGroup = () => {
     if (people) {
       people.forEach(p => {
         if (p) {
-          if(j == index){
+          if (j == index) {
             lead = p.stringValue;
           }
           tempPeople.push(p.stringValue);
@@ -130,7 +130,7 @@ const ManageGroup = () => {
         }
       });
     }
-  
+
     const data = {
       People: tempPeople,
       Type: mem._document.data.value.mapValue.fields.Type.stringValue,
@@ -138,7 +138,7 @@ const ManageGroup = () => {
       Members: tempGroup,
       Reports: tempReport,
       Tasks: tempTask,
-      Learder: lead  
+      Learder: lead
     }
 
     handleAssign(groupId, data);
@@ -147,7 +147,7 @@ const ManageGroup = () => {
     const n = selected._document.data.value.mapValue.fields.Name.stringValue
     toast.success(`${n} is assigned as a leader of this group`);
   }
-  const handleClick = async(i, name) => {
+  const handleClick = async (i, name) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(docRef)
     let tempTask = [];
@@ -156,23 +156,29 @@ const ManageGroup = () => {
     const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
     const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
     const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
-    if(temp){
-    temp.forEach(t => {
-      if(t){
-      tempTask.push(t.stringValue);}
-    });}
-    if(report){
-      report.forEach(r => {
-        if(r){
-        tempReport.push(r.stringValue);}
+    if (temp) {
+      temp.forEach(t => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
       });
     }
-    if(group){
+    if (report) {
+      report.forEach(r => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+    if (group) {
       group.forEach(g => {
-        if(g){
-        if(g.stringValue != name){
-        tempGroup.push(g.stringValue);}}
-      });}
+        if (g) {
+          if (g.stringValue != name) {
+            tempGroup.push(g.stringValue);
+          }
+        }
+      });
+    }
     const newData = {
       Name: mem._document.data.value.mapValue.fields.Name.stringValue,
       Address: mem._document.data.value.mapValue.fields.Address.stringValue,
@@ -188,26 +194,26 @@ const ManageGroup = () => {
       Tasks: tempTask
     }
     updateDoc(docRef, newData)
-    .then(docRef => {
+      .then(docRef => {
         console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.log(error);
-    })
+      })
   }
   const handleAssign = async (groupId, data) => {
     const groupRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     updateDoc(groupRef, data)
-    .then(groupRef => {
+      .then(groupRef => {
         console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.log(error);
-    })
+      })
   }
 
-    
-  const handleRemove = async(groupId, index) => {
+
+  const handleRemove = async (groupId, index) => {
     const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     const mem = await getDoc(docRef);
     let tempTask = [];
@@ -222,9 +228,10 @@ const ManageGroup = () => {
     if (group) {
       group.forEach(g => {
         if (g) {
-          if(g.stringValue !== index){
-          tempGroup.push(g.stringValue);
-        }}
+          if (g.stringValue !== index) {
+            tempGroup.push(g.stringValue);
+          }
+        }
       });
     }
     if (people) {
@@ -253,8 +260,8 @@ const ManageGroup = () => {
         }
       });
     }
-   
-  
+
+
     const data = {
       People: tempPeople,
       Type: mem._document.data.value.mapValue.fields.Type.stringValue,
@@ -262,7 +269,7 @@ const ManageGroup = () => {
       Members: tempGroup,
       Reports: tempReport,
       Tasks: tempTask,
-      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue 
+      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue
     }
 
     handleAssign(groupId, data);
@@ -340,18 +347,20 @@ const ManageGroup = () => {
                 {showManageGroupMenu && (
                   <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
                     <li className="p-1 rounded hover:bg-primary">
-                    <button
+                      <button
                         onClick={() => {
-                          router.push(`/admin/task/group/${selectedRows[0].id}`)}}
+                          router.push(`/admin/task/group/${selectedRows[0].id}`)
+                        }}
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Tasks
                       </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                    <button
+                      <button
                         onClick={() => {
-                          router.push(`/admin/reports/group/${selectedRows[0].id}`)}}
+                          router.push(`/admin/reports/group/${selectedRows[0].id}`)
+                        }}
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Reports
@@ -359,8 +368,9 @@ const ManageGroup = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                         onClick={() => {
-                          router.push(`/admin/groups/edit/${selectedRows[0].id}`)}}
+                        onClick={() => {
+                          router.push(`/admin/groups/edit/${selectedRows[0].id}`)
+                        }}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Group
@@ -369,7 +379,8 @@ const ManageGroup = () => {
                     <li className="p-1 rounded hover:bg-primary">
                       <button
                         className="flex items-center gap-2"
-                        onClick={async (e) => {e.stopPropagation();
+                        onClick={async (e) => {
+                          e.stopPropagation();
                           setSelectedRows([]);
                           setClearSelectedRows(true);
                           const id = selectedRows[0].id;
@@ -377,12 +388,13 @@ const ManageGroup = () => {
                             handleClick(m.id, selectedRows[0].data.Name);
                           })
                           const check = confirm("Do you want to delete the group?");
-                          if(check){
-                          const docRef = doc(db,"KalCompany", "Groups", "Groups", id);
-                          await deleteDoc(docRef)
-                          getData();
-                          toast.success("Group deleted successfully");
-                        }}}
+                          if (check) {
+                            const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+                            await deleteDoc(docRef)
+                            getData();
+                            toast.success("Group deleted successfully");
+                          }
+                        }}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Group
                       </button>
@@ -411,32 +423,32 @@ const ManageGroup = () => {
                 <h3 className="p-2 text-lg font-semibold">Members</h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  {selectedRows[0].data.Members && selectedRows[0].data.Members.map((row, index) =>(
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
-                    <p>{row}</p>
-                    <div className="flex gap-2">
-                      {(selectedRows[0].data.Learder !== users[index]) &&
-                      <button onClick={async ()=>{
-                        await fetchGroup(selectedRows[0].id, index)
-                      }} 
-                      className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
-                       
-                        Assign Leader
-                      </button> 
-                      }
-                    </div>
-                    <button onClick={async()=>{
-                      await handleRemove(selectedRows[0].id, row)
-                    }} className="flex gap-2">
-                      <div className="flex items-center gap-1 p-1 px-2 text-red-600">
-                        {/* < BiX className="w-5 h-auto" /> */}
-                        Remove
+                  {selectedRows[0].data.Members && selectedRows[0].data.Members.map((row, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                    >
+                      <p>{row}</p>
+                      <div className="flex gap-2">
+                        {(selectedRows[0].data.Learder !== users[index]) &&
+                          <button onClick={async () => {
+                            await fetchGroup(selectedRows[0].id, index)
+                          }}
+                            className="flex items-center gap-1 p-1 px-4 text-white rounded-lg bg-secondary hover:bg-primary">
+
+                            Assign Leader
+                          </button>
+                        }
                       </div>
-                    </button>
-                  </div>
+                      <button onClick={async () => {
+                        await handleRemove(selectedRows[0].id, row)
+                      }} className="flex gap-2">
+                        <div className="flex items-center gap-1 p-1 px-2 text-red-600">
+                          {/* < BiX className="w-5 h-auto" /> */}
+                          Remove
+                        </div>
+                      </button>
+                    </div>
                   ))}
                   {/* <Link
                     href="/admin/memebers/{userId}"

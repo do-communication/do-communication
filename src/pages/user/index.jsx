@@ -1,7 +1,22 @@
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
+import useFetch from "@/components/useFetch";
+import { auth } from "../../../config/firebase";
+import { useEffect, useState } from "react";
+
 const User = () => {
+  const [user, setUser] = useState({});
+  const { GetUser } = useFetch("KalCompany")
+
+  const getData = async () => {
+    setUser(await GetUser(auth.currentUser.uid));
+  }
+
+  useEffect(() => {
+    getData();
+  }, [user])
+
   return (
     <UserLayout>
       <div className="px-10 pt-0">
@@ -19,7 +34,8 @@ const User = () => {
             </div>
             <div className="relative">
               <div className="w-48 h-48 bg-sky-200 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-gray-700">
-                <CgProfile size={90} />
+                {/* <CgProfile size={90} /> */}
+                {user ? user.ProfilePic ? <img src={user.ProfilePic}></img> : <CgProfile size={90} /> : <CgProfile size={90} />}
               </div>
             </div>
 
@@ -35,21 +51,20 @@ const User = () => {
 
           <div className="mt-20 text-center border-b pb-12">
             <h1 className="text-4xl font-medium text-gray-700">
-              Lidiya Solomon
+              {user.Name}
             </h1>
             <p className="font-light text-gray-600 mt-3">
-              lidiyanasolomon@gmail.com
+              {user.Email}
             </p>
 
-            <p className="mt-8 text-gray-500">Product Manager</p>
-            <p className="mt-2 text-gray-500">Department of something</p>
+            <p className="mt-8 text-gray-500">Department of {user.Department}</p>
           </div>
           <div className=" flex justify-center items-center py-6 mt-2">
             <button className="text-white py-3 capitalize px-6 rounded-full bg-primary hover:bg-sky-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
               <Link
                 href="/user/profile/profile"
               >
-              Edit your profile 
+                Edit your profile
               </Link>
             </button>
           </div>
