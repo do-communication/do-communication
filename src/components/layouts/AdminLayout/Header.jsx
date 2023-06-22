@@ -193,7 +193,7 @@ const Header = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                    src="/images/admin.png"
                     alt=""
                   />
                 </div>

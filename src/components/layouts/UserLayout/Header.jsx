@@ -1,7 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { IoNotificationsOutline } from "react-icons/io5";
 import {
   AiOutlineMenu,
   AiOutlineBell,
@@ -101,7 +99,8 @@ const Header = () => {
                 </a>
               </div>
 
-              <div className="hidden lg:block">
+
+<div className="hidden lg:block">
                 <div>
                   <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
                 </div>
@@ -197,7 +196,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* <!-- Mobile menu, show/hide based on menu state. --> */}
+{/* <!-- Mobile menu, show/hide based on menu state. --> */}
         {mobileMenu && (
           <div className="absolute w-full transition duration-100 ease-out bg-secondary md:hidden">
             <div className="pt-4 pb-3 border-t border-gray-700">
@@ -206,7 +205,7 @@ const Header = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                    src="/images/admin.png"
                     alt=""
                   />
                 </div>

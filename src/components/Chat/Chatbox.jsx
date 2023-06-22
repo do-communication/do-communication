@@ -105,11 +105,9 @@ const Chatbox = ({
               router.push("/admin/chats/directChat");
             } else if (router.pathname === "/admin/chats/groupChat/[groupId]") {
               router.push("/admin/chats/groupChat");
-            }
-            else if (router.pathname === "/user/chats/groupChat/[groupId]") {
+            } else if (router.pathname === "/user/chats/groupChat/[groupId]") {
               router.push("/user/chats/groupChat");
-            }
-            else if (router.pathname === "/user/chats/directChat/[userId]") {
+            } else if (router.pathname === "/user/chats/directChat/[userId]") {
               router.push("/user/chats/directChat");
             }
           }}
@@ -118,7 +116,7 @@ const Chatbox = ({
           <BiChevronLeft className="w-10 h-auto" />
         </button>
         <div className="flex items-center gap-4">
-          <BiUser className="w-10 h-10 text-4xl bg-gray-400 rounded-full" />
+          {/* <BiUser className="w-10 h-10 text-4xl bg-gray-400 rounded-full" /> */}
           {name}
         </div>
       </header>

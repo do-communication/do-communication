@@ -61,6 +61,9 @@ const SenderMessage = ({
                   title={msg.data.Content}
                 >
                   {msg.data.Content}
+                  <small className="text-[10px]">
+              {formatTimeAgo(new Date(msg.data.CreatedAt?.seconds * 1000))}
+            </small>
                 </p>
               </Link>
             </div>
