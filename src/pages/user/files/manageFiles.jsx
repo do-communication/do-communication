@@ -134,7 +134,7 @@ const ManageFiles = () => {
           <h1 className="mb-5 text-2xl font-semibold">Manage Files</h1>
           <div className="flex items-center justify-between pb-0 mb-2">
             <Link
-              href="/admin/files/create"
+              href="/user/files/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Add File
