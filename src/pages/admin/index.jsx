@@ -11,7 +11,7 @@ import { auth } from "../../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../context/DbContext";
 import { PureComponent } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer ,Tooltip,Legend} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 const Admin = () => {
   const [members, setMembers] = useState(allMembers);
@@ -19,8 +19,8 @@ const Admin = () => {
   const { GetUser } = useFetch("KalCompany")
   const [Colleague, setColleague] = useState(0);
   const [NewTasks, setNewTask] = useState(0);
-  const [Reports, setReports] = useState(0); 
-  const [Files, setFiles] = useState(0); 
+  const [Reports, setReports] = useState(0);
+  const [Files, setFiles] = useState(0);
   const [todo, setTodo] = useState([]);
   const [inprogress, setInprogress] = useState([]);
   const [completed, setComplete] = useState([]);
@@ -35,12 +35,12 @@ const Admin = () => {
       const tasks = collection(db, "KalCompany", "Tasks", "Tasks");
       const taskSnap = await getDocs(tasks);
       setNewTask(taskSnap.docs.length);
-      const q1 = query(tasks, where("Status", "==", "assigned")); 
+      const q1 = query(tasks, where("Status", "==", "assigned"));
       const temp1 = [];
       try {
         const todoTask = await getDocs(q1);
         todoTask.forEach((d) => {
-          temp1.push( d.data() );
+          temp1.push(d.data());
         });
       } catch (err) {
         console.log(err);
@@ -51,7 +51,7 @@ const Admin = () => {
       try {
         const inprogressTask = await getDocs(q2);
         inprogressTask.forEach((d) => {
-          temp2.push( d.data() );
+          temp2.push(d.data());
         });
       } catch (err) {
         console.log(err);
@@ -62,7 +62,7 @@ const Admin = () => {
       try {
         const doneTask = await getDocs(q3);
         doneTask.forEach((d) => {
-          temp3.push( d.data() );
+          temp3.push(d.data());
         });
       } catch (err) {
         console.log(err);
@@ -77,20 +77,20 @@ const Admin = () => {
       setFiles(fileSnap.docs.length)
     }
   }
-useEffect(()=>{
-  getData();
-}, [])
+  useEffect(() => {
+    getData();
+  }, [])
 
-// const Admin = () => {
-//   const [members, setMembers] = useState(allMembers);
+  // const Admin = () => {
+  //   const [members, setMembers] = useState(allMembers);
 
   const data = [
-    { name: "New Task", value: 400 },
-    { name: "In progress", value: 300 },
-    { name: "Done", value: 300 },
+    { name: "New Task", value: todo.length },
+    { name: "In progress", value: inprogress.length },
+    { name: "Done", value: completed.length },
   ];
 
-  const COLORS = ["#298cc5", "#FFBB28", "#00C49F" ];
+  const COLORS = ["#298cc5", "#FFBB28", "#00C49F"];
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -188,7 +188,7 @@ useEffect(()=>{
                         />
                       ))}
                     </Pie>
-                    <Tooltip/>
+                    <Tooltip />
                     <Legend ></Legend>
                   </PieChart>
                 </ResponsiveContainer>
@@ -343,7 +343,7 @@ useEffect(()=>{
                           </div>
                         </div>
                       </li>
-                      
+
                     </ul>
                   </div>
                 </div>
@@ -372,20 +372,20 @@ useEffect(()=>{
                         <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                       </svg>
                     </div>
-                   
+
                     <div className="mt-2 text-sm text-black dark:text-gray-50 ">
-                    {todo && todo.map((row, index) => (
-                      <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                      
+                      {todo && todo.map((row, index) => (
+                        <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+
                           <h2> {row.Title}</h2>
                           <p className="text-sm">
-                              Assigned to: {" "}
-                              {Array.from(
-                                new Set(row.AssignedTo)
-                              ).toString(" ")}{" "}
+                            Assigned to: {" "}
+                            {Array.from(
+                              new Set(row.AssignedTo)
+                            ).toString(" ")}{" "}
                           </p>
-                          
-                      </div>
+
+                        </div>
                       ))}
 
                       <form className="mt-3 text-gray-600 dark:text-gray-400">
@@ -397,7 +397,7 @@ useEffect(()=>{
                         </Link>
                       </form>
                     </div>
-                    
+
                   </div>
                 </div>
 
@@ -416,21 +416,21 @@ useEffect(()=>{
                           <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                         </svg>
                       </div>
-                      
+
                       <div className="mt-2 text-sm text-black dark:text-gray-50">
-                      {inprogress && inprogress.map((row, index) => (
-                        <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                        {inprogress && inprogress.map((row, index) => (
+                          <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
                             <h2>{row.Title}</h2>
                             <p className="text-sm">
                               Assigned to: {" "}
                               {Array.from(
                                 new Set(row.AssignedTo)
                               ).toString(" ")}{" "}
-                          </p>
-                        </div>
-                    ))}
+                            </p>
+                          </div>
+                        ))}
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -447,18 +447,18 @@ useEffect(()=>{
                       </svg>
                     </div>
                     <div className="mt-2 text-sm text-black dark:text-gray-50 ">
-                    {completed &&
-                    completed.map((row, index) => (
-                      <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        <h2>{row.Title}</h2>
-                        <p className="text-sm">
+                      {completed &&
+                        completed.map((row, index) => (
+                          <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                            <h2>{row.Title}</h2>
+                            <p className="text-sm">
                               Assigned to: {" "}
                               {Array.from(
                                 new Set(row.AssignedTo)
                               ).toString(" ")}{" "}
-                          </p>
-                      </div>
-                      ))}
+                            </p>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </div>
