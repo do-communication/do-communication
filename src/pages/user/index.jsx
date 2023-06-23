@@ -42,12 +42,16 @@ const User = () => {
             </div>
 
             <div className="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
+              <Link href="/user/tasks">
               <button className="text-white py-2 px-6 uppercase rounded-full bg-primary hover:bg-sky-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
                 Tasks
               </button>
+              </Link>
+              <Link href="/user/chats/directChat">
               <button className="text-white py-2 px-4 uppercase rounded-full bg-gray-700 hover:bg-gray-800 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
-                Message
+              Message
               </button>
+              </Link>
             </div>
           </div>
 
