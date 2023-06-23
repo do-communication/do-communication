@@ -8,9 +8,14 @@ const Ticket = ({ task }) => {
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold capitalize">{task.data.Title}</h3>
-        <span className="px-2 text-sm font-semibold rounded-lg bg-secondary">
+        {task.data.Priority === "Low"? <span className="px-2 text-sm font-semibold rounded-lg  bg-green-700">
           {task.data.Priority}
-        </span>
+        </span>: task.data.Priority === "Medium" ? <span className="px-2 text-sm font-semibold rounded-lg  bg-yellow-500">
+          {task.data.Priority}
+        </span>: <span className="px-2 text-sm font-semibold rounded-lg  bg-red-700">
+          {task.data.Priority}
+        </span>}
+        
       </div>
       <p className="text-xs">Due Date: {task.data.DueDate}</p>
       {task.data.Description.length > 100 ? (
