@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
@@ -180,13 +180,13 @@ const ManageTasks = () => {
     getData();
   }, []);
   return (
-    <AdminLayout>
+    <UserLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-4 text-3xl font-semibold">Manage Tasks</h1>
           <div className="flex items-center justify-between mb-4">
             <Link
-              href="/admin/task/create"
+              href="/user/tasks/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Assign Task
@@ -234,7 +234,7 @@ const ManageTasks = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.data.Title}</p>
+                    <p>{row.data.Name}</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -256,7 +256,7 @@ const ManageTasks = () => {
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/reports/member/id"
+                        href="/user/groups/reports/member/id"
                         className="flex items-center gap-2"
                       >
                         <HiDocumentChartBar className="w-5 h-auto" /> Reports
@@ -265,7 +265,7 @@ const ManageTasks = () => {
                     <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
-                          router.push(`/admin/task/edit/${selectedRows[0].id}`);
+                          router.push(`/user/groups/tasks/edit/${selectedRows[0].id}`);
                         }}
                         className="flex items-center gap-2"
                       >
@@ -382,7 +382,7 @@ const ManageTasks = () => {
           )}
         </div>
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 

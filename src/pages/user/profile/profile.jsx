@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import { useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify"
@@ -171,7 +171,7 @@ const Profile = () => {
 
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
         <div className="container max-w-screen-lg mx-auto">
           <div>
@@ -378,7 +378,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 

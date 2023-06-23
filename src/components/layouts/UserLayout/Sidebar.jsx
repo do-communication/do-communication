@@ -40,11 +40,19 @@ const Sidebar = () => {
       url: "/user/tasks",
       name: "My Tasks", //unqiue
     },
-
     {
       Icon: <TbReportAnalytics size={20} />,
-      url: "/user/reports/report",
-      name: "Report",
+      name: "Report", //unqiue
+      children: [
+        {
+          url: "/user/reports/report",
+          name: "Write report",
+        },
+        {
+          url: "/user/reports/reports",
+          name: "Reports",
+        },
+      ],
     },
     {
       Icon: <SlEnvolopeLetter size={20} />,
@@ -110,7 +118,7 @@ const Sidebar = () => {
     >
       <nav className="top-0 z-40 flex h-[64px] items-center justify-start bg-primary px-4 py-2 shadow-lg  md:sticky">
         <Link
-          href="/admin"
+          href="/user"
           className="group flex items-center space-x-2 text-white hover:text-white"
         >
           <img src="/images/white_logo.png" alt="logo" width="80" />
