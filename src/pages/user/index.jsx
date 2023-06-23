@@ -40,12 +40,12 @@ const User = () => {
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div className="grid grid-cols-2 text-center order-last md:order-first mt-20 md:mt-0">
               <div>
-                <p className="font-bold text-gray-700 text-xl">{Colleague}</p>
+                <p className="font-bold  ml-16 rounded-2xl w-10 bg-light text-white text-xl">{Colleague}</p>
                 <p className="text-gray-400">Colleague</p>
               </div>
               <div>
-                <p className="font-bold text-gray-700 text-xl">{NewTasks}</p>
-                <p className="text-gray-400">New Tasks</p>
+                <p className="font-bold text-white ml-20 rounded-2xl w-10 bg-green-700 text-xl">{NewTasks}</p>
+                <p className="text-gray-400 ml-3">New Tasks</p>
               </div>
             </div>
             <div className="relative">
