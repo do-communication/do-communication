@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AiFillAccountBook, AiFillFileAdd } from "react-icons/ai";
+import { AiFillAccountBook, AiFillFileAdd, AiFillHome } from "react-icons/ai";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
 import { MdGroupWork } from "react-icons/md";
@@ -16,6 +16,11 @@ const Sidebar = () => {
   const router = useRouter();
 
   const navList = [
+    {
+      Icon: <AiFillHome size={20} />,
+      url: "/user",
+      name: "Home",
+    },
     {
       Icon: <BsFillChatDotsFill size={20} />,
       name: "Chat",
