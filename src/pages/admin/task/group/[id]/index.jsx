@@ -199,7 +199,7 @@ const ManageTasks = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/task/edit"
+                        href="/admin/task/edit/id"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Task
