@@ -1,4 +1,3 @@
-import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
@@ -8,44 +7,46 @@ import {
   AiOutlineClose,
   AiOutlinePlus,
   AiOutlineSearch,
-  AiFillFile,
   AiOutlineFile,
-  AiFillLike,
 } from "react-icons/ai";
-import { TfiFiles } from "react-icons/tfi";
-import { GiShare } from "react-icons/gi";
-import { BiDotsVertical, BiGroup } from "react-icons/bi";
-import { BsEye } from "react-icons/bs";
-import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-import { MdChecklist } from "react-icons/md";
-import { TbMessage } from "react-icons/tb";
+import { GiShare, GiOpenBook } from "react-icons/gi";
+import { BiDotsVertical } from "react-icons/bi";
 import { db } from "../../../../context/DbContext";
 import {
   getDocs,
   collection,
-  query,
-  where,
-  or,
-  orderBy,
-  and,
-  addDoc,
 } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
+import useFetch from "@/components/useFetch";
+import { toast } from "react-toastify";
+import Router from "next/router";
+
+const router = Router;
 
 const ManageFiles = () => {
   const [files, setFiles] = useState([]);
   const [allFiles, setAllFiles] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
+  const [update, setUpdate] = useState(false);
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
+  const [toggledClearRows, setToggleClearRows] = useState(false);
+  const { deleteFile } = useFetch("KalCompany");
+
+  const handleDelete = async () => {
+    await deleteFile(selectedRows[0], setUpdate, update, setSelectedRows);
+    setToggleClearRows(!toggledClearRows);
+  };
 
   // search for groups using group name
   useEffect(() => {
     const filteredData = allFiles.filter(
       (item) =>
-        item.data.FileName &&
-        item.data.FileName.toLowerCase().includes(search.toLowerCase())
+        (item.data.FileName &&
+          item.data.FileName.toLowerCase().includes(search.toLowerCase())) ||
+        (item.data.Description &&
+          item.data.Description.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -54,6 +55,17 @@ const ManageFiles = () => {
       setFiles(allFiles);
     }
   }, [search]);
+
+  const [pending, setPending] = useState(true);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setRows(allFiles);
+      setPending(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const columns = [
     {
@@ -89,11 +101,16 @@ const ManageFiles = () => {
     const id = "select-row-" + row.id;
     document.querySelector(`input[name=${id}]`).classList.remove("checked");
   };
-  useEffect(() => {}, [selectedRows]);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(selectedRows[0].data.url);
+    toast.success("Link Copied");
+  };
+
+  useEffect(() => { }, [selectedRows]);
 
   useEffect(() => {
     getFiles();
-  }, []);
+  }, [update]);
 
   const getFiles = async () => {
     let arr = [];
@@ -111,7 +128,7 @@ const ManageFiles = () => {
   };
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-5 text-2xl font-semibold">Manage Files</h1>
@@ -138,7 +155,10 @@ const ManageFiles = () => {
             columns={columns}
             data={files}
             selectableRows
+            selectableRowsSingle={true}
             onSelectedRowsChange={handleRowSelected}
+            clearSelectedRows={toggledClearRows}
+            progressPending={pending}
             pagination
           />
           {/* try */}
@@ -191,24 +211,35 @@ const ManageFiles = () => {
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/tasks/{groupId}"
+                        href={selectedRows[0].data.url}
                         className="flex items-center gap-2"
+                        target="_blank"
+                      >
+                        <GiOpenBook className="w-5 h-auto" /> Open
+                      </Link>
+                    </li>
+                    <li className="p-1 rounded hover:bg-primary">
+                      <Link
+                        href=""
+                        className="flex items-center gap-2"
+                        onClick={handleCopy}
                       >
                         <GiShare className="w-5 h-auto" /> Share
                       </Link>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/groups/edit/{groupId}"
+                      <button
+                        onClick={() => { router.push(`/user/files/edit/${selectedRows[0].id}`) }}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit file
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                        href="/admin/groups/edit"
+                        href="/user/groups/edit"
                         className="flex items-center gap-2"
+                        onClick={handleDelete}
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete file
                       </button>
@@ -228,6 +259,7 @@ const ManageFiles = () => {
               <div className="relative flex justify-center py-4">
                 <button
                   // onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
+                  onClick={handleCopy}
                   className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
                 >
                   <GiShare className="w-8 h-auto" />
@@ -283,11 +315,11 @@ const ManageFiles = () => {
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
-                        Location
+                        Shelf Location
                       </p>
                     </div>
                     <p className="w-40 text-sm truncate" title="+251910******">
-                      {selectedRows[0].data.location}
+                      {selectedRows[0].data.ShelfLocation}
                     </p>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
@@ -309,7 +341,7 @@ const ManageFiles = () => {
           )}
         </div>
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 

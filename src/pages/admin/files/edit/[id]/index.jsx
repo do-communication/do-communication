@@ -3,7 +3,7 @@ import Select from 'react-select'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { auth } from "../../../../../../config/firebase";
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../context/DbContext";
 import { serverTimestamp } from "@firebase/firestore";
 import { toast } from "react-toastify";
@@ -68,7 +68,7 @@ const AddFile = () => {
 
 
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-              await addDoc(collection(db, "KalCompany", "Files", auth.currentUser.uid), {
+              await setDoc(doc(db, "KalCompany", "Files", auth.currentUser.uid, fileId), {
                 FileName: FileName,
                 CreatedAt: serverTimestamp(),
                 Owner: auth.currentUser.uid,
@@ -142,7 +142,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="address">Shelf Location</label>
+                      <label htmlFor="shelfLocation">Shelf Location</label>
                       <input
                         type="text"
                         name="shelfLocation"
@@ -154,7 +154,7 @@ const AddFile = () => {
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label htmlFor="email">Description</label>
+                      <label htmlFor="type">Description</label>
                       <textarea
                         name="type"
                         id="type"
@@ -166,7 +166,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="state">Upload File</label>
+                      <label htmlFor="file">Upload File</label>
                       <div className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50">
                         <input
                           type="file"

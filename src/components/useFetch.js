@@ -363,7 +363,7 @@ const useFetch = (collectionType) => {
                         });
 
 
-                        const reciever = await GetUser(userId)
+                        const reciever = await GetUserOrAdmin(userId)
                         await setDoc(doc(db, collectionType, "Messages", "Recent", userId), {
                             Content: sendFile.name,
                             CreatedAt: serverTimestamp(),
