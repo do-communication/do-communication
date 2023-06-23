@@ -17,6 +17,9 @@ import { getDocs, collection } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
 import useFetch from "@/components/useFetch";
 import { toast } from "react-toastify";
+import Router from "next/router";
+
+const router = Router;
 
 const ManageFiles = () => {
   const [files, setFiles] = useState([]);
@@ -97,7 +100,7 @@ const ManageFiles = () => {
     toast.success("Link Copied");
   };
 
-  useEffect(() => {}, [selectedRows]);
+  useEffect(() => { }, [selectedRows]);
 
   useEffect(() => {
     getFiles();
@@ -204,6 +207,7 @@ const ManageFiles = () => {
                       <Link
                         href={selectedRows[0].data.url}
                         className="flex items-center gap-2"
+                        target="_blank"
                       >
                         <GiOpenBook className="w-5 h-auto" /> Open
                       </Link>
@@ -218,12 +222,12 @@ const ManageFiles = () => {
                       </Link>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/admin/files/edit"
+                      <button
+                        onClick={() => { router.push(`/admin/files/edit/${selectedRows[0].id}`) }}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit file
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
@@ -247,7 +251,11 @@ const ManageFiles = () => {
                 </h4>
               </div>
               <div className="relative flex justify-center py-4">
-                <button className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
+                <button
+                  // onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
+                  onClick={handleCopy}
+                  className="p-2 text-white rounded-full bg-secondary bg-opacity-80"
+                >
                   <GiShare className="w-8 h-auto" />
                 </button>
               </div>

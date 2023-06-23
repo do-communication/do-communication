@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import {
   doc,
   getDocs,
@@ -12,10 +12,10 @@ import Router from "next/router";
 const router = Router;
 import { toast } from "react-toastify";
 import Select from "react-select";
-import { auth } from "../../../../../../config/firebase";
+import { auth } from "../../../../../../../config/firebase";
 const user = auth.currentUser;
 import { usePathname } from "next/navigation";
-import { db } from "../../../../../../context/DbContext";
+import { db } from "../../../../../../../context/DbContext";
 
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
@@ -296,7 +296,7 @@ const AddMember = () => {
     getData();
   }, []);
   return (
-    <AdminLayout>
+    <UserLayout>
       <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-8">
         <div className="container mx-auto max-w-screen-lg">
           <div>
@@ -473,7 +473,7 @@ const AddMember = () => {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 export default AddMember;

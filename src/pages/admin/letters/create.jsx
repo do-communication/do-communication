@@ -15,20 +15,28 @@ import { db } from "../../../../context/DbContext";
 import { RiAttachment2 } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-
+import useFetch from "@/components/useFetch";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
 const AddReport = () => {
+  const { GetCompanyName } = useFetch("KalCompany");
+  const [comp, setcomp] = useState("")
+  const setComp = async() => {
+    setcomp(await GetCompanyName())
+  }
+  setComp();
   const [reportDetail, setReportDetail] = useState("");
   const [data, setData] = useState({
-    To: "",
-    Address: "",
-    Subject: "",
-    Body: "",
+    To: '',
+    Address: '',
+    Subject: '',
+    Body: '', 
     From: user.displayName,
+    Date: new Date().toDateString(), 
+    Company: comp.companyName
   });
   const to = document.getElementById("to");
   const address = document.getElementById("address");
@@ -55,8 +63,11 @@ const AddReport = () => {
   useEffect(() => {
     const value = { ...data, Body: reportDetail };
     setData(value);
-  }, [reportDetail]);
-
+  }, [reportDetail])
+  useEffect(() => {
+    const value = {...data, Company:comp.companyName}
+    setData(value);
+  }, [comp])
   return (
     <AdminLayout>
       <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-2">

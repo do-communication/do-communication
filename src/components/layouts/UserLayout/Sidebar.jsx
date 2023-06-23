@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AiFillAccountBook, AiFillFileAdd } from "react-icons/ai";
+import { AiFillAccountBook, AiFillFileAdd, AiFillHome } from "react-icons/ai";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
 import { MdGroupWork } from "react-icons/md";
@@ -16,6 +16,11 @@ const Sidebar = () => {
   const router = useRouter();
 
   const navList = [
+    {
+      Icon: <AiFillHome size={20} />,
+      url: "/user",
+      name: "Home",
+    },
     {
       Icon: <BsFillChatDotsFill size={20} />,
       name: "Chat",
@@ -35,11 +40,19 @@ const Sidebar = () => {
       url: "/user/tasks",
       name: "My Tasks", //unqiue
     },
-
     {
       Icon: <TbReportAnalytics size={20} />,
-      url: "/user/reports/report",
-      name: "Report",
+      name: "Report", //unqiue
+      children: [
+        {
+          url: "/user/reports/report",
+          name: "Write report",
+        },
+        {
+          url: "/user/reports/reports",
+          name: "Reports",
+        },
+      ],
     },
     {
       Icon: <SlEnvolopeLetter size={20} />,
@@ -105,7 +118,7 @@ const Sidebar = () => {
     >
       <nav className="top-0 z-40 flex h-[64px] items-center justify-start bg-primary px-4 py-2 shadow-lg  md:sticky">
         <Link
-          href="/admin"
+          href="/user"
           className="group flex items-center space-x-2 text-white hover:text-white"
         >
           <img src="/images/white_logo.png" alt="logo" width="80" />

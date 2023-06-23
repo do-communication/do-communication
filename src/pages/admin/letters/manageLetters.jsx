@@ -1,31 +1,58 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { letters } from "@/mock/letters";
+// import { letters } from "@/mock/letters";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { BiPrinter } from "react-icons/bi";
+import { db } from "../../../../context/DbContext"
+import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
+import useFetch from "@/components/useFetch";
+import { auth } from "../../../../config/firebase";
+const user = auth.currentUser;
 
 const Letters = () => {
+  const { GetCompanyName } = useFetch("KalCompany")
   const [allLetters, setallLetters] = useState([]);
+  const [letters, setLetters ] = useState([]);
   const [search, setSearch] = useState("");
+  let comp = "";
+  const getData = async () => {
+    let arr = []
+    let temp = []
+    const all = collection(db, "KalCompany", "Letter", "Letter");
+    try {
+      const doc = await getDocs(all)
+      doc.forEach(d => {
+        if(d._document.data.value.mapValue.fields.From.stringValue === user.displayName){
+        arr.push({id:d.id, data:d.data()})}
+      });
 
-  useEffect(() => {
-    setallLetters(letters);
+    } catch (err) {
+      console.log(err)
+      setLetters([{ Name: "check your connection" }])
+    }
+    setLetters(arr)
+    setallLetters(arr)
+  }
+
+  useEffect(async() => {
+    getData();
+    comp = await GetCompanyName()
   }, []);
 
   const columns = [
     {
       name: "Subject",
-      selector: (row) => row.subject,
+      selector: (row) => row.data.Subject,
     },
     {
       name: "To",
-      selector: (row) => row.to,
+      selector: (row) => row.data.To,
     },
     {
       name: "Date",
-      selector: (row) => row.createdAt.toDateString(),
+      selector: (row) => row.data.Date,
     },
   ];
 
@@ -73,7 +100,7 @@ const ShowLetterDetail = ({ data }) => {
     window.print();
     document.body.innerHTML = originalContent;
     setIsPrinting(false);
-  };
+  }; 
 
   return (
     <div className="flex flex-col gap-10 bg-gray-200 px-8 py-4">
@@ -94,18 +121,18 @@ const ShowLetterDetail = ({ data }) => {
         ref={printPreviewRef}
       >
         <div className="flex flex-col gap-1">
-          <p>Company Name</p>
-          <p>Address, Location</p>
+          <p>{data.data.Company}</p>
+          <p>{data.data.Address}</p>
         </div>
-        <h3>{data.createdAt.toString()}</h3>
+        <h3>{data.data.Date}</h3>
         <div className="flex flex-col gap-1">
-          <p>Mr. Name</p>
-          <p>Address, Location</p>
+          <p>{data.data.To}</p>
+          <p>{data.data.Address}</p>
         </div>
 
-        <h3 className="font-semibold">Subject: {data.subject}</h3>
+        <h3 className="font-semibold">Subject: {data.data.Subject}</h3>
 
-        <p>{data.body}</p>
+        <p>{data.data.Body}</p>
       </div>
     </div>
   );

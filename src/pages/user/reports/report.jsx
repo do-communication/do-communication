@@ -55,11 +55,11 @@ const AddReport = () => {
         (snapshot) => {
           setProgress(
             sendFile.name +
-              "  " +
-              Math.floor(
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              ) +
-              "% Done"
+            "  " +
+            Math.floor(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            ) +
+            "% Done"
           );
 
           switch (snapshot.state) {
@@ -86,6 +86,8 @@ const AddReport = () => {
           });
         }
       );
+    } else {
+      await addData();
     }
   };
 
@@ -161,7 +163,7 @@ const AddReport = () => {
     e.preventDefault();
     // console.log(sendFile)
     await uploadFile(e);
-  };
+  }
 
   useEffect(() => {
     const values = { ...data, Detail: reportDetail, File: url };
@@ -181,12 +183,11 @@ const AddReport = () => {
       setMembers([{ Name: "check your connection" }]);
     }
 
-    setMembers(arr);
-    setallMembers(arr);
-  };
-
+    setMembers(arr)
+    setallMembers(arr)
+  }
   useEffect(async () => {
-    getData();
+    getData()
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", user.uid);
     setmem(await getDoc(docRef));
   }, []);

@@ -23,7 +23,6 @@ const Letters = () => {
   const [letters, setLetters] = useState([]);
   const [search, setSearch] = useState("");
   let comp = "";
-  console.log(comp);
   const getData = async () => {
     let arr = [];
     let temp = [];

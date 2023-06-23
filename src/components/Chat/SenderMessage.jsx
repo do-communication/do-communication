@@ -54,7 +54,7 @@ const SenderMessage = ({
             onClick={() => handleOpen(null, msg)}
           >
             <div>
-              <Link href={msg.data.url} className="flex flex-col">
+              <Link target="_blank" href={msg.data.url} className="flex flex-col">
                 <BiFileBlank className="h-auto w-12 text-secondary" />
                 <p
                   className="w-10 truncate text-xs font-semibold"

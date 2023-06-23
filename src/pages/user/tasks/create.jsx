@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import {
   doc,
   getDocs,
@@ -8,67 +8,36 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useState, useEffect, useRef } from "react";
-import Router from "next/router";
-const router = Router;
+import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
 import Select from "react-select";
-import { auth } from "../../../../../../config/firebase";
+import { auth } from "../../../../config/firebase";
 const user = auth.currentUser;
-import { usePathname } from "next/navigation";
-import { db } from "../../../../../../context/DbContext";
+// const selectInputRef = useRef();
 
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
   const temp = [];
   const [assignedto, setassignedto] = useState([]);
   const [members, setMembers] = useState([]);
-  const currentPage = usePathname();
-  let i = currentPage.lastIndexOf("edit/");
-  const id = currentPage.slice(i + 5);
+  const [groups, setGroups] = useState([]);
+  const [allgroups, setallGroups] = useState([]);
+  const taskTo = []
   const [data, setData] = useState({
     Title: "",
     Description: "",
     AssignedTo: [],
     Priority: "",
-    StartDate: new Date("10/10/2030").toDateString(),
-    DueDate: new Date("10/10/2030").toDateString,
+    StartDate: new Date("10/10/2030"),
+    DueDate: new Date("10/10/2030"),
     Status: "Assigned",
     AssignedBy: user.displayName,
   });
-  const getMem = async () => {
-    const docRef = doc(db, "KalCompany", "Tasks", "Tasks", id);
-    // const user = ;
-    const mem = await getDoc(docRef);
-    let tempAssigned = [];
-    const assigned =
-      mem._document.data.value.mapValue.fields.AssignedTo.arrayValue.values;
-    if (assigned) {
-      assigned.forEach((t) => {
-        if (t) {
-          tempAssigned.push(t.stringValue);
-        }
-      });
-    }
-
-    setData({
-      Title: mem._document.data.value.mapValue.fields.Title.stringValue,
-      Description:
-        mem._document.data.value.mapValue.fields.Description.stringValue,
-      Priority: mem._document.data.value.mapValue.fields.Priority.stringValue,
-      StartDate: mem._document.data.value.mapValue.fields.StartDate.stringValue,
-      DueDate: mem._document.data.value.mapValue.fields.DueDate.stringValue,
-      AssignedTo: tempAssigned,
-      Status: mem._document.data.value.mapValue.fields.Status.stringValue,
-      AssignedBy:
-        mem._document.data.value.mapValue.fields.AssignedBy.stringValue,
-    });
-  };
-  useEffect(() => {
-    getMem();
-  }, []);
   const getData = async () => {
-    let arr = [];
+    let arr = []
+    let groups = []
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    const allGroup = collection(db, "KalCompany", "Groups", "Groups");
     try {
       const doc = await getDocs(all);
       doc.forEach((d) => {
@@ -78,11 +47,31 @@ const AddMember = () => {
       console.log(err);
       setMembers([{ Name: "check your connection" }]);
     }
+    try {
+      const doc = await getDocs(allGroup)
+      doc.forEach(d => {
+        groups.push({ id: d.id, data: d.data() })
+      });
+    } catch (err) {
+      console.log(err)
+      setGroups([{ Name: "check your connection" }])
+    }
+    arr.map(m => {
+      taskTo.push(m)
+    })
+    groups.map(m => {
+      taskTo.push(m)
+    })
+    setMembers(taskTo)
+    setallMembers(taskTo)
+    setGroups(groups)
+    setallGroups(groups)
 
-    setMembers(arr);
-    setallMembers(arr);
-  };
-
+    // console.log(taskTo)
+  }
+  // useEffect(()=>{
+  //   setTaskTo(Object.assign(allMembers, allgroups))
+  // },[allgroups, allMembers] )
   const updateMember = async (i) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(docRef)
@@ -90,30 +79,20 @@ const AddMember = () => {
       let tempTask = [];
       let tempReport = [];
       let tempGroup = [];
-      const temp =
-        mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-      const report =
-        mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-      const group =
-        mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+      const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
       if (temp) {
-        temp.forEach((t) => {
+        temp.forEach(t => {
           if (t) {
             tempTask.push(t.stringValue);
           }
         });
       }
       if (report) {
-        report.forEach((r) => {
+        report.forEach(r => {
           if (r) {
             tempReport.push(r.stringValue);
-          }
-        });
-      }
-      if (group) {
-        group.forEach((g) => {
-          if (g) {
-            tempGroup.push(g.stringValue);
           }
         });
       }
@@ -144,6 +123,62 @@ const AddMember = () => {
           );
         })
         .catch((error) => {
+          console.log(error);
+        })
+    } else {
+      const groupRef = doc(db, "KalCompany", "Groups", "Groups", i);
+      const group = await getDoc(groupRef);
+      let tempTask = [];
+      let tempReport = [];
+      let tempGroup = [];
+      let tempPeople = [];
+      const task = group._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report = group._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const members = group._document.data.value.mapValue.fields.Members.arrayValue.values;
+      const people = group._document.data.value.mapValue.fields.People.arrayValue.values;
+      if (people) {
+        people.forEach(p => {
+          if (p) {
+            tempPeople.push(p.stringValue);
+          }
+        });
+      }
+      if (task) {
+        task.forEach(t => {
+          if (t) {
+            tempTask.push(t.stringValue);
+          }
+        });
+      }
+      if (report) {
+        report.forEach(r => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      if (members) {
+        members.forEach(g => {
+          if (g) {
+            tempGroup.push(g.stringValue);
+          }
+        });
+      }
+      tempTask.push(data.Title)
+      const newGroup = {
+        People: tempPeople,
+        Type: group._document.data.value.mapValue.fields.Type.stringValue,
+        Name: group._document.data.value.mapValue.fields.Name.stringValue,
+        Members: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+        Learder: group._document.data.value.mapValue.fields.Learder.stringValue
+      }
+      updateDoc(groupRef, newGroup)
+        .then(groupRef => {
+          console.log("A New Document Field has been added to an existing document");
+        })
+        .catch(error => {
           console.log(error);
         })
     }
@@ -260,15 +295,9 @@ const AddMember = () => {
       data.DueDate != null &&
       data.Priority != "null"
     ) {
-      const docRef = doc(db, "KalCompany", "Tasks", "Tasks", id);
-      updateDoc(docRef, data)
-        .then((docRef) => {
-          handleClear();
-          toast.success("Task edited successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      await addDoc(collection(db, "KalCompany", "Tasks", "Tasks"), data);
+      handleClear();
+      toast.success("Task Assigned successfully");
     }
   };
   const handleClear = (e) => {
@@ -296,12 +325,12 @@ const AddMember = () => {
     getData();
   }, []);
   return (
-    <AdminLayout>
-      <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-8">
+    <UserLayout>
+      <div className="flex min-h-screen justify-center bg-gray-100 p-6  pt-8">
         <div className="container mx-auto max-w-screen-lg">
           <div>
             <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
-              Edit Task
+              Assign Task
             </h2>
 
             <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
@@ -327,7 +356,7 @@ const AddMember = () => {
                         id="title"
                         onChange={handleTitle}
                         value={data.Title}
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
                       />
                     </div>
 
@@ -452,7 +481,7 @@ const AddMember = () => {
                         <div className="flex-row gap-10 pt-8">
                           <button
                             onClick={handleClear}
-                            className="text-balck mr-6 rounded border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
+                            className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
                           >
                             Cancel
                           </button>
@@ -461,7 +490,7 @@ const AddMember = () => {
                             className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
                           >
                             {" "}
-                            Edit
+                            Assign
                           </button>
                         </div>
                       </div>
@@ -473,7 +502,7 @@ const AddMember = () => {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 export default AddMember;
