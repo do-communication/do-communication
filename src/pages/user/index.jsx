@@ -6,13 +6,12 @@ import { auth } from "../../../config/firebase";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../context/DbContext";
-
+ 
 const User = () => {
   const [user, setUser] = useState({});
   const { GetUser } = useFetch("KalCompany")
   const [Colleague, setColleague] = useState(0);
   const [NewTasks, setNewTask] = useState(0);
-  console.log("user side")
 
   const getData = async () => {
     if (auth.currentUser) {

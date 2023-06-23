@@ -1,12 +1,83 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { allMembers } from "@/mock/members";
-import React, { useState } from "react";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import { AiFillFileAdd } from "react-icons/ai";
 import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
 import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
+import useFetch from "@/components/useFetch";
+import { auth } from "../../../config/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../context/DbContext";
+
 const Admin = () => {
   const [members, setMembers] = useState(allMembers);
+  const [user, setUser] = useState({});
+  const { GetUser } = useFetch("KalCompany")
+  const [Colleague, setColleague] = useState(0);
+  const [NewTasks, setNewTask] = useState(0);
+  const [Reports, setReports] = useState(0); 
+  const [Files, setFiles] = useState(0); 
+  const [todo, setTodo] = useState([]);
+  const [inprogress, setInprogress] = useState([]);
+  const [completed, setComplete] = useState([]);
+
+  const getData = async () => {
+    if (auth.currentUser) {
+      setUser(await GetUser(auth.currentUser.uid));
+      const coll = collection(db, "KalCompany", "Users", "StaffMembers");
+      const snapshot = await getDocs(coll);
+      setColleague(snapshot.docs.length)
+
+      const tasks = collection(db, "KalCompany", "Tasks", "Tasks");
+      const taskSnap = await getDocs(tasks);
+      setNewTask(taskSnap.docs.length);
+      const q1 = query(tasks, where("Status", "==", "assigned")); 
+      const temp1 = [];
+      try {
+        const todoTask = await getDocs(q1);
+        todoTask.forEach((d) => {
+          temp1.push( d.data() );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setTodo(temp1)
+      const q2 = query(tasks, where("Status", "==", "inprogress"));
+      const temp2 = [];
+      try {
+        const inprogressTask = await getDocs(q2);
+        inprogressTask.forEach((d) => {
+          temp2.push( d.data() );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setInprogress(temp2);
+      const q3 = query(tasks, where("Status", "==", "done"));
+      const temp3 = [];
+      try {
+        const doneTask = await getDocs(q3);
+        doneTask.forEach((d) => {
+          temp3.push( d.data() );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setComplete(temp3);
+      const reports = collection(db, "KalCompany", "Reports", "Reports");
+      const reportSnap = await getDocs(reports);
+      setReports(reportSnap.docs.length)
+
+      const files = collection(db, "KalCompany", "Files", auth.currentUser.uid);
+      const fileSnap = await getDocs(files);
+      setFiles(fileSnap.docs.length)
+    }
+  }
+useEffect(()=>{
+  getData();
+}, [])
   return (
     <AdminLayout>
       <div className="flex min-h-screen bg-gray-100">
@@ -15,7 +86,7 @@ const Admin = () => {
             <div className="flex flex-col justify-between space-y-6 md:flex-row md:space-y-0">
               <div className="mr-6">
                 <h1 className="mb-2 text-4xl font-semibold">Dashboard</h1>
-                <h2 className="ml-0.5 text-gray-600">SomeCompany@gmail.com</h2>
+                <h2 className="ml-0.5 text-gray-600">{auth.currentUser.email}</h2>
               </div>
             </div>
             <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -24,7 +95,7 @@ const Admin = () => {
                   <RiTeamFill size={23} />
                 </div>
                 <div>
-                  <span className="block text-2xl font-bold">12</span>
+                  <span className="block text-2xl font-bold">{Colleague}</span>
                   <span className="block text-gray-500">Employees</span>
                 </div>
               </div>
@@ -33,7 +104,7 @@ const Admin = () => {
                   <FaTasks size={23} />
                 </div>
                 <div>
-                  <span className="block text-2xl font-bold">110</span>
+                  <span className="block text-2xl font-bold">{NewTasks}</span>
                   <span className="block text-gray-500">Tasks</span>
                 </div>
               </div>
@@ -42,7 +113,7 @@ const Admin = () => {
                   <TbReportAnalytics size={23} />
                 </div>
                 <div>
-                  <span className="inline-block text-2xl font-bold">70</span>
+                  <span className="inline-block text-2xl font-bold">{Reports}</span>
                   <span className="block text-gray-500"> Reports</span>
                 </div>
               </div>
@@ -51,7 +122,7 @@ const Admin = () => {
                   <AiFillFileAdd size={23} />
                 </div>
                 <div>
-                  <span className="block text-2xl font-bold">30</span>
+                  <span className="block text-2xl font-bold">{Files}</span>
                   <span className="block text-gray-500">Files</span>
                 </div>
               </div>
@@ -305,36 +376,32 @@ const Admin = () => {
                         <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                       </svg>
                     </div>
+                   
                     <div className="mt-2 text-sm text-black dark:text-gray-50 ">
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
+                    {todo && todo.map((row, index) => (
+                      <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                      
+                          <h2> {row.Title}</h2>
+                          <p className="text-sm">
+                              Assigned to: {" "}
+                              {Array.from(
+                                new Set(row.AssignedTo)
+                              ).toString(" ")}{" "}
+                          </p>
+                          
                       </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
+                      ))}
 
                       <form className="mt-3 text-gray-600 dark:text-gray-400">
-                        <div className="mt-2 flex flex-col ">
-                          <label htmlFor="tel" className="hidden">
-                            task
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Add a task"
-                            className="w-100 mt-2 rounded-sm bg-white px-3 py-4 font-semibold text-white dark:bg-gray-600"
-                          />
-                        </div>
-                        <button
-                          type="submit"
+                        <Link
+                          href="admin/task/create"
                           className="align-item-center mt-4 flex w-32 justify-center rounded-lg bg-primary py-3 font-bold text-white transition duration-300 ease-in-out hover:bg-bold"
                         >
                           Add
-                        </button>
+                        </Link>
                       </form>
                     </div>
+                    
                   </div>
                 </div>
 
@@ -353,17 +420,21 @@ const Admin = () => {
                           <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                         </svg>
                       </div>
+                      
                       <div className="mt-2 text-sm text-black dark:text-gray-50">
-                        <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                          Lorem ipsum dolor sit amet consectetur
+                      {inprogress && inprogress.map((row, index) => (
+                        <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                            <h2>{row.Title}</h2>
+                            <p className="text-sm">
+                              Assigned to: {" "}
+                              {Array.from(
+                                new Set(row.AssignedTo)
+                              ).toString(" ")}{" "}
+                          </p>
                         </div>
-                        <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                          Lorem ipsum dolor sit amet consectetur
-                        </div>
-                        <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                          Lorem ipsum dolor sit amet consectetur
-                        </div>
+                    ))}
                       </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -380,15 +451,18 @@ const Admin = () => {
                       </svg>
                     </div>
                     <div className="mt-2 text-sm text-black dark:text-gray-50 ">
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
+                    {completed &&
+                    completed.map((row, index) => (
+                      <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                        <h2>{row.Title}</h2>
+                        <p className="text-sm">
+                              Assigned to: {" "}
+                              {Array.from(
+                                new Set(row.AssignedTo)
+                              ).toString(" ")}{" "}
+                          </p>
                       </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
