@@ -4,20 +4,34 @@ import Link from "next/link";
 import useFetch from "@/components/useFetch";
 import { auth } from "../../../config/firebase";
 import { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../context/DbContext";
 
 const User = () => {
   const [user, setUser] = useState({});
   const { GetUser } = useFetch("KalCompany")
+  const [Colleague, setColleague] = useState(0);
+  const [NewTasks, setNewTask] = useState(0);
+  console.log("user side")
 
   const getData = async () => {
     if (auth.currentUser) {
       setUser(await GetUser(auth.currentUser.uid));
+      const coll = collection(db, "KalCompany", "Users", "StaffMembers");
+      const snapshot = await getDocs(coll);
+      setColleague(snapshot.docs.length)
+
+      const task = collection(db, "KalCompany", "Tasks", "Tasks");
+      const q = query(task, where("AssignedTo", "array-contains", auth.currentUser.displayName), where("Status", "==", "assigned"));
+      const taskSnap = await getDocs(q);
+      setNewTask(taskSnap.docs.length)
+
     }
   }
 
   useEffect(() => {
     getData();
-  }, [user])
+  }, [])
 
   return (
     <UserLayout>
@@ -26,11 +40,11 @@ const User = () => {
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div className="grid grid-cols-2 text-center order-last md:order-first mt-20 md:mt-0">
               <div>
-                <p className="font-bold text-gray-700 text-xl">12</p>
+                <p className="font-bold text-gray-700 text-xl">{Colleague}</p>
                 <p className="text-gray-400">Colleague</p>
               </div>
               <div>
-                <p className="font-bold text-gray-700 text-xl">10</p>
+                <p className="font-bold text-gray-700 text-xl">{NewTasks}</p>
                 <p className="text-gray-400">New Tasks</p>
               </div>
             </div>

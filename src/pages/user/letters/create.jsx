@@ -34,7 +34,7 @@ const AddReport = () => {
     Address: "",
     Subject: "",
     Body: "",
-    From: user.displayName,
+    From: auth.currentUser.displayName,
     Date: new Date().toDateString(),
     Company: comp.companyName,
   });

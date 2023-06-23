@@ -30,7 +30,7 @@ const AddMember = () => {
     Priority: "",
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
-    Status: "Assigned",
+    Status: "assigned",
     AssignedBy: user.displayName,
   });
   const getData = async () => {
