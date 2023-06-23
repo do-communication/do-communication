@@ -1,12 +1,123 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { allMembers } from "@/mock/members";
-import React, { useState } from "react";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import { AiFillFileAdd } from "react-icons/ai";
 import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
 import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
+import useFetch from "@/components/useFetch";
+import { auth } from "../../../config/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../context/DbContext";
+import { PureComponent } from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer ,Tooltip,Legend} from "recharts";
+
 const Admin = () => {
   const [members, setMembers] = useState(allMembers);
+  const [user, setUser] = useState({});
+  const { GetUser } = useFetch("KalCompany")
+  const [Colleague, setColleague] = useState(0);
+  const [NewTasks, setNewTask] = useState(0);
+  const [Reports, setReports] = useState(0); 
+  const [Files, setFiles] = useState(0); 
+  const [todo, setTodo] = useState([]);
+  const [inprogress, setInprogress] = useState([]);
+  const [completed, setComplete] = useState([]);
+
+  const getData = async () => {
+    if (auth.currentUser) {
+      setUser(await GetUser(auth.currentUser.uid));
+      const coll = collection(db, "KalCompany", "Users", "StaffMembers");
+      const snapshot = await getDocs(coll);
+      setColleague(snapshot.docs.length)
+
+      const tasks = collection(db, "KalCompany", "Tasks", "Tasks");
+      const taskSnap = await getDocs(tasks);
+      setNewTask(taskSnap.docs.length);
+      const q1 = query(tasks, where("Status", "==", "assigned")); 
+      const temp1 = [];
+      try {
+        const todoTask = await getDocs(q1);
+        todoTask.forEach((d) => {
+          temp1.push( d.data() );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setTodo(temp1)
+      const q2 = query(tasks, where("Status", "==", "inprogress"));
+      const temp2 = [];
+      try {
+        const inprogressTask = await getDocs(q2);
+        inprogressTask.forEach((d) => {
+          temp2.push( d.data() );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setInprogress(temp2);
+      const q3 = query(tasks, where("Status", "==", "done"));
+      const temp3 = [];
+      try {
+        const doneTask = await getDocs(q3);
+        doneTask.forEach((d) => {
+          temp3.push( d.data() );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setComplete(temp3);
+      const reports = collection(db, "KalCompany", "Reports", "Reports");
+      const reportSnap = await getDocs(reports);
+      setReports(reportSnap.docs.length)
+
+      const files = collection(db, "KalCompany", "Files", auth.currentUser.uid);
+      const fileSnap = await getDocs(files);
+      setFiles(fileSnap.docs.length)
+    }
+  }
+useEffect(()=>{
+  getData();
+}, [])
+
+// const Admin = () => {
+//   const [members, setMembers] = useState(allMembers);
+
+  const data = [
+    { name: "New Task", value: 400 },
+    { name: "In progress", value: 300 },
+    { name: "Done", value: 300 },
+  ];
+
+  const COLORS = ["#298cc5", "#FFBB28", "#00C49F" ];
+
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
   return (
     <AdminLayout>
       <div className="flex min-h-screen bg-gray-100">
@@ -15,7 +126,7 @@ const Admin = () => {
             <div className="flex flex-col justify-between space-y-6 md:flex-row md:space-y-0">
               <div className="mr-6">
                 <h1 className="mb-2 text-4xl font-semibold">Dashboard</h1>
-                <h2 className="ml-0.5 text-gray-600">SomeCompany@gmail.com</h2>
+                <h2 className="ml-0.5 text-gray-600">{auth.currentUser.email}</h2>
               </div>
             </div>
             <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -24,7 +135,7 @@ const Admin = () => {
                   <RiTeamFill size={23} />
                 </div>
                 <div>
-                  <span className="block text-2xl font-bold">12</span>
+                  <span className="block text-2xl font-bold">{Colleague}</span>
                   <span className="block text-gray-500">Employees</span>
                 </div>
               </div>
@@ -33,7 +144,7 @@ const Admin = () => {
                   <FaTasks size={23} />
                 </div>
                 <div>
-                  <span className="block text-2xl font-bold">110</span>
+                  <span className="block text-2xl font-bold">{NewTasks}</span>
                   <span className="block text-gray-500">Tasks</span>
                 </div>
               </div>
@@ -42,7 +153,7 @@ const Admin = () => {
                   <TbReportAnalytics size={23} />
                 </div>
                 <div>
-                  <span className="inline-block text-2xl font-bold">70</span>
+                  <span className="inline-block text-2xl font-bold">{Reports}</span>
                   <span className="block text-gray-500"> Reports</span>
                 </div>
               </div>
@@ -51,81 +162,36 @@ const Admin = () => {
                   <AiFillFileAdd size={23} />
                 </div>
                 <div>
-                  <span className="block text-2xl font-bold">30</span>
+                  <span className="block text-2xl font-bold">{Files}</span>
                   <span className="block text-gray-500">Files</span>
                 </div>
               </div>
             </section>
             <section className="l:grid-cols-5 l:grid-rows-5 grid gap-6 md:grid-cols-2 xl:grid-flow-col">
               <div className="row-span-2 rounded-lg bg-white shadow">
-                <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 font-semibold">
-                  <span>Best performers </span>
-                  <button
-                    type="button"
-                    className="-mr-1 inline-flex justify-center rounded-md bg-white px-1 text-sm font-medium leading-5 text-gray-500 hover:text-gray-600"
-                    id="options-menu"
-                    aria-haspopup="true"
-                    aria-expanded="true"
-                  >
-                    Completed Tasks
-                    <svg
-                      className="-mr-1 ml-1 h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart width={400} height={200}>
+                    <Pie
+                      data={data}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={130}
+                      fill="#8884d8"
+                      dataKey="value"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="overflow-y-auto">
-                  <ul className="space-y-6 p-6">
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
+                      {data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
                         />
-                      </div>
-                      <span className="text-gray-600">member4</span>
-                      <span className="ml-auto font-semibold">9</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
-                        />
-                      </div>
-                      <span className="text-gray-600">member7</span>
-                      <span className="ml-auto font-semibold">8</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
-                        />
-                      </div>
-                      <span className="text-gray-600">member1</span>
-                      <span className="ml-auto font-semibold">7</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
-                        />
-                      </div>
-                      <span className="text-gray-600">member3</span>
-                      <span className="ml-auto font-semibold">5</span>
-                    </li>
-                  </ul>
-                </div>
+                      ))}
+                    </Pie>
+                    <Tooltip/>
+                    <Legend ></Legend>
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
               {/* <!-- Recent Activities --> */}
               <div className="relative flex w-full min-w-0 flex-col break-words rounded bg-gray-50 shadow-lg dark:bg-gray-50">
@@ -204,7 +270,7 @@ const Admin = () => {
                             <div className="self-center">
                               Some@member added new report
                             </div>
-                            <div className="ml-2 flex-shrink-0">
+                            <div className="ml-2 flex-shrink-0 ">
                               <a
                                 className="flex items-center font-medium text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-500"
                                 href="#0"
@@ -277,6 +343,7 @@ const Admin = () => {
                           </div>
                         </div>
                       </li>
+                      
                     </ul>
                   </div>
                 </div>
@@ -305,36 +372,32 @@ const Admin = () => {
                         <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                       </svg>
                     </div>
+                   
                     <div className="mt-2 text-sm text-black dark:text-gray-50 ">
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
+                    {todo && todo.map((row, index) => (
+                      <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                      
+                          <h2> {row.Title}</h2>
+                          <p className="text-sm">
+                              Assigned to: {" "}
+                              {Array.from(
+                                new Set(row.AssignedTo)
+                              ).toString(" ")}{" "}
+                          </p>
+                          
                       </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
+                      ))}
 
                       <form className="mt-3 text-gray-600 dark:text-gray-400">
-                        <div className="mt-2 flex flex-col ">
-                          <label htmlFor="tel" className="hidden">
-                            task
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Add a task"
-                            className="w-100 mt-2 rounded-sm bg-white px-3 py-4 font-semibold text-white dark:bg-gray-600"
-                          />
-                        </div>
-                        <button
-                          type="submit"
+                        <Link
+                          href="admin/task/create"
                           className="align-item-center mt-4 flex w-32 justify-center rounded-lg bg-primary py-3 font-bold text-white transition duration-300 ease-in-out hover:bg-bold"
                         >
                           Add
-                        </button>
+                        </Link>
                       </form>
                     </div>
+                    
                   </div>
                 </div>
 
@@ -353,17 +416,21 @@ const Admin = () => {
                           <path d="M5 10a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4zm7 0a1.999 1.999 0 1 0 0 4 1.999 1.999 0 1 0 0-4z" />
                         </svg>
                       </div>
+                      
                       <div className="mt-2 text-sm text-black dark:text-gray-50">
-                        <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                          Lorem ipsum dolor sit amet consectetur
+                      {inprogress && inprogress.map((row, index) => (
+                        <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                            <h2>{row.Title}</h2>
+                            <p className="text-sm">
+                              Assigned to: {" "}
+                              {Array.from(
+                                new Set(row.AssignedTo)
+                              ).toString(" ")}{" "}
+                          </p>
                         </div>
-                        <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                          Lorem ipsum dolor sit amet consectetur
-                        </div>
-                        <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                          Lorem ipsum dolor sit amet consectetur
-                        </div>
+                    ))}
                       </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -380,15 +447,18 @@ const Admin = () => {
                       </svg>
                     </div>
                     <div className="mt-2 text-sm text-black dark:text-gray-50 ">
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
+                    {completed &&
+                    completed.map((row, index) => (
+                      <div key={index} className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
+                        <h2>{row.Title}</h2>
+                        <p className="text-sm">
+                              Assigned to: {" "}
+                              {Array.from(
+                                new Set(row.AssignedTo)
+                              ).toString(" ")}{" "}
+                          </p>
                       </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
-                      <div className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700">
-                        Lorem ipsum dolor sit amet consectetur
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
