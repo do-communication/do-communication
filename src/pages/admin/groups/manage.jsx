@@ -263,19 +263,23 @@ const ManageGroup = () => {
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   {selectedRows[0].data.Members && selectedRows[0].data.Members.map((row, index) =>(
-                  <Link
-                    key={index}
-                    href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
+                  // <Link
+                  //   key={index}
+                  //   href="/admin/groups/manage"
+                  //   className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                  // >
+                  <button>
                     <p>{row.value}</p>
                     <div className="flex gap-2">
-                      <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
+                      <button 
+                      onClick = {((e) => {console.log(e)})}
+                      className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
                         <BiUserPlus className="w-5 h-auto" />
                         Assign Leader
                       </button>
                     </div>
-                  </Link>
+                    </button>
+                  // </Link>
                   ))}
                   {/* <Link
                     href="/admin/memebers/{userId}"
