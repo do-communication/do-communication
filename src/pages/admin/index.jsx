@@ -10,6 +10,8 @@ import useFetch from "@/components/useFetch";
 import { auth } from "../../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../context/DbContext";
+import { PureComponent } from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer ,Tooltip,Legend} from "recharts";
 
 const Admin = () => {
   const [members, setMembers] = useState(allMembers);
@@ -78,6 +80,44 @@ const Admin = () => {
 useEffect(()=>{
   getData();
 }, [])
+
+// const Admin = () => {
+//   const [members, setMembers] = useState(allMembers);
+
+  const data = [
+    { name: "New Task", value: 400 },
+    { name: "In progress", value: 300 },
+    { name: "Done", value: 300 },
+  ];
+
+  const COLORS = ["#298cc5", "#FFBB28", "#00C49F" ];
+
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
   return (
     <AdminLayout>
       <div className="flex min-h-screen bg-gray-100">
@@ -129,74 +169,29 @@ useEffect(()=>{
             </section>
             <section className="l:grid-cols-5 l:grid-rows-5 grid gap-6 md:grid-cols-2 xl:grid-flow-col">
               <div className="row-span-2 rounded-lg bg-white shadow">
-                <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 font-semibold">
-                  <span>Best performers </span>
-                  <button
-                    type="button"
-                    className="-mr-1 inline-flex justify-center rounded-md bg-white px-1 text-sm font-medium leading-5 text-gray-500 hover:text-gray-600"
-                    id="options-menu"
-                    aria-haspopup="true"
-                    aria-expanded="true"
-                  >
-                    Completed Tasks
-                    <svg
-                      className="-mr-1 ml-1 h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart width={400} height={200}>
+                    <Pie
+                      data={data}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={130}
+                      fill="#8884d8"
+                      dataKey="value"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="overflow-y-auto">
-                  <ul className="space-y-6 p-6">
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
+                      {data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
                         />
-                      </div>
-                      <span className="text-gray-600">member4</span>
-                      <span className="ml-auto font-semibold">9</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
-                        />
-                      </div>
-                      <span className="text-gray-600">member7</span>
-                      <span className="ml-auto font-semibold">8</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
-                        />
-                      </div>
-                      <span className="text-gray-600">member1</span>
-                      <span className="ml-auto font-semibold">7</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img
-                          src="images/pp.png"
-                          alt="Annette Watson profile picture"
-                        />
-                      </div>
-                      <span className="text-gray-600">member3</span>
-                      <span className="ml-auto font-semibold">5</span>
-                    </li>
-                  </ul>
-                </div>
+                      ))}
+                    </Pie>
+                    <Tooltip/>
+                    <Legend ></Legend>
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
               {/* <!-- Recent Activities --> */}
               <div className="relative flex w-full min-w-0 flex-col break-words rounded bg-gray-50 shadow-lg dark:bg-gray-50">
@@ -275,7 +270,7 @@ useEffect(()=>{
                             <div className="self-center">
                               Some@member added new report
                             </div>
-                            <div className="ml-2 flex-shrink-0">
+                            <div className="ml-2 flex-shrink-0 ">
                               <a
                                 className="flex items-center font-medium text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-500"
                                 href="#0"
@@ -348,6 +343,7 @@ useEffect(()=>{
                           </div>
                         </div>
                       </li>
+                      
                     </ul>
                   </div>
                 </div>
