@@ -271,7 +271,7 @@ const Profile = () => {
                     </div>
 
                     {progress && <div className="md:col-span-3">
-                      <label for="address">Progress</label>
+                      <label htmlFor="address">Progress</label>
                       <input
                         type="text"
                         id="progress"

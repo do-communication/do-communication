@@ -12,10 +12,10 @@ import Router from "next/router";
 const router = Router;
 import { toast } from "react-toastify";
 import Select from "react-select";
-import { auth } from "../../../../../../config/firebase";
+import { auth } from "../../../../../../../config/firebase";
 const user = auth.currentUser;
 import { usePathname } from "next/navigation";
-import { db } from "../../../../../../context/DbContext";
+import { db } from "../../../../../../../context/DbContext";
 
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);

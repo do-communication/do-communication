@@ -7,7 +7,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist, MdTask } from "react-icons/md";
-import { db } from "../../../../../../../context/DbContext";
+import { db } from "../../../../../context/DbContext";
 import {
   doc,
   getDocs,
@@ -137,7 +137,7 @@ const ShowReportDetail = ({ data }) => (
   <div className="px-8 py-4">
     <h1 className="pb-2 text-lg font-semibold">Report Detail</h1>
     <p dangerouslySetInnerHTML={{ __html: data.Detail }}></p>
-    { data.File && <Link target="_blank" className="font-medium text-blue-600 dark:text-blue-500 hover:underline" href={data.File}> File Link </Link>}
+    {data.File && <Link target="_blank" className="font-medium text-blue-600 dark:text-blue-500 hover:underline" href={data.File}> File Link </Link>}
   </div>
 );
 export default Reports;
