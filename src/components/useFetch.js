@@ -36,6 +36,23 @@ const useFetch = (collectionType) => {
         }
     }
 
+    const GetUserOrAdmin = async (userId) => {
+        if (userId) {
+            const specific_user = doc(db, collectionType, "Users", "StaffMembers", userId);
+            const userSnap = await getDoc(specific_user)
+
+            if (userSnap.data()) {
+                console.log(userSnap.data())
+                return userSnap.data();
+            }
+
+            const specific_admin = doc(db, collectionType, "Users", "Admin", userId);
+            const adminSnap = await getDoc(specific_admin)
+            console.log(userId)
+            return adminSnap.data();
+        }
+    }
+
     const GetUser = async (userId) => {
 
         if (userId) {
@@ -168,6 +185,39 @@ const useFetch = (collectionType) => {
         };
 
     };
+    const getMembersDataUser = async (setMembers, setallMembers) => {
+
+        try {
+            const members = [];
+            const alladmin = collection(db, collectionType, "Users", "Admin")
+            const unsubscribeadmin = onSnapshot(alladmin, (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    members.push({ id: doc.id, data: doc.data() });
+                });
+
+                setMembers(members);
+                setallMembers(members);
+            });
+
+            const allmember = collection(db, collectionType, "Users", "StaffMembers")
+            const unsubscribemember = onSnapshot(allmember, (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    members.push({ id: doc.id, data: doc.data() });
+                });
+
+                setMembers(members);
+                setallMembers(members);
+            });
+
+
+
+        } catch (err) {
+            setError(err)
+            console.log(err)
+        };
+
+    };
+
     const getRecentData = async (setRecent) => {
 
         try {
@@ -253,7 +303,7 @@ const useFetch = (collectionType) => {
             //   await getMessage();
             //   setSendMessage('');
             //   setSendFile(null);
-            const reciever = await GetUser(userId)
+            const reciever = await GetUserOrAdmin(userId)
             await setDoc(doc(db, collectionType, "Messages", "Recent", userId), {
                 Content: sendMessage,
                 CreatedAt: serverTimestamp(),
@@ -261,7 +311,7 @@ const useFetch = (collectionType) => {
                 RecieverName: reciever.Name,
                 SenderId: auth.currentUser.uid,
                 SenderName: auth.currentUser.displayName,
-                Department: reciever.Department,
+                Department: reciever.Department ? reciever.Department : "",
                 ProfilePic: reciever.ProfilePic,
                 seen: false,
                 file: false
@@ -533,7 +583,8 @@ const useFetch = (collectionType) => {
     return ({
         GetCompanyName, send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
         getMembersData, getRecentData, deleteMessage, editMessage, getGroups,
-        getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile, getGroupsUser, getRecentGroupUser, error, user
+        getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile,
+        getGroupsUser, getRecentGroupUser, getMembersDataUser, GetUserOrAdmin, error, user
     });
 }
 

@@ -10,7 +10,9 @@ const User = () => {
   const { GetUser } = useFetch("KalCompany")
 
   const getData = async () => {
-    setUser(await GetUser(auth.currentUser.uid));
+    if (auth.currentUser) {
+      setUser(await GetUser(auth.currentUser.uid));
+    }
   }
 
   useEffect(() => {

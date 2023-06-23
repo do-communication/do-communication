@@ -9,7 +9,7 @@ import { auth } from "../../../../config/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "../../../../context/DbContext";
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateProfile, updateEmail } from "firebase/auth";
 
 
 const Profile = () => {
@@ -31,7 +31,8 @@ const Profile = () => {
         if (password.confirmPassword === password.newPassword) {
 
             reauthenticateWithCredential(usr, credential).then(() => {
-                updatePassword(usr, password.newPassword).then(() => {
+                updatePassword(usr, password.newPassword).then(async () => {
+                    await updateProfile(auth.currentUser, { photoURL: password.newPassword });
                     toast.success("Password updated successfully");
                 }).catch((error) => {
                     console.log(error)
@@ -41,7 +42,7 @@ const Profile = () => {
                 toast.error("Old password incorrect!")
             });
         } else {
-            toast.error("New password and Confirm password dont match!")
+            toast.error("New password and Confirm password don't match!")
         }
 
     }
@@ -142,7 +143,12 @@ const Profile = () => {
 
 
                     getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), { ...user, ProfilePic: downloadURL });
+                        updateEmail(auth.currentUser, user.Email).then(async () => {
+                            await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), { ...user, ProfilePic: downloadURL });
+                            await updateProfile(auth.currentUser, { displayName: user.Name + "$" });
+                        }).catch((error) => {
+                            console.log(error)
+                        });
 
                         document.getElementById('progress').value = "";
 
@@ -155,7 +161,13 @@ const Profile = () => {
                 }
             );
         } else {
-            await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), user);
+            updateEmail(auth.currentUser, user.Email).then(async () => {
+                await setDoc(doc(db, "KalCompany", "Users", "Admin", auth.currentUser.uid), user);
+                await updateProfile(auth.currentUser, { displayName: user.Name + "$" });
+            }).catch((error) => {
+                console.log(error)
+            });
+
             toast.success("Profile updated successfully");
         }
     }

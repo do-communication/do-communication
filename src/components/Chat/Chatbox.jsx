@@ -28,6 +28,7 @@ const Chatbox = ({
   if (isgroup) {
     userId = router.query.groupId;
   }
+  console.log(userId)
 
   const { user, send, sendGroup, editMessage, editGroupMessage } =
     useFetch("KalCompany");

@@ -8,7 +8,7 @@ import { auth } from "../../../../config/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "../../../../context/DbContext";
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, updateProfile, updateEmail } from "firebase/auth";
 import useFetch from "@/components/useFetch";
 
 
@@ -41,7 +41,7 @@ const Profile = () => {
                 toast.error("Old password incorrect!")
             });
         } else {
-            toast.error("New password and Confirm password dont match!")
+            toast.error("New password and Confirm password don't match!")
         }
 
     }
@@ -144,7 +144,13 @@ const Profile = () => {
 
 
                     getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", auth.currentUser.uid), { ...user, ProfilePic: downloadURL });
+                        updateEmail(auth.currentUser, user.Email).then(async () => {
+                            await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", auth.currentUser.uid), { ...user, ProfilePic: downloadURL });
+                            await updateProfile(auth.currentUser, { displayName: user.Name });
+                        }).catch((error) => {
+                            console.log(error)
+                        });
+
 
                         document.getElementById('progress').value = "";
 
@@ -158,6 +164,7 @@ const Profile = () => {
             );
         } else {
             await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", auth.currentUser.uid), user);
+            await updateProfile(auth.currentUser, { displayName: user.Name });
             toast.success("Profile updated successfully");
         }
     }
@@ -211,7 +218,7 @@ const Profile = () => {
                                 <div className="pl-6 lg:col-span-2">
                                     <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-5">
                                         <div className="md:col-span-5">
-                                            <label htmlFor="full_name" className="flex pr-10">Full Name</label>
+                                            <label htmlFor="Name" className="flex pr-10">Full Name</label>
                                             <input
                                                 type="text"
                                                 name="Name"
@@ -223,7 +230,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="md:col-span-5">
-                                            <label htmlFor="company_name" className="flex pr-10">Department</label>
+                                            <label htmlFor="Department" className="flex pr-10">Department</label>
                                             <input
                                                 type="text"
                                                 name="Department"
@@ -234,7 +241,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="md:col-span-5">
-                                            <label htmlFor="full_name" className="flex pr-10">Date of Birth</label>
+                                            <label htmlFor="DateOfBirth" className="flex pr-10">Date of Birth</label>
                                             <input
                                                 type="date"
                                                 name="DateOfBirth"
@@ -245,7 +252,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="md:col-span-5">
-                                            <label htmlFor="full_name" className="flex pr-10">Phone Number</label>
+                                            <label htmlFor="PhoneNumber" className="flex pr-10">Phone Number</label>
                                             <input
                                                 type="text"
                                                 name="PhoneNumber"
@@ -256,16 +263,11 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="md:col-span-5">
-                                            <label htmlFor="full_name" className="flex pr-10">Gender</label>
-                                            <input
-                                                type="text"
-                                                name="Gender"
-                                                id="Gender"
-                                                className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                                                value={user.Gender}
-                                                onChange={handleChange}
-                                                maxLength={1}
-                                            />
+                                            <label htmlFor="Gender" className="flex pr-10">Gender</label>
+                                            <select onChange={handleChange} name="Gender" id="Gender" className="w-full h-10 px-4 mt-1 border rounded bg-gray-50">
+                                                <option value="F" selected={user ? user.Gender === "f" || user.Gender === "F" : false} >Female</option>
+                                                <option value="M" selected={user ? user.Gender === "m" || user.Gender === "M" : false} >Male</option>
+                                            </select>
                                         </div>
 
                                         {progress && <div className="md:col-span-3">

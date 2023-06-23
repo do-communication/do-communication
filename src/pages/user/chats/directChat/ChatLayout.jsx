@@ -26,7 +26,7 @@ const ChatLayout = ({ children, user }) => {
   const [selected, setSelected] = useState(user);
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
-  const { getMembersData, getRecentData } = useFetch("KalCompany");
+  const { getMembersDataUser, getRecentData } = useFetch("KalCompany");
   // search for groups using group name
   useEffect(() => {
     getRecent();
@@ -45,7 +45,7 @@ const ChatLayout = ({ children, user }) => {
   }
 
   const getData = async () => {
-    await getMembersData(setMembers, setallMembers);
+    await getMembersDataUser(setMembers, setallMembers);
   }
 
   const handleSelect = (member) => {
@@ -97,8 +97,8 @@ const ChatLayout = ({ children, user }) => {
                 href={`/user/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2 rounded-xl  ${member.id === router.query.userId
-                    ? "bg-secondary text-white"
-                    : "hover:bg-opacity-25 hover:bg-secondary"
+                  ? "bg-secondary text-white"
+                  : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
                 onClick={() => handleSelect(member)}
               >
@@ -141,8 +141,8 @@ const ChatLayout = ({ children, user }) => {
                 href={`/user/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2  rounded-xl ${member.id === router.query.userId
-                    ? "bg-secondary text-white"
-                    : "hover:bg-opacity-25 hover:bg-secondary"
+                  ? "bg-secondary text-white"
+                  : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
