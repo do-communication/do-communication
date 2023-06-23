@@ -132,15 +132,15 @@ const CreateGroup = () => {
   }, []);
   return (
     <UserLayout>
-      <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
-        <div className="container max-w-screen-lg mx-auto">
+      <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-8">
+        <div className="container mx-auto max-w-screen-lg">
           <div>
-            <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
+            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
               Edit Group
             </h2>
 
-            <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
-              <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
+            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="pb-3 pl-4 text-lg font-medium">Group Detail</p>
                   <img
@@ -153,14 +153,14 @@ const CreateGroup = () => {
                 </div>
 
                 <div className="lg:col-span-2">
-                  <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-5">
+                  <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-5">
                     <div className="md:col-span-5">
                       <label htmlFor="full_name">Group Name</label>
                       <input
                         type="text"
                         name="group_name"
                         id="groupName"
-                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="Enter group name"
                         disabled
                         value={data.Name}
@@ -177,7 +177,7 @@ const CreateGroup = () => {
                       <label htmlFor="type">Group Type</label>
                       <select
                         id="type"
-                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         value={data.Type}
                         disabled
                         onChange={(e) => {
@@ -213,7 +213,7 @@ const CreateGroup = () => {
                           type="text"
                           name="custom_group_type"
                           id="customGroup"
-                          className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                          className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                           placeholder="Enter custom group type"
                           disabled={!showCustomType}
                           value={data.Type}
@@ -263,7 +263,7 @@ const CreateGroup = () => {
                         <div className="flex-row gap-10 pt-8">
                           <button
                             onClick={clearForm}
-                            className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck"
+                            className="text-balck mr-6 rounded border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
                           >
                             Cancel
                           </button>
@@ -271,7 +271,7 @@ const CreateGroup = () => {
                             disabled={
                               !data.Name || !data.Type || !data.Members.length
                             }
-                            className="px-4 py-2 font-bold text-white rounded disabled:brightness-90 disabled:cursor-not-allowed bg-primary hover:bg-bold"
+                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold disabled:cursor-not-allowed disabled:brightness-90"
                             onClick={handleCreateGroup}
                           >
                             Edit

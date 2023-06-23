@@ -6,7 +6,7 @@ export const allMembers = [
       Name: "member 1",
       email: "Member1@gmail.com",
       department: "Reseption",
-    }
+    },
   },
   {
     id: "2",
@@ -15,7 +15,7 @@ export const allMembers = [
       Name: "member 2",
       email: "Member2@gmail.com",
       department: "Designer",
-    }
+    },
   },
   {
     id: "3",
@@ -24,7 +24,7 @@ export const allMembers = [
       Name: "member 3",
       email: "Member3@gmail.com",
       department: "Manager",
-    }
+    },
   },
   {
     id: "4",
@@ -33,7 +33,7 @@ export const allMembers = [
       Name: "member 4",
       email: "Member4@gmail.com",
       department: "Accountant",
-    }
+    },
   },
   {
     id: "5",
@@ -42,7 +42,7 @@ export const allMembers = [
       Name: "member 5",
       email: "Member5@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "6",
@@ -51,7 +51,7 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "7",
@@ -60,7 +60,7 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "8",
@@ -69,7 +69,7 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "1",
@@ -78,7 +78,7 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "10",
@@ -87,7 +87,7 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "11",
@@ -96,7 +96,7 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
   {
     id: "12",
@@ -105,6 +105,6 @@ export const allMembers = [
       Name: "member 6",
       email: "Member6@gmail.com",
       department: "designer",
-    }
+    },
   },
 ];

@@ -20,19 +20,15 @@ const AuthHeader = () => {
       setLoginButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
-      setMenuHoverStyle(
-        "md:p-4 py-2 block hover:text-white"
-      );
-    } else if (currentPath === "/auth/login"){
+      setMenuHoverStyle("md:p-4 py-2 block hover:text-white");
+    } else if (currentPath === "/auth/login") {
       setSignupButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
       setLoginButtonStyle(
         "w-full text-white px-6 py-2  font-semibold flex items-center justify-center bg-primary  rounded-full shadow-sm shadow-black hover:brightness-95"
       );
-      setMenuHoverStyle(
-        "md:p-4 py-2 block hover:text-white" 
-      );
+      setMenuHoverStyle("md:p-4 py-2 block hover:text-white");
     } else {
       setSignupButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
@@ -40,42 +36,40 @@ const AuthHeader = () => {
       setLoginButtonStyle(
         "w-full text-black px-6 py-2  font-semibold flex items-center justify-center  rounded-full hover:text-gray-700"
       );
-      setMenuHoverStyle(
-        "md:p-4 py-2 block hover:underline"
-      );
+      setMenuHoverStyle("md:p-4 py-2 block hover:underline");
     }
   }, [router]);
   return (
     <header className="mb-4">
       <nav
         className="
-         flex flex-wrap
+         flex w-full
+         flex-wrap
          items-center
          justify-between
-         w-full
-         py-8
-         md:py-5
-         md:px-20
          px-6
-         text-lg text-gray-700
+         py-8
+         text-lg
+         text-gray-700
+         md:px-20 md:py-5
        "
       >
         <div>
           <Link href="/">
-            <img src="/images/logo.png" alt="logo" className="lg:w-24  w-20" />
+            <img src="/images/logo.png" alt="logo" className="w-20  lg:w-24" />
           </Link>
         </div>
 
         {/* menu bar for mobile */}
         <AiOutlineMenu
-          className="h-auto w-8 cursor-pointer md:hidden block"
+          className="block h-auto w-8 cursor-pointer md:hidden"
           onClick={() => setShowHeader(!showHeader)}
         />
 
         <div
           className={`${
             showHeader ? "visible" : "hidden"
-          } w-full md:flex md:items-center md:w-auto`}
+          } w-full md:flex md:w-auto md:items-center`}
         >
           <ul
             className="
@@ -91,18 +85,12 @@ const AuthHeader = () => {
               </Link>
             </li>
             <li>
-              <Link
-                className={menuHoverStyle}
-                href="/#about"
-              >
+              <Link className={menuHoverStyle} href="/#about">
                 About us
               </Link>
             </li>
             <li>
-              <Link
-                className={menuHoverStyle}
-                href="/#contact"
-              >
+              <Link className={menuHoverStyle} href="/#contact">
                 Contact us
               </Link>
             </li>
@@ -111,7 +99,7 @@ const AuthHeader = () => {
         <div
           className={`${
             showHeader ? "visible" : "hidden"
-          } w-full md:flex md:items-center md:w-auto`}
+          } w-full md:flex md:w-auto md:items-center`}
         >
           <ul
             className="

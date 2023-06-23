@@ -15,10 +15,10 @@ const SideNav = ({ nav, isActive, currentPath }) => {
             setIsSelected(!isSelected);
           }
         }}
-        className={`relative flex items-center w-full px-2 py-1 rounded ${
+        className={`relative flex w-full items-center rounded px-2 py-1 ${
           isActive && !nav.children
             ? "bg-gray-700 text-white hover:text-gray-400"
-            : "hover:text-white hover:bg-gray-700 hover:active:bg-gray-700"
+            : "hover:bg-gray-700 hover:text-white hover:active:bg-gray-700"
         }`}
       >
         <div className="pr-2">{Icon}</div>
@@ -35,19 +35,19 @@ const SideNav = ({ nav, isActive, currentPath }) => {
       </Link>
       {children && (
         <div
-          className={`pl-4 pr-2 overflow-hidden transition-all transform translate duration-200 ${
+          className={`translate transform overflow-hidden pl-4 pr-2 transition-all duration-200 ${
             isSelected ? "max-h-full" : "max-h-0"
           }`}
         >
-          <ul className="flex flex-col pl-2 mt-2 space-y-1 text-xs text-gray-500 border-l border-gray-700">
+          <ul className="mt-2 flex flex-col space-y-1 border-l border-gray-700 pl-2 text-xs text-gray-500">
             {children.map((child, index) => (
               <li className="text-sm text-gray-600 " key={index}>
                 <Link
                   href={child.url}
-                  className={`relative flex items-center w-full px-2 py-1 rounded ${
+                  className={`relative flex w-full items-center rounded px-2 py-1 ${
                     child.url === currentPath
                       ? "bg-gray-700 text-white hover:text-gray-400"
-                      : "hover:text-white hover:bg-gray-700 hover:active:bg-gray-700"
+                      : "hover:bg-gray-700 hover:text-white hover:active:bg-gray-700"
                   }`}
                 >
                   <div>{child.name}</div>

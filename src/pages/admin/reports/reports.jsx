@@ -7,8 +7,14 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist, MdTask } from "react-icons/md";
-import { db } from "../../../../context/DbContext"
-import { doc, getDocs, getDoc, collection, deleteDoc } from "firebase/firestore";
+import { db } from "../../../../context/DbContext";
+import {
+  doc,
+  getDocs,
+  getDoc,
+  collection,
+  deleteDoc,
+} from "firebase/firestore";
 
 const Reports = () => {
   const [allReports, setallReports] = useState([]);
@@ -16,29 +22,28 @@ const Reports = () => {
   const [search, setSearch] = useState("");
 
   const getData = async () => {
-    let arr = []
+    let arr = [];
     const all = collection(db, "KalCompany", "Reports", "Reports");
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push(d.data())
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push(d.data());
       });
-
     } catch (err) {
-      console.log(err)
-      setMembers([{ Name: "check your connection" }])
+      console.log(err);
+      setMembers([{ Name: "check your connection" }]);
     }
 
-    setReports(arr)
-    setallReports(arr)
-  }
+    setReports(arr);
+    setallReports(arr);
+  };
 
   useEffect(() => {
     const filteredData = allReports.filter(
       (item) =>
-        (item.ReportBy && item.ReportBy.toLowerCase().includes(search.toLowerCase())) ||
-        (item.Title &&
-          item.Title.toLowerCase().includes(search.toLowerCase()))
+        (item.ReportBy &&
+          item.ReportBy.toLowerCase().includes(search.toLowerCase())) ||
+        (item.Title && item.Title.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -47,23 +52,23 @@ const Reports = () => {
       setReports(allReports);
     }
   }, [search]);
-   //loading till fetch
-   const [pending, setPending] =useState(true);
-   const [rows, setRows] = useState([]);
-   useEffect(() => {
-     const timeout = setTimeout(() => {
-       setRows(allReports);
-       setPending(false);
-     }, 2000);
-     return () => clearTimeout(timeout);
-   }, []);
+  //loading till fetch
+  const [pending, setPending] = useState(true);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setRows(allReports);
+      setPending(false);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const columns = [
     {
       name: "Report By",
       selector: (row) => (
         <p className="flex items-center justify-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-200">
             {!row.user?.ProfilePic || row.user?.ProfilePic === "" ? (
               row.ReportBy[0]
             ) : (
@@ -96,23 +101,23 @@ const Reports = () => {
   });
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   return (
     <AdminLayout>
-      <div className="order-last md:col-span-2 col-span-full md:order-first">
+      <div className="order-last col-span-full md:order-first md:col-span-2">
         <h1 className="mb-5 text-2xl font-semibold">Reports</h1>
-        <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
-          <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
+        <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:justify-between md:items-center">
+          <div className="flex rounded-md border-gray-700 bg-white pr-4 ">
             <input
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
+              className="w-11/12 bg-transparent py-2 pl-4 outline-none"
               placeholder="Search reports"
             />
-            <AiOutlineSearch className="w-6 h-auto" />
+            <AiOutlineSearch className="h-auto w-6" />
           </div>
         </div>
         <ClientOnlyTable

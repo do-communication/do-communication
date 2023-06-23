@@ -1,41 +1,49 @@
 import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
-import Select from 'react-select'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import Select from "react-select";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import { auth } from "../../../../config/firebase";
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../../../context/DbContext"
-import { serverTimestamp } from '@firebase/firestore'
+import { db } from "../../../../context/DbContext";
+import { serverTimestamp } from "@firebase/firestore";
 import { toast } from "react-toastify";
 
-
 const AddFile = () => {
-
   const [sendFile, setSendFile] = useState(null);
   const [FileName, setFileName] = useState("");
   const [Discription, setDiscription] = useState("");
   const [progress, setProgress] = useState("");
 
   const UploadFile = async (e) => {
-
     if (sendFile !== null) {
-
       const storage = getStorage();
-      console.log(storage)
+      console.log(storage);
       const storageRef = ref(storage, auth.currentUser.uid + "/" + FileName);
-      const uploadTask = uploadBytesResumable(storageRef, sendFile)
+      const uploadTask = uploadBytesResumable(storageRef, sendFile);
 
-      uploadTask.on('state_changed',
+      uploadTask.on(
+        "state_changed",
         (snapshot) => {
-
-          setProgress(FileName + "  " + (Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100)) + '% Done');
+          setProgress(
+            FileName +
+              "  " +
+              Math.floor(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              ) +
+              "% Done"
+          );
 
           switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
+            case "paused":
+              console.log("Upload is paused");
               break;
-            case 'running':
-              console.log('Upload is running');
+            case "running":
+              console.log("Upload is running");
               break;
           }
         },
@@ -43,26 +51,27 @@ const AddFile = () => {
           console.log(error);
         },
         () => {
-
-
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await addDoc(collection(db, "KalCompany", "Files", auth.currentUser.uid), {
-              FileName: FileName,
-              CreatedAt: serverTimestamp(),
-              Owner: auth.currentUser.uid,
-              SenderName: auth.currentUser.displayName,
-              Description: Discription,
-              url: downloadURL
-            });
+            await addDoc(
+              collection(db, "KalCompany", "Files", auth.currentUser.uid),
+              {
+                FileName: FileName,
+                CreatedAt: serverTimestamp(),
+                Owner: auth.currentUser.uid,
+                SenderName: auth.currentUser.displayName,
+                Description: Discription,
+                url: downloadURL,
+              }
+            );
 
-            document.getElementById('type').value = '';
-            document.getElementById('full_name').value = '';
-            document.getElementById('file').value = [];
-            document.getElementById('progress').value = "";
+            document.getElementById("type").value = "";
+            document.getElementById("full_name").value = "";
+            document.getElementById("file").value = [];
+            document.getElementById("progress").value = "";
 
-            setProgress('');
-            setFileName('');
-            setDiscription('');
+            setProgress("");
+            setFileName("");
+            setDiscription("");
             setSendFile(null);
 
             e.preventDefault();
@@ -72,93 +81,103 @@ const AddFile = () => {
 
             toast.success("File uploaded successfully");
           });
-
         }
       );
     }
-  }
+  };
   return (
     <AdminLayout>
-      <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
-        <div className="container max-w-screen-lg mx-auto">
+      <div className="flex min-h-screen justify-center bg-gray-100 p-6  pt-8">
+        <div className="container mx-auto max-w-screen-lg">
           <div>
-            <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Add File</h2>
+            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
+              Add File
+            </h2>
 
-            <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
-              <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
                 <div className="text-gray-600">
-                  <p className="font-medium text-lg pb-3 pl-4">File Details</p>
-                  <img src="/images/addfile.svg" alt="form" width={235} height={600} className="pt-4 sm:pb-3" />
+                  <p className="pb-3 pl-4 text-lg font-medium">File Details</p>
+                  <img
+                    src="/images/addfile.svg"
+                    alt="form"
+                    width={235}
+                    height={600}
+                    className="pt-4 sm:pb-3"
+                  />
                 </div>
 
                 <div className="lg:col-span-2 ">
-                  <div className="grid gap-6 gap-y-7 text-sm grid-cols-1 md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 gap-y-7 text-sm md:grid-cols-6">
                     <div className="md:col-span-3">
-                      <label for="full_name">File Name</label>
+                      <label htmlFor="full_name">File Name</label>
                       <input
                         type="text"
                         name="file_name"
                         id="full_name"
-                        className="h-10 border mt-1 rounded px-4  w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
                         onChange={(e) => setFileName(e.target.value)}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="address">Location</label>
+                      <label htmlFor="address">Location</label>
                       <input
                         type="text"
                         name="location"
                         id="location"
-                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="none"
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label for="email">Description</label>
+                      <label htmlFor="email">Description</label>
                       <textarea
-
                         name="type"
                         id="type"
-                        className="border mt-1 rounded px-4 w-full  h-24 bg-gray-50"
+                        className="mt-1 h-24 w-full rounded border  bg-gray-50 px-4"
                         placeholder=" "
                         onChange={(e) => setDiscription(e.target.value)}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Upload File</label>
-                      <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                      <label htmlFor="state">Upload File</label>
+                      <div className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50">
                         <input
                           type="file"
                           name="file"
                           id="file"
                           placeholder=" "
-                          className="px-4 appearance-none outline-none  text-gray-500 p-2 w-full bg-transparent text-sm border-none"
+                          className="w-full appearance-none border-none  bg-transparent p-2 px-4 text-sm text-gray-500 outline-none"
                           onChange={(e) => setSendFile(e.target.files[0])}
                         />
                       </div>
                     </div>
 
-                    {progress && <div className="md:col-span-3">
-                      <label for="address">Progress</label>
-                      <input
-                        type="text"
-                        id="progress"
-                        className="h-10 border mt-1 rounded-lg px-4 w-full bg-gray-50"
-                        value={progress}
-                        disabled
-                      />
-                    </div>}
+                    {progress && (
+                      <div className="md:col-span-3">
+                        <label htmlFor="address">Progress</label>
+                        <input
+                          type="text"
+                          id="progress"
+                          className="mt-1 h-10 w-full rounded-lg border bg-gray-50 px-4"
+                          value={progress}
+                          disabled
+                        />
+                      </div>
+                    )}
 
-
-                    <div className="md:col-span-6 mb-10 text-right ml-auto">
+                    <div className="mb-10 ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-2">
-                          <button className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
+                          <button className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary">
                             Cancel
                           </button>
-                          <button onClick={(e) => UploadFile(e)} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
+                          <button
+                            onClick={(e) => UploadFile(e)}
+                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
+                          >
                             Upload
                           </button>
                         </div>
@@ -173,7 +192,6 @@ const AddFile = () => {
         {/* </form> */}
       </div>
     </AdminLayout>
-
   );
 };
 

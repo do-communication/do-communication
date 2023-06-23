@@ -1,5 +1,12 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  getDocs,
+  getDoc,
+  addDoc,
+  collection,
+  updateDoc,
+} from "firebase/firestore";
 import { useState, useEffect, useRef } from "react";
 import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
@@ -7,7 +14,7 @@ import Select from "react-select";
 import { auth } from "../../../../config/firebase";
 const user = auth.currentUser;
 // const selectInputRef = useRef();
-  
+
 const AddMember = () => {
   const [allMembers, setallMembers] = useState([]);
   const temp = [];
@@ -17,14 +24,14 @@ const AddMember = () => {
   const [allgroups, setallGroups] = useState([]);
   const taskTo = []
   const [data, setData] = useState({
-    Title: '',
-    Description: '',
+    Title: "",
+    Description: "",
     AssignedTo: [],
-    Priority: '',
+    Priority: "",
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
-    Status: "Assigned",  
-    AssignedBy: user.displayName
+    Status: "Assigned",
+    AssignedBy: user.displayName,
   });
   const getData = async () => {
     let arr = []
@@ -32,170 +39,177 @@ const AddMember = () => {
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
     const allGroup = collection(db, "KalCompany", "Groups", "Groups");
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push({id:d.id, data:d.data()})
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push({ id: d.id, data: d.data() });
       });
     } catch (err) {
-      console.log(err)
-      setMembers([{ Name: "check your connection" }])
+      console.log(err);
+      setMembers([{ Name: "check your connection" }]);
     }
     try {
       const doc = await getDocs(allGroup)
       doc.forEach(d => {
-        groups.push({id:d.id, data:d.data()})
+        groups.push({ id: d.id, data: d.data() })
       });
     } catch (err) {
       console.log(err)
       setGroups([{ Name: "check your connection" }])
     }
-    arr.map(m=>{
+    arr.map(m => {
       taskTo.push(m)
     })
-    groups.map(m=>{
+    groups.map(m => {
       taskTo.push(m)
     })
     setMembers(taskTo)
     setallMembers(taskTo)
     setGroups(groups)
     setallGroups(groups)
-    
+
     // console.log(taskTo)
   }
-// useEffect(()=>{
-//   setTaskTo(Object.assign(allMembers, allgroups))
-// },[allgroups, allMembers] )
-  const updateMember = async(i) =>{
+  // useEffect(()=>{
+  //   setTaskTo(Object.assign(allMembers, allgroups))
+  // },[allgroups, allMembers] )
+  const updateMember = async (i) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(docRef)
-    if(mem._document){
+    if (mem._document) {
       let tempTask = [];
       let tempReport = [];
       let tempGroup = [];
-    const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
-    if(temp){
-    temp.forEach(t => {
-      if(t){
-      tempTask.push(t.stringValue);}
-    });}
-    if(report){
-      report.forEach(r => {
-        if(r){
-        tempReport.push(r.stringValue);}
-      });
-    }
-    if(group){
-      group.forEach(g => {
-        if(g){
-        tempGroup.push(g.stringValue);}
-      });}
-    tempTask.push(data.Title)
-    const newData = {
-      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
-      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
-      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
-      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
-      Department: mem._document.data.value.mapValue.fields.Department.stringValue,
-      PhoneNumber: mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
-      DateOfBirth: mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
-      ProfilePic: mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
-      RegisteredAt: mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
-      GroupId: tempGroup,
-      Reports: tempReport,
-      Tasks: tempTask
-    }
-    updateDoc(docRef, newData)
-    .then(docRef => {
-        console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
-        console.log(error);
-    })}else{
+      const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+      if (temp) {
+        temp.forEach(t => {
+          if (t) {
+            tempTask.push(t.stringValue);
+          }
+        });
+      }
+      if (report) {
+        report.forEach(r => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      tempTask.push(data.Title);
+      const newData = {
+        Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+        Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+        Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+        Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+        Department:
+          mem._document.data.value.mapValue.fields.Department.stringValue,
+        PhoneNumber:
+          mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+        DateOfBirth:
+          mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+        ProfilePic:
+          mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+        RegisteredAt:
+          mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+        GroupId: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+      };
+      updateDoc(docRef, newData)
+        .then((docRef) => {
+          console.log(
+            "A New Document Field has been added to an existing document"
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    } else {
       const groupRef = doc(db, "KalCompany", "Groups", "Groups", i);
       const group = await getDoc(groupRef);
       let tempTask = [];
-    let tempReport = [];
-    let tempGroup = [];
-    let tempPeople = [];
-    const task = group._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report = group._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const members = group._document.data.value.mapValue.fields.Members.arrayValue.values;
-    const people = group._document.data.value.mapValue.fields.People.arrayValue.values;
-    if (people) {
-      people.forEach(p => {
-        if (p) {
-          tempPeople.push(p.stringValue);
-        }
-      });
-    }
-    if (task) {
-      task.forEach(t => {
-        if (t) {
-          tempTask.push(t.stringValue);
-        }
-      });
-    }
-    if (report) {
-      report.forEach(r => {
-        if (r) {
-          tempReport.push(r.stringValue);
-        }
-      });
-    }
-    if (members) {
-      members.forEach(g => {
-        if (g) {
-          tempGroup.push(g.stringValue);
-        }
-      });
-    }
-    tempTask.push(data.Title)
-    const newGroup = {
-      People: tempPeople,
-      Type: group._document.data.value.mapValue.fields.Type.stringValue,
-      Name: group._document.data.value.mapValue.fields.Name.stringValue,
-      Members: tempGroup,
-      Reports: tempReport,
-      Tasks: tempTask,
-      Learder: group._document.data.value.mapValue.fields.Learder.stringValue
-    }
-    updateDoc(groupRef, newGroup)
-    .then(groupRef => {
-        console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
-        console.log(error);
-    })
+      let tempReport = [];
+      let tempGroup = [];
+      let tempPeople = [];
+      const task = group._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report = group._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const members = group._document.data.value.mapValue.fields.Members.arrayValue.values;
+      const people = group._document.data.value.mapValue.fields.People.arrayValue.values;
+      if (people) {
+        people.forEach(p => {
+          if (p) {
+            tempPeople.push(p.stringValue);
+          }
+        });
+      }
+      if (task) {
+        task.forEach(t => {
+          if (t) {
+            tempTask.push(t.stringValue);
+          }
+        });
+      }
+      if (report) {
+        report.forEach(r => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      if (members) {
+        members.forEach(g => {
+          if (g) {
+            tempGroup.push(g.stringValue);
+          }
+        });
+      }
+      tempTask.push(data.Title)
+      const newGroup = {
+        People: tempPeople,
+        Type: group._document.data.value.mapValue.fields.Type.stringValue,
+        Name: group._document.data.value.mapValue.fields.Name.stringValue,
+        Members: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+        Learder: group._document.data.value.mapValue.fields.Learder.stringValue
+      }
+      updateDoc(groupRef, newGroup)
+        .then(groupRef => {
+          console.log("A New Document Field has been added to an existing document");
+        })
+        .catch(error => {
+          console.log(error);
+        })
     }
   }
 
-  const select = document.getElementById('selectPriority');
-  const title = document.getElementById('title');
-  const start = document.getElementById('start');
-  const end = document.getElementById('end');
-  const description = document.getElementById('description');
-  const assigned = document.getElementById('assigned');
-  const startDate = document.getElementById('startDate');
-  const endDate = document.getElementById('endDate');
+  const select = document.getElementById("selectPriority");
+  const title = document.getElementById("title");
+  const start = document.getElementById("start");
+  const end = document.getElementById("end");
+  const description = document.getElementById("description");
+  const assigned = document.getElementById("assigned");
+  const startDate = document.getElementById("startDate");
+  const endDate = document.getElementById("endDate");
 
-  select && select.addEventListener('change', function handleChange(event) {
-    setData({
-      ...data,
-      Priority: event.target.value
+  select &&
+    select.addEventListener("change", function handleChange(event) {
+      setData({
+        ...data,
+        Priority: event.target.value,
+      });
+      if (select && select.classList.contains("ring-red-600")) {
+        select.classList.remove("ring-red-600");
+        select.classList.remove("ring-2");
+      }
     });
-    if (select && select.classList.contains("ring-red-600")) {
-      select.classList.remove("ring-red-600");
-      select.classList.remove("ring-2");
-    }
-  });
   const handleTitle = (e) => {
     e.preventDefault();
     setData({
       ...data,
-      Title: e.target.value
-    })
+      Title: e.target.value,
+    });
     if (title && title.classList.contains("ring-red-600")) {
       title.classList.remove("ring-red-600");
       title.classList.remove("ring-2");
@@ -206,8 +220,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      Description: e.target.value
-    })
+      Description: e.target.value,
+    });
     if (description && description.classList.contains("ring-red-600")) {
       description.classList.remove("ring-red-600");
       description.classList.remove("ring-2");
@@ -218,8 +232,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      StartDate: e.target.value
-    })
+      StartDate: e.target.value,
+    });
     if (start && start.classList.contains("ring-red-600")) {
       start.classList.remove("ring-red-600");
       start.classList.remove("ring-2");
@@ -230,8 +244,8 @@ const AddMember = () => {
     e.preventDefault();
     setData({
       ...data,
-      DueDate: e.target.value
-    })
+      DueDate: e.target.value,
+    });
     if (end && end.classList.contains("ring-red-600")) {
       end.classList.remove("ring-red-600");
       end.classList.remove("ring-2");
@@ -256,7 +270,7 @@ const AddMember = () => {
       description.classList.add("ring-red-600");
       description.classList.add("ring-2");
     }
-    if (select && (data.Priority == "null" || data.Priority === '')) {
+    if (select && (data.Priority == "null" || data.Priority === "")) {
       select.classList.add("ring-red-600");
       select.classList.add("ring-2");
     }
@@ -270,11 +284,17 @@ const AddMember = () => {
       end.classList.add("ring-2");
       endDate.placeholder = "Please select the due date";
     }
-    assignedto.forEach(m =>{
+    assignedto.forEach((m) => {
       updateMember(m.id);
-     
     });
-    if (data.Title != "" && data.Description != "" && data.AssignedTo != "" && data.StartDate != null && data.DueDate != null && data.Priority != "null") {
+    if (
+      data.Title != "" &&
+      data.Description != "" &&
+      data.AssignedTo != "" &&
+      data.StartDate != null &&
+      data.DueDate != null &&
+      data.Priority != "null"
+    ) {
       await addDoc(collection(db, "KalCompany", "Tasks", "Tasks"), data);
       handleClear();
       toast.success("Task Assigned successfully");
@@ -292,69 +312,83 @@ const AddMember = () => {
     assigned.value = "";
     assigned.placeholder = "search for a member or group";
     startDate.value = null;
-    data.StartDate = new Date("10/10/2030")
+    data.StartDate = new Date("10/10/2030");
     startDate.placeholder = "MM/DD/YYYY";
     endDate.value = null;
-    data.DueDate = new Date("10/10/2030")
+    data.DueDate = new Date("10/10/2030");
     endDate.placeholder = "MM/DD/YYYY";
     select.value = "null";
     data.Priority = "";
     // selectInputRef.current.select.clearValue();
   };
   useEffect(() => {
-    getData()
+    getData();
   }, []);
   return (
     <AdminLayout>
-      <div className="min-h-screen p-6 pt-8 bg-gray-100 flex  justify-center">
-        <div className="container max-w-screen-lg mx-auto">
+      <div className="flex min-h-screen justify-center bg-gray-100 p-6  pt-8">
+        <div className="container mx-auto max-w-screen-lg">
           <div>
-            <h2 className="font-semibold text-xl text-gray-600 pb-4 pt-0">Assign Task</h2>
+            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
+              Assign Task
+            </h2>
 
-            <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
-              <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
                 <div className="text-gray-600">
-                  <p className="font-medium text-lg pb-3 pl-4">Task Details</p>
-                  <img src="/images/task.svg" alt="form" width={250} height={800} className="pt-10 sm:pb-3" />
+                  <p className="pb-3 pl-4 text-lg font-medium">Task Details</p>
+                  <img
+                    src="/images/task.svg"
+                    alt="form"
+                    width={250}
+                    height={800}
+                    className="pt-10 sm:pb-3"
+                  />
                 </div>
 
                 <div className="lg:col-span-2 ">
-                  <div className="grid gap-6 gap-y-5 text-sm grid-cols-1 md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-3">
-                      <label for="full_name">Task Title</label>
+                      <label htmlFor="full_name">Task Title</label>
                       <input
                         type="text"
                         name="task_title"
                         id="title"
                         onChange={handleTitle}
                         value={data.Title}
-                        className="h-10 border mt-1 rounded px-4  w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="task">Task Description</label>
+                      <label htmlFor="task">Task Description</label>
                       <textarea
                         type="text"
                         name="description"
                         id="description"
                         onChange={handleDescription}
                         value={data.Description}
-                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="Write some description about the task"
-                        rows={16} cols={50}
+                        rows={16}
+                        cols={50}
                       />
                     </div>
 
-                  <div className="md:col-span-3">
-                    <label for="address">Assigned To:</label>
-                    <Select
+                    <div className="md:col-span-3">
+                      <label htmlFor="address">Assigned To:</label>
+                      <Select
                         // ref={selectInputRef}
                         isMulti
                         name="members"
                         id="assigned"
                         options={allMembers.map((member) => {
-                          return { label: member.data.Name, value: member.data.Name, id:member.id, Tasks:member.data.Tasks };
+                          return {
+                            label: member.data.Name,
+                            value: member.data.Name,
+                            id: member.id,
+                            Tasks: member.data.Tasks,
+                          };
                         })}
                         onChange={(selectedMembers) => {
                           setMembers(
@@ -362,26 +396,39 @@ const AddMember = () => {
                           );
                           setData({
                             ...data,
-                            AssignedTo: selectedMembers.map((member) => member.value)
-                          })
-                          selectedMembers.map(member => {
-                            temp.push({Tasks:member.Tasks, value:member.value, id:member.id})
+                            AssignedTo: selectedMembers.map(
+                              (member) => member.value
+                            ),
                           });
-                          setassignedto(Array.from(new Set(temp)))
-                          
-                          if (assigned && assigned.classList.contains("ring-red-600")) {
+                          selectedMembers.map((member) => {
+                            temp.push({
+                              Tasks: member.Tasks,
+                              value: member.value,
+                              id: member.id,
+                            });
+                          });
+                          setassignedto(Array.from(new Set(temp)));
+
+                          if (
+                            assigned &&
+                            assigned.classList.contains("ring-red-600")
+                          ) {
                             assigned.classList.remove("ring-red-600");
                             assigned.classList.remove("ring-2");
-                            assigned.placeholder = "search for a member or a group";
+                            assigned.placeholder =
+                              "search for a member or a group";
                           }
-
                         }}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="Gender">Priority</label>
-                      <select required id="selectPriority" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+                      <label htmlFor="Gender">Priority</label>
+                      <select
+                        required
+                        id="selectPriority"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                      >
                         <option value="null">Select priority</option>
                         <option value="High">High</option>
                         <option value="Medium">Medium</option>
@@ -390,38 +437,60 @@ const AddMember = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Start Date</label>
-                      <div id="start" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                        <input required type="date"
-                          onfocus="(this.type='date')" name="startDate"
+                      <label htmlFor="state">Start Date</label>
+                      <div
+                        id="start"
+                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                      >
+                        <input
+                          required
+                          type="date"
+                          onFocus="(this.type='date')"
+                          name="startDate"
                           placeholder="MM/DD/YYYY"
                           onChange={handleStart}
                           id="startDate"
                           value={data.StartDate}
-                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
+                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                        />
                       </div>
                     </div>
 
                     <div className="md:col-span-3">
-                      <label for="state">Due Date</label>
-                      <div id="end" className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                        <input required type="date"
+                      <label htmlFor="state">Due Date</label>
+                      <div
+                        id="end"
+                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                      >
+                        <input
+                          required
+                          type="date"
                           onChange={handleEnd}
                           value={data.DueDate}
                           id="endDate"
-                          onfocus="(this.type='date')" name="dueDate"
+                          onFocus="(this.type='date')"
+                          name="dueDate"
                           placeholder="MM/DD/YYYY"
-                          className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" />
+                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                        />
                       </div>
                     </div>
 
-                    <div className="md:col-span-6 text-right ml-auto">
+                    <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 pt-8">
-                          <button onClick={handleClear} className="bg-gray-300 hover:bg-primary text-balck  font-bold py-2 px-4 mr-6 rounded border-b-2">
+                          <button
+                            onClick={handleClear}
+                            className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
+                          >
                             Cancel
                           </button>
-                          <button onClick={handleSubmit} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded"> Assign
+                          <button
+                            onClick={handleSubmit}
+                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
+                          >
+                            {" "}
+                            Assign
                           </button>
                         </div>
                       </div>
@@ -434,7 +503,6 @@ const AddMember = () => {
         </div>
       </div>
     </AdminLayout>
-
   );
 };
 export default AddMember;

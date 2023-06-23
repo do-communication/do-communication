@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"; 
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import Ticket from "@/components/Task/Ticket";
 import { collection, getDocs, getDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
@@ -11,7 +11,7 @@ const MyTaskPage = () => {
   const [tasks, setTasks] = useState([allTasks]);
   console.log("mytask loaded")
   const getData = async () => {
- 
+
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
 
@@ -20,28 +20,28 @@ const MyTaskPage = () => {
         let arr = []
         let temp = []
         querySnapshot.forEach((doc) => {
-            arr.push({ id: doc.id, data: doc.data() });
+          arr.push({ id: doc.id, data: doc.data() });
         });
 
         arr.map(a => {
-          if(a.data.AssignedTo.includes(user.displayName)){
+          if (a.data.AssignedTo.includes(user.displayName)) {
             temp.push(a)
           }
         })
-  
-      setTasks(temp)
-      setallTasks(temp)
-    });
-  }catch (err) {
-    console.log(err)
-    setTasks([{ Name: "check your connection" }])
-  }
+
+        setTasks(temp)
+        setallTasks(temp)
+      });
+    } catch (err) {
+      console.log(err)
+      setTasks([{ Name: "check your connection" }])
+    }
 
 
-      // const doc = await getDocs(all)
-      // doc.forEach(d => {
-      //   arr.push({id:d.id, data:d.data()})
-      // });
+    // const doc = await getDocs(all)
+    // doc.forEach(d => {
+    //   arr.push({id:d.id, data:d.data()})
+    // });
 
     //   arr.map(a => {
     //     if(a.data.AssignedTo.includes(user.displayName)){
@@ -89,7 +89,7 @@ const MyTaskPage = () => {
                 >
                   {(provided) => (
                     <div
-                      className="p-3 mt-2 mb-3 bg-white border-b border-gray-100 rounded cursor-pointer dark:bg-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-900"
+                      className="mb-3 mt-2 cursor-pointer rounded border-b border-gray-100 bg-white p-3 hover:bg-gray-50 dark:border-gray-900 dark:bg-gray-600 dark:hover:bg-gray-700"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -106,7 +106,7 @@ const MyTaskPage = () => {
       </div>
     );
   };
-  useEffect(()=>{
+  useEffect(() => {
     getData();
   }, []);
   const handleDragEnd = (result) => {
@@ -131,21 +131,23 @@ const MyTaskPage = () => {
         task.data.Status.toLowerCase() === sourceStatus &&
         `${task.id}` === result.draggableId
     );
-    
+
     if (task) {
       change(task, destinationStatus, sourceStatus);
     }
   };
-  const change = async(task, destinationStatus, sourceStatus) => {
+  const change = async (task, destinationStatus, sourceStatus) => {
     const docRef = doc(db, "KalCompany", "Tasks", "Tasks", task.id);
     const mem = await getDoc(docRef)
     let tempAssigned = []
     const assigned = mem._document.data.value.mapValue.fields.AssignedTo.arrayValue.values
-    if(assigned){
+    if (assigned) {
       assigned.forEach(t => {
-        if(t){
-        tempAssigned.push(t.stringValue);}
-      });}
+        if (t) {
+          tempAssigned.push(t.stringValue);
+        }
+      });
+    }
     const newData = {
       Title: mem._document.data.value.mapValue.fields.Title.stringValue,
       Priority: mem._document.data.value.mapValue.fields.Priority.stringValue,
@@ -156,13 +158,13 @@ const MyTaskPage = () => {
       StartDate: mem._document.data.value.mapValue.fields.StartDate.stringValue,
       DueDate: mem._document.data.value.mapValue.fields.DueDate.stringValue,
     }
-        updateDoc(docRef, newData)
-    .then(docRef => {
+    updateDoc(docRef, newData)
+      .then(docRef => {
         console.log("A New Document Field has been added to an existing document");
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.log(error);
-    })
+      })
 
   }
   return (
@@ -188,7 +190,7 @@ const MyTaskPage = () => {
                       {...provided.dragHandleProps}
                       className="md:col-span-2 xl:col-span-1"
                     >
-                      <div className="h-full p-3 text-black bg-white rounded">
+                      <div className="h-full rounded bg-white p-3 text-black">
                         <h3 className="text-sm font-semibold">{card.title}</h3>
                         <TaskItems status={card.status} />
                       </div>

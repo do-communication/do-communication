@@ -2,10 +2,9 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
-import { db} from "context/DbContext";
+import { db } from "context/DbContext";
 import { doc, getDocs, getDoc, collection } from "firebase/firestore";
-// import { useRouter } from 'next/router';
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -13,10 +12,9 @@ import {
   AiOutlinePlus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiDotsVertical, BiGroup } from "react-icons/bi";
-import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-import { MdChecklist, MdTask } from "react-icons/md";
-
+import { BiDotsVertical } from "react-icons/bi";
+import { HiDocumentChartBar } from "react-icons/hi2";
+import { MdTask } from "react-icons/md";
 
 const ManageTasks = () => {
   const [allTasks, setallTasks] = useState([]);
@@ -29,50 +27,54 @@ const ManageTasks = () => {
   // const { asPath, pathname } = useRouter();
   const currentPage = usePathname();
   let i = currentPage.lastIndexOf("member/");
-  const id = currentPage.slice(i+7)
+  const id = currentPage.slice(i + 7);
 
-  const getMem = async() => {
+  const getMem = async () => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
     const mem = await getDoc(docRef);
     setUser(mem._document.data.value.mapValue.fields.Name.stringValue);
-    const tasks = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    if(tasks){
-      tasks.forEach(t => {
-        if(t){
-        tempTask.push(t.stringValue);
-      }
-      });}
-  }
+    const tasks =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    if (tasks) {
+      tasks.forEach((t) => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+  };
   getMem();
   const getData = async () => {
-    let arr = []
-    let selected = []
+    let arr = [];
+    let selected = [];
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push(d.data())
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push(d.data());
       });
-
     } catch (err) {
-      console.log(err)
-      setTasks([{ Name: "check your connection" }])
+      console.log(err);
+      setTasks([{ Name: "check your connection" }]);
     }
-    arr.map(element => {
-      if(tempTask.includes(element.Title)){
-        selected.push(element)
-      } 
-    })
-    setTasks(selected)
-    setallTasks(selected)
-  }
+    arr.map((element) => {
+      if (tempTask.includes(element.Title)) {
+        selected.push(element);
+      }
+    });
+    setTasks(selected);
+    setallTasks(selected);
+  };
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) =>
-        item.Title && item.Title.toLowerCase().includes(search.toLowerCase())
+        (item.Title &&
+          item.Title.toLowerCase().includes(search.toLowerCase())) ||
         // || item.AssignedTo && item.AssignedTo.includes(search.toLowerCase())
-        || item.Status && item.Status.toLowerCase().includes(search.toLowerCase())
-        || item.Priority && item.Priority.toLowerCase().includes(search.toLowerCase())
+        (item.Status &&
+          item.Status.toLowerCase().includes(search.toLowerCase())) ||
+        (item.Priority &&
+          item.Priority.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -107,19 +109,19 @@ const ManageTasks = () => {
     {
       name: "Priority",
       selector: (row) => row.Priority,
-    }
+    },
   ];
 
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
   }, []);
   useEffect(() => {
-    getData()
+    getData();
   }, []);
   return (
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
-        <div className="order-last md:col-span-2 col-span-full md:order-first">
+        <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-4 text-2xl font-semibold">{user} Tasks</h1>
           <div className="flex items-center justify-between mt-6 mb-4">
             <Link
@@ -147,7 +149,7 @@ const ManageTasks = () => {
             pagination
           />
         </div>
-        <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
+        <div className="border-none col-span-full border-primary md:col-span-1 md:border-l-4">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
             <div className="flex items-center justify-center w-full h-full text-xl">
@@ -189,7 +191,7 @@ const ManageTasks = () => {
                   <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
                 {showManageTaskMenu && (
-                  <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
+                  <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
                         href="/admin/reports/member/id"
@@ -218,36 +220,74 @@ const ManageTasks = () => {
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center justify-center w-20 h-20 bg-light rounded-full">
+                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-light">
                   <MdTask className="w-12 h-12" />
                 </div>
-                <h4 className="text-xl font-semibold capitalize" mt-1>
+                <h4 className="mt-1 text-xl font-semibold capitalize">
                   {selectedRows[0].Title}
                 </h4>
-                <p className="text-sm">Assigned to {Array.from(new Set(selectedRows[0].AssignedTo)).toString(" ")}  </p>
+                <p className="text-sm">
+                  Assigned to{" "}
+                  {Array.from(new Set(selectedRows[0].AssignedTo)).toString(
+                    " "
+                  )}{" "}
+                </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>
-                <p className="flex flex-col p-2 gap-2 overflow-y-auto max-h-64">{selectedRows[0].Description}</p>
+                <p className="flex flex-col gap-2 p-2 overflow-y-auto max-h-64">
+                  {selectedRows[0].Description}
+                </p>
                 <table>
                   <tr>
-                    <td><h2 className="inline-block p-2 text-lg font-semibold">Priority:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].Priority}</p></td>
+                    <td>
+                      <h2 className="inline-block p-2 text-lg font-semibold">
+                        Priority:
+                      </h2>
+                    </td>
+                    <td>
+                      <p className="inline-block gap-2">
+                        {selectedRows[0].Priority}
+                      </p>
+                    </td>
                   </tr>
                   <tr>
-                    <td><h2 className="inline-block p-2 text-lg font-semibold">Status:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].Status}</p></td>
+                    <td>
+                      <h2 className="inline-block p-2 text-lg font-semibold">
+                        Status:
+                      </h2>
+                    </td>
+                    <td>
+                      <p className="inline-block gap-2">
+                        {selectedRows[0].Status}
+                      </p>
+                    </td>
                   </tr>
                   <tr>
-                    <td><h2 className="inline-block p-2 text-lg font-semibold">Issue Date:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].StartDate}</p></td>
+                    <td>
+                      <h2 className="inline-block p-2 text-lg font-semibold">
+                        Issue Date:
+                      </h2>
+                    </td>
+                    <td>
+                      <p className="inline-block gap-2">
+                        {selectedRows[0].StartDate}
+                      </p>
+                    </td>
                   </tr>
                   <tr>
-                    <td><h2 className="inline-block p-2 text-lg font-semibold">Due Date:</h2></td>
-                    <td><p className="inline-block gap-2">{selectedRows[0].DueDate}</p></td>
+                    <td>
+                      <h2 className="inline-block p-2 text-lg font-semibold">
+                        Due Date:
+                      </h2>
+                    </td>
+                    <td>
+                      <p className="inline-block gap-2">
+                        {selectedRows[0].DueDate}
+                      </p>
+                    </td>
                   </tr>
                 </table>
-
               </div>
             </div>
           )}

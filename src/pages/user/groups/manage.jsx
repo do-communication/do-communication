@@ -88,9 +88,9 @@ const ManageGroup = () => {
   return (
     <UserLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
-        <div className="order-last md:col-span-2 col-span-full md:order-first">
+        <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-4 text-3xl font-semibold">Your Groups</h1>
-          <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
+          <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between md:items-center">
             <Link
               href="/user/groups/edit/id"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
@@ -119,7 +119,7 @@ const ManageGroup = () => {
             pagination={true}
           />
         </div>
-        <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
+        <div className="border-none col-span-full border-primary md:col-span-1 md:border-l-4">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
             <div className="flex items-center justify-center w-full h-full text-xl">
@@ -145,7 +145,7 @@ const ManageGroup = () => {
                   <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
                 {showManageGroupMenu && (
-                  <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
+                  <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       {JSON.stringify(selectedRows[0].id, null, 9)}
                       <Link
@@ -171,7 +171,7 @@ const ManageGroup = () => {
                 <div className="flex items-center justify-center w-20 h-20 bg-red-400 rounded-full">
                   <MdGroup className="w-12 h-12" />
                 </div>
-                <h4 className="text-xl font-semibold capitalize" mt-1>
+                <h4 className="mt-1 text-xl font-semibold capitalize">
                   {selectedRows[0].Name}
                 </h4>
                 <p className="text-sm">{selectedRows[0].Type}</p>
@@ -191,7 +191,7 @@ const ManageGroup = () => {
                       <Link
                         key={index}
                         href="/admin/memebers/{userId}"
-                        className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
+                        className="flex items-center justify-between p-2 rounded-md hover:bg-secondary hover:bg-opacity-25"
                       >
                         <p>{row.value}</p>
                         <div className="flex gap-2">

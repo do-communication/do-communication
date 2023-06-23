@@ -17,18 +17,26 @@ const GroupChat = () => {
   const get = async (groupId) => {
     setReciever(await GetGroup(groupId));
     await getGroupMessage(groupId, setMessages);
-  }
+  };
 
-  useEffect(() => { get(groupId) }, [groupId])
   useEffect(() => {
     get(groupId);
-  }, [update])
-  console.log("index.jsx")
-
+  }, [groupId]);
+  useEffect(() => {
+    get(groupId);
+  }, [update]);
+  console.log("index.jsx");
 
   return (
     <ChatLayout group={reciever}>
-      <Chatbox messages={messages} name={reciever ? reciever.Name : ""} get={get} setUpdate={setUpdate} update={update} isgroup={true} />
+      <Chatbox
+        messages={messages}
+        name={reciever ? reciever.Name : ""}
+        get={get}
+        setUpdate={setUpdate}
+        update={update}
+        isgroup={true}
+      />
     </ChatLayout>
   );
 };

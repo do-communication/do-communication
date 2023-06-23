@@ -18,7 +18,7 @@ const Ticket = ({ task }) => {
           <p className="">
             {task.data.Description}{" "}
             <button
-              className="underline text-primary"
+              className="text-primary underline"
               onClick={() => setShowDetail(false)}
             >
               Read Less
@@ -28,7 +28,7 @@ const Ticket = ({ task }) => {
           <p className="">
             {task.data.Description.substring(0, 100)}...
             <button
-              className="underline text-primary"
+              className="text-primary underline"
               onClick={() => setShowDetail(true)}
             >
               Read More

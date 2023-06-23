@@ -101,18 +101,18 @@ const Sidebar = () => {
     <div
       className={`${
         !openSideBar && "-translate-x-full"
-      } md:translate-x-0 md:sticky max-h-screen top-0 h-screen bg-white shadow-md shadow-black text-blue-100 w-64 fixed inset-y-0 left-0 transform transition duration-200 ease-in-out z-50`}
+      } fixed inset-y-0 left-0 top-0 z-50 h-screen max-h-screen w-64 transform bg-white text-blue-100 shadow-md shadow-black transition duration-200 ease-in-out md:sticky md:translate-x-0`}
     >
-      <nav className="h-[64px] py-2 shadow-lg px-4 md:sticky top-0 bg-primary flex items-center justify-start  z-40">
+      <nav className="top-0 z-40 flex h-[64px] items-center justify-start bg-primary px-4 py-2 shadow-lg  md:sticky">
         <Link
           href="/admin"
-          className="flex items-center space-x-2 text-white group hover:text-white"
+          className="group flex items-center space-x-2 text-white hover:text-white"
         >
           <img src="/images/white_logo.png" alt="logo" width="80" />
         </Link>
       </nav>
 
-      <nav className="px-4 pt-4 scroller overflow-y-scroll max-h-[calc(100vh-64px)]">
+      <nav className="scroller max-h-[calc(100vh-64px)] overflow-y-scroll px-4 pt-4">
         <ul className="flex flex-col space-y-2">
           {navList.map((nav, index) => {
             const isActive = checkIsNavActive(nav);

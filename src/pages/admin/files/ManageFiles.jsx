@@ -8,18 +8,11 @@ import {
   AiOutlineClose,
   AiOutlinePlus,
   AiOutlineSearch,
-  AiFillFile,
   AiOutlineFile,
-  AiFillLike,
 } from "react-icons/ai";
-// import { TfiFiles } from "react-icons/tfi";
 import { GiShare, GiOpenBook } from "react-icons/gi";
-import { BiDotsVertical, BiGroup } from "react-icons/bi";
-// import { BsEye } from "react-icons/bs";
-// import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
-// import { MdChecklist } from "react-icons/md";
-// import { TbMessage } from "react-icons/tb";
-import { db } from "../../../../context/DbContext"
+import { BiDotsVertical } from "react-icons/bi";
+import { db } from "../../../../context/DbContext";
 import { getDocs, collection } from "firebase/firestore";
 import { auth } from "../../../../config/firebase";
 import useFetch from "@/components/useFetch";
@@ -36,19 +29,21 @@ const ManageFiles = () => {
   const [update, setUpdate] = useState(false);
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
   const [toggledClearRows, setToggleClearRows] = useState(false);
-  const { deleteFile } = useFetch("KalCompany")
-
+  const { deleteFile } = useFetch("KalCompany");
 
   const handleDelete = async () => {
     await deleteFile(selectedRows[0], setUpdate, update, setSelectedRows);
-    setToggleClearRows(!toggledClearRows)
-  }
+    setToggleClearRows(!toggledClearRows);
+  };
 
   // search for groups using group name
   useEffect(() => {
     const filteredData = allFiles.filter(
       (item) =>
-        item.data.FileName && item.data.FileName.toLowerCase().includes(search.toLowerCase()) || item.data.Description && item.data.Description.toLowerCase().includes(search.toLowerCase())
+        (item.data.FileName &&
+          item.data.FileName.toLowerCase().includes(search.toLowerCase())) ||
+        (item.data.Description &&
+          item.data.Description.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -68,13 +63,12 @@ const ManageFiles = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-
   const columns = [
     {
       name: "File Name",
       selector: (row) => (
         <p className="flex items-center gap-2">
-          <AiOutlineFile className="w-9 p-2 h-auto" />
+          <AiOutlineFile className="h-auto p-2 w-9" />
 
           {row.data.FileName}
         </p>
@@ -97,41 +91,40 @@ const ManageFiles = () => {
 
   const handleDeselectedRows = (index, row) => {
     let arr = [...selectedRows];
-    arr.splice(index, 1)
+    arr.splice(index, 1);
     setSelectedRows(arr);
-  }
+  };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(selectedRows[0].data.url)
+    navigator.clipboard.writeText(selectedRows[0].data.url);
     toast.success("Link Copied");
-  }
+  };
+
+  useEffect(() => { }, [selectedRows]);
 
   useEffect(() => {
-  }, [selectedRows])
-
-  useEffect(() => {
-    getFiles()
-  }, [update])
+    getFiles();
+  }, [update]);
 
   const getFiles = async () => {
-    let arr = []
+    let arr = [];
     try {
-      const all = collection(db, "KalCompany", "Files", auth.currentUser.uid)
-      const doc = await getDocs(all)
-      doc.forEach(d => {
-        arr.push({ id: d.id, data: d.data() })
+      const all = collection(db, "KalCompany", "Files", auth.currentUser.uid);
+      const doc = await getDocs(all);
+      doc.forEach((d) => {
+        arr.push({ id: d.id, data: d.data() });
       });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
     setAllFiles(arr);
     setFiles(arr);
-  }
+  };
 
   return (
     <AdminLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
-        <div className="order-last md:col-span-2 col-span-full md:order-first">
+        <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-5 text-2xl font-semibold">Manage Files</h1>
           <div className="flex items-center justify-between pb-0 mb-2">
             <Link
@@ -164,7 +157,7 @@ const ManageFiles = () => {
           />
           {/* try */}
         </div>
-        <div className="border-none md:border-l-4 md:col-span-1 border-primary col-span-full">
+        <div className="border-none col-span-full border-primary md:col-span-1 md:border-l-4">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
             <div className="flex items-center justify-center w-full h-full text-xl">
@@ -188,7 +181,10 @@ const ManageFiles = () => {
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
                     <p>{row.data.FileName}</p>
-                    <button onClick={() => handleDeselectedRows(index, row)} className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
+                    <button
+                      onClick={() => handleDeselectedRows(index, row)}
+                      className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500"
+                    >
                       <AiOutlineClose />
                     </button>
                   </li>
@@ -206,7 +202,7 @@ const ManageFiles = () => {
                   <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
                 {showManageGroupMenu && (
-                  <ul className="absolute z-10 flex flex-col gap-2 p-2 duration-300 border-2 rounded border-secondary bg-[#90c7ea] top-9 right-2 w-52">
+                  <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
                         href={selectedRows[0].data.url}
@@ -250,7 +246,7 @@ const ManageFiles = () => {
                   {/* <MdGroup className="w-12 h-12" /> */}
                   <AiOutlineFile className="flex items-center justify-center w-10 h-10 m-2 rounded-full " />
                 </div>
-                <h4 className="text-xl font-semibold capitalize" mt-1>
+                <h4 className="mt-1 text-xl font-semibold capitalize">
                   {selectedRows[0].data.FileName}
                 </h4>
               </div>
@@ -270,55 +266,66 @@ const ManageFiles = () => {
                 </h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         File Name
                       </p>
                     </div>
-                    <p className="w-40 truncate text-sm" title="Lidiya Solomon Tamru">
+                    <p
+                      className="w-40 text-sm truncate"
+                      title="Lidiya Solomon Tamru"
+                    >
                       {selectedRows[0].data.FileName}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold ">
                         Description
                       </p>
                     </div>
-                    <p className="w-40 truncate text-sm" title="Product Manager">
+                    <p
+                      className="w-40 text-sm truncate"
+                      title="Product Manager"
+                    >
                       {selectedRows[0].data.Description}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Owner
                       </p>
                     </div>
-                    <p className="w-40 truncate text-sm" title="Addis Ababa/Ethiopia">
+                    <p
+                      className="w-40 text-sm truncate"
+                      title="Addis Ababa/Ethiopia"
+                    >
                       {selectedRows[0].data.SenderName}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Shelf Location
                       </p>
                     </div>
-                    <p className="w-40 truncate text-sm" title="+251910******">
+                    <p className="w-40 text-sm truncate" title="+251910******">
                       {selectedRows[0].data.ShelfLocation}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-opacity-25 hover:bg-secondary">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Created At
                       </p>
                     </div>
-                    <p className="w-40 truncate text-sm" title="+251910******">
-                      {String(selectedRows[0].data.CreatedAt.toDate().toDateString())}
+                    <p className="w-40 text-sm truncate" title="+251910******">
+                      {String(
+                        selectedRows[0].data.CreatedAt.toDate().toDateString()
+                      )}
                     </p>
                   </div>
                 </ul>
