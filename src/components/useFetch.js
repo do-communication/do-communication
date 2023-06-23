@@ -28,7 +28,9 @@ const useFetch = (collectionType) => {
         }
     }
     const GetFile = async (userId, fileId) => {
-        if (userId) {
+        if (userId && fileId) {
+            console.log(userId)
+            console.log(fileId)
             const specific_user = doc(db, collectionType, "Files", userId, fileId);
             const docSnap = await getDoc(specific_user)
 
@@ -584,7 +586,7 @@ const useFetch = (collectionType) => {
         GetCompanyName, send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
         getMembersData, getRecentData, deleteMessage, editMessage, getGroups,
         getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile,
-        getGroupsUser, getRecentGroupUser, getMembersDataUser, GetUserOrAdmin, error, user
+        getGroupsUser, getRecentGroupUser, getMembersDataUser, GetUserOrAdmin, GetFile, error, user
     });
 }
 
