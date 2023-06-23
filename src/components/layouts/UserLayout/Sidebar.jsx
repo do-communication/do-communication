@@ -112,9 +112,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`${
-        !openSideBar && "-translate-x-full"
-      } fixed inset-y-0 left-0 top-0 z-50 h-screen max-h-screen w-64 transform bg-white text-blue-100 shadow-md shadow-black transition duration-200 ease-in-out md:sticky md:translate-x-0`}
+      className={`${!openSideBar && "-translate-x-full"
+        } fixed inset-y-0 left-0 top-0 z-50 h-screen max-h-screen w-64 transform bg-white text-blue-100 shadow-md shadow-black transition duration-200 ease-in-out md:sticky md:translate-x-0`}
     >
       <nav className="top-0 z-40 flex h-[64px] items-center justify-start bg-primary px-4 py-2 shadow-lg  md:sticky">
         <Link

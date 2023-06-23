@@ -31,7 +31,7 @@ const AddMember = () => {
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
     Status: "Assigned",
-    AssignedBy: user.displayName,
+    AssignedBy: auth.currentUser.displayName,
   });
   const getData = async () => {
     let arr = []
