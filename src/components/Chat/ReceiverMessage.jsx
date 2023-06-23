@@ -1,3 +1,4 @@
+import { formatTimeAgo } from "@/utils/formatTimeAgo";
 import Link from "next/link";
 import { BiFileBlank } from "react-icons/bi";
 
@@ -10,6 +11,9 @@ const ReceiverMessage = ({ msg }) => {
         </div>
         <div className="relative px-4 py-2 ml-3 text-sm bg-white shadow rounded-xl">
           <div>{msg.data.Content}</div>
+          <small className="text-[10px]">
+              {formatTimeAgo(new Date(msg.data.CreatedAt?.seconds * 1000))}
+            </small>
         </div>
       </div>
       <ul className="flex gap-4 ml-14">
@@ -26,9 +30,14 @@ const ReceiverMessage = ({ msg }) => {
               >
                 {msg.data.Content}
               </p>
+              <small className="text-[10px]">
+                {formatTimeAgo(new Date(msg.data.CreatedAt?.seconds * 1000))}
+              </small>
             </Link>
           </li>
-        ) : <div></div>}
+        ) : (
+          <div></div>
+        )}
       </ul>
     </div>
   );

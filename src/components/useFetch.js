@@ -20,12 +20,36 @@ const useFetch = (collectionType) => {
 
     // get name by id
     const GetAdmin = async (userId) => {
-        console.log(userId)
         if (userId) {
             const specific_user = doc(db, collectionType, "Users", "Admin", userId);
             const docSnap = await getDoc(specific_user)
-            console.log(docSnap.data())
+
             return docSnap.data();
+        }
+    }
+    const GetFile = async (userId, fileId) => {
+        if (userId) {
+            const specific_user = doc(db, collectionType, "Files", userId, fileId);
+            const docSnap = await getDoc(specific_user)
+
+            return docSnap.data();
+        }
+    }
+
+    const GetUserOrAdmin = async (userId) => {
+        if (userId) {
+            const specific_user = doc(db, collectionType, "Users", "StaffMembers", userId);
+            const userSnap = await getDoc(specific_user)
+
+            if (userSnap.data()) {
+                console.log(userSnap.data())
+                return userSnap.data();
+            }
+
+            const specific_admin = doc(db, collectionType, "Users", "Admin", userId);
+            const adminSnap = await getDoc(specific_admin)
+            console.log(userId)
+            return adminSnap.data();
         }
     }
 
@@ -50,8 +74,9 @@ const useFetch = (collectionType) => {
 
     // Get messages in the system
     const getMessage = async (userId, setMessages) => {
-        // console.log("getting chat message")
+
         if (userId) {
+
             const allMessages = collection(db, collectionType, "Messages", "Messages")
 
             const q = query(allMessages,
@@ -65,7 +90,9 @@ const useFetch = (collectionType) => {
                 querySnapshot.forEach((doc) => {
                     messages.push({ id: doc.id, data: doc.data() });
                 });
-                document.getElementById("message_send").value = ""
+                if (document.getElementById("message_send")) {
+                    document.getElementById("message_send").value = ""
+                }
                 setMessages(messages);
             });
         }
@@ -82,39 +109,74 @@ const useFetch = (collectionType) => {
                 querySnapshot.forEach((doc) => {
                     messages.push({ id: doc.id, data: doc.data() });
                 });
-                document.getElementById("message_send").value = ""
+                if (document.getElementById("message_send")) {
+                    document.getElementById("message_send").value = ""
+                }
                 setMessages(messages);
             });
 
         }
     };
 
-    const getGroups = async () => {
-        let groups = []
+    const getGroups = async (setGroups, setAllGroups) => {
+
         try {
             const all = collection(db, collectionType, "Groups", "Groups")
-            const doc = await getDocs(all)
-            doc.forEach(d => {
-                groups.push({ id: d.id, data: d.data() })
+
+
+            const unsubscribe = onSnapshot(all, (querySnapshot) => {
+                const groups = [];
+                querySnapshot.forEach((doc) => {
+                    groups.push({ id: doc.id, data: doc.data() });
+                });
+
+                setGroups(groups);
+                setAllGroups(groups);
             });
 
         } catch (err) {
             setError(err)
             console.log(err)
         };
+    };
 
-        return groups
+    const getGroupsUser = async (setGroups, setAllGroups, userId) => {
+
+        try {
+            const all = collection(db, collectionType, "Groups", "Groups")
+
+            const q = query(all, where("People", "array-contains", userId));
+
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const groups = [];
+                querySnapshot.forEach((doc) => {
+                    groups.push({ id: doc.id, data: doc.data() });
+                });
+
+                setGroups(groups);
+                setAllGroups(groups);
+            });
+
+        } catch (err) {
+            setError(err)
+            console.log(err)
+        };
     };
 
     // get all members
-    const getMembersData = async () => {
-        // console.log("getting member")
-        let members = []
+    const getMembersData = async (setMembers, setallMembers) => {
+
+
         try {
             const all = collection(db, collectionType, "Users", "StaffMembers")
-            const doc = await getDocs(all)
-            doc.forEach(d => {
-                members.push({ id: d.id, data: d.data() })
+            const unsubscribe = onSnapshot(all, (querySnapshot) => {
+                const members = [];
+                querySnapshot.forEach((doc) => {
+                    members.push({ id: doc.id, data: doc.data() });
+                });
+
+                setMembers(members);
+                setallMembers(members);
             });
 
         } catch (err) {
@@ -122,10 +184,42 @@ const useFetch = (collectionType) => {
             console.log(err)
         };
 
-        return members
     };
-    const getRecentData = async () => {
-        let recentChat = []
+    const getMembersDataUser = async (setMembers, setallMembers) => {
+
+        try {
+            const members = [];
+            const alladmin = collection(db, collectionType, "Users", "Admin")
+            const unsubscribeadmin = onSnapshot(alladmin, (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    members.push({ id: doc.id, data: doc.data() });
+                });
+
+                setMembers(members);
+                setallMembers(members);
+            });
+
+            const allmember = collection(db, collectionType, "Users", "StaffMembers")
+            const unsubscribemember = onSnapshot(allmember, (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    members.push({ id: doc.id, data: doc.data() });
+                });
+
+                setMembers(members);
+                setallMembers(members);
+            });
+
+
+
+        } catch (err) {
+            setError(err)
+            console.log(err)
+        };
+
+    };
+
+    const getRecentData = async (setRecent) => {
+
         try {
 
             const all = collection(db, collectionType, "Messages", "Recent")
@@ -135,40 +229,61 @@ const useFetch = (collectionType) => {
                 ), orderBy("CreatedAt", "desc")
             );
 
-            const docs = await getDocs(q)
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const recentChat = [];
+                querySnapshot.forEach((doc) => {
+                    recentChat.push({ id: doc.id, data: doc.data() });
+                });
 
-            docs.forEach(d => {
-                recentChat.push({ id: d.data().RecieverId, data: d.data() })
+                setRecent(recentChat);
             });
 
         } catch (err) {
             setError(err)
         };
-
-        return recentChat
     };
-    const getRecentGroup = async () => {
-        let recentGroup = []
+    const getRecentGroup = async (setRecent) => {
+
         try {
 
             const all = collection(db, collectionType, "GroupMessages", "Recent")
-            // const q = query(all,
-            //     where("SenderId", '==', auth.currentUser.uid), orderBy("CreatedAt", "desc")
-            // );
-            const q = query(all, orderBy("CreatedAt", "desc")
-            );
 
-            const docs = await getDocs(q)
+            const q = query(all, orderBy("CreatedAt", "desc"));
 
-            docs.forEach(d => {
-                recentGroup.push({ id: d.data().GroupId, data: d.data() })
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const recentGroup = [];
+                querySnapshot.forEach((doc) => {
+                    recentGroup.push({ id: doc.id, data: doc.data() });
+                });
+
+                setRecent(recentGroup);
             });
 
         } catch (err) {
             setError(err)
         };
 
-        return recentGroup
+    };
+    const getRecentGroupUser = async (setRecent, userId) => {
+        try {
+
+            const all = collection(db, collectionType, "GroupMessages", "Recent")
+
+            const q = query(all, where("People", "array-contains", userId), orderBy("CreatedAt", "desc"));
+
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const recentGroup = [];
+                querySnapshot.forEach((doc) => {
+                    recentGroup.push({ id: doc.id, data: doc.data() });
+                });
+
+                setRecent(recentGroup);
+            });
+
+        } catch (err) {
+            setError(err)
+        };
+
     };
 
     // send message
@@ -188,15 +303,15 @@ const useFetch = (collectionType) => {
             //   await getMessage();
             //   setSendMessage('');
             //   setSendFile(null);
-            const reciever = await GetUser(userId)
-            await setDoc(doc(db, collectionType, "Messages", "Recent", auth.currentUser.uid + "-" + userId), {
+            const reciever = await GetUserOrAdmin(userId)
+            await setDoc(doc(db, collectionType, "Messages", "Recent", userId), {
                 Content: sendMessage,
                 CreatedAt: serverTimestamp(),
                 RecieverId: userId,
-                Name: reciever.Name,
+                RecieverName: reciever.Name,
                 SenderId: auth.currentUser.uid,
                 SenderName: auth.currentUser.displayName,
-                Department: reciever.Department,
+                Department: reciever.Department ? reciever.Department : "",
                 ProfilePic: reciever.ProfilePic,
                 seen: false,
                 file: false
@@ -215,8 +330,9 @@ const useFetch = (collectionType) => {
                 (snapshot) => {
 
                     const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                    // console.log('Upload is ' + progress + '% done');
-                    document.getElementById("message_send").value = sendFile.name + "  " + progress + '% Done';
+                    if (document.getElementById("message_send")) {
+                        document.getElementById("message_send").value = sendFile.name + "  " + progress + '% Done';
+                    }
                     switch (snapshot.state) {
                         case 'paused':
                             console.log('Upload is paused');
@@ -246,11 +362,11 @@ const useFetch = (collectionType) => {
 
 
                         const reciever = await GetUser(userId)
-                        await setDoc(doc(db, collectionType, "Messages", "Recent", auth.currentUser.uid + "-" + userId), {
+                        await setDoc(doc(db, collectionType, "Messages", "Recent", userId), {
                             Content: sendFile.name,
                             CreatedAt: serverTimestamp(),
                             RecieverId: userId,
-                            Name: reciever.Name,
+                            RecieverName: reciever.Name,
                             SenderId: auth.currentUser.uid,
                             SenderName: auth.currentUser.displayName,
                             Department: reciever.Department,
@@ -296,7 +412,8 @@ const useFetch = (collectionType) => {
                 SenderId: auth.currentUser.uid,
                 SenderName: auth.currentUser.displayName,
                 seen: false,
-                file: false
+                file: false,
+                People: reciever.People
             });
 
             setPriorityChange(!priorityChange);
@@ -313,7 +430,9 @@ const useFetch = (collectionType) => {
 
                     const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                     // console.log('Upload is ' + progress + '% done');
-                    document.getElementById("message_send").value = sendFile.name + "  " + progress + '% Done';
+                    if (document.getElementById("message_send")) {
+                        document.getElementById("message_send").value = sendFile.name + "  " + progress + '% Done';
+                    }
                     switch (snapshot.state) {
                         case 'paused':
                             console.log('Upload is paused');
@@ -352,7 +471,8 @@ const useFetch = (collectionType) => {
                             SenderName: auth.currentUser.displayName,
                             seen: false,
                             file: true,
-                            url: downloadURL
+                            url: downloadURL,
+                            People: reciever.People
                         });
 
                         setUpdate(!update);
@@ -463,7 +583,8 @@ const useFetch = (collectionType) => {
     return ({
         GetCompanyName, send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
         getMembersData, getRecentData, deleteMessage, editMessage, getGroups,
-        getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile, error, user
+        getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile,
+        getGroupsUser, getRecentGroupUser, getMembersDataUser, GetUserOrAdmin, error, user
     });
 }
 

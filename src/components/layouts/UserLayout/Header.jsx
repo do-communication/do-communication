@@ -1,7 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { IoNotificationsOutline } from "react-icons/io5";
 import {
   AiOutlineMenu,
   AiOutlineBell,
@@ -10,11 +8,45 @@ import {
 } from "react-icons/ai";
 import OpenSideBarContext from "./context/openSideBarContext";
 import Link from "next/link";
+import { auth } from "../../../../config/firebase";
+import { useAuth } from "../../../../context/AuthContext";
+import Router from "next/router";
 import Notification from "./Notification";
+import useFetch from "@/components/useFetch";
+
+const router = Router;
+
 const Header = () => {
+  const { user, logout } = useAuth();
+  const [usr, setUsr] = useState(null);
+  const [company, setCompany] = useState(null);
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
+  const { GetCompanyName, GetUser } = useFetch("KalCompany");
+
+  const getinfo = async () => {
+    console.log(auth.currentUser.uid)
+    setUsr(await GetUser(auth.currentUser.uid));
+    setCompany(await GetCompanyName());
+  }
+
+  const handleProfile = () => {
+    router.push("/user/profile/profile")
+  }
+
+  useEffect(() => {
+    getinfo()
+  }, [user])
+
+  const handleSingout = (e) => {
+    e.preventDefault();
+    try {
+      logout().then(() => router.push("/"));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleSidebar = () => {
     if (openSideBar) {
@@ -70,33 +102,11 @@ const Header = () => {
                 </a>
               </div>
 
+
               <div className="hidden lg:block">
-                <form action="" className="app-search" method="GET">
-                  <div className="relative group ">
-                    <input
-                      type="text"
-                      className="form-input rounded-md bg-light_2 text-sm text-gray-700 pl-10 py-1.5 ml-5 border-transparent border-none outline-none focus:ring-0 focus:text-white transition-all duration-300 ease-in-out focus:w-60 w-48"
-                      placeholder="Search..."
-                      autoComplete="off"
-                    />
-                    <span className="absolute text-gray-400 transition-all duration-300 ease-in-out left-44 bottom-2 group-focus-within:left-8">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </form>
+                <div>
+                  <p className="font-sans text-2xl"><i><b>{company && company.companyName}</b></i></p>
+                </div>
               </div>
             </div>
             <div className="items-stretch hidden md:flex">
@@ -118,14 +128,14 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-10 h-10 rounded-full"
-                        src="/images/pp.png"
+                        src={usr ? usr.ProfilePic ? usr.ProfilePic : "/images/pp.png" : "/images/pp.png"}
                         alt=""
                       />
                     </div>
 
                     <div className="flex flex-col ml-4">
-                      <span>Member1</span>
-                      <span>Product Manager</span>
+                      <span>{usr && usr.Name}</span>
+                      <span>{usr && usr.Department}</span>
                     </div>
                   </div>
                   {open && (
@@ -143,12 +153,10 @@ const Header = () => {
                         tabindex="-1"
                         id="user-menu-item-0"
                       >
-                        <Link 
-                          href="/user/profile/profile"
-                        >
+                        <button onClick={handleProfile} >
                           My Profile
-                        </Link>
-                        
+                        </button>
+
                       </a>
 
 
@@ -158,6 +166,7 @@ const Header = () => {
                         role="menuitem"
                         tabindex="-1"
                         id="user-menu-item-1"
+                        onClick={handleSingout}
                       >
                         <Link
                           href="#"
@@ -169,7 +178,7 @@ const Header = () => {
                   )}
                 </div>
               </div>
-              
+
             </div>
 
             <div className="flex px-2 -mr-2 md:hidden">
@@ -197,16 +206,16 @@ const Header = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                    src="/images/admin.png"
                     alt=""
                   />
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-gray-800">
-                    Senait Gobezie
+                    {usr && usr.Name}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    sen@example.com
+                    {usr && usr.Email}
                   </div>
                 </div>
                 <div className="flex-shrink-0 p-1 ml-auto">
@@ -223,6 +232,7 @@ const Header = () => {
 
                 <Link
                   href="/logout"
+                  onClick={handleSingout}
                   className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-white hover:bg-primary"
                 >
                   <AiOutlineLogout className="w-5 h-auto" />

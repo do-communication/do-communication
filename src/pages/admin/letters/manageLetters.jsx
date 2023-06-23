@@ -1,4 +1,4 @@
-import UserLayout from "@/components/layouts/UserLayout/UserLayout";
+import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 // import { letters } from "@/mock/letters";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
@@ -14,7 +14,7 @@ const user = auth.currentUser;
 const Letters = () => {
   const { GetCompanyName } = useFetch("KalCompany")
   const [allLetters, setallLetters] = useState([]);
-  const [letters, setLetters] = useState([]);
+  const [letters, setLetters ] = useState([]);
   const [search, setSearch] = useState("");
   let comp = "";
   const getData = async () => {
@@ -52,7 +52,7 @@ const Letters = () => {
     },
     {
       name: "Date",
-      selector: (row) => row.data.Date
+      selector: (row) => row.data.Date,
     },
   ];
 
@@ -61,7 +61,7 @@ const Letters = () => {
   });
 
   return (
-    <UserLayout>
+    <AdminLayout>
       <div className="order-last md:col-span-2 col-span-full md:order-first">
         <h1 className="mb-5 text-2xl font-semibold">My Letters</h1>
         <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
@@ -84,7 +84,7 @@ const Letters = () => {
           expandableRowsComponent={ShowLetterDetail}
         />
       </div>
-    </UserLayout>
+    </AdminLayout>
   );
 };
 
@@ -100,7 +100,7 @@ const ShowLetterDetail = ({ data }) => {
     window.print();
     document.body.innerHTML = originalContent;
     setIsPrinting(false);
-  };
+  }; 
 
   return (
     <div className="flex flex-col gap-10 px-8 py-4 bg-gray-200">

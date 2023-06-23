@@ -47,6 +47,16 @@ const Reports = () => {
       setReports(allReports);
     }
   }, [search]);
+   //loading till fetch
+   const [pending, setPending] =useState(true);
+   const [rows, setRows] = useState([]);
+   useEffect(() => {
+     const timeout = setTimeout(() => {
+       setRows(allReports);
+       setPending(false);
+     }, 2000);
+     return () => clearTimeout(timeout);
+   }, []);
 
   const columns = [
     {
@@ -108,6 +118,7 @@ const Reports = () => {
         <ClientOnlyTable
           columns={columns}
           data={reports}
+          progressPending={pending}
           pagination={true}
           expandableRows
           expandableRowsComponent={ShowReportDetail}
@@ -121,6 +132,7 @@ const ShowReportDetail = ({ data }) => (
   <div className="px-8 py-4">
     <h1 className="pb-2 text-lg font-semibold">Report Detail</h1>
     <p dangerouslySetInnerHTML={{ __html: data.Detail }}></p>
+    { data.File && <Link target="_blank" className="font-medium text-blue-600 dark:text-blue-500 hover:underline" href={data.File}> File Link </Link>}
   </div>
 );
 export default Reports;

@@ -7,6 +7,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { RecentMessageItem } from "@/components/Chat/RecentMessageItem";
+import { auth } from "../../../../../config/firebase";
 
 const ChatLayout = ({ children, user }) => {
   const [messageTab, setMessageTab] = useState("recent");
@@ -18,41 +19,37 @@ const ChatLayout = ({ children, user }) => {
   const [selected, setSelected] = useState(user);
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
-  const { getMembersData, getRecentData } = useFetch("KalCompany")
+  const { getMembersData, getRecentData } = useFetch("KalCompany");
   // search for groups using group name
 
   useEffect(() => {
-    getRecent()
+    getRecent();
   }, [priorityChange]);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   useEffect(() => {
-    setSelected(user)
-  }, [user])
-
+    setSelected(user);
+  }, [user]);
 
   const getRecent = async () => {
-    const recentChat = await getRecentData();
-    setRecent(recentChat);
+    await getRecentData(setRecent);
   }
 
   const getData = async () => {
-    const data = await getMembersData();
-    setMembers(data);
-    setallMembers(data);
+    await getMembersData(setMembers, setallMembers);
   }
 
   const handleSelect = (member) => {
-    setSelected(member.data)
-    setEditMode(false)
-    const elem = document.getElementById('message_send');
+    setSelected(member.data);
+    setEditMode(false);
+    const elem = document.getElementById("message_send");
     if (elem) {
       elem.value = "";
     }
-  }
+  };
 
   useEffect(() => {
     if (search.trim() != "") {
@@ -61,7 +58,8 @@ const ChatLayout = ({ children, user }) => {
 
     const filteredData = allMembers.filter(
       (item) =>
-        item?.data.Name && item?.data.Name.toLowerCase().includes(search.toLowerCase())
+        item?.data.Name &&
+        item?.data.Name.toLowerCase().includes(search.toLowerCase())
     );
 
     if (search) {
@@ -70,8 +68,6 @@ const ChatLayout = ({ children, user }) => {
       setMembers(allMembers);
     }
   }, [search]);
-
-
 
   const renderRecent = () => {
     return (
@@ -95,13 +91,13 @@ const ChatLayout = ({ children, user }) => {
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2 rounded-xl  ${member.id === router.query.userId
-                  ? "bg-secondary text-white"
-                  : "hover:bg-opacity-25 hover:bg-secondary"
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
                 onClick={() => handleSelect(member)}
               >
                 <RecentMessageItem
-                  name={member.data.Name}
+                  name={member.data.RecieverId == auth.currentUser.uid ? member.data.SenderName : member.data.RecieverName}
                   msg={member.data.Content}
                 />
               </Link>
@@ -139,15 +135,17 @@ const ChatLayout = ({ children, user }) => {
                 href={`/admin/chats/directChat/${member.id}`}
                 key={index}
                 className={`flex flex-row items-center p-2  rounded-xl ${member.id === router.query.userId
-                  ? "bg-secondary text-white"
-                  : "hover:bg-opacity-25 hover:bg-secondary"
+                    ? "bg-secondary text-white"
+                    : "hover:bg-opacity-25 hover:bg-secondary"
                   }`}
                 onClick={() => handleSelect(member)}
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
                   {member.data.Name[0]}
                 </div>
-                <div className="ml-2 text-sm font-semibold">{member.data.Name}</div>
+                <div className="ml-2 text-sm font-semibold">
+                  {member.data.Name}
+                </div>
               </Link>
             ))}
 
@@ -176,41 +174,51 @@ const ChatLayout = ({ children, user }) => {
               <h3 className="font-semibold">Direct Chat</h3>
             </div>
             {/* profile part start */}
-            {selected ? <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                  <div className="flex items-center justify-center w-full h-full">
-                    {selected.ProfilePic === "" ?
-                      selected.Name[0]
-                      : <img
-                        src={selected.ProfilePic}
+            {selected ? (
+              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                    <div className="flex items-center justify-center w-full h-full rounded-full">
+                      {selected.ProfilePic === "" ? (
+                        selected.Name ? selected.Name[0] : selected.RecieverName[0]
+                      ) : (
+                        <img
+                          src={selected.ProfilePic}
+                          alt="Avatar"
+                          className="flex items-center justify-center w-full h-full rounded-full"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 text-sm font-semibold">
+                  {selected.Name}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {selected.Department}
+                </div>
+                <div className="flex flex-row items-center mt-3"></div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
+                <div className="rounded-full h-50 w-50">
+                  <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
+                    <div className="flex items-center justify-center w-full h-full rounded-full">
+                      <img
+                        src="/images/pp.png"
                         alt="Avatar"
                         className="rounded-full"
-                      />}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="mt-2 text-sm font-semibold">{selected.Name}</div>
-              <div className="text-xs text-gray-500">{selected.Department}</div>
-              <div className="flex flex-row items-center mt-3">
-              </div>
-            </div> : <div className="flex flex-col justify-center items-center px-4 py-6 mt-4 mr-6 border-gray-200 rounded-lg bg-light opacity-3">
-              <div className="rounded-full h-50 w-50">
-                <div className="items-center justify-center w-16 h-16 bg-blue-200 rounded-full md:flex lg:hidden xl:flex">
-                  <div className="flex items-center justify-center w-full h-full">
-                    <img
-                      src="/images/pp.png"
-                      alt="Avatar"
-                      className="rounded-full"
-                    />
-                  </div>
+                <div className="mt-2 text-sm font-semibold">
+                  Select to view profile
                 </div>
+                <div className="text-xs text-gray-500"></div>
+                <div className="flex flex-row items-center mt-3"></div>
               </div>
-              <div className="mt-2 text-sm font-semibold">Select to view profile</div>
-              <div className="text-xs text-gray-500"></div>
-              <div className="flex flex-row items-center mt-3">
-              </div>
-            </div>}
+            )}
             {/* profile part end */}
 
             {/* tab */}
@@ -231,7 +239,7 @@ const ChatLayout = ({ children, user }) => {
               </button>
             </div>
 
-            <div className="w-full max-h-[450px] overflow-x-hidden overflow-y-auto mt-4">
+            <div className="w-full max-h-[270px] overflow-x-hidden overflow-y-auto mt-4">
               {messageTab === "recent" ? renderRecent() : renderMembers()}
             </div>
           </div>
@@ -239,7 +247,13 @@ const ChatLayout = ({ children, user }) => {
             className={`lg:col-span-3 col-span-full lg:block ${router.query.userId ? "" : "hidden"
               }`}
           >
-            {children && cloneElement(children, { setPriorityChange: setPriorityChange, priorityChange: priorityChange, editMode: editMode, setEditMode: setEditMode })}
+            {children &&
+              cloneElement(children, {
+                setPriorityChange: setPriorityChange,
+                priorityChange: priorityChange,
+                editMode: editMode,
+                setEditMode: setEditMode,
+              })}
           </div>
         </div>
       </div>

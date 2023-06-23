@@ -92,7 +92,7 @@ const ManageGroup = () => {
           <h1 className="mb-4 text-3xl font-semibold">Your Groups</h1>
           <div className="flex flex-col gap-4 mb-4 md:items-center sm:justify-between sm:flex-row">
             <Link
-              href="/user/groups/edit"
+              href="/user/groups/edit/id"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               Edit Group

@@ -23,7 +23,7 @@ const Header = () => {
   const [openSideBar, openSideBarDispatch] = useContext(OpenSideBarContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [open, setOpen] = useState(false);
-  const { GetAdmin, GetCompanyName, GetUser } = useFetch("KalCompany");
+  const { GetAdmin, GetCompanyName } = useFetch("KalCompany");
 
   const getinfo = async () => {
     console.log(auth.currentUser.uid)
@@ -101,7 +101,7 @@ const Header = () => {
 
               <div className="hidden lg:block">
                 <div>
-                  <p><b>{company && company.companyName}</b></p>
+                  <p className="font-sans text-2xl "><i><b>{company && company.companyName}</b></i></p>
                 </div>
               </div>
             </div>
@@ -124,7 +124,7 @@ const Header = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="w-8 h-8 rounded-full"
-                        src="/images/admin.png"
+                        src={usr ? usr.ProfilePic ? usr.ProfilePic : "/images/admin.png" : "/images/admin.png"}
                         alt=""
                       />
                     </div>
@@ -193,7 +193,7 @@ const Header = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://assets.codepen.io/3321250/internal/avatars/users/default.png?fit=crop&format=auto&height=512&version=1646800353&width=512"
+                    src="/images/admin.png"
                     alt=""
                   />
                 </div>
@@ -202,7 +202,7 @@ const Header = () => {
                     {usr && usr.Name}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-600">
-                    {company && company.email}
+                    {usr && usr.Email}
                   </div>
                 </div>
                 <button type="button">

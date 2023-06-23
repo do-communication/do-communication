@@ -77,6 +77,7 @@ const AddMember = () => {
   const updateMember = async(i) =>{
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(docRef)
+    if(mem._document){
     let tempTask = [];
     let tempReport = [];
     let tempGroup = [];
@@ -121,6 +122,7 @@ const AddMember = () => {
     .catch(error => {
         console.log(error);
     })
+  }
   }
 
   const select = document.getElementById('selectPriority');

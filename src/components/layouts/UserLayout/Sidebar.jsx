@@ -4,14 +4,16 @@ import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiTeamFill, RiLogoutBoxFill } from "react-icons/ri";
 import { MdGroupWork } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
-import {SlEnvolopeLetter} from"react-icons/sl";
+import { SlEnvolopeLetter } from "react-icons/sl";
 import { TbReportAnalytics } from "react-icons/tb";
 import SideNav from "./SideNav";
 import Link from "next/link";
 import OpenSideBarContext from "./context/openSideBarContext";
+import { useRouter } from "next/router";
 
 const Sidebar = () => {
   const [openSideBar] = useContext(OpenSideBarContext);
+  const router = useRouter();
 
   const navList = [
     {
@@ -41,8 +43,17 @@ const Sidebar = () => {
     },
     {
       Icon: <SlEnvolopeLetter size={20} />,
-      url: "/user/letters/letter",
-      name: "Letter",
+      name: "Letters", //unqiue
+      children: [
+        {
+          url: "/user/letters/create",
+          name: "Create Letter",
+        },
+        {
+          url: "/user/letters/manageLetters",
+          name: "My Letters",
+        },
+      ],
     },
     {
       Icon: <AiFillFileAdd size={20} />,
@@ -54,7 +65,7 @@ const Sidebar = () => {
         },
         {
           url: "/user/files/manageFiles",
-          name: "Manage files",
+          name: "My Files",
         },
       ],
     },
@@ -62,15 +73,29 @@ const Sidebar = () => {
       Icon: <MdGroupWork size={20} />,
       name: "Groups", //unqiue
       url: "/user/groups/manage",
-         
-      
     },
     {
-      Icon: <RiLogoutBoxFill  size={20}/>,
+      Icon: <RiLogoutBoxFill size={20} />,
       url: "/",
       name: "Sign out",
     },
   ];
+
+  const checkIsNavActive = (nav) => {
+    const currentRoute = router.pathname;
+
+    if (!nav.url && nav.children) {
+      for (const link of nav.children) {
+        if (currentRoute === link.url) {
+          return true;
+        }
+      }
+    } else {
+      return currentRoute === nav.url;
+    }
+
+    return false;
+  };
 
   return (
     <div
@@ -89,9 +114,17 @@ const Sidebar = () => {
 
       <nav className="px-4 pt-4 scroller overflow-y-scroll max-h-[calc(100vh-64px)]">
         <ul className="flex flex-col space-y-2">
-          {navList.map((nav, index) => (
-            <SideNav nav={nav} key={index} />
-          ))}
+          {navList.map((nav, index) => {
+            const isActive = checkIsNavActive(nav);
+            return (
+              <SideNav
+                nav={nav}
+                key={index}
+                isActive={isActive}
+                currentPath={router.pathname}
+              />
+            );
+          })}
         </ul>
       </nav>
     </div>

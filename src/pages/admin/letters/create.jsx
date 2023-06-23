@@ -1,28 +1,68 @@
-import UserLayout from "@/components/layouts/UserLayout/UserLayout";
+import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { doc, getDocs, getDoc, addDoc, collection, updateDoc } from "firebase/firestore";
+import { useState, useEffect, useRef } from "react";
+import { auth } from "../../../../config/firebase";
+const user = auth.currentUser;
+import { db } from "../../../../context/DbContext";
 import { RiAttachment2 } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-
+import useFetch from "@/components/useFetch";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
 const AddReport = () => {
+  const { GetCompanyName } = useFetch("KalCompany");
+  const [comp, setcomp] = useState("")
+  const setComp = async() => {
+    setcomp(await GetCompanyName())
+  }
+  setComp();
   const [reportDetail, setReportDetail] = useState("");
-  const handleSubmit = (e) => {
+  const [data, setData] = useState({
+    To: '',
+    Address: '',
+    Subject: '',
+    Body: '', 
+    From: user.displayName,
+    Date: new Date().toDateString(), 
+    Company: comp.companyName
+  });
+  const to = document.getElementById('to');
+  const address = document.getElementById('address');
+  const body = document.getElementById('body');
+  const subject = document.getElementById('subject');
+  const handleClear = () =>{
+    // setReportDetail("");
+    to.value = '';
+    to.placeholder = "enter recipient name";
+    address.value = '';
+    address.placeholder = 'enter recipient address';
+    body.placeholder = 'Write body part of the letter';
+    subject.value = '';
+    subject.placeholder = 'enter report title';
+  }
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("submit");
-
+    await addDoc(collection(db, "KalCompany", "Letter", "Letter"), data);
+    handleClear();
     toast.success("Letter Created successfully");
     // create it in firestore
     // redirect to /letters/[letterId]
   };
-
+  useEffect(() => {
+    const value = {...data, Body:reportDetail}
+    setData(value);
+  }, [reportDetail])
+  useEffect(() => {
+    const value = {...data, Company:comp.companyName}
+    setData(value);
+  }, [comp])
   return (
-    <UserLayout>
+    <AdminLayout>
       <div className="flex justify-center min-h-screen p-6 pt-2 bg-gray-100">
         <div className="container max-w-screen-lg mx-auto">
           <form>
@@ -48,8 +88,10 @@ const AddReport = () => {
                       type="text"
                       name="report_title"
                       className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                      id="task_title"
+                      id="to"
                       placeholder="enter recipient name"
+                      value={data.To}
+                      onChange={(e) => {setData({...data, To:e.target.value})}}
                     />
                   </div>
                   <div className="md:col-span-6">
@@ -58,8 +100,10 @@ const AddReport = () => {
                       type="text"
                       name="report_title"
                       className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                      id="task_title"
+                      id="address"
                       placeholder="enter recipient address"
+                      value={data.Address}
+                      onChange={(e) => {setData({...data, Address:e.target.value})}}
                     />
                   </div>
                   <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-6">
@@ -69,8 +113,12 @@ const AddReport = () => {
                         type="text"
                         name="report_title"
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
-                        id="task_title"
+                        id="subject"
                         placeholder="enter report title"
+                        value={data.Subject}
+                        onChange={(e) => {
+                          setData({...data, Subject:e.target.value});
+                          }}
                       />
                     </div>
 
@@ -78,8 +126,12 @@ const AddReport = () => {
                       <label for="detail">Body</label>
                       <QuillNoSSRWrapper
                         theme="snow"
+                        id="body"
                         value={reportDetail}
-                        onChange={setReportDetail}
+                        onChange={(e)=>{
+                          setReportDetail(e.slice(3, e.lastIndexOf("</p>")));
+                        }}
+                        
                         placeholder="Write body part of the letter"
                         style={{ height: 180 }}
                       />
@@ -88,7 +140,9 @@ const AddReport = () => {
                     <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 ">
-                          <button className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck">
+                          <button 
+                          onClick={handleClear}
+                          className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded hover:bg-primary text-balck">
                             Cancel
                           </button>
                           <button
@@ -107,7 +161,7 @@ const AddReport = () => {
           </form>
         </div>
       </div>
-    </UserLayout>
+    </AdminLayout>
   );
 };
 

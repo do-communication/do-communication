@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault()
     try {
       const cred = await logIn(data.email, data.password)
-      if (auth.currentUser.displayName == "true") {
+      if (auth.currentUser.displayName[auth.currentUser.displayName.length - 1] === "$") {
         router.push('/admin')
       }
       else {

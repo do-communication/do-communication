@@ -162,6 +162,7 @@ const CreateGroup = () => {
                         id="groupName"
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder="Enter group name"
+                        disabled
                         value={data.Name}
                         onChange={(e) => {
                           setData({
@@ -178,6 +179,7 @@ const CreateGroup = () => {
                         id="type"
                         className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         value={data.Type}
+                        disabled
                         onChange={(e) => {
                           if (e.target.value.toLowerCase() == "custom") {
                             setShowCustomType(true);
