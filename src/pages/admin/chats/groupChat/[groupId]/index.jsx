@@ -25,7 +25,6 @@ const GroupChat = () => {
   useEffect(() => {
     get(groupId);
   }, [update]);
-  console.log("index.jsx");
 
   return (
     <ChatLayout group={reciever}>

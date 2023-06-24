@@ -26,7 +26,6 @@ const Header = () => {
   const { GetAdmin, GetCompanyName } = useFetch("KalCompany");
 
   const getinfo = async () => {
-    console.log(auth.currentUser.uid);
     setUsr(await GetAdmin(auth.currentUser.uid));
     setCompany(await GetCompanyName());
   };

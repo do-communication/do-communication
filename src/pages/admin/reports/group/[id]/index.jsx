@@ -24,7 +24,6 @@ const Reports = () => {
     const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
     const mem = await getDoc(docRef);
     setUser(mem._document.data.value.mapValue.fields.Name.stringValue);
-    console.log(mem._document.data.value.mapValue.fields);
     const reports =
       mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
     if (reports) {
@@ -96,16 +95,16 @@ const Reports = () => {
     <AdminLayout>
       <div className="order-last col-span-full md:order-first md:col-span-2">
         <h1 className="mb-5 text-2xl font-semibold">{user} Reports</h1>
-        <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:justify-between md:items-center">
-          <div className="flex rounded-md border-gray-700 bg-white pr-4 ">
+        <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between md:items-center">
+          <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
             <input
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-11/12 bg-transparent py-2 pl-4 outline-none"
+              className="w-11/12 py-2 pl-4 bg-transparent outline-none"
               placeholder="Search reports"
             />
-            <AiOutlineSearch className="h-auto w-6" />
+            <AiOutlineSearch className="w-6 h-auto" />
           </div>
         </div>
         <ClientOnlyTable

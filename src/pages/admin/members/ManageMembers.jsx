@@ -90,7 +90,7 @@ const ManageMembers = () => {
       name: "Name",
       selector: (row) => (
         <p className="flex items-center justify-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-200">
+          <div className="flex items-center justify-center w-8 h-8 bg-blue-200 rounded-full">
             {row.data && row.data.ProfilePic === "" ? (
               row.data.Name[0]
             ) : (
@@ -131,22 +131,22 @@ const ManageMembers = () => {
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last col-span-full md:order-first md:col-span-2">
           <h1 className="mb-5 text-2xl font-semibold">Manage Members</h1>
-          <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:justify-between md:items-center">
+          <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:justify-between md:items-center">
             <Link
               href="/admin/members/create"
-              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-base font-semibold hover:bg-secondary"
+              className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Add Member
             </Link>
-            <div className="flex rounded-md border-gray-700 bg-white pr-4 ">
+            <div className="flex pr-4 bg-white border-gray-700 rounded-md ">
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-11/12 bg-transparent py-2 pl-4 outline-none"
+                className="w-11/12 py-2 pl-4 bg-transparent outline-none"
                 placeholder="Search from members"
               />
-              <AiOutlineSearch className="h-auto w-6" />
+              <AiOutlineSearch className="w-6 h-auto" />
             </div>
           </div>
           <ClientOnlyTable
@@ -159,10 +159,10 @@ const ManageMembers = () => {
             pagination={true}
           />
         </div>
-        <div className="col-span-full border-none border-primary md:col-span-1 md:border-l-4">
+        <div className="border-none col-span-full border-primary md:col-span-1 md:border-l-4">
           {/* if no row is selected */}
           {selectedRows.length === 0 && (
-            <div className="flex h-full w-full items-center justify-center text-xl">
+            <div className="flex items-center justify-center w-full h-full text-xl">
               <p>Select Member to see details</p>
             </div>
           )}
@@ -171,8 +171,8 @@ const ManageMembers = () => {
             <>
               <h3 className="flex justify-between px-2 pb-4 text-xl font-semibold">
                 Selected members
-                <button className="flex items-center gap-1 rounded-lg bg-red-600 px-2 py-1 text-base text-white hover:bg-red-500">
-                  <AiOutlineClose className="h-auto w-5" />
+                <button className="flex items-center gap-1 px-2 py-1 text-base text-white bg-red-600 rounded-lg hover:bg-red-500">
+                  <AiOutlineClose className="w-5 h-auto" />
                   Delete All
                 </button>
               </h3>
@@ -180,10 +180,10 @@ const ManageMembers = () => {
                 {selectedRows.map((row, index) => (
                   <li
                     key={index}
-                    className="flex justify-between rounded-lg bg-white px-4 py-2 shadow-sm shadow-black"
+                    className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
                     <p>{row.data.Name}</p>
-                    <button className="rounded-lg bg-red-600 p-1 text-white hover:bg-red-500">
+                    <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
                   </li>
@@ -207,11 +207,11 @@ const ManageMembers = () => {
                 <button
                   onClick={() => setShowManageGroupMenu(!showManageGroupMenu)}
                 >
-                  <BiDotsVertical className="h-auto w-8 hover:text-gray-600" />
+                  <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
                 {showManageGroupMenu && (
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
                           router.push(
@@ -220,10 +220,10 @@ const ManageMembers = () => {
                         }}
                         className="flex items-center gap-2"
                       >
-                        <MdChecklist className="h-auto w-5" /> Tasks
+                        <MdChecklist className="w-5 h-auto" /> Tasks
                       </button>
                     </li>
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
                           router.push(
@@ -232,10 +232,10 @@ const ManageMembers = () => {
                         }}
                         className="flex items-center gap-2"
                       >
-                        <HiDocumentChartBar className="h-auto w-5" /> Reports
+                        <HiDocumentChartBar className="w-5 h-auto" /> Reports
                       </button>
                     </li>
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
                           router.push(
@@ -244,10 +244,10 @@ const ManageMembers = () => {
                         }}
                         className="flex items-center gap-2"
                       >
-                        <AiFillEdit className="h-auto w-5" /> Edit Member
+                        <AiFillEdit className="w-5 h-auto" /> Edit Member
                       </button>
                     </li>
-                    <li className="rounded p-1 hover:bg-primary">
+                    <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={async (e) => {
                           e.stopPropagation();
@@ -272,14 +272,14 @@ const ManageMembers = () => {
                         }}
                         className="flex items-center gap-2"
                       >
-                        <AiFillDelete className="h-auto w-5" /> Delete Member
+                        <AiFillDelete className="w-5 h-auto" /> Delete Member
                       </button>
                     </li>
                   </ul>
                 )}
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary">
+                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-primary">
                   {selectedRows[0].data.ProfilePic === "" ? (
                     selectedRows[0].data.Name[0]
                   ) : (
@@ -295,24 +295,24 @@ const ManageMembers = () => {
                 <h4 className="mt-1 text-xl font-semibold capitalize">
                   {selectedRows[0].data.Name}
                 </h4>
-                <p className="text-md mt-1 font-light">
+                <p className="mt-1 font-light text-md">
                   {selectedRows[0].data.Email}
                 </p>
                 <p className="text-sm">{selectedRows[0].data.type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button className="rounded-full bg-secondary bg-opacity-80 p-2 text-white">
-                  <TbMessage className="h-auto w-8" />
+                <button className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
+                  <TbMessage className="w-8 h-auto" />
                 </button>
               </div>
 
-              <div className="ml-2 h-full w-full rounded-xl bg-gray-200 p-2">
-                <h3 className="p-2 text-center text-lg font-bold">
+              <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
+                <h3 className="p-2 text-lg font-bold text-center">
                   Profile Details
                 </h3>
 
-                <ul className="flex max-h-64 flex-col gap-2 overflow-y-auto">
-                  <div className="flex items-center justify-between rounded-sm p-2 hover:bg-secondary hover:bg-opacity-25">
+                <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Full Name
@@ -323,7 +323,7 @@ const ManageMembers = () => {
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between rounded-sm p-2 hover:bg-secondary hover:bg-opacity-25">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold ">
                         Department
@@ -333,7 +333,7 @@ const ManageMembers = () => {
                       {selectedRows[0].data.Department}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between rounded-sm p-2 hover:bg-secondary hover:bg-opacity-25">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Address
@@ -343,7 +343,7 @@ const ManageMembers = () => {
                       {selectedRows[0].data.Address}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between rounded-sm p-2 hover:bg-secondary hover:bg-opacity-25">
+                  <div className="flex items-center justify-between p-2 rounded-sm hover:bg-secondary hover:bg-opacity-25">
                     <div className="flex gap-2">
                       <p className="flex items-center gap-1 p-1 px-2 font-semibold">
                         Phone Number
@@ -356,12 +356,12 @@ const ManageMembers = () => {
                 </ul>
               </div>
               {/* try */}
-              <div className="ml-2 mt-6 h-full w-full rounded-xl bg-gray-200 p-2">
-                <h3 className="p-2 text-center text-lg font-semibold">
+              <div className="w-full h-full p-2 mt-6 ml-2 bg-gray-200 rounded-xl">
+                <h3 className="p-2 text-lg font-semibold text-center">
                   Joined Groups
                 </h3>
 
-                <ul className="flex max-h-64 flex-col gap-2 overflow-y-auto">
+                <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
                   {/* <Link
                     href="/admin/memebers/{userId}"
                     className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
@@ -411,12 +411,12 @@ const ManageMembers = () => {
                     selectedRows[0].data.GroupId.map((row, index) => (
                       <li
                         key={index}
-                        className="flex justify-between rounded-lg bg-white px-4 py-2 shadow-sm shadow-black"
+                        className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                       >
                         <p>{row}</p>
                         <button
                           type="submit"
-                          className="flex items-center gap-1 rounded-lg bg-primary px-2 text-white hover:bg-secondary"
+                          className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
                         >
                           <BsEye /> View
                         </button>

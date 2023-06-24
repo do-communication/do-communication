@@ -29,8 +29,6 @@ const useFetch = (collectionType) => {
     }
     const GetFile = async (userId, fileId) => {
         if (userId && fileId) {
-            console.log(userId)
-            console.log(fileId)
             const specific_user = doc(db, collectionType, "Files", userId, fileId);
             const docSnap = await getDoc(specific_user)
 
@@ -44,13 +42,11 @@ const useFetch = (collectionType) => {
             const userSnap = await getDoc(specific_user)
 
             if (userSnap.data()) {
-                console.log(userSnap.data())
                 return userSnap.data();
             }
 
             const specific_admin = doc(db, collectionType, "Users", "Admin", userId);
             const adminSnap = await getDoc(specific_admin)
-            console.log(userId)
             return adminSnap.data();
         }
     }

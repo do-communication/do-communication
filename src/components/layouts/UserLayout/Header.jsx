@@ -26,14 +26,13 @@ const Header = () => {
   const { GetCompanyName, GetUser } = useFetch("KalCompany");
 
   const getinfo = async () => {
-    console.log(auth.currentUser.uid);
     setUsr(await GetUser(auth.currentUser.uid));
     setCompany(await GetCompanyName());
-  }
+  };
 
   const handleProfile = () => {
-    router.push("/user/profile/profile")
-  }
+    router.push("/user/profile/profile");
+  };
 
   useEffect(() => {
     getinfo();
@@ -58,30 +57,30 @@ const Header = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 w-full bg-light text-black shadow-xl">
+      <nav className="sticky top-0 z-50 w-full text-black shadow-xl bg-light">
         <div className="mx-auto ">
-          <div className="flex h-16 items-stretch justify-between">
+          <div className="flex items-stretch justify-between h-16">
             <div className="flex items-center md:hidden">
               <button
                 type="button"
                 onClick={toggleSidebar}
-                className="inline-flex items-center justify-center rounded-md p-2 text-white hover:text-gray-700"
+                className="inline-flex items-center justify-center p-2 text-white rounded-md hover:text-gray-700"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
               >
                 <span className="sr-only">Open main menu</span>
-                <BiMenuAltLeft className="h-auto w-10" />
+                <BiMenuAltLeft className="w-10 h-auto" />
               </button>
             </div>
             <div className="flex items-center pl-6">
               <div className="flex-shrink-0 md:hidden">
                 <a
                   href="#"
-                  className="group flex items-center space-x-2 text-white"
+                  className="flex items-center space-x-2 text-white group"
                 >
                   <div>
                     <svg
-                      className="h-8 w-8 transition-transform duration-300 group-hover:-rotate-45 "
+                      className="w-8 h-8 transition-transform duration-300 group-hover:-rotate-45 "
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -112,25 +111,25 @@ const Header = () => {
                 </div>
               </div>
             </div>
-            <div className="hidden items-stretch md:flex">
+            <div className="items-stretch hidden md:flex">
               {/* notification */}
               <Notification />
-              <div className="ml-4 flex md:ml-6 ">
+              <div className="flex ml-4 md:ml-6 ">
                 {/* <!-- Profile dropdown --> */}
-                <div className="bright relative cursor-pointer bg-light px-4 text-sm text-gray-700 shadow-2xl hover:text-white">
+                <div className="relative px-4 text-sm text-gray-700 shadow-2xl cursor-pointer bright bg-light hover:text-white">
                   <div
-                    className="flex min-h-full items-center"
+                    className="flex items-center min-h-full"
                     onClick={() => setOpen(!open)}
                   >
                     <div
-                      className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      className="flex items-center max-w-xs text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                       id="user-menu-button"
                       aria-expanded="false"
                       aria-haspopup="true"
                     >
                       <span className="sr-only">Open user menu</span>
                       <img
-                        className="h-10 w-10 rounded-full"
+                        className="w-10 h-10 rounded-full"
                         src={
                           usr
                             ? usr.ProfilePic
@@ -142,14 +141,14 @@ const Header = () => {
                       />
                     </div>
 
-                    <div className="ml-4 flex flex-col">
+                    <div className="flex flex-col ml-4">
                       <span>{usr && usr.Name}</span>
                       <span>{usr && usr.Department}</span>
                     </div>
                   </div>
                   {open && (
                     <div
-                      className="absolute right-0 mt-0 min-w-full origin-top-right rounded-b-md bg-white py-1 shadow ring-1 ring-black ring-opacity-5 transition duration-100 ease-out focus:outline-none"
+                      className="absolute right-0 min-w-full py-1 mt-0 transition duration-100 ease-out origin-top-right bg-white shadow rounded-b-md ring-1 ring-black ring-opacity-5 focus:outline-none"
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu-button"
@@ -162,10 +161,7 @@ const Header = () => {
                         tabIndex="-1"
                         id="user-menu-item-0"
                       >
-                        <button onClick={handleProfile} >
-                          My Profile
-                        </button>
-
+                        <button onClick={handleProfile}>My Profile</button>
                       </a>
 
                       <a
@@ -184,12 +180,12 @@ const Header = () => {
               </div>
             </div>
 
-            <div className="-mr-2 flex px-2 md:hidden">
+            <div className="flex px-2 -mr-2 md:hidden">
               {/* <!-- Mobile menu button --> */}
               <button
                 type="button"
                 onClick={() => setMobileMenu(!mobileMenu)}
-                className="inline-flex items-center justify-center rounded-md p-2 text-white hover:text-gray-700"
+                className="inline-flex items-center justify-center p-2 text-white rounded-md hover:text-gray-700"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
               >
@@ -202,13 +198,13 @@ const Header = () => {
 
         {/* <!-- Mobile menu, show/hide based on menu state. --> */}
         {mobileMenu && (
-          <div className="absolute w-full bg-secondary transition duration-100 ease-out md:hidden">
-            <div className="border-t border-gray-700 pb-3 pt-4">
+          <div className="absolute w-full transition duration-100 ease-out bg-secondary md:hidden">
+            <div className="pt-4 pb-3 border-t border-gray-700">
               {/* <!-- profile menue for mobile --> */}
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
                   <img
-                    className="h-10 w-10 rounded-full"
+                    className="w-10 h-10 rounded-full"
                     src="/images/admin.png"
                     alt=""
                   />
@@ -221,24 +217,24 @@ const Header = () => {
                     {usr && usr.Email}
                   </div>
                 </div>
-                <div className="ml-auto flex-shrink-0 p-1">
+                <div className="flex-shrink-0 p-1 ml-auto">
                   <Notification />
                 </div>
               </div>
-              <div className="mt-3 space-y-1 border-t border-t-gray-700 px-2">
+              <div className="px-2 mt-3 space-y-1 border-t border-t-gray-700">
                 <Link
                   href="/user/profile/profile"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-primary hover:text-white"
+                  className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary hover:text-white"
                 >
-                  <AiOutlineUser className="h-auto w-5" /> My Profile
+                  <AiOutlineUser className="w-5 h-auto" /> My Profile
                 </Link>
 
                 <Link
                   href="/logout"
                   onClick={handleSingout}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-primary hover:text-white"
+                  className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-primary hover:text-white"
                 >
-                  <AiOutlineLogout className="h-auto w-5" />
+                  <AiOutlineLogout className="w-5 h-auto" />
                   Sign out
                 </Link>
               </div>

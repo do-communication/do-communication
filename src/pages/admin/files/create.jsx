@@ -23,7 +23,6 @@ const AddFile = () => {
   const UploadFile = async (e) => {
     if (sendFile !== null) {
       const storage = getStorage();
-      console.log(storage);
       const storageRef = ref(storage, auth.currentUser.uid + "/" + FileName);
       const uploadTask = uploadBytesResumable(storageRef, sendFile);
 
@@ -32,11 +31,11 @@ const AddFile = () => {
         (snapshot) => {
           setProgress(
             FileName +
-            "  " +
-            Math.floor(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            ) +
-            "% Done"
+              "  " +
+              Math.floor(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              ) +
+              "% Done"
           );
 
           switch (snapshot.state) {

@@ -22,7 +22,7 @@ const AddMember = () => {
   const [members, setMembers] = useState([]);
   const [groups, setGroups] = useState([]);
   const [allgroups, setallGroups] = useState([]);
-  const taskTo = []
+  const taskTo = [];
   const [data, setData] = useState({
     Title: "",
     Description: "",
@@ -34,8 +34,8 @@ const AddMember = () => {
     AssignedBy: user.displayName,
   });
   const getData = async () => {
-    let arr = []
-    let groups = []
+    let arr = [];
+    let groups = [];
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
     const allGroup = collection(db, "KalCompany", "Groups", "Groups");
     try {
@@ -48,49 +48,50 @@ const AddMember = () => {
       setMembers([{ Name: "check your connection" }]);
     }
     try {
-      const doc = await getDocs(allGroup)
-      doc.forEach(d => {
-        groups.push({ id: d.id, data: d.data() })
+      const doc = await getDocs(allGroup);
+      doc.forEach((d) => {
+        groups.push({ id: d.id, data: d.data() });
       });
     } catch (err) {
-      console.log(err)
-      setGroups([{ Name: "check your connection" }])
+      console.log(err);
+      setGroups([{ Name: "check your connection" }]);
     }
-    arr.map(m => {
-      taskTo.push(m)
-    })
-    groups.map(m => {
-      taskTo.push(m)
-    })
-    setMembers(taskTo)
-    setallMembers(taskTo)
-    setGroups(groups)
-    setallGroups(groups)
-
-    // console.log(taskTo)
-  }
+    arr.map((m) => {
+      taskTo.push(m);
+    });
+    groups.map((m) => {
+      taskTo.push(m);
+    });
+    setMembers(taskTo);
+    setallMembers(taskTo);
+    setGroups(groups);
+    setallGroups(groups);
+  };
   // useEffect(()=>{
   //   setTaskTo(Object.assign(allMembers, allgroups))
   // },[allgroups, allMembers] )
   const updateMember = async (i) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
-    const mem = await getDoc(docRef)
+    const mem = await getDoc(docRef);
     if (mem._document) {
       let tempTask = [];
       let tempReport = [];
       let tempGroup = [];
-      const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-      const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-      const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+      const temp =
+        mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report =
+        mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const group =
+        mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
       if (temp) {
-        temp.forEach(t => {
+        temp.forEach((t) => {
           if (t) {
             tempTask.push(t.stringValue);
           }
         });
       }
       if (report) {
-        report.forEach(r => {
+        report.forEach((r) => {
           if (r) {
             tempReport.push(r.stringValue);
           }
@@ -124,7 +125,7 @@ const AddMember = () => {
         })
         .catch((error) => {
           console.log(error);
-        })
+        });
     } else {
       const groupRef = doc(db, "KalCompany", "Groups", "Groups", i);
       const group = await getDoc(groupRef);
@@ -132,39 +133,43 @@ const AddMember = () => {
       let tempReport = [];
       let tempGroup = [];
       let tempPeople = [];
-      const task = group._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-      const report = group._document.data.value.mapValue.fields.Reports.arrayValue.values;
-      const members = group._document.data.value.mapValue.fields.Members.arrayValue.values;
-      const people = group._document.data.value.mapValue.fields.People.arrayValue.values;
+      const task =
+        group._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report =
+        group._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const members =
+        group._document.data.value.mapValue.fields.Members.arrayValue.values;
+      const people =
+        group._document.data.value.mapValue.fields.People.arrayValue.values;
       if (people) {
-        people.forEach(p => {
+        people.forEach((p) => {
           if (p) {
             tempPeople.push(p.stringValue);
           }
         });
       }
       if (task) {
-        task.forEach(t => {
+        task.forEach((t) => {
           if (t) {
             tempTask.push(t.stringValue);
           }
         });
       }
       if (report) {
-        report.forEach(r => {
+        report.forEach((r) => {
           if (r) {
             tempReport.push(r.stringValue);
           }
         });
       }
       if (members) {
-        members.forEach(g => {
+        members.forEach((g) => {
           if (g) {
             tempGroup.push(g.stringValue);
           }
         });
       }
-      tempTask.push(data.Title)
+      tempTask.push(data.Title);
       const newGroup = {
         People: tempPeople,
         Type: group._document.data.value.mapValue.fields.Type.stringValue,
@@ -172,17 +177,19 @@ const AddMember = () => {
         Members: tempGroup,
         Reports: tempReport,
         Tasks: tempTask,
-        Learder: group._document.data.value.mapValue.fields.Learder.stringValue
-      }
+        Learder: group._document.data.value.mapValue.fields.Learder.stringValue,
+      };
       updateDoc(groupRef, newGroup)
-        .then(groupRef => {
-          console.log("A New Document Field has been added to an existing document");
+        .then((groupRef) => {
+          console.log(
+            "A New Document Field has been added to an existing document"
+          );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
-        })
+        });
     }
-  }
+  };
 
   const select = document.getElementById("selectPriority");
   const title = document.getElementById("title");
@@ -326,15 +333,15 @@ const AddMember = () => {
   }, []);
   return (
     <AdminLayout>
-      <div className="flex min-h-screen justify-center bg-gray-100 p-6  pt-8">
-        <div className="container mx-auto max-w-screen-lg">
+      <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
+        <div className="container max-w-screen-lg mx-auto">
           <div>
-            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
+            <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
               Assign Task
             </h2>
 
-            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
-              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
+            <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="pb-3 pl-4 text-lg font-medium">Task Details</p>
                   <img
@@ -347,7 +354,7 @@ const AddMember = () => {
                 </div>
 
                 <div className="lg:col-span-2 ">
-                  <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-6">
                     <div className="md:col-span-3">
                       <label htmlFor="full_name">Task Title</label>
                       <input
@@ -356,7 +363,7 @@ const AddMember = () => {
                         id="title"
                         onChange={handleTitle}
                         value={data.Title}
-                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                       />
                     </div>
 
@@ -368,7 +375,7 @@ const AddMember = () => {
                         id="description"
                         onChange={handleDescription}
                         value={data.Description}
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder="Write some description about the task"
                         rows={16}
                         cols={50}
@@ -427,7 +434,7 @@ const AddMember = () => {
                       <select
                         required
                         id="selectPriority"
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                       >
                         <option value="null">Select priority</option>
                         <option value="High">High</option>
@@ -440,7 +447,7 @@ const AddMember = () => {
                       <label htmlFor="state">Start Date</label>
                       <div
                         id="start"
-                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                        className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50"
                       >
                         <input
                           required
@@ -451,7 +458,7 @@ const AddMember = () => {
                           onChange={handleStart}
                           id="startDate"
                           value={data.StartDate}
-                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                          className="w-full px-4 text-gray-800 bg-transparent outline-none appearance-none"
                         />
                       </div>
                     </div>
@@ -460,7 +467,7 @@ const AddMember = () => {
                       <label htmlFor="state">Due Date</label>
                       <div
                         id="end"
-                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                        className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50"
                       >
                         <input
                           required
@@ -471,7 +478,7 @@ const AddMember = () => {
                           onFocus="(this.type='date')"
                           name="dueDate"
                           placeholder="MM/DD/YYYY"
-                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                          className="w-full px-4 text-gray-800 bg-transparent outline-none appearance-none"
                         />
                       </div>
                     </div>
@@ -481,13 +488,13 @@ const AddMember = () => {
                         <div className="flex-row gap-10 pt-8">
                           <button
                             onClick={handleClear}
-                            className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
+                            className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded text-balck hover:bg-primary"
                           >
                             Cancel
                           </button>
                           <button
                             onClick={handleSubmit}
-                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
+                            className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
                           >
                             {" "}
                             Assign

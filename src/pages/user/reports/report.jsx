@@ -45,7 +45,6 @@ const AddReport = () => {
   });
 
   const uploadFile = async (e) => {
-    console.log(sendFile);
     if (sendFile !== null || sendFile) {
       const storage = getStorage();
       const storageRef = ref(storage, user.uid + "/" + sendFile.name);

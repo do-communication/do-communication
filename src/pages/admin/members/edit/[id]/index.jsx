@@ -97,7 +97,6 @@ const AddMember = () => {
       Reports: tempReport,
       Tasks: tempTask,
     });
-    console.log(mem);
   };
   useEffect(() => {
     getMem();
@@ -265,14 +264,14 @@ const AddMember = () => {
   };
   return (
     <AdminLayout>
-      <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-8">
-        <div className="container mx-auto max-w-screen-lg">
+      <div className="flex justify-center min-h-screen p-6 pt-8 bg-gray-100">
+        <div className="container max-w-screen-lg mx-auto">
           <form>
-            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
+            <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
               Edit Member
             </h2>
-            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
-              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
+            <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="pb-3 pl-4 text-lg font-medium">
                     Employee Details
@@ -286,15 +285,15 @@ const AddMember = () => {
                   />
                 </div>
 
-                {/* <div className="bg-white rounded shadow-sm p-4 px-4 md:p-8 mb-6">
-                  <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+                {/* <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
+                  <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
                     <div className="text-gray-600">
-                      <p className="font-medium text-lg pb-3 pl-4">Employee Details</p>
+                      <p className="pb-3 pl-4 text-lg font-medium">Employee Details</p>
                       <img src="/images/form1.svg" alt="form" width={250} height={800} className="pt-10 sm:pb-3" />
                     </div> */}
 
                 <div className="lg:col-span-2 ">
-                  <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-6">
                     <div className="md:col-span-3">
                       <label htmlFor="full_name">Full Name</label>
                       <input
@@ -303,7 +302,7 @@ const AddMember = () => {
                         type="text"
                         name="full_name"
                         id="full_name"
-                        className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                       />
                     </div>
 
@@ -315,7 +314,7 @@ const AddMember = () => {
                         name="email"
                         value={data.Email}
                         id="email"
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder="email@employee.com"
                       />
                     </div>
@@ -328,7 +327,7 @@ const AddMember = () => {
                         name="address"
                         value={data.Address}
                         id="address"
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                         placeholder=""
                       />
                     </div>
@@ -337,7 +336,7 @@ const AddMember = () => {
                       <label htmlFor="Gender">Gender</label>
                       <select
                         id="selectGender"
-                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
+                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
                       >
                         <option value="null">Select gender</option>
                         <option value="f">Female</option>
@@ -349,7 +348,7 @@ const AddMember = () => {
                       <label htmlFor="country">Phone Number</label>
                       <div
                         id="phoneNumber"
-                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                        className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50"
                       >
                         <input
                           onChange={handlePhone}
@@ -360,7 +359,7 @@ const AddMember = () => {
                           required
                           name="country"
                           placeholder="+251 9 "
-                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                          className="w-full px-4 text-gray-800 bg-transparent outline-none appearance-none"
                         />
                       </div>
                     </div>
@@ -369,7 +368,7 @@ const AddMember = () => {
                       <label htmlFor="state">Department</label>
                       <div
                         id="department"
-                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                        className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50"
                       >
                         <input
                           onChange={handleDepartment}
@@ -377,7 +376,7 @@ const AddMember = () => {
                           id="dep"
                           value={data.Department}
                           placeholder="Department"
-                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                          className="w-full px-4 text-gray-800 bg-transparent outline-none appearance-none"
                         />
                       </div>
                     </div>
@@ -386,7 +385,7 @@ const AddMember = () => {
                       <label htmlFor="state">Date of Birth</label>
                       <div
                         id="dob"
-                        className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50"
+                        className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50"
                       >
                         <input
                           type="date"
@@ -396,7 +395,7 @@ const AddMember = () => {
                           onFocus="(this.type='date')"
                           name="DB"
                           placeholder="MM/DD/YYYY"
-                          className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
+                          className="w-full px-4 text-gray-800 bg-transparent outline-none appearance-none"
                         />
                       </div>
                     </div>
@@ -406,13 +405,13 @@ const AddMember = () => {
                         <div className="flex-row gap-10 pt-8">
                           <button
                             onClick={handleClear}
-                            className="text-balck mr-6 rounded  border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
+                            className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded text-balck hover:bg-primary"
                           >
                             Cancel
                           </button>
                           <button
                             onClick={handleSubmit}
-                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
+                            className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
                           >
                             Edit
                           </button>

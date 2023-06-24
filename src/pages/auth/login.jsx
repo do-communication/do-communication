@@ -47,7 +47,7 @@ const Login = () => {
         emaildiv.classList.add("ring-red-600");
         emaildiv.classList.add("ring-2");
       }
-      console.log(err.message);
+      console.log(err?.message);
     }
   };
   const handleEmailChange = (e) => {
@@ -100,7 +100,6 @@ const Login = () => {
         emaildiv.classList.add("ring-2");
       }
     }
-    console.log(data);
   };
 
   return (

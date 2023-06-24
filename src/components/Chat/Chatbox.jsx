@@ -28,7 +28,6 @@ const Chatbox = ({
   if (isgroup) {
     userId = router.query.groupId;
   }
-  console.log(userId)
 
   const { user, send, sendGroup, editMessage, editGroupMessage } =
     useFetch("KalCompany");
@@ -98,8 +97,8 @@ const Chatbox = ({
   }, [messages]);
 
   return (
-    <div className="relative h-full flex-col rounded-2xl bg-white">
-      <header className="absolute top-0 z-40 flex h-16 w-full flex-row items-center gap-4 rounded-t-2xl bg-primary px-4 text-2xl font-semibold text-white">
+    <div className="relative flex-col h-full bg-white rounded-2xl">
+      <header className="absolute top-0 z-40 flex flex-row items-center w-full h-16 gap-4 px-4 text-2xl font-semibold text-white rounded-t-2xl bg-primary">
         <button
           onClick={() => {
             if (router.pathname === "/admin/chats/directChat/[userId]") {
@@ -112,9 +111,9 @@ const Chatbox = ({
               router.push("/user/chats/directChat");
             }
           }}
-          className="block h-10 w-10 rounded-full hover:bg-secondary lg:hidden"
+          className="block w-10 h-10 rounded-full hover:bg-secondary lg:hidden"
         >
-          <BiChevronLeft className="h-auto w-10" />
+          <BiChevronLeft className="w-10 h-auto" />
         </button>
         <div className="flex items-center gap-4">
           {/* <BiUser className="w-10 h-10 text-4xl bg-gray-400 rounded-full" /> */}
@@ -125,7 +124,7 @@ const Chatbox = ({
       <div
         ref={chatboxRef}
         id="scroll"
-        className="absolute grid h-full w-full grid-cols-12 gap-y-2 overflow-y-auto overflow-x-hidden py-16"
+        className="absolute grid w-full h-full grid-cols-12 py-16 overflow-x-hidden overflow-y-auto gap-y-2"
       >
         {messages.map((msg) => {
           return msg.data.SenderId === user.uid ? (
@@ -144,7 +143,7 @@ const Chatbox = ({
         })}
       </div>
       {/* sender form */}
-      <div className="absolute bottom-0 flex h-16 w-full flex-row items-center rounded-xl border-t bg-white px-4">
+      <div className="absolute bottom-0 flex flex-row items-center w-full h-16 px-4 bg-white border-t rounded-xl">
         <div>
           <label
             htmlFor="file_upload"
@@ -166,12 +165,12 @@ const Chatbox = ({
             }}
           />
         </div>
-        <div className="ml-4 flex-grow">
+        <div className="flex-grow ml-4">
           <div className="relative w-full">
             <input
               type="text"
               id="message_send"
-              className="flex h-10 w-full rounded-xl border pl-4 focus:border-indigo-300 focus:outline-none"
+              className="flex w-full h-10 pl-4 border rounded-xl focus:border-indigo-300 focus:outline-none"
               onChange={(e) => {
                 setSendMessage(e.target.value);
                 document.getElementById("file_upload").value = "";
@@ -192,7 +191,7 @@ const Chatbox = ({
           {editMode ? (
             <button
               onClick={editMess}
-              className="flex flex-shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-1 text-white hover:bg-Bold"
+              className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white rounded-xl bg-primary hover:bg-Bold"
             >
               <span>Edit</span>
               <TbEdit />
@@ -200,7 +199,7 @@ const Chatbox = ({
           ) : (
             <button
               onClick={sendMess}
-              className="flex flex-shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-1 text-white hover:bg-Bold"
+              className="flex items-center justify-center flex-shrink-0 gap-2 px-4 py-1 text-white rounded-xl bg-primary hover:bg-Bold"
             >
               <span>Send</span>
               <TbSend />
