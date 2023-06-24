@@ -19,12 +19,15 @@ import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
 import dynamic from "next/dynamic";
 import DataTable from "react-data-table-component";
+import { auth } from "../../../../config/firebase";
+import useFetch from "@/components/useFetch";
 
 const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
   ssr: false,
 });
 
 const ManageGroup = () => {
+  const { GetUser } = useFetch("KalCompany");
   const [allGroups, setallGroups] = useState([]);
   const [groups, setGroups] = useState(allGroups);
   const [search, setSearch] = useState("");
@@ -94,8 +97,8 @@ const ManageGroup = () => {
       selector: (row) => row.data.Type,
     },
   ];
-  console.log("fetch Group")
   const fetchGroup = async (groupId, index) => {
+    setClearSelectedRows(!clearSelectedRows)
     const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     const mem = await getDoc(docRef);
     let tempTask = [];
@@ -113,7 +116,8 @@ const ManageGroup = () => {
       mem._document.data.value.mapValue.fields.People.arrayValue.values;
     var j = 0;
     if (people) {
-      people.forEach((p) => {
+      // people.forEach((p) => 
+      for (let p of people) {
         if (p) {
           if (j == index) {
             lead = p.stringValue;
@@ -122,7 +126,7 @@ const ManageGroup = () => {
           users.push(p.stringValue);
           j += 1;
         }
-      });
+      };
     }
     if (task) {
       task.forEach((t) => {
@@ -155,6 +159,84 @@ const ManageGroup = () => {
       Tasks: tempTask,
       Learder: lead,
     };
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    if (mem._document.data.value.mapValue.fields.Learder.stringValue) {
+      const prevId = mem._document.data.value.mapValue.fields.Learder.stringValue;
+
+
+      auth.currentUser.getIdToken(true).then((idToken) => {
+        const TOKEN = idToken
+        const url = `http://localhost:5000/api/users/${prevId}`;
+
+        GetUser(prevId).then((prevName) => {
+
+          const user_info = `{
+              "displayName": "${prevName.Name}"
+          }`;
+
+          fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${TOKEN}`,
+              'Content-Type': 'application/json',
+            },
+            body: user_info,
+          }).then(async (cred) => {
+            console.log(cred)
+          }).catch((error) => {
+            console.log(error);
+
+            if (error === "auth/id-token-expired") {
+              toast.error("LogIn session has expired Please login again");
+              setTimeout(() => {
+                signOut();
+              }, 5000);
+            }
+          })
+
+        })
+
+
+      })
+    }
+
+
+    auth.currentUser.getIdToken(true).then((idToken) => {
+      const TOKEN = idToken
+      const url = `http://localhost:5000/api/users/${lead}`;
+
+      GetUser(lead).then((usr) => {
+        const user_info = `{
+          "displayName": "${usr.Name + "~"}"
+      }`;
+
+        fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: user_info,
+        }).then(async (cred) => {
+          console.log(cred)
+        }).catch((error) => {
+          console.log(error);
+
+          if (error === "auth/id-token-expired") {
+            toast.error("LogIn session has expired Please login again");
+            setTimeout(() => {
+              signOut();
+            }, 5000);
+          }
+        })
+      })
+    })
+
+
+
+
+
 
     handleAssign(groupId, data);
     const leaderRef = doc(
