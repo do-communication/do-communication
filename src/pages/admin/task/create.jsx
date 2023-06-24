@@ -397,7 +397,7 @@ const AddMember = () => {
                           setData({
                             ...data,
                             AssignedTo: selectedMembers.map(
-                              (member) => member.value
+                              (member) => member.id
                             ),
                           });
                           selectedMembers.map((member) => {
@@ -410,7 +410,7 @@ const AddMember = () => {
                           setassignedto(Array.from(new Set(temp)));
 
                           if (
-                            assigned &&
+                            assigned &&  
                             assigned.classList.contains("ring-red-600")
                           ) {
                             assigned.classList.remove("ring-red-600");
@@ -445,7 +445,6 @@ const AddMember = () => {
                         <input
                           required
                           type="date"
-                          onFocus="(this.type='date')"
                           name="startDate"
                           placeholder="MM/DD/YYYY"
                           onChange={handleStart}
@@ -468,7 +467,6 @@ const AddMember = () => {
                           onChange={handleEnd}
                           value={data.DueDate}
                           id="endDate"
-                          onFocus="(this.type='date')"
                           name="dueDate"
                           placeholder="MM/DD/YYYY"
                           className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"
