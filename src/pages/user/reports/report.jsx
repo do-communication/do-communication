@@ -305,18 +305,7 @@ const AddReport = () => {
 
                     <div className="md:col-span-6">
                       <label htmlFor="detail">Detail Description</label>
-                      {/* <QuillNoSSRWrapper
-                        theme="snow"
-                        value={reportDetail}
-                        onChange={(e) => {
-                          {
-                            setReportDetail(e.slice(3, e.lastIndexOf("</p>")));
-                            // setData({...data, Detail:reportDetail});
-                          }
-                        }}
-                        placeholder="Write some description about the report"
-                        style={{ height: 180 }}
-                      /> */}
+
                       <ClientOnlyEditor
                         onInit={(evt, editor) => (editorRef.current = editor)}
                         apiKey="g1yw7n29lj6bkf1dco2yof3tac3lznaq0g325pdit2lczvxk"
