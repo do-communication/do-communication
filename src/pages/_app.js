@@ -2,12 +2,19 @@ import "@/styles/globals.css";
 import { AuthContextProvider } from "../../context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Head from "next/head";
+
 export default function App({ Component, pageProps }) {
   return (
-    <AuthContextProvider>
-      <Component {...pageProps} />
-      <ToastContainer />
-    </AuthContextProvider>
+    <>
+      <Head>
+        <title>Do Communication</title>
+      </Head>
+      <AuthContextProvider>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </AuthContextProvider>
+    </>
   );
 }
 const NetworkError = () => {

@@ -10,7 +10,7 @@ import { useAuth } from "../../../../context/AuthContext";
 import { auth } from "../../../../config/firebase";
 import emailjs from "@emailjs/browser";
 import useFetch from "@/components/useFetch";
-import { updateProfile } from "firebase/auth";
+import { signOut, updateProfile } from "firebase/auth";
 
 const router = Router;
 
@@ -215,26 +215,62 @@ const AddMember = () => {
       const adminId = auth.currentUser.uid;
       const company = await GetCompanyName();
 
-      signUp(data.Email, password).then(async (cred) => {
-        try {
-          await setDoc(
-            doc(db, "KalCompany", "Users", "StaffMembers", cred.user.uid),
-            data
-          );
-          console.log(company);
-          await updateProfile(auth.currentUser, {
-            displayName: data.Name,
-            photoURL: company.companyName,
-          });
-          console.log(password);
-          logIn(email, pass);
-          sendEmail(password, adminId, data.Name, data.Email);
-          handleClear();
-          toast.success("Member added successfully");
-        } catch (errrr) {
-          console.log(errrr);
-        }
+
+      // INTEGRATE API
+      // let formData = new FormData();
+      // let parsed_url = new URL(`https://www.${company.companyName}.com`);
+
+
+      auth.currentUser.getIdToken(true).then((idToken) => {
+        const TOKEN = idToken
+        const url = 'http://localhost:5000/api/users/';
+
+
+        const user_info = `{
+          "email": "${data.Email}",
+          "password": "${password}",
+          "displayName": "${data.Name}",
+          "photoURL": "https://www.levelup.com"
+      }`;
+
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: user_info,
+        }).then(result => result.json())
+          .then(async (cred) => {
+            try {
+              await setDoc(
+                doc(db, "KalCompany", "Users", "StaffMembers", cred.uid),
+                data
+              );
+
+              console.log(company);
+              console.log(password);
+              sendEmail(password, adminId, data.Name, data.Email);
+              handleClear();
+              toast.success("Member added successfully");
+            } catch (errrr) {
+              console.log(errrr);
+            }
+          }).catch((error) => {
+            console.log(error);
+
+            if (error === "auth/id-token-expired") {
+              toast.error("LogIn session has expired Please login again");
+              setTimeout(() => {
+                signOut();
+              }, 5000);
+            }
+          })
+
       });
+
+
     }
   };
   const handleClear = (e) => {
@@ -389,7 +425,7 @@ const AddMember = () => {
                           id="date"
                           onChange={handleDob}
                           value={data.DateOfBirth}
-                          onFocus="(this.type='date')"
+                          // onFocus="(this.type='date')"
                           name="DB"
                           placeholder="MM/DD/YYYY"
                           className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"

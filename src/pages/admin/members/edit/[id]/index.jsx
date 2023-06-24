@@ -1,6 +1,6 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import { toast } from "react-toastify";
-
+import { auth } from "../../../../../../config/firebase";
 import {
   doc,
   getDocs,
@@ -230,15 +230,59 @@ const AddMember = () => {
       data.DateOfBirth != "" &&
       data.Gender != "null"
     ) {
-      const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
-      updateDoc(docRef, data)
-        .then((docRef) => {
-          handleClear();
-          toast.success("Member edited successfully");
-        })
-        .catch((error) => {
+
+
+      auth.currentUser.getIdToken(true).then((idToken) => {
+        const TOKEN = idToken
+        const url = `http://localhost:5000/api/users/${id}`;
+
+        const user_info = `{
+            "displayName": "${data.Name}",
+            "email" : "${data.Email}"
+        }`;
+
+        fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: user_info,
+        }).then(async (cred) => {
+          console.log(cred)
+          const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
+          updateDoc(docRef, data)
+            .then((docRef) => {
+              handleClear();
+              toast.success("Member edited successfully");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        }).catch((error) => {
           console.log(error);
-        });
+
+          if (error === "auth/id-token-expired") {
+            toast.error("LogIn session has expired Please login again");
+            setTimeout(() => {
+              signOut();
+            }, 5000);
+          }
+        })
+
+      })
+
+
+      // const docRef = doc(db, "KalCompany", "Users", "StaffMembers", id);
+      // updateDoc(docRef, data)
+      //   .then((docRef) => {
+      //     handleClear();
+      //     toast.success("Member edited successfully");
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     }
   };
   const handleClear = (e) => {
@@ -393,7 +437,6 @@ const AddMember = () => {
                           id="date"
                           onChange={handleDob}
                           value={data.DateOfBirth}
-                          onFocus="(this.type='date')"
                           name="DB"
                           placeholder="MM/DD/YYYY"
                           className="w-full appearance-none bg-transparent px-4 text-gray-800 outline-none"

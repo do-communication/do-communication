@@ -14,6 +14,7 @@ const DirectChat = () => {
 
   const { getMessage, user, GetUser } = useFetch("KalCompany");
   const userId = router.query.userId;
+  console.log(userId)
   const get = async (userId) => {
     setReciever(await GetUser(userId));
     await getMessage(userId, setMessages);
