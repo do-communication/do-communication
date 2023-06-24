@@ -85,7 +85,7 @@ const Admin = () => {
   //   const [members, setMembers] = useState(allMembers);
 
   const data = [
-    { name: "New Task", value: todo.length },
+    { name: "Assigned", value: todo.length },
     { name: "In progress", value: inprogress.length },
     { name: "Done", value: completed.length },
   ];
@@ -363,7 +363,7 @@ const Admin = () => {
                 <div className="md:col-span-2 xl:col-span-1">
                   <div className="rounded bg-white p-3 text-black">
                     <div className="text-blac flex justify-between py-1">
-                      <h3 className="text-sm font-semibold">Tasks in TO DO</h3>
+                      <h3 className="text-sm font-semibold">Tasks Assigned</h3>
                       <svg
                         className="h-4 cursor-pointer fill-current text-gray-600 dark:text-gray-500"
                         xmlns="http://www.w3.org/2000/svg"
