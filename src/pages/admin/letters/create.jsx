@@ -14,13 +14,19 @@ const user = auth.currentUser;
 import { db } from "../../../../context/DbContext";
 import { RiAttachment2 } from "react-icons/ri";
 import dynamic from "next/dynamic";
-
+import useFetch from "@/components/useFetch";
 const ClientOnlyEditor = dynamic(
   () => import("@tinymce/tinymce-react").then((module) => module.Editor),
   { ssr: false, loading: () => <p>Loading ...</p> }
 );
 
-const AddLetter = () => {
+const AddReport = () => {
+  const { GetCompanyName } = useFetch("KalCompany");
+  const [comp, setcomp] = useState("");
+  const setComp = async () => {
+    setcomp(await GetCompanyName());
+  };
+  setComp();
   const [reportDetail, setReportDetail] = useState("");
   const editorRef = useRef(null);
   const [data, setData] = useState({
@@ -29,6 +35,8 @@ const AddLetter = () => {
     Subject: "",
     Body: "",
     From: user.displayName,
+    Date: new Date().toDateString(),
+    Company: comp.companyName,
   });
   const to = document.getElementById("to");
   const address = document.getElementById("address");
@@ -61,7 +69,10 @@ const AddLetter = () => {
     const value = { ...data, Body: reportDetail };
     setData(value);
   }, [reportDetail]);
-
+  useEffect(() => {
+    const value = { ...data, Company: comp.companyName };
+    setData(value);
+  }, [comp]);
   return (
     <AdminLayout>
       <div className="flex justify-center min-h-screen p-6 pt-2 bg-gray-100">

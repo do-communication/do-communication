@@ -32,11 +32,11 @@ const AddFile = () => {
         (snapshot) => {
           setProgress(
             FileName +
-              "  " +
-              Math.floor(
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              ) +
-              "% Done"
+            "  " +
+            Math.floor(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            ) +
+            "% Done"
           );
 
           switch (snapshot.state) {
@@ -125,7 +125,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="address">Shelf Location</label>
+                      <label htmlFor="shelfLocation">Shelf Location</label>
                       <input
                         type="text"
                         name="shelfLocation"
@@ -136,7 +136,7 @@ const AddFile = () => {
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label htmlFor="email">Description</label>
+                      <label htmlFor="type">Description</label>
                       <textarea
                         name="type"
                         id="type"
@@ -147,7 +147,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="state">Upload File</label>
+                      <label htmlFor="file">Upload File</label>
                       <div className="flex items-center h-10 mt-1 border border-gray-200 rounded bg-gray-50">
                         <input
                           type="file"
@@ -162,7 +162,7 @@ const AddFile = () => {
 
                     {progress && (
                       <div className="md:col-span-3">
-                        <label htmlFor="address">Progress</label>
+                        <label htmlFor="progress">Progress</label>
                         <input
                           type="text"
                           id="progress"

@@ -7,16 +7,21 @@ const Ticket = ({ task }) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold capitalize">{task.name}</h3>
-        <span className="rounded-lg bg-secondary px-2 text-sm font-semibold">
-          {task.priority}
-        </span>
+        <h3 className="text-lg font-semibold capitalize">{task.data.Title}</h3>
+        {task.data.Priority === "Low"? <span className="px-2 text-sm font-semibold rounded-lg  bg-green-700">
+          {task.data.Priority}
+        </span>: task.data.Priority === "Medium" ? <span className="px-2 text-sm font-semibold rounded-lg  bg-yellow-500">
+          {task.data.Priority}
+        </span>: <span className="px-2 text-sm font-semibold rounded-lg  bg-red-700">
+          {task.data.Priority}
+        </span>}
+        
       </div>
-      <p className="text-xs">Due Date: {task.dueDate}</p>
-      {task.detail.length > 100 ? (
+      <p className="text-xs">Due Date: {task.data.DueDate}</p>
+      {task.data.Description.length > 100 ? (
         showDetail ? (
           <p className="">
-            {task.detail}{" "}
+            {task.data.Description}{" "}
             <button
               className="text-primary underline"
               onClick={() => setShowDetail(false)}
@@ -26,7 +31,7 @@ const Ticket = ({ task }) => {
           </p>
         ) : (
           <p className="">
-            {task.detail.substring(0, 100)}...
+            {task.data.Description.substring(0, 100)}...
             <button
               className="text-primary underline"
               onClick={() => setShowDetail(true)}
@@ -36,7 +41,7 @@ const Ticket = ({ task }) => {
           </p>
         )
       ) : (
-        <p>{task.detail}</p>
+        <p>{task.data.Description}</p>
       )}
     </div>
   );

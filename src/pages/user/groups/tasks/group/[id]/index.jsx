@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import { db } from "context/DbContext";
 import { doc, getDocs, getDoc, collection } from "firebase/firestore";
+// import { useRouter } from 'next/router';
+import { usePathname } from "next/navigation";
 import {
   AiFillDelete,
   AiFillEdit,
@@ -20,10 +22,31 @@ const ManageTasks = () => {
   const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
+  const [user, setUser] = useState("");
+  let tempTask = [];
+  // const { asPath, pathname } = useRouter();
+  const currentPage = usePathname();
+  let i = currentPage.lastIndexOf("group/");
+  const id = currentPage.slice(i + 6);
+  const getMem = async () => {
+    const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+    const mem = await getDoc(docRef);
+    setUser(mem._document.data.value.mapValue.fields.Name.stringValue);
+    const tasks =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    if (tasks) {
+      tasks.forEach((t) => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+  };
+  getMem();
   const getData = async () => {
     let arr = [];
+    let selected = [];
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
       const doc = await getDocs(all);
@@ -34,20 +57,24 @@ const ManageTasks = () => {
       console.log(err);
       setTasks([{ Name: "check your connection" }]);
     }
-
-    setTasks(arr);
-    setallTasks(arr);
+    arr.map((element) => {
+      if (tempTask.includes(element.Title)) {
+        selected.push(element);
+      }
+    });
+    setTasks(selected);
+    setallTasks(selected);
   };
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) =>
-        (item.name && item.name.toLowerCase().includes(search.toLowerCase())) ||
-        (item.assignedTo &&
-          item.assignedTo.toLowerCase().includes(search.toLowerCase())) ||
-        (item.status &&
-          item.status.toLowerCase().includes(search.toLowerCase())) ||
-        (item.priority &&
-          item.priority.toLowerCase().includes(search.toLowerCase()))
+        (item.Title &&
+          item.Title.toLowerCase().includes(search.toLowerCase())) ||
+        // || item.AssignedTo && item.AssignedTo.includes(search.toLowerCase())
+        (item.Status &&
+          item.Status.toLowerCase().includes(search.toLowerCase())) ||
+        (item.Priority &&
+          item.Priority.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -65,7 +92,7 @@ const ManageTasks = () => {
     },
     {
       name: "Assigned To",
-      selector: (row) => new Set(row.AssignedTo).toString(),
+      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" "),
     },
     {
       name: "Status",
@@ -95,10 +122,10 @@ const ManageTasks = () => {
     <UserLayout>
       <div className="grid min-h-full grid-cols-3 gap-x-6 gap-y-6">
         <div className="order-last col-span-full md:order-first md:col-span-2">
-          <h1 className="mb-4 text-2xl font-semibold">[Group NAME] Tasks</h1>
+          <h1 className="mb-4 text-2xl font-semibold">{user} Tasks</h1>
           <div className="flex items-center justify-between mt-6 mb-4">
             <Link
-              href="/admin/task/create"
+              href="/user/tasks/create"
               className="flex items-center justify-center gap-2 px-4 py-2 text-base font-semibold rounded-lg bg-primary hover:bg-secondary"
             >
               <AiOutlinePlus /> Assign Task
@@ -145,7 +172,7 @@ const ManageTasks = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.name}</p>
+                    <p>{row.Name}</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -167,7 +194,7 @@ const ManageTasks = () => {
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/reports/member/id"
+                        href="/user/groups/reports/member/id"
                         className="flex items-center gap-2"
                       >
                         <HiDocumentChartBar className="w-5 h-auto" /> Reports
@@ -175,7 +202,7 @@ const ManageTasks = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/task/edit"
+                        href="/user/tasks/edit/id"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Task
@@ -183,7 +210,7 @@ const ManageTasks = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
-                        href="/admin/task/delete/{taskId}"
+                        href="#"
                         className="flex items-center gap-2"
                       >
                         <AiFillDelete className="w-5 h-auto" /> Delete Task
@@ -201,7 +228,9 @@ const ManageTasks = () => {
                 </h4>
                 <p className="text-sm">
                   Assigned to{" "}
-                  {new Set(selectedRows[0].AssignedTo).toString(", ")}{" "}
+                  {Array.from(new Set(selectedRows[0].AssignedTo)).toString(
+                    " "
+                  )}{" "}
                 </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">

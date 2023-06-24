@@ -1,33 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { allTasks } from "@/mock/tasks";
 import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import Ticket from "@/components/Task/Ticket";
-
+import { collection, getDocs, getDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
+import { db } from "../../../context/DbContext";
+import { auth } from "../../../config/firebase";
+const user = auth.currentUser;
 const MyTaskPage = () => {
   const [allTasks, setallTasks] = useState([]);
   const [tasks, setTasks] = useState([allTasks]);
+  console.log("mytask loaded")
   const getData = async () => {
-    let arr = [];
-    let temp = [];
+
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
-      const doc = await getDocs(all);
-      doc.forEach((d) => {
-        arr.push({ id: d.id, data: d.data() });
+
+      console.log("onsnapshot called")
+      const unsubscribe = onSnapshot(all, (querySnapshot) => {
+        let arr = []
+        let temp = []
+        querySnapshot.forEach((doc) => {
+          arr.push({ id: doc.id, data: doc.data() });
+        });
+
+        arr.map(a => {
+          if (a.data.AssignedTo.includes(user.displayName)) {
+            temp.push(a)
+          }
+        })
+
+        setTasks(temp)
+        setallTasks(temp)
       });
     } catch (err) {
-      console.log(err);
-      setTasks([{ Name: "check your connection" }]);
+      console.log(err)
+      setTasks([{ Name: "check your connection" }])
     }
 
-    setTasks(arr);
-    setallTasks(arr);
-  };
+
+    // const doc = await getDocs(all)
+    // doc.forEach(d => {
+    //   arr.push({id:d.id, data:d.data()})
+    // });
+
+    //   arr.map(a => {
+    //     if(a.data.AssignedTo.includes(user.displayName)){
+    //       temp.push(a)
+    //     }
+    //   })
+    // } catch (err) {
+    //   console.log(err)
+    //   setTasks([{ Name: "check your connection" }])
+    // }
+
+    // setTasks(temp)
+    // setallTasks(temp)
+  }
   const CARDS = [
     {
       title: "New Tasks",
-      status: "todo",
+      status: "assigned",
     },
     {
       title: "In Progress",
@@ -44,7 +76,6 @@ const MyTaskPage = () => {
     const filteredTasks = allTasks.filter(
       (task) => task.data.Status.toLowerCase() === status
     );
-
     return (
       <div className="mt-2 text-sm text-black dark:text-gray-50 ">
         <Droppable droppableId={status}>
@@ -75,10 +106,12 @@ const MyTaskPage = () => {
       </div>
     );
   };
-
+  useEffect(() => {
+    getData();
+  }, []);
   const handleDragEnd = (result) => {
     const { destination, source } = result;
-
+    console.log(result)
     // If the destination is null or the task is dropped back to the original position, do nothing
     if (
       !destination ||
@@ -88,8 +121,10 @@ const MyTaskPage = () => {
       return;
     }
 
-    const sourceStatus = CARDS[source.index].status;
-    const destinationStatus = CARDS[destination.index].status;
+    const sourceStatus = source.droppableId;
+    const destinationStatus = destination.droppableId;
+    console.log(sourceStatus)
+    console.log(destinationStatus)
 
     const task = allTasks.find(
       (task) =>
@@ -98,10 +133,40 @@ const MyTaskPage = () => {
     );
 
     if (task) {
-      task.data.Status = destinationStatus;
+      change(task, destinationStatus, sourceStatus);
     }
   };
+  const change = async (task, destinationStatus, sourceStatus) => {
+    const docRef = doc(db, "KalCompany", "Tasks", "Tasks", task.id);
+    const mem = await getDoc(docRef)
+    let tempAssigned = []
+    const assigned = mem._document.data.value.mapValue.fields.AssignedTo.arrayValue.values
+    if (assigned) {
+      assigned.forEach(t => {
+        if (t) {
+          tempAssigned.push(t.stringValue);
+        }
+      });
+    }
+    const newData = {
+      Title: mem._document.data.value.mapValue.fields.Title.stringValue,
+      Priority: mem._document.data.value.mapValue.fields.Priority.stringValue,
+      AssignedBy: mem._document.data.value.mapValue.fields.AssignedBy.stringValue,
+      Description: mem._document.data.value.mapValue.fields.Description.stringValue,
+      Status: destinationStatus,
+      AssignedTo: tempAssigned,
+      StartDate: mem._document.data.value.mapValue.fields.StartDate.stringValue,
+      DueDate: mem._document.data.value.mapValue.fields.DueDate.stringValue,
+    }
+    updateDoc(docRef, newData)
+      .then(docRef => {
+        console.log("A New Document Field has been added to an existing document");
+      })
+      .catch(error => {
+        console.log(error);
+      })
 
+  }
   return (
     <UserLayout>
       <DragDropContext onDragEnd={handleDragEnd}>

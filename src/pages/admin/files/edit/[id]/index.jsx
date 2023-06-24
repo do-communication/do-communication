@@ -1,92 +1,108 @@
 import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
-import Select from "react-select";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
+import Select from 'react-select'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { auth } from "../../../../../../config/firebase";
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { db } from "../../../../../../context/DbContext";
 import { serverTimestamp } from "@firebase/firestore";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import useFetch from "@/components/useFetch";
+import { useEffect } from "react";
 
 const AddFile = () => {
+  const router = useRouter();
+
+  const fileId = router.query.id;
+
   const [sendFile, setSendFile] = useState(null);
   const [FileName, setFileName] = useState("");
   const [Discription, setDiscription] = useState("");
   const [progress, setProgress] = useState("");
   const [shelfLocation, setShelfLocation] = useState("none");
+  const { GetFile } = useFetch("KalCompany");
+  const [oldFileName, setOldFileName] = useState("");
+
+  const getData = () => {
+    GetFile(auth.currentUser.uid, fileId).then((file) => {
+      setOldFileName(file.FileName);
+      setFileName(file.FileName);
+      setDiscription(file.Description);
+      setShelfLocation(file.ShelfLocation);
+    })
+  }
+
+  useEffect(() => {
+    getData();
+  }, [])
 
   const UploadFile = async (e) => {
     if (sendFile !== null) {
       const storage = getStorage();
-      console.log(storage);
-      const storageRef = ref(storage, auth.currentUser.uid + "/" + FileName);
-      const uploadTask = uploadBytesResumable(storageRef, sendFile);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          setProgress(
-            FileName +
-              "  " +
-              Math.floor(
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              ) +
-              "% Done"
-          );
+      const deleteRef = ref(storage, auth.currentUser.uid + "/" + oldFileName);
+      // Delete the file
+      deleteObject(deleteRef).then(() => {
+        const storageRef = ref(storage, auth.currentUser.uid + "/" + FileName);
+        const uploadTask = uploadBytesResumable(storageRef, sendFile)
 
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await addDoc(
-              collection(db, "KalCompany", "Files", auth.currentUser.uid),
-              {
+        uploadTask.on('state_changed',
+          (snapshot) => {
+
+            setProgress(FileName + "  " + (Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100)) + '% Done');
+
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+
+
+            getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+              await setDoc(doc(db, "KalCompany", "Files", auth.currentUser.uid, fileId), {
                 FileName: FileName,
                 CreatedAt: serverTimestamp(),
                 Owner: auth.currentUser.uid,
                 SenderName: auth.currentUser.displayName,
                 Description: Discription,
                 url: downloadURL,
-                ShelfLocation: shelfLocation,
-              }
-            );
+                ShelfLocation: shelfLocation
+              });
 
-            document.getElementById("type").value = "";
-            document.getElementById("full_name").value = "";
-            document.getElementById("file").value = [];
-            document.getElementById("progress").value = "";
-            document.getElementById("shelfLocation").value = "";
+              document.getElementById('type').value = '';
+              document.getElementById('full_name').value = '';
+              document.getElementById('file').value = [];
+              document.getElementById('progress').value = "";
+              document.getElementById("shelfLocation").value = "";
 
-            setProgress("");
-            setFileName("");
-            setDiscription("");
-            setSendFile(null);
-            setShelfLocation("none");
+              setProgress('');
+              setFileName('');
+              setDiscription('');
+              setSendFile(null);
+              setShelfLocation("none")
 
-            e.preventDefault();
-            console.log("submit");
+              e.preventDefault();
+              console.log("submit");
 
-            // e.target.reset();
+              // e.target.reset();
 
-            toast.success("File uploaded successfully");
-          });
-        }
-      );
+              toast.success("File Updated successfully");
+            });
+
+          }
+        );
+      }).catch((error) => {
+        console.log(error)
+      });
     }
   };
   return (
@@ -121,11 +137,12 @@ const AddFile = () => {
                         id="full_name"
                         className="mt-1 h-10 w-full rounded border  bg-gray-50 px-4"
                         onChange={(e) => setFileName(e.target.value)}
+                        value={FileName}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="address">Shelf Location</label>
+                      <label htmlFor="shelfLocation">Shelf Location</label>
                       <input
                         type="text"
                         name="shelfLocation"
@@ -133,21 +150,23 @@ const AddFile = () => {
                         className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="none"
                         onChange={(e) => setShelfLocation(e.target.value)}
+                        value={shelfLocation}
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label htmlFor="email">Description</label>
+                      <label htmlFor="type">Description</label>
                       <textarea
                         name="type"
                         id="type"
                         className="mt-1 h-24 w-full rounded border  bg-gray-50 px-4"
                         placeholder=" "
                         onChange={(e) => setDiscription(e.target.value)}
+                        value={Discription}
                       />
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="state">Upload File</label>
+                      <label htmlFor="file">Upload File</label>
                       <div className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50">
                         <input
                           type="file"
@@ -180,16 +199,9 @@ const AddFile = () => {
                             Cancel
                           </button>
                           <button
-                            disabled={
-                              !FileName ||
-                              !Discription ||
-                              !sendFile ||
-                              !shelfLocation
-                            }
-                            onClick={(e) => UploadFile(e)}
-                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
-                          >
-                            Upload
+                            disabled={!FileName || !Discription || !sendFile || !shelfLocation}
+                            onClick={(e) => UploadFile(e)} className="bg-primary hover:bg-bold text-white font-bold py-2 px-4 rounded">
+                            Update
                           </button>
                         </div>
                       </div>

@@ -149,7 +149,7 @@ const ManageGroup = () => {
                     <li className="p-1 rounded hover:bg-primary">
                       {JSON.stringify(selectedRows[0].id, null, 9)}
                       <Link
-                        href={`/user/groups/tasks/${selectedRows[0].id}`}
+                        href={`/user/groups/tasks/group/${selectedRows[0].id}`}
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Tasks
@@ -158,7 +158,7 @@ const ManageGroup = () => {
 
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/groups/edit"
+                        href="/user/groups/edit/id"
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Group
@@ -190,7 +190,7 @@ const ManageGroup = () => {
                     selectedRows[0].Members.map((row, index) => (
                       <Link
                         key={index}
-                        href="/admin/memebers/{userId}"
+                        href="#"
                         className="flex items-center justify-between p-2 rounded-md hover:bg-secondary hover:bg-opacity-25"
                       >
                         <p>{row.value}</p>

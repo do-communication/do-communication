@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
@@ -105,7 +105,7 @@ const Reports = () => {
   }, []);
 
   return (
-    <AdminLayout>
+    <UserLayout>
       <div className="order-last col-span-full md:order-first md:col-span-2">
         <h1 className="mb-5 text-2xl font-semibold">Reports</h1>
         <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:justify-between md:items-center">
@@ -129,7 +129,7 @@ const Reports = () => {
           expandableRowsComponent={ShowReportDetail}
         />
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 

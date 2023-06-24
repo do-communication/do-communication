@@ -26,7 +26,7 @@ const ChatLayout = ({ children, user }) => {
   const [selected, setSelected] = useState(user);
   const [editMode, setEditMode] = useState(false);
   const router = useRouter();
-  const { getMembersData, getRecentData } = useFetch("KalCompany");
+  const { getMembersDataUser, getRecentData } = useFetch("KalCompany");
   // search for groups using group name
   useEffect(() => {
     getRecent();
@@ -45,8 +45,8 @@ const ChatLayout = ({ children, user }) => {
   };
 
   const getData = async () => {
-    await getMembersData(setMembers, setallMembers);
-  };
+    await getMembersDataUser(setMembers, setallMembers);
+  }
 
   const handleSelect = (member) => {
     setSelected(member.data);
@@ -96,11 +96,10 @@ const ChatLayout = ({ children, user }) => {
               <Link
                 href={`/user/chats/directChat/${member.id}`}
                 key={index}
-                className={`flex flex-row items-center rounded-xl p-2  ${
-                  member.id === router.query.userId
+                className={`flex flex-row items-center rounded-xl p-2  ${member.id === router.query.userId
                     ? "bg-secondary text-white"
                     : "hover:bg-secondary hover:bg-opacity-25"
-                }`}
+                  }`}
                 onClick={() => handleSelect(member)}
               >
                 <RecentMessageItem
@@ -145,11 +144,10 @@ const ChatLayout = ({ children, user }) => {
               <Link
                 href={`/user/chats/directChat/${member.id}`}
                 key={index}
-                className={`flex flex-row items-center rounded-xl  p-2 ${
-                  member.id === router.query.userId
+                className={`flex flex-row items-center rounded-xl  p-2 ${member.id === router.query.userId
                     ? "bg-secondary text-white"
                     : "hover:bg-secondary hover:bg-opacity-25"
-                }`}
+                  }`}
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-200">
                   {member.data.Name[0]}
@@ -176,9 +174,8 @@ const ChatLayout = ({ children, user }) => {
         <div className="absolute grid h-full w-full grid-cols-4 gap-5">
           {/* Sidebar */}
           <div
-            className={`col-span-full max-h-full rounded-2xl bg-white px-4 py-5 shadow-md lg:col-span-1 lg:block ${
-              router.query.userId ? "hidden" : ""
-            }`}
+            className={`col-span-full max-h-full rounded-2xl bg-white px-4 py-5 shadow-md lg:col-span-1 lg:block ${router.query.userId ? "hidden" : ""
+              }`}
           >
             {/* Chat Logo with create message*/}
             <div className="flex items-center justify-center gap-2 text-3xl">
@@ -240,17 +237,15 @@ const ChatLayout = ({ children, user }) => {
             {/* tab */}
             <div className="mt-6 grid grid-cols-2 rounded-2xl bg-gray-200 font-semibold">
               <button
-                className={`rounded-2xl py-2 ${
-                  messageTab === "recent" ? "bg-primary" : ""
-                }`}
+                className={`rounded-2xl py-2 ${messageTab === "recent" ? "bg-primary" : ""
+                  }`}
                 onClick={() => setMessageTab("recent")}
               >
                 Recent
               </button>
               <button
-                className={`rounded-2xl py-2 ${
-                  messageTab === "member" ? "bg-primary" : ""
-                }`}
+                className={`rounded-2xl py-2 ${messageTab === "member" ? "bg-primary" : ""
+                  }`}
                 onClick={() => setMessageTab("member")}
               >
                 Members
@@ -262,9 +257,8 @@ const ChatLayout = ({ children, user }) => {
             </div>
           </div>
           <div
-            className={`col-span-full lg:col-span-3 lg:block ${
-              router.query.userId ? "" : "hidden"
-            }`}
+            className={`col-span-full lg:col-span-3 lg:block ${router.query.userId ? "" : "hidden"
+              }`}
           >
             {children &&
               cloneElement(children, {

@@ -29,7 +29,11 @@ const Header = () => {
     console.log(auth.currentUser.uid);
     setUsr(await GetUser(auth.currentUser.uid));
     setCompany(await GetCompanyName());
-  };
+  }
+
+  const handleProfile = () => {
+    router.push("/user/profile/profile")
+  }
 
   useEffect(() => {
     getinfo();
@@ -158,7 +162,10 @@ const Header = () => {
                         tabIndex="-1"
                         id="user-menu-item-0"
                       >
-                        <Link href="/user/profile/profile">My Profile</Link>
+                        <button onClick={handleProfile} >
+                          My Profile
+                        </button>
+
                       </a>
 
                       <a

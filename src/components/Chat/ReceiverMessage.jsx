@@ -22,7 +22,7 @@ const ReceiverMessage = ({ msg }) => {
             key={msg.id}
             className="px-2 py-1 mt-2 text-center rounded-md bg-slate-200 hover:bg-slate-300"
           >
-            <Link href={msg.data.url} className="flex flex-col" passHref>
+            <Link target="_blank" href={msg.data.url} className="flex flex-col" passHref>
               <BiFileBlank className="w-12 h-auto text-secondary" />
               <p
                 className="w-10 text-xs font-semibold truncate"

@@ -1,4 +1,3 @@
-import AdminLayout from "@/components/layouts/UserLayout/UserLayout";
 import Select from "react-select";
 import {
   getStorage,
@@ -12,12 +11,14 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../../context/DbContext";
 import { serverTimestamp } from "@firebase/firestore";
 import { toast } from "react-toastify";
+import UserLayout from "@/components/layouts/UserLayout/UserLayout";
 
 const AddFile = () => {
   const [sendFile, setSendFile] = useState(null);
   const [FileName, setFileName] = useState("");
   const [Discription, setDiscription] = useState("");
   const [progress, setProgress] = useState("");
+  const [shelfLocation, setShelfLocation] = useState("none");
 
   const UploadFile = async (e) => {
     if (sendFile !== null) {
@@ -31,11 +32,11 @@ const AddFile = () => {
         (snapshot) => {
           setProgress(
             FileName +
-              "  " +
-              Math.floor(
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              ) +
-              "% Done"
+            "  " +
+            Math.floor(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            ) +
+            "% Done"
           );
 
           switch (snapshot.state) {
@@ -61,6 +62,7 @@ const AddFile = () => {
                 SenderName: auth.currentUser.displayName,
                 Description: Discription,
                 url: downloadURL,
+                ShelfLocation: shelfLocation,
               }
             );
 
@@ -68,11 +70,13 @@ const AddFile = () => {
             document.getElementById("full_name").value = "";
             document.getElementById("file").value = [];
             document.getElementById("progress").value = "";
+            document.getElementById("shelfLocation").value = "";
 
             setProgress("");
             setFileName("");
             setDiscription("");
             setSendFile(null);
+            setShelfLocation("none");
 
             e.preventDefault();
             console.log("submit");
@@ -86,7 +90,7 @@ const AddFile = () => {
     }
   };
   return (
-    <AdminLayout>
+    <UserLayout>
       <div className="flex min-h-screen justify-center bg-gray-100 p-6  pt-8">
         <div className="container mx-auto max-w-screen-lg">
           <div>
@@ -121,17 +125,18 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="address">Location</label>
+                      <label htmlFor="shelfLocation"> Shelf Location</label>
                       <input
                         type="text"
-                        name="location"
-                        id="location"
+                        name="shelfLocation"
+                        id="shelfLocation"
                         className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="none"
+                        onChange={(e) => setShelfLocation(e.target.value)}
                       />
                     </div>
                     <div className="md:col-span-3">
-                      <label htmlFor="email">Description</label>
+                      <label htmlFor="type">Description</label>
                       <textarea
                         name="type"
                         id="type"
@@ -142,7 +147,7 @@ const AddFile = () => {
                     </div>
 
                     <div className="md:col-span-3">
-                      <label htmlFor="state">Upload File</label>
+                      <label htmlFor="file">Upload File</label>
                       <div className="mt-1 flex h-10 items-center rounded border border-gray-200 bg-gray-50">
                         <input
                           type="file"
@@ -157,7 +162,7 @@ const AddFile = () => {
 
                     {progress && (
                       <div className="md:col-span-3">
-                        <label htmlFor="address">Progress</label>
+                        <label htmlFor="progress">Progress</label>
                         <input
                           type="text"
                           id="progress"
@@ -175,6 +180,12 @@ const AddFile = () => {
                             Cancel
                           </button>
                           <button
+                            disabled={
+                              !FileName ||
+                              !Discription ||
+                              !sendFile ||
+                              !shelfLocation
+                            }
                             onClick={(e) => UploadFile(e)}
                             className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
                           >
@@ -191,7 +202,7 @@ const AddFile = () => {
         </div>
         {/* </form> */}
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 

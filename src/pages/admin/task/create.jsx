@@ -20,6 +20,9 @@ const AddMember = () => {
   const temp = [];
   const [assignedto, setassignedto] = useState([]);
   const [members, setMembers] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [allgroups, setallGroups] = useState([]);
+  const taskTo = []
   const [data, setData] = useState({
     Title: "",
     Description: "",
@@ -27,12 +30,14 @@ const AddMember = () => {
     Priority: "",
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
-    Status: "Assigned",
+    Status: "assigned",
     AssignedBy: user.displayName,
   });
   const getData = async () => {
-    let arr = [];
+    let arr = []
+    let groups = []
     const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    const allGroup = collection(db, "KalCompany", "Groups", "Groups");
     try {
       const doc = await getDocs(all);
       doc.forEach((d) => {
@@ -42,74 +47,142 @@ const AddMember = () => {
       console.log(err);
       setMembers([{ Name: "check your connection" }]);
     }
+    try {
+      const doc = await getDocs(allGroup)
+      doc.forEach(d => {
+        groups.push({ id: d.id, data: d.data() })
+      });
+    } catch (err) {
+      console.log(err)
+      setGroups([{ Name: "check your connection" }])
+    }
+    arr.map(m => {
+      taskTo.push(m)
+    })
+    groups.map(m => {
+      taskTo.push(m)
+    })
+    setMembers(taskTo)
+    setallMembers(taskTo)
+    setGroups(groups)
+    setallGroups(groups)
 
-    setMembers(arr);
-    setallMembers(arr);
-  };
-
+    // console.log(taskTo)
+  }
+  // useEffect(()=>{
+  //   setTaskTo(Object.assign(allMembers, allgroups))
+  // },[allgroups, allMembers] )
   const updateMember = async (i) => {
     const docRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
-    const mem = await getDoc(docRef);
-    let tempTask = [];
-    let tempReport = [];
-    let tempGroup = [];
-    const temp =
-      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report =
-      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group =
-      mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
-    if (temp) {
-      temp.forEach((t) => {
-        if (t) {
-          tempTask.push(t.stringValue);
-        }
-      });
+    const mem = await getDoc(docRef)
+    if (mem._document) {
+      let tempTask = [];
+      let tempReport = [];
+      let tempGroup = [];
+      const temp = mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report = mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const group = mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+      if (temp) {
+        temp.forEach(t => {
+          if (t) {
+            tempTask.push(t.stringValue);
+          }
+        });
+      }
+      if (report) {
+        report.forEach(r => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      tempTask.push(data.Title);
+      const newData = {
+        Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+        Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+        Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+        Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+        Department:
+          mem._document.data.value.mapValue.fields.Department.stringValue,
+        PhoneNumber:
+          mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+        DateOfBirth:
+          mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+        ProfilePic:
+          mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+        RegisteredAt:
+          mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+        GroupId: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+      };
+      updateDoc(docRef, newData)
+        .then((docRef) => {
+          console.log(
+            "A New Document Field has been added to an existing document"
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    } else {
+      const groupRef = doc(db, "KalCompany", "Groups", "Groups", i);
+      const group = await getDoc(groupRef);
+      let tempTask = [];
+      let tempReport = [];
+      let tempGroup = [];
+      let tempPeople = [];
+      const task = group._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report = group._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const members = group._document.data.value.mapValue.fields.Members.arrayValue.values;
+      const people = group._document.data.value.mapValue.fields.People.arrayValue.values;
+      if (people) {
+        people.forEach(p => {
+          if (p) {
+            tempPeople.push(p.stringValue);
+          }
+        });
+      }
+      if (task) {
+        task.forEach(t => {
+          if (t) {
+            tempTask.push(t.stringValue);
+          }
+        });
+      }
+      if (report) {
+        report.forEach(r => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      if (members) {
+        members.forEach(g => {
+          if (g) {
+            tempGroup.push(g.stringValue);
+          }
+        });
+      }
+      tempTask.push(data.Title)
+      const newGroup = {
+        People: tempPeople,
+        Type: group._document.data.value.mapValue.fields.Type.stringValue,
+        Name: group._document.data.value.mapValue.fields.Name.stringValue,
+        Members: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+        Learder: group._document.data.value.mapValue.fields.Learder.stringValue
+      }
+      updateDoc(groupRef, newGroup)
+        .then(groupRef => {
+          console.log("A New Document Field has been added to an existing document");
+        })
+        .catch(error => {
+          console.log(error);
+        })
     }
-    if (report) {
-      report.forEach((r) => {
-        if (r) {
-          tempReport.push(r.stringValue);
-        }
-      });
-    }
-    if (group) {
-      group.forEach((g) => {
-        if (g) {
-          tempGroup.push(g.stringValue);
-        }
-      });
-    }
-    tempTask.push(data.Title);
-    const newData = {
-      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
-      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
-      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
-      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
-      Department:
-        mem._document.data.value.mapValue.fields.Department.stringValue,
-      PhoneNumber:
-        mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
-      DateOfBirth:
-        mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
-      ProfilePic:
-        mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
-      RegisteredAt:
-        mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
-      GroupId: tempGroup,
-      Reports: tempReport,
-      Tasks: tempTask,
-    };
-    updateDoc(docRef, newData)
-      .then((docRef) => {
-        console.log(
-          "A New Document Field has been added to an existing document"
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  }
 
   const select = document.getElementById("selectPriority");
   const title = document.getElementById("title");
