@@ -12,7 +12,6 @@ import { useState, useEffect, useRef } from "react";
 import { auth } from "../../../../config/firebase";
 const user = auth.currentUser;
 import { db } from "../../../../context/DbContext";
-import { RiAttachment2 } from "react-icons/ri";
 import dynamic from "next/dynamic";
 import useFetch from "@/components/useFetch";
 const ClientOnlyEditor = dynamic(
@@ -20,7 +19,7 @@ const ClientOnlyEditor = dynamic(
   { ssr: false, loading: () => <p>Loading ...</p> }
 );
 
-const AddReport = () => {
+const AddLetter = () => {
   const { GetCompanyName } = useFetch("KalCompany");
   const [comp, setcomp] = useState("");
   const setComp = async () => {
@@ -140,16 +139,6 @@ const AddReport = () => {
 
                     <div className="md:col-span-6">
                       <label htmlFor="detail">Body</label>
-                      {/* <QuillNoSSRWrapper
-                        theme="snow"
-                        id="body"
-                        value={reportDetail}
-                        onChange={(e) => {
-                          setReportDetail(e.slice(3, e.lastIndexOf("</p>")));
-                        }}
-                        placeholder="Write body part of the letter"
-                        style={{ height: 180 }}
-                      /> */}
                       <ClientOnlyEditor
                         onInit={(evt, editor) => (editorRef.current = editor)}
                         apiKey="g1yw7n29lj6bkf1dco2yof3tac3lznaq0g325pdit2lczvxk"
