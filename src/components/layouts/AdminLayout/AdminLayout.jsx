@@ -12,7 +12,7 @@ import { useAuth } from "../../../../context/AuthContext";
 const router = Router;
 
 const AdminLayout = ({ children, noFooter = false }) => {
-  console.log(auth.currentUser)
+  // console.log(auth.currentUser)
   const { logout } = useAuth();
   const [openSideBar, openSideBarDispatch] = useReducer(
     openSideBarReducer,

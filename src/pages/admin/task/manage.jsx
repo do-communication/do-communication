@@ -10,6 +10,7 @@ import {
   getDoc,
   collection,
   deleteDoc,
+  updateDoc
 } from "firebase/firestore";
 import Router from "next/router";
 const router = Router;
@@ -30,7 +31,8 @@ const ManageTasks = () => {
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false);
-  let assignedMem = [];
+  const [assigned, setAssigned] = useState([]);
+  let tempo = [];
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
   const getData = async () => {
     let arr = [];
@@ -86,9 +88,9 @@ const ManageTasks = () => {
       sortable: true,
     },
     {
-      name: "Assigned To",
+      name: "Assigned By",
       selector: (row) =>
-        row.data && Array.from(new Set(row.data.AssignedTo)).toString(" "),
+        row.data && row.data.AssignedBy.slice(0,row.data.AssignedBy.length-1),
     },
     {
       name: "Status",
@@ -107,9 +109,28 @@ const ManageTasks = () => {
       selector: (row) => row.data && row.data.Priority,
     },
   ];
+  console.log("intask")
+  const fetch = async (arr) =>{
+    tempo = []
+
+    for (let m of arr){
+      const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
+      const val = await getDoc(refUser);
+      if(val._document){
+        tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
+      }else{
+        const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
+        const val2 = await getDoc(refGroup); 
+        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+      } 
+    }
+
+    setAssigned(tempo) 
+  }
   const handleClick = async (i, name) => {
     const memRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(memRef);
+    if(mem._document){
     let tempTask = [];
     let tempReport = [];
     let tempGroup = [];
@@ -138,9 +159,7 @@ const ManageTasks = () => {
     if (group) {
       group.forEach((g) => {
         if (g) {
-          if (g.stringValue != name) {
             tempGroup.push(g.stringValue);
-          }
         }
       });
     }
@@ -171,10 +190,70 @@ const ManageTasks = () => {
       })
       .catch((error) => {
         console.log(error);
+      });}
+      else{
+    const memRef = doc(db, "KalCompany", "Groups", "Groups", i);
+    const mem = await getDoc(memRef);
+    let tempTask = [];
+    let tempReport = [];
+    let tempMembers = [];
+    let tempPeople = [];
+    const task =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report =
+      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const members =
+      mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    const people = 
+    mem._document.data.value.mapValue.fields.People.arrayValue.values;
+
+    if (task) {
+      task.forEach((t) => {
+        if (t) {
+          if (t.stringValue != name) {
+            tempTask.push(t.stringValue);
+          }
+        }
       });
+    }
+    if (report) {
+      report.forEach((r) => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+    if (members) {
+      members.forEach((g) => {
+        if (g) {
+            tempMembers.push(g.stringValue);
+        }
+      });
+    }
+    const newData = {
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+      Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+      Members: tempMembers,
+      Reports: tempReport,
+      Tasks: tempTask,
+      People: tempPeople
+    };
+    updateDoc(memRef, newData)
+      .then((memRef) => {
+        console.log(
+          "A New Document Field has been added to an existing document"
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      }
   };
-  const handleRowSelected = useCallback((state) => {
+  const handleRowSelected = useCallback(async (state) => {
     setSelectedRows(state.selectedRows);
+    if (state.selectedRows[0]){
+    await fetch(state.selectedRows[0].data.AssignedTo);}
   }, []);
   useEffect(() => {
     getData();
@@ -245,10 +324,12 @@ const ManageTasks = () => {
           )}
 
           {selectedRows.length === 1 && (
+            
             <div className="flex flex-col">
               <div className="relative flex justify-end">
                 <button
-                  onClick={() => setShowManageTaskMenu(!showManageTaskMenu)}
+                  onClick={() => {setShowManageTaskMenu(!showManageTaskMenu);
+                    }}
                 >
                   <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
@@ -279,12 +360,10 @@ const ManageTasks = () => {
                           e.stopPropagation();
                           setSelectedRows([]);
                           setClearSelectedRows(true);
-                          // setClearSelectedRows(true);
                           const id = selectedRows[0].id;
-                          // selectedRows[0].data.map(m => {
-                          // handleClick(m.id, selectedRows[0].data.Title);
-                          // console.log(selectedRows[0].data)
-                          // })
+                          selectedRows[0].data.AssignedTo.map(m => {
+                          handleClick(m, selectedRows[0].data.Title);
+                          })
                           const check = confirm(
                             "Do you want to delete the task?"
                           );
@@ -316,10 +395,11 @@ const ManageTasks = () => {
                   {selectedRows[0].data.Title}
                 </h4>
                 <p className="text-sm">
+                  {/* {console.log(selectedRows[0].data.AssignedTo)} */}
                   Assigned to{" "}
                   {Array.from(
-                    new Set(selectedRows[0].data.AssignedTo)
-                  ).toString(" ")}{" "}
+                      new Set(assigned)
+                    ).toString(" ")}
                 </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">

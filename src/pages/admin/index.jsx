@@ -8,7 +8,7 @@ import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import useFetch from "@/components/useFetch";
 import { auth } from "../../../config/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, getDoc, doc } from "firebase/firestore";
 import { db } from "../../../context/DbContext";
 import { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
@@ -24,7 +24,26 @@ const Admin = () => {
   const [todo, setTodo] = useState([]);
   const [inprogress, setInprogress] = useState([]);
   const [completed, setComplete] = useState([]);
+  const [assigned1, setAssigned1] = useState([]);
+  const [assigned2, setAssigned2] = useState([]);
+  const [assigned3, setAssigned3] = useState([]);
 
+  const fetch = async (arr, setAssigned, tempo) =>{
+
+    for (let m of arr){
+      const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
+      const val = await getDoc(refUser);
+      if(val._document){
+        tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
+      }else{
+        const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
+        const val2 = await getDoc(refGroup); 
+        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+      } 
+    }
+
+    setAssigned(tempo) 
+  }
   const getData = async () => {
     if (auth.currentUser) {
       setUser(await GetUser(auth.currentUser.uid));
@@ -37,10 +56,12 @@ const Admin = () => {
       setNewTask(taskSnap.docs.length);
       const q1 = query(tasks, where("Status", "==", "assigned"));
       const temp1 = [];
+      const tempa = [];
       try {
         const todoTask = await getDocs(q1);
         todoTask.forEach((d) => {
           temp1.push(d.data());
+          fetch(d.data().AssignedTo, setAssigned1, tempa)
         });
       } catch (err) {
         console.log(err);
@@ -48,10 +69,12 @@ const Admin = () => {
       setTodo(temp1)
       const q2 = query(tasks, where("Status", "==", "inprogress"));
       const temp2 = [];
+      const tempb = [];
       try {
         const inprogressTask = await getDocs(q2);
         inprogressTask.forEach((d) => {
           temp2.push(d.data());
+          fetch(d.data().AssignedTo, setAssigned2, tempb)
         });
       } catch (err) {
         console.log(err);
@@ -59,10 +82,12 @@ const Admin = () => {
       setInprogress(temp2);
       const q3 = query(tasks, where("Status", "==", "done"));
       const temp3 = [];
+      const tempc = [];
       try {
         const doneTask = await getDocs(q3);
         doneTask.forEach((d) => {
           temp3.push(d.data());
+          fetch(d.data().AssignedTo, setAssigned3, tempc)
         });
       } catch (err) {
         console.log(err);
@@ -381,7 +406,7 @@ const Admin = () => {
                           <p className="text-sm">
                             Assigned to: {" "}
                             {Array.from(
-                              new Set(row.AssignedTo)
+                              new Set(assigned1)
                             ).toString(" ")}{" "}
                           </p>
 
@@ -424,7 +449,7 @@ const Admin = () => {
                             <p className="text-sm">
                               Assigned to: {" "}
                               {Array.from(
-                                new Set(row.AssignedTo)
+                                new Set(assigned2)
                               ).toString(" ")}{" "}
                             </p>
                           </div>
@@ -454,7 +479,7 @@ const Admin = () => {
                             <p className="text-sm">
                               Assigned to: {" "}
                               {Array.from(
-                                new Set(row.AssignedTo)
+                                new Set(assigned3)
                               ).toString(" ")}{" "}
                             </p>
                           </div>

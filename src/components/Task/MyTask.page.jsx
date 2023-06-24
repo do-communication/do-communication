@@ -15,16 +15,15 @@ const MyTaskPage = () => {
     const all = collection(db, "KalCompany", "Tasks", "Tasks");
     try {
 
-      console.log("onsnapshot called")
       const unsubscribe = onSnapshot(all, (querySnapshot) => {
         let arr = []
         let temp = []
         querySnapshot.forEach((doc) => {
           arr.push({ id: doc.id, data: doc.data() });
         });
-
+ 
         arr.map(a => {
-          if (a.data.AssignedTo.includes(user.displayName)) {
+          if (a.data.AssignedTo.includes(user.uid)) {
             temp.push(a)
           }
         })
