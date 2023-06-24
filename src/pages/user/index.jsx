@@ -6,7 +6,7 @@ import { auth } from "../../../config/firebase";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../context/DbContext";
- 
+
 const User = () => {
   const [user, setUser] = useState({});
   const { GetUser } = useFetch("KalCompany")
@@ -39,7 +39,7 @@ const User = () => {
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div className="grid grid-cols-2 text-center order-last md:order-first mt-20 md:mt-0">
               <div>
-                <p className="font-bold  ml-16 rounded-2xl w-10 bg-light text-white text-xl">{Colleague}</p>
+                <p className="font-bold  ml-16 rounded-2xl w-10 bg-light text-white text-xl">{Colleague - 1}</p>
                 <p className="text-gray-400">Colleague</p>
               </div>
               <div>

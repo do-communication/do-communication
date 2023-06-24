@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
-import SidebarLeader from "./SidebarLeader"
+import SidebarLeader from "./SidebarLeader";
+import Sidebar from "./Sidebar"
 import { auth } from "../../../../config/firebase";
 import OpenSideBarContext, {
   openSideBarReducer,
@@ -27,7 +27,7 @@ const UserLayout = ({ children }) => {
     return (
       <div className="md:flex">
         <OpenSideBarContext.Provider value={[openSideBar, openSideBarDispatch]}>
-          <Sidebar />
+          {auth.currentUser.displayName[auth.currentUser.displayName.length - 1] == "~" ? <SidebarLeader /> : <Sidebar />}
           <div className="flex flex-1 flex-col">
             {/* <!-- Top navbar --> */}
             <Header />
