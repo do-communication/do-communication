@@ -362,51 +362,7 @@ const ManageMembers = () => {
                 </h3>
 
                 <ul className="flex max-h-64 flex-col gap-2 overflow-y-auto">
-                  {/* <Link
-                    href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
-                    <p className="flex items-center gap-1 p-1 px-4 rounded-lg ">
-                      <BiGroup />
-                      Group one
-                    </p>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
-                    >
-                      <BsEye /> View
-                    </button>
-                  </Link>
-                  <Link
-                    href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
-                    <p className="flex items-center gap-1 p-1 px-4 rounded-lg ">
-                      <BiGroup />
-                      Group one
-                    </p>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
-                    >
-                      <BsEye /> View
-                    </button>
-                  </Link>
-                  <Link
-                    href="/admin/memebers/{userId}"
-                    className="flex items-center justify-between p-2 rounded-md hover:bg-opacity-25 hover:bg-secondary"
-                  >
-                    <p className="flex items-center gap-1 p-1 px-4 rounded-lg ">
-                      <BiGroup />
-                      Group one
-                    </p>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-1 px-2 text-white rounded-lg bg-primary hover:bg-secondary"
-                    >
-                      <BsEye /> View
-                    </button>
-                  </Link> */}
+                  
                   {selectedRows[0].data.GroupId &&
                     selectedRows[0].data.GroupId.map((row, index) => (
                       <li
@@ -414,12 +370,12 @@ const ManageMembers = () => {
                         className="flex justify-between rounded-lg bg-white px-4 py-2 shadow-sm shadow-black"
                       >
                         <p>{row}</p>
-                        <button
+                        {/* <button
                           type="submit"
                           className="flex items-center gap-1 rounded-lg bg-primary px-2 text-white hover:bg-secondary"
                         >
                           <BsEye /> View
-                        </button>
+                        </button> */}
                       </li>
                     ))}
                 </ul>
