@@ -26,7 +26,7 @@ const Login = () => {
       const cred = await logIn(data.email, data.password);
       if (
         auth.currentUser.displayName[
-          auth.currentUser.displayName.length - 1
+        auth.currentUser.displayName.length - 1
         ] === "$"
       ) {
         router.push("/admin");
@@ -80,28 +80,28 @@ const Login = () => {
       passwordInput.placeholder = "Enter Your Password";
     }
   };
-  const handleLoginGoogle = async (e) => {
-    e.preventDefault();
-    try {
-      const cred = await signInGoogle(auth, provider);
-      router.push("/admin");
-    } catch (err) {
-      if (err.message == "Firebase: Error (auth/wrong-password).") {
-        passwordInput.value = "";
-        passwordInput.placeholder = "The password is incorrect";
-        passworddiv.classList.remove("ring-blue-300");
-        passworddiv.classList.add("ring-red-600");
-        passworddiv.classList.add("ring-2");
-      } else {
-        emailInput.value = "";
-        emailInput.placeholder = "The email you entered is incorrect";
-        emaildiv.classList.remove("ring-blue-300");
-        emaildiv.classList.add("ring-red-600");
-        emaildiv.classList.add("ring-2");
-      }
-    }
-    console.log(data);
-  };
+  // const handleLoginGoogle = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const cred = await signInGoogle(auth, provider);
+  //     router.push("/admin");
+  //   } catch (err) {
+  //     if (err.message == "Firebase: Error (auth/wrong-password).") {
+  //       passwordInput.value = "";
+  //       passwordInput.placeholder = "The password is incorrect";
+  //       passworddiv.classList.remove("ring-blue-300");
+  //       passworddiv.classList.add("ring-red-600");
+  //       passworddiv.classList.add("ring-2");
+  //     } else {
+  //       emailInput.value = "";
+  //       emailInput.placeholder = "The email you entered is incorrect";
+  //       emaildiv.classList.remove("ring-blue-300");
+  //       emaildiv.classList.add("ring-red-600");
+  //       emaildiv.classList.add("ring-2");
+  //     }
+  //   }
+  //   console.log(data);
+  // };
 
   return (
     <AuthLayout title="Sign In">
@@ -165,7 +165,7 @@ const Login = () => {
           Sign in
         </button>
         <h1 className="text-red-700 error-txt"></h1>
-        <fieldset className="border-t border-black">
+        {/* <fieldset className="border-t border-black">
           <legend className="px-4 mx-auto text-lg text-black">or</legend>
         </fieldset>
         <button
@@ -173,7 +173,7 @@ const Login = () => {
           className="flex items-center justify-center w-full py-4 text-lg font-semibold text-white rounded-full shadow-sm bg-primary shadow-black hover:brightness-95"
         >
           Sign in with &nbsp; <FcGoogle className="w-6 h-auto" />
-        </button>
+        </button> */}
       </div>
     </AuthLayout>
   );

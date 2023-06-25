@@ -16,13 +16,14 @@ const Signup = () => {
   const { user, signUp } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [data, setData] = useState({
     name: "",
     companyName: "",
     email: "",
     password: "",
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const emailSignUp = document.getElementById("emailSignUp");
   const passwordSignUp = document.getElementById("passwordSignUp");
   const divemail = document.getElementById("divemail");
@@ -31,6 +32,8 @@ const Signup = () => {
   const nameInput = document.getElementById("nameInput");
   const namediv = document.getElementById("namediv");
   const companydiv = document.getElementById("companydiv");
+  const divconfirm = document.getElementById("divconfirm");
+  const passwordConfirm = document.getElementById("passwordConfirm");
 
   const handleEmailChange = (e) => {
     e.preventDefault();
@@ -45,6 +48,17 @@ const Signup = () => {
       emailSignUp.placeholder = "Enter your email";
     }
   };
+  const handleConfirm = (e) => {
+    e.preventDefault();
+    setConfirmPassword(e.target.value);
+    if (divconfirm && divconfirm.classList.contains("ring-red-600")) {
+      divconfirm.classList.remove("ring-red-600");
+      divconfirm.classList.remove("ring-2");
+      divconfirm.classList.add("ring-blue-300");
+      passwordConfirm.placeholder = "Confirm Your Password";
+    }
+  }
+
   const handlePasswordChange = (e) => {
     e.preventDefault();
 
@@ -114,11 +128,19 @@ const Signup = () => {
       divpassword.classList.add("ring-red-600");
       divpassword.classList.add("ring-2");
     }
+    if (passwordSignUp.value !== passwordConfirm.value) {
+      passwordConfirm.value = "";
+      passwordConfirm.placeholder = "Password doesn't match";
+      divconfirm.classList.remove("ring-blue-300");
+      divconfirm.classList.add("ring-red-600");
+      divconfirm.classList.add("ring-2");
+    }
     if (
       passwordSignUp.value != "" &&
       emailSignUp.value != "" &&
       nameInput.value != "" &&
-      companyInput.value != ""
+      companyInput.value != "" &&
+      passwordSignUp.value === passwordConfirm.value
     ) {
       try {
         signUp(data.email, data.password).then(async (cred) => {
@@ -264,13 +286,16 @@ const Signup = () => {
             />
           )}
         </div>
-        <div className="group flex gap-2 rounded-3xl bg-white pl-5 pr-5 ring-blue-300 hover:ring-2 active:ring-2">
+        <div id="divconfirm" className="group flex gap-2 rounded-3xl bg-white pl-5 pr-5 ring-blue-300 hover:ring-2 active:ring-2">
           <MdLockOutline className="h-auto w-10 pl-2 text-gray-600" />
           <input
             type={showConfirmPassword ? "text" : "password"}
             className="w-full rounded-3xl bg-white px-[10px] py-4 text-gray-600 outline-none"
             placeholder="Confirm your password"
             size="lg"
+            value={confirmPassword}
+            id="passwordConfirm"
+            onChange={handleConfirm}
           />
           {showConfirmPassword ? (
             <AiOutlineEye

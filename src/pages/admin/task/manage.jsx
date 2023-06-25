@@ -90,7 +90,7 @@ const ManageTasks = () => {
     {
       name: "Assigned By",
       selector: (row) =>
-        row.data && row.data.AssignedBy.slice(0,row.data.AssignedBy.length-1),
+        row.data && row.data.AssignedBy.slice(0, row.data.AssignedBy.length - 1),
     },
     {
       name: "Status",
@@ -110,150 +110,154 @@ const ManageTasks = () => {
     },
   ];
   console.log("intask")
-  const fetch = async (arr) =>{
+  const fetch = async (arr) => {
     tempo = []
 
-    for (let m of arr){
+    for (let m of arr) {
       const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
       const val = await getDoc(refUser);
-      if(val._document){
+      if (val._document) {
         tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
-      }else{
+      } else {
         const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
-        const val2 = await getDoc(refGroup); 
-        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
-      } 
+        const val2 = await getDoc(refGroup);
+        if (val2._document) {
+          tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+        }
+      }
     }
 
-    setAssigned(tempo) 
+    setAssigned(tempo)
   }
   const handleClick = async (i, name) => {
     const memRef = doc(db, "KalCompany", "Users", "StaffMembers", i);
     const mem = await getDoc(memRef);
-    if(mem._document){
-    let tempTask = [];
-    let tempReport = [];
-    let tempGroup = [];
-    const temp =
-      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report =
-      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const group =
-      mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
-    if (temp) {
-      temp.forEach((t) => {
-        if (t) {
-          if (t.stringValue != name) {
-            tempTask.push(t.stringValue);
+    if (mem._document) {
+      let tempTask = [];
+      let tempReport = [];
+      let tempGroup = [];
+      const temp =
+        mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report =
+        mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const group =
+        mem._document.data.value.mapValue.fields.GroupId.arrayValue.values;
+      if (temp) {
+        temp.forEach((t) => {
+          if (t) {
+            if (t.stringValue != name) {
+              tempTask.push(t.stringValue);
+            }
           }
-        }
-      });
-    }
-    if (report) {
-      report.forEach((r) => {
-        if (r) {
-          tempReport.push(r.stringValue);
-        }
-      });
-    }
-    if (group) {
-      group.forEach((g) => {
-        if (g) {
-            tempGroup.push(g.stringValue);
-        }
-      });
-    }
-    const newData = {
-      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
-      Address: mem._document.data.value.mapValue.fields.Address.stringValue,
-      Email: mem._document.data.value.mapValue.fields.Email.stringValue,
-      Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
-      Department:
-        mem._document.data.value.mapValue.fields.Department.stringValue,
-      PhoneNumber:
-        mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
-      DateOfBirth:
-        mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
-      ProfilePic:
-        mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
-      RegisteredAt:
-        mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
-      GroupId: tempGroup,
-      Reports: tempReport,
-      Tasks: tempTask,
-    };
-    updateDoc(memRef, newData)
-      .then((memRef) => {
-        console.log(
-          "A New Document Field has been added to an existing document"
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });}
-      else{
-    const memRef = doc(db, "KalCompany", "Groups", "Groups", i);
-    const mem = await getDoc(memRef);
-    let tempTask = [];
-    let tempReport = [];
-    let tempMembers = [];
-    let tempPeople = [];
-    const task =
-      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
-    const report =
-      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
-    const members =
-      mem._document.data.value.mapValue.fields.Members.arrayValue.values;
-    const people = 
-    mem._document.data.value.mapValue.fields.People.arrayValue.values;
-
-    if (task) {
-      task.forEach((t) => {
-        if (t) {
-          if (t.stringValue != name) {
-            tempTask.push(t.stringValue);
-          }
-        }
-      });
-    }
-    if (report) {
-      report.forEach((r) => {
-        if (r) {
-          tempReport.push(r.stringValue);
-        }
-      });
-    }
-    if (members) {
-      members.forEach((g) => {
-        if (g) {
-            tempMembers.push(g.stringValue);
-        }
-      });
-    }
-    const newData = {
-      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
-      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
-      Type: mem._document.data.value.mapValue.fields.Type.stringValue,
-      Members: tempMembers,
-      Reports: tempReport,
-      Tasks: tempTask,
-      People: tempPeople
-    };
-    updateDoc(memRef, newData)
-      .then((memRef) => {
-        console.log(
-          "A New Document Field has been added to an existing document"
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        });
       }
+      if (report) {
+        report.forEach((r) => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      if (group) {
+        group.forEach((g) => {
+          if (g) {
+            tempGroup.push(g.stringValue);
+          }
+        });
+      }
+      const newData = {
+        Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+        Address: mem._document.data.value.mapValue.fields.Address.stringValue,
+        Email: mem._document.data.value.mapValue.fields.Email.stringValue,
+        Gender: mem._document.data.value.mapValue.fields.Gender.stringValue,
+        Department:
+          mem._document.data.value.mapValue.fields.Department.stringValue,
+        PhoneNumber:
+          mem._document.data.value.mapValue.fields.PhoneNumber.stringValue,
+        DateOfBirth:
+          mem._document.data.value.mapValue.fields.DateOfBirth.stringValue,
+        ProfilePic:
+          mem._document.data.value.mapValue.fields.ProfilePic.stringValue,
+        RegisteredAt:
+          mem._document.data.value.mapValue.fields.RegisteredAt.stringValue,
+        GroupId: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+      };
+      updateDoc(memRef, newData)
+        .then((memRef) => {
+          console.log(
+            "A New Document Field has been added to an existing document"
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      const memRef = doc(db, "KalCompany", "Groups", "Groups", i);
+      const mem = await getDoc(memRef);
+      let tempTask = [];
+      let tempReport = [];
+      let tempMembers = [];
+      let tempPeople = [];
+      const task =
+        mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report =
+        mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const members =
+        mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+      const people =
+        mem._document.data.value.mapValue.fields.People.arrayValue.values;
+
+      if (task) {
+        task.forEach((t) => {
+          if (t) {
+            if (t.stringValue != name) {
+              tempTask.push(t.stringValue);
+            }
+          }
+        });
+      }
+      if (report) {
+        report.forEach((r) => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      if (members) {
+        members.forEach((g) => {
+          if (g) {
+            tempMembers.push(g.stringValue);
+          }
+        });
+      }
+      const newData = {
+        Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+        Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+        Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+        Members: tempMembers,
+        Reports: tempReport,
+        Tasks: tempTask,
+        People: tempPeople
+      };
+      updateDoc(memRef, newData)
+        .then((memRef) => {
+          console.log(
+            "A New Document Field has been added to an existing document"
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
   const handleRowSelected = useCallback(async (state) => {
     setSelectedRows(state.selectedRows);
-    if (state.selectedRows[0]){
-    await fetch(state.selectedRows[0].data.AssignedTo);}
+    if (state.selectedRows[0]) {
+      await fetch(state.selectedRows[0].data.AssignedTo);
+    }
   }, []);
   useEffect(() => {
     getData();
@@ -286,6 +290,7 @@ const ManageTasks = () => {
             data={tasks}
             selectableRows
             onSelectedRowsChange={handleRowSelected}
+            selectableRowsSingle={true}
             progressPending={pending}
             pagination
           />
@@ -324,25 +329,26 @@ const ManageTasks = () => {
           )}
 
           {selectedRows.length === 1 && (
-            
+
             <div className="flex flex-col">
               <div className="relative flex justify-end">
                 <button
-                  onClick={() => {setShowManageTaskMenu(!showManageTaskMenu);
-                    }}
+                  onClick={() => {
+                    setShowManageTaskMenu(!showManageTaskMenu);
+                  }}
                 >
                   <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
                 </button>
                 {showManageTaskMenu && (
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
-                    <li className="p-1 rounded hover:bg-primary">
+                    {/* <li className="p-1 rounded hover:bg-primary">
                       <Link
                         href="/admin/reports/member/id"
                         className="flex items-center gap-2"
                       >
                         <HiDocumentChartBar className="w-5 h-auto" /> Reports
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
@@ -362,7 +368,7 @@ const ManageTasks = () => {
                           setClearSelectedRows(true);
                           const id = selectedRows[0].id;
                           selectedRows[0].data.AssignedTo.map(m => {
-                          handleClick(m, selectedRows[0].data.Title);
+                            handleClick(m, selectedRows[0].data.Title);
                           })
                           const check = confirm(
                             "Do you want to delete the task?"
@@ -398,8 +404,8 @@ const ManageTasks = () => {
                   {/* {console.log(selectedRows[0].data.AssignedTo)} */}
                   Assigned to{" "}
                   {Array.from(
-                      new Set(assigned)
-                    ).toString(" ")}
+                    new Set(assigned)
+                  ).toString(" ")}
                 </p>
               </div>
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">

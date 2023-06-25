@@ -16,12 +16,16 @@ import {
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist, MdTask } from "react-icons/md";
+import Router from "next/router";
+
+const router = Router;
 
 const ManageTasks = () => {
   const [allTasks, setallTasks] = useState([]);
   const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
+  const [display, setDisplay] = useState([]);
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
   const [user, setUser] = useState("");
   let tempTask = [];
@@ -44,6 +48,25 @@ const ManageTasks = () => {
     }
   };
   getMem();
+
+  const fetch = async (arr, setAssigned, tempo) => {
+    for (let m of arr) {
+      const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
+      const val = await getDoc(refUser);
+      if (val._document) {
+        tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
+      } else {
+        const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
+        const val2 = await getDoc(refGroup);
+        if (val2._document) {
+          tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+        }
+      }
+    }
+
+    setAssigned(tempo)
+  }
+
   const getData = async () => {
     let arr = [];
     let selected = [];
@@ -64,6 +87,10 @@ const ManageTasks = () => {
     });
     setTasks(selected);
     setallTasks(selected);
+    let tempo = [];
+    selected.map(m => {
+      fetch(m.AssignedTo, setDisplay, tempo)
+    })
   };
   useEffect(() => {
     const filteredData = allTasks.filter(
@@ -91,8 +118,8 @@ const ManageTasks = () => {
       sortable: true,
     },
     {
-      name: "Assigned To",
-      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" "),
+      name: "Assigned By",
+      selector: (row) => row.AssignedBy,
     },
     {
       name: "Status",
@@ -185,12 +212,12 @@ const ManageTasks = () => {
           {selectedRows.length === 1 && (
             <div className="flex flex-col">
               <div className="relative flex justify-end">
-                <button
+                {/* <button
                   onClick={() => setShowManageTaskMenu(!showManageTaskMenu)}
                 >
                   <BiDotsVertical className="w-8 h-auto hover:text-gray-600" />
-                </button>
-                {showManageTaskMenu && (
+                </button> */}
+                {/* {showManageTaskMenu && (
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
@@ -217,7 +244,7 @@ const ManageTasks = () => {
                       </button>
                     </li>
                   </ul>
-                )}
+                )} */}
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-light">
@@ -228,7 +255,7 @@ const ManageTasks = () => {
                 </h4>
                 <p className="text-sm">
                   Assigned to{" "}
-                  {Array.from(new Set(selectedRows[0].AssignedTo)).toString(
+                  {Array.from(new Set(display)).toString(
                     " "
                   )}{" "}
                 </p>

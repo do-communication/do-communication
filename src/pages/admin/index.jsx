@@ -38,7 +38,9 @@ const Admin = () => {
       } else {
         const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
         const val2 = await getDoc(refGroup);
-        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+        if (val2._document) {
+          tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+        }
       }
     }
 

@@ -287,7 +287,7 @@ const ManageGroup = () => {
 
 
 
-
+    console.log(data.People[index]);
     handleAssign(groupId, data);
     const leaderRef = doc(
       db,
@@ -597,7 +597,7 @@ const ManageGroup = () => {
                         <MdChecklist className="w-5 h-auto" /> Tasks
                       </button>
                     </li>
-                    <li className="p-1 rounded hover:bg-primary">
+                    {/* <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
                           router.push(
@@ -608,7 +608,7 @@ const ManageGroup = () => {
                       >
                         <MdChecklist className="w-5 h-auto" /> Reports
                       </button>
-                    </li>
+                    </li> */}
                     <li className="p-1 rounded hover:bg-primary">
                       <button
                         onClick={() => {
