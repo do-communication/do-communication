@@ -143,7 +143,7 @@ const AddLetter = () => {
                         onInit={(evt, editor) => (editorRef.current = editor)}
                         apiKey="g1yw7n29lj6bkf1dco2yof3tac3lznaq0g325pdit2lczvxk"
                         init={{
-                          height: 500,
+                          height: 200,
                           menubar: false,
                           plugins: [
                             "advlist",
@@ -172,7 +172,7 @@ const AddLetter = () => {
                         }}
                       />
                     </div>
-                    <div className="mt-10 md:col-span-6 "></div>
+                    <div className="mt-4 md:col-span-6 "></div>
                     <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 ">

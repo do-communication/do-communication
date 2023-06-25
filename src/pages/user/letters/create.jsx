@@ -71,14 +71,14 @@ const AddLetter = () => {
 
   return (
     <UserLayout>
-      <div className="flex justify-center min-h-screen p-6 pt-2 bg-gray-100">
-        <div className="container max-w-screen-lg mx-auto">
+      <div className="flex min-h-screen justify-center bg-gray-100 p-6 pt-2">
+        <div className="container mx-auto max-w-screen-lg">
           <form>
-            <h2 className="pt-0 pb-4 text-xl font-semibold text-gray-600">
+            <h2 className="pb-4 pt-0 text-xl font-semibold text-gray-600">
               Write a Letter
             </h2>
-            <div className="p-4 px-4 mb-6 bg-white rounded shadow-sm md:p-8">
-              <div className="grid grid-cols-1 gap-4 text-sm gap-y-2 lg:grid-cols-3">
+            <div className="mb-6 rounded bg-white p-4 px-4 shadow-sm md:p-8">
+              <div className="grid grid-cols-1 gap-4 gap-y-2 text-sm lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="pb-3 pl-4 text-lg font-medium">Letter</p>
                   <img
@@ -95,7 +95,7 @@ const AddLetter = () => {
                     <input
                       type="text"
                       name="report_title"
-                      className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                      className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                       id="to"
                       placeholder="enter recipient name"
                       value={data.To}
@@ -109,7 +109,7 @@ const AddLetter = () => {
                     <input
                       type="text"
                       name="report_title"
-                      className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                      className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                       id="address"
                       placeholder="enter recipient address"
                       value={data.Address}
@@ -118,13 +118,13 @@ const AddLetter = () => {
                       }}
                     />
                   </div>
-                  <div className="grid grid-cols-1 gap-6 text-sm gap-y-5 md:grid-cols-6">
+                  <div className="grid grid-cols-1 gap-6 gap-y-5 text-sm md:grid-cols-6">
                     <div className="md:col-span-6">
                       <label htmlFor="full_name"> Subject:</label>
                       <input
                         type="text"
                         name="report_title"
-                        className="w-full h-10 px-4 mt-1 border rounded bg-gray-50"
+                        className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         id="subject"
                         placeholder="enter report title"
                         value={data.Subject}
@@ -140,7 +140,7 @@ const AddLetter = () => {
                         onInit={(evt, editor) => (editorRef.current = editor)}
                         apiKey="g1yw7n29lj6bkf1dco2yof3tac3lznaq0g325pdit2lczvxk"
                         init={{
-                          height: 500,
+                          height: 200,
                           menubar: false,
                           plugins: [
                             "advlist",
@@ -169,18 +169,18 @@ const AddLetter = () => {
                         }}
                       />
                     </div>
-                    <div className="mt-10 md:col-span-6 "></div>
+                    <div className="mt-4 md:col-span-6 "></div>
                     <div className="ml-auto text-right md:col-span-6">
                       <div className="inline-flex items-end justify-end">
                         <div className="flex-row gap-10 ">
                           <button
                             onClick={handleClear}
-                            className="px-4 py-2 mr-6 font-bold bg-gray-300 border-b-2 rounded text-balck hover:bg-primary"
+                            className="text-balck mr-6 rounded border-b-2 bg-gray-300 px-4 py-2 font-bold hover:bg-primary"
                           >
                             Cancel
                           </button>
                           <button
-                            className="px-4 py-2 font-bold text-white rounded bg-primary hover:bg-bold"
+                            className="rounded bg-primary px-4 py-2 font-bold text-white hover:bg-bold"
                             onClick={handleSubmit}
                           >
                             Compose Letter
