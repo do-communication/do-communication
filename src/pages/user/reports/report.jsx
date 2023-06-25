@@ -350,7 +350,7 @@ const AddReport = () => {
                         }}
                       />
                     </div>
-                    <div className="mt-10 md:col-span-6 ">
+                    <div className="mt-8 md:col-span-6 ">
                       <label htmlFor="address">Submitted To:</label>
                       <Select
                         // ref={selectInputRef}
