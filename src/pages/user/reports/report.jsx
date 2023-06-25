@@ -32,10 +32,17 @@ const AddReport = () => {
   const [sendFile, setSendFile] = useState(null);
   const [progress, setProgress] = useState("");
   const [members, setMembers] = useState([]);
+
   let url = "";
   const [mem, setmem] = useState({});
+  let name = "";
+  if (auth.currentUser.displayName[auth.currentUser.displayName.length-1] === "~") {
+    name = auth.currentUser.displayName.slice(0, auth.currentUser.displayName.length - 1);
+  }else{
+    name = auth.currentUser.displayName
+  }
   const [data, setData] = useState({
-    ReportBy: user.displayName,
+    ReportBy: name,
     Title: "",
     Detail: "",
     File: "",
@@ -170,25 +177,53 @@ const AddReport = () => {
     setData(values);
   }, [reportDetail, url]);
 
+  const fetch = async (arr, setAssigned, tempo) =>{
+
+    for (let m of arr){
+      const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
+      const val = await getDoc(refUser);
+      if(val._document){
+        tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
+      }else{
+        const refGroup = doc(db, "KalCompany", "Users", "Admin", m);
+        const val2 = await getDoc(refGroup); 
+        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+      } 
+    }
+
+    setAssigned(tempo) 
+  }
   const getData = async () => {
     let arr = [];
-    const all = collection(db, "KalCompany", "Users", "StaffMembers");
+    let leaders = [];
+    const all = collection(db, "KalCompany", "Groups", "Groups");
+    const admin = collection(db, "KalCompany", "Users", "Admin");
     try {
       const doc = await getDocs(all);
+      const ad = await getDocs(admin);
       doc.forEach((d) => {
         arr.push({ id: d.id, data: d.data() });
       });
+      ad.forEach((d) => {
+        leaders.push(d.id);
+      });
     } catch (err) {
       console.log(err);
-      setMembers([{ Name: "check your connection" }]);
+      // setMembers([{ Name: "check your connection" }]);
+    }
+    
+    for(let m in arr){
+      if (arr[m].data.Learder != "" && arr[m].data.Learder != auth.currentUser.uid){
+        leaders.push(arr[m].data.Learder)
+      }
     }
 
-    setMembers(arr)
-    setallMembers(arr)
+    let temporary = [];
+    fetch(leaders, setallMembers, temporary)
   }
   useEffect(async () => {
     getData()
-    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", user.uid);
+    const docRef = doc(db, "KalCompany", "Users", "StaffMembers", auth.currentUser.uid);
     setmem(await getDoc(docRef));
   }, []);
   return (
@@ -253,10 +288,8 @@ const AddReport = () => {
                         id="assigned"
                         options={allMembers.map((member) => {
                           return {
-                            label: member.data.Name,
-                            value: member.data.Name,
-                            id: member.id,
-                            Tasks: member.data.Tasks,
+                            label: member,
+                            value: member,
                           };
                         })}
                         onChange={(selectedMembers) => {

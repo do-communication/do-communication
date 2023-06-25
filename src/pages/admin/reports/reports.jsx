@@ -15,7 +15,7 @@ import {
   collection,
   deleteDoc,
 } from "firebase/firestore";
-
+import { auth } from "../../../../config/firebase";
 const Reports = () => {
   const [allReports, setallReports] = useState([]);
   const [reports, setReports] = useState(allReports);
@@ -27,7 +27,8 @@ const Reports = () => {
     try {
       const doc = await getDocs(all);
       doc.forEach((d) => {
-        arr.push(d.data());
+        if(d.data().ReportTo.includes(auth.currentUser.displayName.slice(0, auth.currentUser.displayName.length-1))){
+        arr.push(d.data());}
       });
     } catch (err) {
       console.log(err);
