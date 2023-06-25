@@ -226,21 +226,21 @@ const ManageGroup = () => {
                 {showManageGroupMenu && (
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href={`/user/groups/tasks/group/${selectedRows[0].id}`}
+                      <button
+                        onClick={()=>{router.push(`/user/groups/tasks/group/${selectedRows[0].id}`)}}
                         className="flex items-center gap-2"
                       >
                         <MdChecklist className="w-5 h-auto" /> Tasks
-                      </Link>
+                      </button>
                     </li>
 
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/user/groups/edit/id"
+                      <button
+                        onClick={()=>{router.push(`edit/${selectedRows[0].id}`)}}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Group
-                      </Link>
+                      </button>
                     </li>
                   </ul>
                 )}

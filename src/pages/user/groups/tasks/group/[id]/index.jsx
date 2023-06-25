@@ -6,6 +6,8 @@ import { db } from "context/DbContext";
 import { doc, getDocs, getDoc, collection } from "firebase/firestore";
 // import { useRouter } from 'next/router';
 import { usePathname } from "next/navigation";
+import { Router } from "next/router";
+const router = Router
 import {
   AiFillDelete,
   AiFillEdit,
@@ -25,6 +27,8 @@ const ManageTasks = () => {
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
   const [user, setUser] = useState("");
   let tempTask = [];
+  let ids = [];
+  const [display, setDisplay] = useState([]);
   // const { asPath, pathname } = useRouter();
   const currentPage = usePathname();
   let i = currentPage.lastIndexOf("group/");
@@ -35,6 +39,7 @@ const ManageTasks = () => {
     setUser(mem._document.data.value.mapValue.fields.Name.stringValue);
     const tasks =
       mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    
     if (tasks) {
       tasks.forEach((t) => {
         if (t) {
@@ -42,8 +47,27 @@ const ManageTasks = () => {
         }
       });
     }
+
   };
   getMem();
+
+  const fetch = async (arr, setAssigned, tempo) => {
+
+    for (let m of arr) {
+      const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
+      const val = await getDoc(refUser);
+      if (val._document) {
+        tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
+      } else {
+        const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
+        const val2 = await getDoc(refGroup);
+        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+      }
+    }
+
+    setAssigned(tempo)
+  }
+
   const getData = async () => {
     let arr = [];
     let selected = [];
@@ -57,6 +81,7 @@ const ManageTasks = () => {
       console.log(err);
       setTasks([{ Name: "check your connection" }]);
     }
+    console.log(tempTask)
     arr.map((element) => {
       if (tempTask.includes(element.Title)) {
         selected.push(element);
@@ -64,6 +89,9 @@ const ManageTasks = () => {
     });
     setTasks(selected);
     setallTasks(selected);
+    let tempo = [];
+    selected.map(m=>{fetch(m.AssignedTo, setDisplay, tempo);})
+    
   };
   useEffect(() => {
     const filteredData = allTasks.filter(
@@ -91,8 +119,8 @@ const ManageTasks = () => {
       sortable: true,
     },
     {
-      name: "Assigned To",
-      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" "),
+      name: "Assigned By",
+      selector: (row) => row.AssignedBy,
     },
     {
       name: "Status",
@@ -201,12 +229,13 @@ const ManageTasks = () => {
                       </Link>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
-                      <Link
-                        href="/user/tasks/edit/id"
+                      <button
+                        // href="/user/tasks/edit/id"
+                        onClick={()=>{router.push(`user/groups/tasks/edit${selectedRows[0].id}`)}}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Task
-                      </Link>
+                      </button>
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <button
@@ -228,7 +257,7 @@ const ManageTasks = () => {
                 </h4>
                 <p className="text-sm">
                   Assigned to{" "}
-                  {Array.from(new Set(selectedRows[0].AssignedTo)).toString(
+                  {Array.from(new Set(display)).toString(
                     " "
                   )}{" "}
                 </p>

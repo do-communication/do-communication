@@ -16,11 +16,15 @@ import {
 import { BiDotsVertical, BiGroup } from "react-icons/bi";
 import { HiDocumentChartBar, HiUsers } from "react-icons/hi2";
 import { MdChecklist, MdTask } from "react-icons/md";
+import Router from "next/router";
+
+const router = Router;
 
 const ManageTasks = () => {
   const [allTasks, setallTasks] = useState([]);
   const [tasks, setTasks] = useState([allTasks]);
   const [search, setSearch] = useState("");
+  const [display, setDisplay] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [showManageTaskMenu, setShowManageTaskMenu] = useState(false);
   const [user, setUser] = useState("");
@@ -44,6 +48,26 @@ const ManageTasks = () => {
     }
   };
   getMem();
+
+  const fetch = async (arr, setAssigned, tempo) => {
+
+    for (let m of arr) {
+      const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
+      const val = await getDoc(refUser);
+      if (val._document) {
+        tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
+      } else {
+        const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
+        const val2 = await getDoc(refGroup);
+        if(val2._document){
+        tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
+        }
+      }
+    }
+
+    setAssigned(tempo)
+  }
+
   const getData = async () => {
     let arr = [];
     let selected = [];
@@ -51,30 +75,32 @@ const ManageTasks = () => {
     try {
       const doc = await getDocs(all);
       doc.forEach((d) => {
-        arr.push(d.data());
+        arr.push({id:d.id, data:d.data()});
       });
     } catch (err) {
       console.log(err);
       setTasks([{ Name: "check your connection" }]);
     }
     arr.map((element) => {
-      if (tempTask.includes(element.Title)) {
+      if (tempTask.includes(element.data.Title)) {
         selected.push(element);
       }
     });
     setTasks(selected);
     setallTasks(selected);
+    let tempo = [];
+    selected.map(m=>{fetch(m.data.AssignedTo, setDisplay, tempo);})
   };
   useEffect(() => {
     const filteredData = allTasks.filter(
       (item) =>
-        (item.Title &&
-          item.Title.toLowerCase().includes(search.toLowerCase())) ||
+        (item.data.Title &&
+          item.data.Title.toLowerCase().includes(search.toLowerCase())) ||
         // || item.AssignedTo && item.AssignedTo.includes(search.toLowerCase())
-        (item.Status &&
-          item.Status.toLowerCase().includes(search.toLowerCase())) ||
-        (item.Priority &&
-          item.Priority.toLowerCase().includes(search.toLowerCase()))
+        (item.data.Status &&
+          item.data.Status.toLowerCase().includes(search.toLowerCase())) ||
+        (item.data.Priority &&
+          item.data.Priority.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -87,28 +113,28 @@ const ManageTasks = () => {
   const columns = [
     {
       name: "Tasks",
-      selector: (row) => row.Title,
+      selector: (row) => row.data.Title,
       sortable: true,
     },
     {
-      name: "Assigned To",
-      selector: (row) => Array.from(new Set(row.AssignedTo)).toString(" "),
+      name: "Assigned By",
+      selector: (row) => row.data.AssignedBy,
     },
     {
       name: "Status",
-      selector: (row) => row.Status,
+      selector: (row) => row.data.Status,
     },
     {
       name: "Issue Date",
-      selector: (row) => row.StartDate,
+      selector: (row) => row.data.StartDate,
     },
     {
       name: "Due Date",
-      selector: (row) => row.DueDate,
+      selector: (row) => row.data.DueDate,
     },
     {
       name: "Priority",
-      selector: (row) => row.Priority,
+      selector: (row) => row.data.Priority,
     },
   ];
 
@@ -172,7 +198,7 @@ const ManageTasks = () => {
                     key={index}
                     className="flex justify-between px-4 py-2 bg-white rounded-lg shadow-sm shadow-black"
                   >
-                    <p>{row.Name}</p>
+                    <p>{row.data.Name}</p>
                     <button className="p-1 text-white bg-red-600 rounded-lg hover:bg-red-500">
                       <AiOutlineClose />
                     </button>
@@ -202,7 +228,7 @@ const ManageTasks = () => {
                     </li>
                     <li className="p-1 rounded hover:bg-primary">
                       <Link
-                        href="/admin/task/edit/id"
+                        href={`/admin/task/edit/${selectedRows[0].id}`}
                         className="flex items-center gap-2"
                       >
                         <AiFillEdit className="w-5 h-auto" /> Edit Task
@@ -224,11 +250,11 @@ const ManageTasks = () => {
                   <MdTask className="w-12 h-12" />
                 </div>
                 <h4 className="mt-1 text-xl font-semibold capitalize">
-                  {selectedRows[0].Title}
+                  {selectedRows[0].data.Title}
                 </h4>
                 <p className="text-sm">
                   Assigned to{" "}
-                  {Array.from(new Set(selectedRows[0].AssignedTo)).toString(
+                  {Array.from(new Set(display)).toString(
                     " "
                   )}{" "}
                 </p>
@@ -236,7 +262,7 @@ const ManageTasks = () => {
               <div className="w-full h-full p-2 ml-2 bg-gray-200 rounded-xl">
                 <h2 className="p-2 text-lg font-semibold">Task Detail</h2>
                 <p className="flex flex-col gap-2 p-2 overflow-y-auto max-h-64">
-                  {selectedRows[0].Description}
+                  {selectedRows[0].data.Description}
                 </p>
                 <table>
                   <tr>
@@ -247,7 +273,7 @@ const ManageTasks = () => {
                     </td>
                     <td>
                       <p className="inline-block gap-2">
-                        {selectedRows[0].Priority}
+                        {selectedRows[0].data.Priority}
                       </p>
                     </td>
                   </tr>
@@ -259,7 +285,7 @@ const ManageTasks = () => {
                     </td>
                     <td>
                       <p className="inline-block gap-2">
-                        {selectedRows[0].Status}
+                        {selectedRows[0].data.Status}
                       </p>
                     </td>
                   </tr>
@@ -271,7 +297,7 @@ const ManageTasks = () => {
                     </td>
                     <td>
                       <p className="inline-block gap-2">
-                        {selectedRows[0].StartDate}
+                        {selectedRows[0].data.StartDate}
                       </p>
                     </td>
                   </tr>
@@ -283,7 +309,7 @@ const ManageTasks = () => {
                     </td>
                     <td>
                       <p className="inline-block gap-2">
-                        {selectedRows[0].DueDate}
+                        {selectedRows[0].data.DueDate}
                       </p>
                     </td>
                   </tr>

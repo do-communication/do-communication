@@ -140,7 +140,7 @@ const Signup = () => {
 
             await updateProfile(auth.currentUser, {
               displayName: data.name + "$",
-              photoURL: data.password,
+              photoURL: data.companyName,
             });
 
 

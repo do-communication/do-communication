@@ -286,7 +286,7 @@ const AddMember = () => {
     data.StartDate = new Date("10/10/2030");
     startDate.placeholder = "MM/DD/YYYY";
     endDate.value = null;
-    data.DueDate = new Date("10/10/2030");
+    data.DueDate = new Date("10/10/2030"); 
     endDate.placeholder = "MM/DD/YYYY";
     select.value = "null";
     data.Priority = "";
