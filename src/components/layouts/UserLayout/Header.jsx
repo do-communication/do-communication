@@ -26,7 +26,7 @@ const Header = () => {
   const { GetCompanyName, GetUser } = useFetch("KalCompany");
 
   const getinfo = async () => {
-    console.log(auth.currentUser.uid);
+    console.log(auth.currentUser.photoURL);
     setUsr(await GetUser(auth.currentUser.uid));
     setCompany(await GetCompanyName());
   }

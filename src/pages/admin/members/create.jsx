@@ -231,7 +231,7 @@ const AddMember = () => {
           "email": "${data.Email}",
           "password": "${password}",
           "displayName": "${data.Name}",
-          "photoURL": "https://www.levelup.com"
+          "photoURL": "https://www.${auth.currentUser.photoURL}.com"
       }`;
 
 

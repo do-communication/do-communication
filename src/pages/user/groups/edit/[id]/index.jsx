@@ -11,7 +11,11 @@ import { useState, useEffect } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import Router from "next/router";
+const rouuter = Router;
+import { usePathname } from "next/navigation";
 import { db } from "../../../../../../context/DbContext";
+
+
 
 const router = Router;
 const CreateGroup = () => {
@@ -19,6 +23,11 @@ const CreateGroup = () => {
   const [members, setMembers] = useState([]);
   const [showCustomType, setShowCustomType] = useState(false);
   const selected = [];
+  const ids = [];
+  const currentPage = usePathname();
+  console.log(router.query)
+  let i = currentPage.lastIndexOf("edit/");
+  const id = currentPage.slice(i + 5);
   const [data, setData] = useState({
     Type: "",
     Name: "",
@@ -29,6 +38,66 @@ const CreateGroup = () => {
   const customGroup = document.getElementById("customGroup");
   const type = document.getElementById("type");
   const groupName = document.getElementById("groupName");
+
+  const getMem = async () => {
+    const docRef = doc(db, "KalCompany", "Groups", "Groups", id);
+    // const user = ;
+    getDoc(docRef).then((mem) => {
+      let tempTask = [];
+      let tempReport = [];
+      let tempGroup = [];
+      let tempPeople = [];
+      const task =
+        mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+      const report =
+        mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+      const group =
+        mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+      const people =
+        mem._document.data.value.mapValue.fields.People.arrayValue.values;
+      if (task) {
+        task.forEach((t) => {
+          if (t) {
+            tempTask.push(t.stringValue);
+          }
+        });
+      }
+      if (report) {
+        report.forEach((r) => {
+          if (r) {
+            tempReport.push(r.stringValue);
+          }
+        });
+      }
+      if (group) {
+        group.forEach((g) => {
+          if (g) {
+            tempGroup.push(g.stringValue);
+          }
+        });
+      }
+      if (people) {
+        people.forEach((p) => {
+          if (p) {
+            tempPeople.push(p.stringValue);
+          }
+        });
+      }
+      setData({
+        Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+        Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+        Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+        Members: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+        People: tempPeople,
+      });
+
+    })
+  };
+  useEffect(() => {
+    getMem();
+  }, []);
 
   const getData = async () => {
     let arr = [];
@@ -162,7 +231,6 @@ const CreateGroup = () => {
                         id="groupName"
                         className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         placeholder="Enter group name"
-                        disabled
                         value={data.Name}
                         onChange={(e) => {
                           setData({
@@ -179,7 +247,6 @@ const CreateGroup = () => {
                         id="type"
                         className="mt-1 h-10 w-full rounded border bg-gray-50 px-4"
                         value={data.Type}
-                        disabled
                         onChange={(e) => {
                           if (e.target.value.toLowerCase() == "custom") {
                             setShowCustomType(true);
