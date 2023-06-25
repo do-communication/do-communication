@@ -19,7 +19,7 @@ const AdminLayout = ({ children, noFooter = false }) => {
     false
   );
   // || auth.currentUser.displayName != "true"
-  if (!auth.currentUser) {
+  if (!auth.currentUser || auth.currentUser.displayName[auth.currentUser.displayName.length - 1] != "$") {
     console.log("router going back");
     logout();
     router.push("/");

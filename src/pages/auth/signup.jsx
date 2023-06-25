@@ -142,11 +142,14 @@ const Signup = () => {
               displayName: data.name + "$",
               photoURL: data.password,
             });
+
+
             router.push("/admin");
           } catch (errrr) {
             console.log(errrr);
           }
         });
+
       } catch (err) {
         if (
           err.message ==

@@ -74,6 +74,24 @@ const useFetch = (collectionType) => {
         }
     }
 
+    const GetGroupByLeader = async (userId, setallGroups, setGroups) => {
+        if (userId) {
+            const all = collection(db, collectionType, "Groups", "Groups");
+
+            const q = query(all, where("Learder", "==", userId));
+
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const groups = [];
+                querySnapshot.forEach((doc) => {
+                    groups.push({ id: doc.id, data: doc.data() });
+                });
+
+                setGroups(groups);
+                setallGroups(groups);
+            });
+        }
+    }
+
     // Get messages in the system
     const getMessage = async (userId, setMessages) => {
 
@@ -586,7 +604,7 @@ const useFetch = (collectionType) => {
         GetCompanyName, send, sendGroup, GetAdmin, GetUser, GetGroup, getMessage,
         getMembersData, getRecentData, deleteMessage, editMessage, getGroups,
         getRecentGroup, getGroupMessage, deleteGroupMessage, editGroupMessage, deleteFile,
-        getGroupsUser, getRecentGroupUser, getMembersDataUser, GetUserOrAdmin, GetFile, error, user
+        getGroupsUser, getRecentGroupUser, getMembersDataUser, GetUserOrAdmin, GetFile, GetGroupByLeader, error, user
     });
 }
 

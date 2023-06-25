@@ -23,16 +23,22 @@ const Letters = () => {
   const [letters, setLetters] = useState([]);
   const [search, setSearch] = useState("");
   let comp = "";
+  let name = "";
   const getData = async () => {
     let arr = [];
     let temp = [];
+    if(auth.currentUser.displayName[auth.currentUser.displayName.length-1]==="~"){
+      name = auth.currentUser.displayName.slice(0, auth.currentUser.displayName.length-1)
+    }else{
+      name = auth.currentUser.displayName
+    }
     const all = collection(db, "KalCompany", "Letter", "Letter");
     try {
       const doc = await getDocs(all);
       doc.forEach((d) => {
         if (
           d._document.data.value.mapValue.fields.From.stringValue ===
-          user.displayName
+          name
         ) {
           arr.push({ id: d.id, data: d.data() });
         }
@@ -141,7 +147,7 @@ const ShowLetterDetail = ({ data }) => {
 
         <h3 className="font-semibold">Subject: {data.data.Subject}</h3>
 
-        <p>{data.data.Body}</p>
+        <p>{data.data.Body.slice(3, data.data.Body.lastIndexOf("</p>"))}</p>
       </div>
     </div>
   );

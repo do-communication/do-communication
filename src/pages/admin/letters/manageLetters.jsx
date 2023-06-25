@@ -132,7 +132,7 @@ const ShowLetterDetail = ({ data }) => {
 
         <h3 className="font-semibold">Subject: {data.data.Subject}</h3>
 
-        <p>{data.data.Body}</p>
+        <p>{data.data.Body.slice(3, data.data.Body.lastIndexOf("</p>"))}</p>
       </div>
     </div>
   );

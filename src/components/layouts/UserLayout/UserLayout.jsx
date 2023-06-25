@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
+import SidebarLeader from "./SidebarLeader";
+import Sidebar from "./Sidebar"
 import { auth } from "../../../../config/firebase";
 import OpenSideBarContext, {
   openSideBarReducer,
@@ -11,13 +12,14 @@ import { useAuth } from "../../../../context/AuthContext";
 const router = Router;
 
 const UserLayout = ({ children }) => {
+  console.log(auth.currentUser)
   const { logout } = useAuth();
   const [openSideBar, openSideBarDispatch] = useReducer(
     openSideBarReducer,
     false
   );
 
-  if (!auth.currentUser) {
+  if (!auth.currentUser || auth.currentUser.displayName[auth.currentUser.displayName.length - 1] == "$") {
     console.log("router going back");
     logout();
     router.push("/");
@@ -25,7 +27,7 @@ const UserLayout = ({ children }) => {
     return (
       <div className="md:flex">
         <OpenSideBarContext.Provider value={[openSideBar, openSideBarDispatch]}>
-          <Sidebar />
+          {auth.currentUser.displayName[auth.currentUser.displayName.length - 1] == "~" ? <SidebarLeader /> : <Sidebar />}
           <div className="flex flex-1 flex-col">
             {/* <!-- Top navbar --> */}
             <Header />

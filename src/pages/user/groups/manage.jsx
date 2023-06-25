@@ -8,6 +8,7 @@ import {
   getDoc,
   collection,
   deleteDoc,
+  updateDoc
 } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -16,15 +17,20 @@ import {
   AiOutlineMinus,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiDotsVertical, BiUserMinus, BiUserPlus, BiX } from "react-icons/bi";
+import { BiDotsVertical, BiUserMinus, BiUserPlus, BiX, BiHardHat } from "react-icons/bi";
 import { HiDocumentChartBar } from "react-icons/hi2";
 import { MdChecklist, MdGroup } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
 import dynamic from "next/dynamic";
+import useFetch from "@/components/useFetch";
+import { auth } from "../../../../config/firebase";
+import Router from "next/router";
 
 const ClientOnlyTable = dynamic(() => import("react-data-table-component"), {
   ssr: false,
 });
+
+const router = Router;
 
 const ManageGroup = () => {
   const [allGroups, setallGroups] = useState([]);
@@ -33,29 +39,20 @@ const ManageGroup = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
+  const users = [];
+  const { GetGroupByLeader } = useFetch("KalCompany");
 
   const getData = async () => {
-    let arr = [];
-    const all = collection(db, "KalCompany", "Groups", "Groups");
-    try {
-      const doc = await getDocs(all);
-      doc.forEach((d) => {
-        arr.push(d.data());
-      });
-    } catch (err) {
-      console.log(err);
-      setTasks([{ Name: "check your connection" }]);
-    }
-
-    setGroups(arr);
-    setallGroups(arr);
+    await GetGroupByLeader(auth.currentUser.uid, setallGroups, setGroups)
+    setSelectedRows([]);
+    setClearSelectedRows(!clearSelectedRows);
   };
   // search for groups using group name
   useEffect(() => {
     const filteredData = allGroups.filter(
       (item) =>
-        (item.Name && item.Name.toLowerCase().includes(search.toLowerCase())) ||
-        (item.Type && item.Type.toLowerCase().includes(search.toLowerCase()))
+        (item.data.Name && item.data.Name.toLowerCase().includes(search.toLowerCase())) ||
+        (item.data.Type && item.data.Type.toLowerCase().includes(search.toLowerCase()))
     );
 
     if (search) {
@@ -68,12 +65,12 @@ const ManageGroup = () => {
   const columns = [
     {
       name: "Group Name",
-      selector: (row) => row.Name,
+      selector: (row) => row.data.Name,
       sortable: true,
     },
     {
       name: "Type",
-      selector: (row) => row.Type,
+      selector: (row) => row.data.Type,
     },
   ];
 
@@ -84,6 +81,88 @@ const ManageGroup = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const handleAssign = async (groupId, data) => {
+    const groupRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
+    updateDoc(groupRef, data)
+      .then((groupRef) => {
+        console.log(
+          "A New Document Field has been added to an existing document"
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleRemove = async (groupId, index) => {
+    const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
+    const mem = await getDoc(docRef);
+    let tempTask = [];
+    let tempReport = [];
+    let tempGroup = [];
+    let tempPeople = [];
+    const task =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report =
+      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group =
+      mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    const people =
+      mem._document.data.value.mapValue.fields.People.arrayValue.values;
+    // var j = 0;
+    if (group) {
+      group.forEach((g) => {
+        if (g) {
+          if (g.stringValue !== index) {
+            tempGroup.push(g.stringValue);
+          }
+        }
+      });
+    }
+    if (people) {
+      people.forEach((p) => {
+        if (p) {
+          // if(j == index){
+          //   lead = p.stringValue;
+          // }
+          tempPeople.push(p.stringValue);
+          users.push(p.stringValue);
+          // j += 1;
+        }
+      });
+    }
+    if (task) {
+      task.forEach((t) => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+    if (report) {
+      report.forEach((r) => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+
+    const data = {
+      People: tempPeople,
+      Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+      Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+      Members: tempGroup,
+      Reports: tempReport,
+      Tasks: tempTask,
+      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+    };
+
+    handleAssign(groupId, data);
+    toast.success(`${index} is removed from this group`);
+    getData();
+  };
+
+
 
   return (
     <UserLayout>
@@ -147,7 +226,6 @@ const ManageGroup = () => {
                 {showManageGroupMenu && (
                   <ul className="absolute right-2 top-9 z-10 flex w-52 flex-col gap-2 rounded border-2 border-secondary bg-[#90c7ea] p-2 duration-300">
                     <li className="p-1 rounded hover:bg-primary">
-                      {JSON.stringify(selectedRows[0].id, null, 9)}
                       <Link
                         href={`/user/groups/tasks/group/${selectedRows[0].id}`}
                         className="flex items-center gap-2"
@@ -172,12 +250,12 @@ const ManageGroup = () => {
                   <MdGroup className="w-12 h-12" />
                 </div>
                 <h4 className="mt-1 text-xl font-semibold capitalize">
-                  {selectedRows[0].Name}
+                  {selectedRows[0].data.Name}
                 </h4>
-                <p className="text-sm">{selectedRows[0].Type}</p>
+                <p className="text-sm">{selectedRows[0].data.Type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
+                <button onClick={() => router.push(`/user/chats/groupChat/${selectedRows[0].id}`)} className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
                   <TbMessage className="w-8 h-auto" />
                 </button>
               </div>
@@ -186,21 +264,28 @@ const ManageGroup = () => {
                 <h3 className="p-2 text-lg font-semibold">Members</h3>
 
                 <ul className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                  {selectedRows[0].Members &&
-                    selectedRows[0].Members.map((row, index) => (
-                      <Link
+                  {selectedRows[0].data.Members &&
+                    selectedRows[0].data.Members.map((row, index) => (
+                      <div
                         key={index}
-                        href="#"
                         className="flex items-center justify-between p-2 rounded-md hover:bg-secondary hover:bg-opacity-25"
                       >
-                        <p>{row.value}</p>
-                        <div className="flex gap-2">
-                          <button className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-secondary hover:bg-primary">
-                            <BiUserMinus className="w-5 h-auto" />
-                            Remove
-                          </button>
-                        </div>
-                      </Link>
+                        <p>{row}</p>
+                        {selectedRows[0].data.People[index] === auth.currentUser.uid ?
+                          <div className="flex gap-2">
+
+                            <BiHardHat className="w-5 h-auto" />
+                            Leader
+
+                          </div> : <div className="flex gap-2">
+                            <button onClick={async () => {
+                              await handleRemove(selectedRows[0].id, row);
+                            }} className="flex items-center gap-1 p-1 px-2 text-white rounded-lg bg-gray-700 hover:bg-primary">
+                              <BiUserMinus className="w-5 h-auto" />
+                              Remove
+                            </button>
+                          </div>}
+                      </div>
                     ))}
                   {/* <Link
                     href="/admin/memebers/{userId}"
