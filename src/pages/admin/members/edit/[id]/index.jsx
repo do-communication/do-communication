@@ -31,6 +31,7 @@ const AddMember = () => {
     GroupId: [],
     Reports: [],
     Tasks: [],
+    GroupCount: 0
   });
   const select = document.getElementById("selectGender");
   const email = document.getElementById("email");
@@ -96,6 +97,7 @@ const AddMember = () => {
       GroupId: tempGroup,
       Reports: tempReport,
       Tasks: tempTask,
+      GroupCount: mem._document.data.value.mapValue.fields.GroupCount.stringValue,
     });
     console.log(mem);
   };

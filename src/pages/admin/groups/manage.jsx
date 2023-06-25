@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout/AdminLayout";
 import Link from "next/link";
 import { db } from "../../../../context/DbContext";
 import { toast } from "react-toastify";
-import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDocs, getDoc, collection, deleteDoc, updateDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { useState, useEffect, useCallback } from "react";
 import Router from "next/router";
 const router = Router;
@@ -34,6 +34,8 @@ const ManageGroup = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [clearSelectedRows, setClearSelectedRows] = useState(false); // this is used to clear the selected rows
   const [showManageGroupMenu, setShowManageGroupMenu] = useState(false);
+  const [pLeader, setPLeader] = useState(null);
+  const [currLeader, setCurrLeader] = useState(null);
   const users = [];
   const getData = async () => {
 
@@ -161,6 +163,7 @@ const ManageGroup = () => {
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////
+
     const prevId = mem._document.data.value.mapValue.fields.Learder.stringValue;
 
     if (prevId !== lead) {
@@ -174,32 +177,52 @@ const ManageGroup = () => {
           const TOKEN = idToken
           const url = `http://localhost:5000/api/users/${prevId}`;
 
-          GetUser(prevId).then((prev) => {
+          GetUser(prevId).then(async (prev) => {
+            await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", prevId), {
+              Name: prev.Name,
+              Address: prev.Address,
+              Email: prev.Email,
+              Gender: prev.Gender,
+              Department: prev.Department,
+              PhoneNumber: prev.PhoneNumber,
+              DateOfBirth: prev.DateOfBirth,
+              ProfilePic: prev.ProfilePic,
+              RegisteredAt: prev.RegisteredAt,
+              GroupId: prev.GroupId,
+              Reports: prev.Reports,
+              Tasks: prev.Tasks,
+              GroupCount: prev.GroupCount === 0 ? prev.GroupCount : prev.GroupCount - 1
+            });
 
-            const user_info = `{
+            //////////////////////////////////////////////////////
+            if (prev.GroupCount - 1 <= 0) {
+              const user_info = `{
               "displayName": "${prev.Name}"
           }`;
 
-            fetch(url, {
-              method: 'PATCH',
-              headers: {
-                'Authorization': `Bearer ${TOKEN}`,
-                'Content-Type': 'application/json',
-              },
-              body: user_info,
-            }).then(async (cred) => {
-              console.log(cred)
-            }).catch((error) => {
-              console.log(error);
+              fetch(url, {
+                method: 'PATCH',
+                headers: {
+                  'Authorization': `Bearer ${TOKEN}`,
+                  'Content-Type': 'application/json',
+                },
+                body: user_info,
+              }).then(async (cred) => {
+                console.log(cred)
+              }).catch((error) => {
+                console.log(error);
 
-              if (error === "auth/id-token-expired") {
-                toast.error("LogIn session has expired Please login again");
-                setTimeout(() => {
-                  signOut();
-                }, 5000);
-              }
-            })
+                if (error === "auth/id-token-expired") {
+                  toast.error("LogIn session has expired Please login again");
+                  setTimeout(() => {
+                    signOut();
+                  }, 5000);
+                }
+              })
 
+            } else {
+              console.log("Leader on other Groups")
+            }
           })
 
 
@@ -211,7 +234,26 @@ const ManageGroup = () => {
         const TOKEN = idToken
         const url = `http://localhost:5000/api/users/${lead}`;
 
-        GetUser(lead).then((usr) => {
+        GetUser(lead).then(async (usr) => {
+
+          await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", lead), {
+            Name: usr.Name,
+            Address: usr.Address,
+            Email: usr.Email,
+            Gender: usr.Gender,
+            Department: usr.Department,
+            PhoneNumber: usr.PhoneNumber,
+            DateOfBirth: usr.DateOfBirth,
+            ProfilePic: usr.ProfilePic,
+            RegisteredAt: usr.RegisteredAt,
+            GroupId: usr.GroupId,
+            Reports: usr.Reports,
+            Tasks: usr.Tasks,
+            GroupCount: usr.GroupCount + 1
+          });
+
+
+          ////////////////////////////////////////////
           const user_info = `{
           "displayName": "${usr.Name + "~"}"
       }`;
@@ -335,7 +377,7 @@ const ManageGroup = () => {
       });
   };
 
-  const handleRemove = async (groupId, index) => {
+  const handleRemove = async (groupId, index, userId) => {
     const docRef = doc(db, "KalCompany", "Groups", "Groups", groupId);
     const mem = await getDoc(docRef);
     let tempTask = [];
@@ -350,25 +392,29 @@ const ManageGroup = () => {
       mem._document.data.value.mapValue.fields.Members.arrayValue.values;
     const people =
       mem._document.data.value.mapValue.fields.People.arrayValue.values;
-    // var j = 0;
+    var j = 0;
+    var i = 0;
     if (group) {
       group.forEach((g) => {
         if (g) {
           if (g.stringValue !== index) {
             tempGroup.push(g.stringValue);
+          } else {
+            j = i
           }
+          i += 1
         }
       });
     }
+    let check = 0
     if (people) {
       people.forEach((p) => {
         if (p) {
-          // if(j == index){
-          //   lead = p.stringValue;
-          // }
-          tempPeople.push(p.stringValue);
-          users.push(p.stringValue);
-          // j += 1;
+          if (j !== check) {
+            tempPeople.push(p.stringValue);
+            users.push(p.stringValue);
+          }
+          check += 1
         }
       });
     }
@@ -387,6 +433,67 @@ const ManageGroup = () => {
       });
     }
 
+    let NewLeader = mem._document.data.value.mapValue.fields.Learder.stringValue
+    if (mem._document.data.value.mapValue.fields.Learder.stringValue === userId) {
+      NewLeader = "";
+      auth.currentUser.getIdToken(true).then((idToken) => {
+        const TOKEN = idToken
+        const url = `http://localhost:5000/api/users/${userId}`;
+
+        GetUser(userId).then(async (prev) => {
+          await setDoc(doc(db, "KalCompany", "Users", "StaffMembers", userId), {
+            Name: prev.Name,
+            Address: prev.Address,
+            Email: prev.Email,
+            Gender: prev.Gender,
+            Department: prev.Department,
+            PhoneNumber: prev.PhoneNumber,
+            DateOfBirth: prev.DateOfBirth,
+            ProfilePic: prev.ProfilePic,
+            RegisteredAt: prev.RegisteredAt,
+            GroupId: prev.GroupId,
+            Reports: prev.Reports,
+            Tasks: prev.Tasks,
+            GroupCount: prev.GroupCount === 0 ? prev.GroupCount : prev.GroupCount - 1
+          });
+
+          //////////////////////////////////////////////////////
+          if (prev.GroupCount - 1 <= 0) {
+            const user_info = `{
+          "displayName": "${prev.Name}"
+      }`;
+
+            fetch(url, {
+              method: 'PATCH',
+              headers: {
+                'Authorization': `Bearer ${TOKEN}`,
+                'Content-Type': 'application/json',
+              },
+              body: user_info,
+            }).then(async (cred) => {
+              console.log(cred)
+            }).catch((error) => {
+              console.log(error);
+
+              if (error === "auth/id-token-expired") {
+                toast.error("LogIn session has expired Please login again");
+                setTimeout(() => {
+                  signOut();
+                }, 5000);
+              }
+            })
+
+          } else {
+            console.log("Leader on other Groups")
+          }
+        })
+      })
+
+    }
+
+    console.log(userId)
+    console.log(NewLeader)
+
     const data = {
       People: tempPeople,
       Type: mem._document.data.value.mapValue.fields.Type.stringValue,
@@ -394,7 +501,7 @@ const ManageGroup = () => {
       Members: tempGroup,
       Reports: tempReport,
       Tasks: tempTask,
-      Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+      Learder: NewLeader,
     };
 
     handleAssign(groupId, data);
@@ -403,6 +510,12 @@ const ManageGroup = () => {
   };
   const handleRowSelected = useCallback((state) => {
     setSelectedRows(state.selectedRows);
+    console.log(state.selectedRows[0])
+    // console.log(auth.currentUser.uid)
+    if (state.selectableRows) {
+      setPLeader(state.selectedRows[0].data.Learder);
+    }
+    // setCurrLeader(auth.currentUser.uid);
   }, []);
 
   useEffect(() => {
@@ -552,7 +665,7 @@ const ManageGroup = () => {
                 <p className="text-sm">{selectedRows[0].data.Type}</p>
               </div>
               <div className="relative flex justify-center py-4">
-                <button className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
+                <button onClick={() => router.push(`/admin/chats/groupChat/${selectedRows[0].id}`)} className="p-2 text-white rounded-full bg-secondary bg-opacity-80">
                   <TbMessage className="w-8 h-auto" />
                 </button>
               </div>
@@ -569,7 +682,7 @@ const ManageGroup = () => {
                       >
                         <p>{row}</p>
                         <div className="flex gap-2">
-                          {selectedRows[0].data.Learder !== users[index] && (
+                          {selectedRows[0].data.Learder !== users[index] && selectedRows[0].data.Learder !== selectedRows[0].data.People[index] && (
                             <button
                               onClick={async () => {
                                 await fetchGroup(selectedRows[0].id, index);
@@ -582,7 +695,7 @@ const ManageGroup = () => {
                         </div>
                         <button
                           onClick={async () => {
-                            await handleRemove(selectedRows[0].id, row);
+                            await handleRemove(selectedRows[0].id, row, selectedRows[0].data.People[index]);
                           }}
                           className="flex gap-2"
                         >
