@@ -28,21 +28,21 @@ const Admin = () => {
   const [assigned2, setAssigned2] = useState([]);
   const [assigned3, setAssigned3] = useState([]);
 
-  const fetch = async (arr, setAssigned, tempo) =>{
+  const fetch = async (arr, setAssigned, tempo) => {
 
-    for (let m of arr){
+    for (let m of arr) {
       const refUser = doc(db, "KalCompany", "Users", "StaffMembers", m);
       const val = await getDoc(refUser);
-      if(val._document){
+      if (val._document) {
         tempo.push(val._document.data.value.mapValue.fields.Name.stringValue)
-      }else{
+      } else {
         const refGroup = doc(db, "KalCompany", "Groups", "Groups", m);
-        const val2 = await getDoc(refGroup); 
+        const val2 = await getDoc(refGroup);
         tempo.push(val2._document.data.value.mapValue.fields.Name.stringValue)
-      } 
+      }
     }
 
-    setAssigned(tempo) 
+    setAssigned(tempo)
   }
   const getData = async () => {
     if (auth.currentUser) {
@@ -151,7 +151,7 @@ const Admin = () => {
             <div className="flex flex-col justify-between space-y-6 md:flex-row md:space-y-0">
               <div className="mr-6">
                 <h1 className="mb-2 text-4xl font-semibold">Dashboard</h1>
-                <h2 className="ml-0.5 text-gray-600">{auth.currentUser.email}</h2>
+                <h2 className="ml-0.5 text-gray-600">{auth.currentUser && auth.currentUser.email}</h2>
               </div>
             </div>
             <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">

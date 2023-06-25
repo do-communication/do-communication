@@ -30,6 +30,7 @@ const AddMember = () => {
     GroupId: [],
     Reports: [],
     Tasks: [],
+    GroupCount: 0
   });
   const select = document.getElementById("selectGender");
   const email = document.getElementById("email");

@@ -35,7 +35,7 @@ const AddReport = () => {
   let url = "";
   const [mem, setmem] = useState({});
   const [data, setData] = useState({
-    ReportBy: user.displayName,
+    ReportBy: auth.currentUser.displayName,
     Title: "",
     Detail: "",
     File: "",

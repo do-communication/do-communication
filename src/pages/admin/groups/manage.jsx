@@ -161,19 +161,60 @@ const ManageGroup = () => {
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////
-    if (mem._document.data.value.mapValue.fields.Learder.stringValue) {
-      const prevId = mem._document.data.value.mapValue.fields.Learder.stringValue;
+    const prevId = mem._document.data.value.mapValue.fields.Learder.stringValue;
+
+    if (prevId !== lead) {
+
+
+      if (mem._document.data.value.mapValue.fields.Learder.stringValue) {
+
+
+
+        auth.currentUser.getIdToken(true).then((idToken) => {
+          const TOKEN = idToken
+          const url = `http://localhost:5000/api/users/${prevId}`;
+
+          GetUser(prevId).then((prev) => {
+
+            const user_info = `{
+              "displayName": "${prev.Name}"
+          }`;
+
+            fetch(url, {
+              method: 'PATCH',
+              headers: {
+                'Authorization': `Bearer ${TOKEN}`,
+                'Content-Type': 'application/json',
+              },
+              body: user_info,
+            }).then(async (cred) => {
+              console.log(cred)
+            }).catch((error) => {
+              console.log(error);
+
+              if (error === "auth/id-token-expired") {
+                toast.error("LogIn session has expired Please login again");
+                setTimeout(() => {
+                  signOut();
+                }, 5000);
+              }
+            })
+
+          })
+
+
+        })
+      }
 
 
       auth.currentUser.getIdToken(true).then((idToken) => {
         const TOKEN = idToken
-        const url = `http://localhost:5000/api/users/${prevId}`;
+        const url = `http://localhost:5000/api/users/${lead}`;
 
-        GetUser(prevId).then((prevName) => {
-
+        GetUser(lead).then((usr) => {
           const user_info = `{
-              "displayName": "${prevName.Name}"
-          }`;
+          "displayName": "${usr.Name + "~"}"
+      }`;
 
           fetch(url, {
             method: 'PATCH',
@@ -194,44 +235,11 @@ const ManageGroup = () => {
               }, 5000);
             }
           })
-
         })
-
-
       })
+    } else {
+      console.log("Already a leader");
     }
-
-
-    auth.currentUser.getIdToken(true).then((idToken) => {
-      const TOKEN = idToken
-      const url = `http://localhost:5000/api/users/${lead}`;
-
-      GetUser(lead).then((usr) => {
-        const user_info = `{
-          "displayName": "${usr.Name + "~"}"
-      }`;
-
-        fetch(url, {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${TOKEN}`,
-            'Content-Type': 'application/json',
-          },
-          body: user_info,
-        }).then(async (cred) => {
-          console.log(cred)
-        }).catch((error) => {
-          console.log(error);
-
-          if (error === "auth/id-token-expired") {
-            toast.error("LogIn session has expired Please login again");
-            setTimeout(() => {
-              signOut();
-            }, 5000);
-          }
-        })
-      })
-    })
 
 
 

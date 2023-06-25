@@ -10,10 +10,17 @@ import SideNav from "./SideNav";
 import Link from "next/link";
 import OpenSideBarContext from "./context/openSideBarContext";
 import { useRouter } from "next/router";
+// import Router from "next/router";
+
+// const rout = Router;
 
 const Sidebar = () => {
     const [openSideBar] = useContext(OpenSideBarContext);
     const router = useRouter();
+    if (router.pathname === "/user/groups/manage") {
+        router.push("/user")
+    }
+
 
     const navList = [
         {
