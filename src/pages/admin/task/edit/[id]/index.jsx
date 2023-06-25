@@ -37,7 +37,6 @@ const AddMember = () => {
   });
   const getMem = async () => {
     const docRef = doc(db, "KalCompany", "Tasks", "Tasks", id);
-    // const user = ;
     const mem = await getDoc(docRef);
     let tempAssigned = [];
     const assigned =
@@ -59,8 +58,6 @@ const AddMember = () => {
       DueDate: mem._document.data.value.mapValue.fields.DueDate.stringValue,
       AssignedTo: tempAssigned,
       Status: mem._document.data.value.mapValue.fields.Status.stringValue,
-      AssignedBy:
-        mem._document.data.value.mapValue.fields.AssignedBy.stringValue,
     });
   };
   useEffect(() => {
@@ -139,6 +136,77 @@ const AddMember = () => {
       };
       updateDoc(docRef, newData)
         .then((docRef) => {
+          console.log(
+            "A New Document Field has been added to an existing document"
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }else{
+      const groupRef = doc(db, "KalCompany", "Groups", "Groups", i);
+      const ref = await getDoc(groupRef)
+      let tempTask = [];
+    let tempReport = [];
+    let tempGroup = [];
+    let tempPeople = [];
+    const task =
+      mem._document.data.value.mapValue.fields.Tasks.arrayValue.values;
+    const report =
+      mem._document.data.value.mapValue.fields.Reports.arrayValue.values;
+    const group =
+      mem._document.data.value.mapValue.fields.Members.arrayValue.values;
+    const people =
+      mem._document.data.value.mapValue.fields.People.arrayValue.values;
+    // var j = 0;
+    if (group) {
+      group.forEach((g) => {
+        if (g) {
+          // if (g.stringValue !== index) {
+            tempGroup.push(g.stringValue);
+          // }
+        }
+      });
+    }
+    if (people) {
+      people.forEach((p) => {
+        if (p) {
+          // if(j == index){
+          //   lead = p.stringValue;
+          // }
+          tempPeople.push(p.stringValue);
+          // users.push(p.stringValue);
+          // j += 1;
+        }
+      });
+    }
+    if (task) {
+      task.forEach((t) => {
+        if (t) {
+          tempTask.push(t.stringValue);
+        }
+      });
+    }
+    if (report) {
+      report.forEach((r) => {
+        if (r) {
+          tempReport.push(r.stringValue);
+        }
+      });
+    }
+
+    tempTask.push(data.Title);
+      const newData = {
+        People: tempPeople,
+        Type: mem._document.data.value.mapValue.fields.Type.stringValue,
+        Name: mem._document.data.value.mapValue.fields.Name.stringValue,
+        Members: tempGroup,
+        Reports: tempReport,
+        Tasks: tempTask,
+        Learder: mem._document.data.value.mapValue.fields.Learder.stringValue,
+      };
+      updateDoc(groupRef, newData)
+        .then((groupRef) => {
           console.log(
             "A New Document Field has been added to an existing document"
           );

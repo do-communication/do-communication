@@ -90,7 +90,7 @@ const ManageTasks = () => {
     {
       name: "Assigned By",
       selector: (row) =>
-        row.data && row.data.AssignedBy.slice(0, row.data.AssignedBy.length - 1),
+        row.data && row.data.AssignedBy,
     },
     {
       name: "Status",
@@ -109,7 +109,6 @@ const ManageTasks = () => {
       selector: (row) => row.data && row.data.Priority,
     },
   ];
-  console.log("intask")
   const fetch = async (arr) => {
     tempo = []
 

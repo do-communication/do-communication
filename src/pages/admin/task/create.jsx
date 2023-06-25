@@ -23,6 +23,12 @@ const AddMember = () => {
   const [groups, setGroups] = useState([]);
   const [allgroups, setallGroups] = useState([]);
   const taskTo = []
+  let name = "";
+  if(auth.currentUser.displayName[auth.currentUser.displayName.length-1] == '$' || auth.currentUser.displayName[auth.currentUser.displayName.length-1] == '~'){
+    name = auth.currentUser.displayName.slice(0, auth.currentUser.displayName.length-1);
+  }else{
+    name = auth.currentUser.displayName;
+  }
   const [data, setData] = useState({
     Title: "",
     Description: "",
@@ -31,7 +37,7 @@ const AddMember = () => {
     StartDate: new Date("10/10/2030"),
     DueDate: new Date("10/10/2030"),
     Status: "assigned",
-    AssignedBy: user.displayName,
+    AssignedBy: name,
   });
   const getData = async () => {
     let arr = []
@@ -96,7 +102,9 @@ const AddMember = () => {
           }
         });
       }
+      
       tempTask.push(data.Title);
+      
       const newData = {
         Name: mem._document.data.value.mapValue.fields.Name.stringValue,
         Address: mem._document.data.value.mapValue.fields.Address.stringValue,
@@ -164,6 +172,7 @@ const AddMember = () => {
           }
         });
       }
+      console.log(data.Title)
       tempTask.push(data.Title)
       const newGroup = {
         People: tempPeople,
